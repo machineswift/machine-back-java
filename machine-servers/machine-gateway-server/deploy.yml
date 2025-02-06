@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: machine-gateway-server-deployment
+  namespace: cj-app-sjzx-prod
+  labels:
+    app: machine-gateway-server
+spec:
+  replicas: {{replicat}}
+  selector:
+    matchLabels:
+      app: machine-gateway-server
+  template:
+    metadata:
+      labels:
+        app: machine-gateway-server
+    spec:
+      containers:
+        - name: machine-gateway-server
+          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-gateway-server_master:{{imageVersion}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: '-XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=PROD -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dreactor.netty.ioSelectCount=1 -Dreactor.netty.pool.maxConnections=96 -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=XXXX'
+            - name: SKY_AGENT
+              value: '-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-gateway-server -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800'
+          resources:
+            limits:
+              cpu: '4'
+              memory: 4096Mi
+            requests:
+              cpu: '1'
+              memory: 512Mi
+      imagePullSecrets:
+        - name: xjzc.super.app

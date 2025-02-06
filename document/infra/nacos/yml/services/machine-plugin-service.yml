@@ -1,0 +1,13 @@
+machine:
+  yunXiCubeShop:
+    datasource:
+      host: XXX
+      schema: XXX
+      username: XXX
+      password: XXX
+  yunXiCubeUser:
+    datasource:
+      host: XXX
+      schema: XXX
+      username: XXX
+      password: XXX

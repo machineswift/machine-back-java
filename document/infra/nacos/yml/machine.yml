@@ -1,0 +1,58 @@
+machine:
+  datasource:
+    host: 127.0.0.1
+    username: root
+    password: root
+  rabbitmq:
+    host: localhost
+    username: machine
+    password: machine
+  rocketmq:
+    host: localhost
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: redis
+  jwt:
+    secret: XXX
+
+beisen:
+  appKey: XXX
+  appSecret: XXX
+
+feiShu:
+  message:
+    appId: XXX
+    appSecret: XXX
+
+huaweiyun:
+  sms:
+    appKey: XXX
+    appSecret: XXX
+    sender:
+      captcha: XXX
+      message: XXX
+    template:
+      captcha:
+        phoneLogin: XXX
+        forgetPassword: XXX
+
+
+# Huawei OBS 配置
+huawei:
+  obs:
+    # 秘钥 Access Key
+    ak: XXX
+    # 秘钥 Secret Key
+    sk: XXX
+    upload:
+      # 指定地址
+      endPoint: obs.cn-east-3.myhuaweicloud.com
+      # 桶名称
+      bucketName: machine-app-file
+      # 文件夹名称
+      parentDir: machine
+
+# logging:
+#  level:
+#    root: trace

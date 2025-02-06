@@ -1,0 +1,11 @@
+auth2:
+  gitee:
+    clientId: XXX
+    clientSecret: XXX
+    redirectUri: http://localhost:8080/machine-iam-app/iam/auth2/login/gitee
+
+  feiShu:
+    clientId: XXX
+    clientSecret: XXX
+    redirectUri: http://localhost:8080/machine-iam-app/iam/auth2/login/fei_shu
+

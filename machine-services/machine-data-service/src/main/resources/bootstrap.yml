@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  application:
+    name: machine-data-service
+
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 4096MB
+
+  cloud:
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+        sharedConfigs:
+          - dataId: machine.yml
+            group: MACHINE_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+
+machine:
+  datasource:
+    schema: machine_data

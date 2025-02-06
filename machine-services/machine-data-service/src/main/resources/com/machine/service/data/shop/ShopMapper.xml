@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.shop.dao.mapper.IShopMapper">
+
+    <select id="countNotBindOrganization" resultType="java.lang.Integer">
+        select count(0)
+        from t_shop s
+        WHERE s.id NOT IN
+              (SELECT sor.shop_id
+               FROM t_shop_organization_relation sor
+               WHERE sor.organization_type = #{inputDto.organizationType})
+    </select>
+
+    <select id="listNotBindOrganization" resultType="java.lang.String">
+        select s.id
+        from t_shop s
+        WHERE s.id NOT IN
+              (SELECT sor.shop_id
+               FROM t_shop_organization_relation sor
+               WHERE sor.organization_type = #{inputDto.organizationType})
+    </select>
+
+    <select id="listAreaCodeByShopIdSet" resultType="java.lang.String">
+        select s.area_code
+        from t_shop s
+        WHERE s.id IN
+        <foreach item="item" collection="shopIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY s.area_code
+    </select>
+
+    <select id="listShopIdByShopCodeSet" resultType="java.lang.String">
+        select s.id
+        from t_shop s
+        WHERE s.code IN
+        <foreach item="item" collection="shopCodeSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="listShopIdByAreaCodeSet" resultType="java.lang.String">
+        select s.id
+        from t_shop s
+        WHERE s.area_code IN
+        <foreach item="item" collection="areaCodeSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.data.shop.dao.mapper.entity.ShopEntity">
+        select s.*
+        from t_shop s
+        <where>
+            <if test="inputDto.status != null  ">
+                AND s.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND s.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY s.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+    <select id="listAll" resultType="com.machine.service.data.shop.dao.mapper.entity.ShopEntity">
+        select s.*
+        from t_shop s
+        <where>
+            <if test="inputDto.status != null  ">
+                AND s.status = #{inputDto.status}
+            </if>
+        </where>
+    </select>
+
+    <select id="pageShop" resultType="com.machine.service.data.shop.dao.mapper.entity.ShopEntity">
+        SELECT s.* FROM t_shop s
+        <where>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+
+            <!-- 省市区 开始 -->
+            <if test="(inputDto.provinceCodeSet != null  and inputDto.provinceCodeSet.size > 0)
+                        or (inputDto.cityCodeSet != null  and inputDto.cityCodeSet.size > 0)
+                        or (inputDto.areaCodeSet != null  and inputDto.areaCodeSet.size > 0)">
+                AND (
+                <if test="inputDto.provinceCodeSet != null  and inputDto.provinceCodeSet.size > 0">
+                    s.province_code IN
+                    <foreach item="item" collection="inputDto.provinceCodeSet" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+
+                <if test="inputDto.cityCodeSet != null  and inputDto.cityCodeSet.size > 0">
+                    <if test="inputDto.provinceCodeSet != null  and inputDto.provinceCodeSet.size > 0">
+                        OR
+                    </if>
+                    s.city_code IN
+                    <foreach item="item" collection="inputDto.cityCodeSet" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+
+                <if test="inputDto.areaCodeSet != null  and inputDto.areaCodeSet.size > 0">
+                    <if test="(inputDto.provinceCodeSet != null  and inputDto.provinceCodeSet.size > 0)
+                        or (inputDto.cityCodeSet != null  and inputDto.cityCodeSet.size > 0)">
+                        OR
+                    </if>
+                    s.area_code IN
+                    <foreach item="item" collection="inputDto.areaCodeSet" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <!-- 省市区 结束 -->
+
+            <if test="inputDto.typeSet != null  and inputDto.typeSet.size > 0">
+                AND s.type IN
+                <foreach item="item" collection="inputDto.typeSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.statusSet != null and inputDto.statusSet.size > 0">
+                AND s.status IN
+                <foreach item="item" collection="inputDto.statusSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.codeSet != null  and inputDto.codeSet.size > 0">
+                AND s.code IN
+                <foreach item="item" collection="inputDto.codeSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
+                AND s.id IN
+                <foreach item="item" collection="inputDto.shopIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.create_time DESC
+    </select>
+
+    <select id="pageCollectShop" resultType="com.machine.service.data.shop.dao.mapper.entity.ShopEntity">
+        SELECT s.* FROM t_shop s
+        LEFT JOIN t_user_collect_shop ucs ON ucs.shop_id = s.id
+        <where>
+            ucs.user_id = #{inputDto.userId}
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
+                AND s.id IN
+                <foreach item="item" collection="inputDto.shopIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.create_time DESC
+    </select>
+
+</mapper>

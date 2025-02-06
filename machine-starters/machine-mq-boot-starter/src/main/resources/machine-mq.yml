@@ -1,0 +1,35 @@
+spring:
+  rabbitmq:
+    host: ${machine.rabbitmq.host}
+    username: ${machine.rabbitmq.username}
+    password: ${machine.rabbitmq.password}
+    port: 5672
+    virtualHost: machine
+  cloud:
+    function:
+      definition: |
+        webHookFastEventConsumer;
+        webHookSlowEventConsumer;
+        businessMessageConsumer;
+    stream:
+      bindings:
+        # WebHook 事件队列（用于数据体量量较小，实时要求较高的场景）
+        webHookFastEventProducer:
+          destination: web-hook-fast-event-topic
+        webHookFastEventConsumer-in-0:
+          destination: web-hook-fast-event-topic
+          group: mq-group
+
+        # WebHook 事件队列（用于数据体量量较大，实时要求不高的场景）
+        webHookSlowEventProducer:
+          destination: web-hook-slow-event-topic
+        webHookSlowEventConsumer-in-0:
+          destination: web-hook-slow-event-topic
+          group: mq-group
+
+        # WebHook 事件队列（用于数据体量量较大，实时要求不高的场景）
+        businessMessageProducer:
+          destination: business-message-topic
+        businessMessageConsumer-in-0:
+          destination: business-message-topic
+          group: mq-group

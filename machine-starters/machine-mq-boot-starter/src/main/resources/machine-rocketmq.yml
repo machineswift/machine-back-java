@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    function:
+      definition: |
+        mqFunction;mqConsumer;
+    stream:
+      rocketmq:
+        binder:
+          name-server: ${machine.rocketmq.host}:9876
+          access-key: ${machine.rocketmq.access}
+          secret-key: ${machine.rocketmq.secret}
+          namespace: machine
+          enable-msg-trace: true
+          customized-trace-topic: RMQ_SYS_TRACE_TOPIC
+      producer:
+        sendMsgTimeout: 5000
+        retryTimesWhenSendFailed: 3
+      bindings:
+        mqProducer:
+          destination: mq-producer-topic
+        mqFunction-in-0:
+          destination: mq-producer-topic
+          group: mq-group
+        mqFunction-out-0:
+          destination: mq-function-topic
+        mqConsumer-in-0:
+          destination: mq-function-topic
+          group: mq-group

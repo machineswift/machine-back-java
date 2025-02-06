@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.plugin.yunxi.dao.mapper.IYunXiCubeShopMapper">
+
+    <select id="listByOffset" resultType="com.machine.service.plugin.yunxi.dao.mapper.entity.YunXiCubeShopEntity">
+        select s.*
+        from sc_shop s
+        <where>
+            s.dr = 0
+            <if test="offset != null ">
+                AND s.id > #{offset}
+            </if>
+        </where>
+        ORDER BY s.id ASC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

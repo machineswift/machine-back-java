@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: machine-hrm-service-deployment
+  namespace: cj-app-sjzx-prod
+  labels:
+    app: machine-hrm-service
+spec:
+  replicas: {{replicat}}
+  selector:
+    matchLabels:
+      app: machine-hrm-service
+  template:
+    metadata:
+      labels:
+        app: machine-hrm-service
+    spec:
+      containers:
+        - name: machine-hrm-service
+          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-hrm-service_master:{{imageVersion}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: '-XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=PROD -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=XXXX'
+            - name: SKY_AGENT
+              value: '-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-hrm-service -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800'
+          resources:
+            limits:
+              cpu: '1'
+              memory: 2048Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+      imagePullSecrets:
+        - name: xjzc.super.app

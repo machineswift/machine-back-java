@@ -1,0 +1,49 @@
+spring:
+  data:
+    redis:
+      host: ${machine.redis.host}
+      port: ${machine.redis.port}
+      password: ${machine.redis.password}
+      database: ${machine.redis.database:0}
+  redis:
+    host: ${machine.redis.host}
+    port: ${machine.redis.port}
+    password: ${machine.redis.password}
+    database: ${machine.redis.database:0}
+
+wx:
+  mp:
+    useRedis: true
+    redisConfig:
+      host: ${machine.redis.host}
+      port: ${machine.redis.port}
+      password: ${machine.redis.password}
+      database: ${machine.redis.database:0}
+      timeout: 3000
+    configs:
+      - appId: 1111 # 第一个公众号的appid
+        secret: 1111 # 公众号的appsecret
+        token: 111 # 接口配置里的Token值
+        aesKey: 111 # 接口配置里的EncodingAESKey值
+
+  miniapp:
+    configs:
+      - appid: #微信小程序的appid
+        secret: #微信小程序的Secret
+        token: #微信小程序消息服务器配置的token
+        aesKey: #微信小程序消息服务器配置的EncodingAESKey
+        msgDataFormat: JSON
+
+wechat:
+  cp:
+    appConfigs:
+      - agentId: 1000001
+        corpId: xxxx
+        secret: 1111
+        token: 111
+        aesKey: 111
+      - agentId: 1000002
+        corpId: xxxx
+        secret: 1111
+        token: 111
+        aesKey: 111

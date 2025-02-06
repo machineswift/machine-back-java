@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.label.dao.mapper.ILabelOptionMapper">
+
+    <select id="listByOffset" resultType="com.machine.service.data.label.dao.mapper.entity.LabelOptionEntity">
+        select lo.*
+        from t_label_option lo
+        <where>
+            <if test="inputDto.labelId != null and inputDto.labelId !='' ">
+                AND lo.label_id = #{inputDto.labelId}
+            </if>
+            <if test="inputDto.status != null ">
+                AND lo.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND lo.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY lo.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+    <select id="selectPage" resultType="com.machine.service.data.label.dao.mapper.entity.LabelOptionEntity">
+        select lo.*
+        from t_label_option lo
+        <where>
+            <if test="inputDto.status != null ">
+                AND lo.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.labelId != null and inputDto.labelId !='' ">
+                AND lo.label_id = #{inputDto.labelId}
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND lo.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

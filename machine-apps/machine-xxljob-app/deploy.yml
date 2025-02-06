@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: machine-xxljob-app-deployment
+  namespace: cj-app-sjzx-prod
+  labels:
+    app: machine-xxljob-app
+spec:
+  replicas: {{replicat}}
+  selector:
+    matchLabels:
+      app: machine-xxljob-app
+  template:
+    metadata:
+      labels:
+        app: machine-xxljob-app
+    spec:
+      containers:
+        - name: machine-xxljob-app
+          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-xxljob-app_master:{{imageVersion}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: '-XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=PROD -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -DXXL_JOB_EXECUTOR_HOST_IP=10.247.167.120 -DXXL_JOB_EXECUTOR_HOST_PORT=9999 -DXXL_JOB_ADMIN_ADDRESS=https://app-gateway.machine888.com/machine-xxljob-server  -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=XXXX'
+            - name: SKY_AGENT
+              value: '-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-xxljob-app -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800'
+          resources:
+            limits:
+              cpu: '1'
+              memory: 2048Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+      imagePullSecrets:
+        - name: xjzc.super.app

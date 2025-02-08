@@ -97,3 +97,8 @@ spring:
           uri: lb://machine-xxljob-server
           predicates:
             - Path=/machine-xxljob-server/**
+
+        - id: machine-camunda-server
+          uri: lb://machine-camunda-server
+          predicates:
+            - Path=/machine-camunda-server/**

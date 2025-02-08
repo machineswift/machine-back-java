@@ -15,6 +15,9 @@ spring:
     static-path-pattern: /static/**
   resources:
     static-locations: classpath:/static/
+  web:
+    resources:
+      static-locations: classpath:/static/
 
   freemarker:
     template-loader-path: classpath:/templates/
@@ -23,7 +26,7 @@ spring:
     request-context-attribute: request
     settings:
       number_format: 0.##########
-#      new_built_in_class_resolver: safer
+      new_builtin_class_resolver: safer
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -81,16 +84,17 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
 
+### actuator
 management:
   server:
-    servlet:
-      context-path: /actuator
+    base-path: /actuator
   health:
     mail:
       enabled: false
 
 xxl:
   job:
+    timeout: 3
     accessToken: default_token
     i18n: zh_CN
     triggerpool:

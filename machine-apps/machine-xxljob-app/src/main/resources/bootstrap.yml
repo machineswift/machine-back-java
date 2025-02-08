@@ -39,6 +39,7 @@ spring:
 xxl:
   job:
     admin:
+      timeout: 3
       addresses: ${XXL_JOB_ADMIN_ADDRESS}
     accessToken: default_token
     executor:

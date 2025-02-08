@@ -10,6 +10,26 @@ spring:
     web-application-type: reactive
 
   cloud:
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+        sharedConfigs:
+          - dataId: machine.yml
+            group: MACHINE_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+
+
     gateway:
       routes:
         - id: machine-iam-app
@@ -77,21 +97,3 @@ spring:
           uri: lb://machine-xxljob-server
           predicates:
             - Path=/machine-xxljob-server/**
-    nacos:
-      config:
-        server-addr: ${machine.nacos.server-addr}
-        username: ${machine.nacos.username}
-        password: ${machine.nacos.password}
-        file-extension: yml
-        namespace: MACHINE_${spring.profiles.active}
-        group: MACHINE_GROUP
-        sharedConfigs:
-          - dataId: machine.yml
-            group: MACHINE_GROUP
-            refresh: true
-      discovery:
-        server-addr: ${machine.nacos.server-addr}
-        username: ${machine.nacos.username}
-        password: ${machine.nacos.password}
-        namespace: MACHINE_${spring.profiles.active}
-        group: MACHINE_GROUP

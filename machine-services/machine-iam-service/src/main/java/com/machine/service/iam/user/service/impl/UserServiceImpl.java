@@ -811,15 +811,20 @@ public class UserServiceImpl implements IUserService {
             }
 
             //查询角色权限信息
-            Set<String> permissionCodeSet = new HashSet<>();
             List<PermissionEntity> permissionEntityList = permissionDao.selectByUserId(request.getId());
+            Set<String> permissionIdSet = new HashSet<>();
             if (CollectionUtil.isNotEmpty(permissionEntityList)) {
-                permissionCodeSet.addAll(permissionEntityList.stream().map(PermissionEntity::getCode).toList());
+                permissionIdSet.addAll(permissionEntityList.stream().map(PermissionEntity::getId).toList());
             }
             if (CollectionUtil.isNotEmpty(permissionsByRoleIds)) {
-                permissionCodeSet.addAll(permissionsByRoleIds.stream().map(PermissionEntity::getCode).toList());
+                permissionIdSet.addAll(permissionsByRoleIds.stream().map(PermissionEntity::getId).toList());
             }
-            detailDto.setPermissionCodeList(new ArrayList<>(permissionCodeSet));
+
+            PermissionTreeOutputDto allTreeOutputDto = permissionCache.treeAll();
+            Set<PermissionTreeOutputDto> permissionWithParentNodeSet = TreeUtil.getAllParentNodes(allTreeOutputDto, permissionIdSet);
+
+            detailDto.setPermissionCodeList(permissionWithParentNodeSet.stream()
+                    .map(PermissionTreeOutputDto::getCode).collect(Collectors.toList()));
         }
         return detailDto;
     }

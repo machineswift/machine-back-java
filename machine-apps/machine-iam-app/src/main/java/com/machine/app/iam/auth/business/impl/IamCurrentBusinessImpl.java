@@ -11,6 +11,7 @@ import com.machine.app.iam.auth.controller.vo.request.IamUserSmsCaptchaChangePas
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCurrentUserInfoResponseVo;
 import com.machine.client.iam.permission.IIamPermissionClient;
 import com.machine.client.iam.permission.dto.output.PermissionListOutputDto;
+import com.machine.client.iam.permission.dto.output.PermissionTreeOutputDto;
 import com.machine.client.iam.role.IIamRoleClient;
 import com.machine.client.iam.role.dto.input.IamRoleCodeInputDto;
 import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
@@ -28,7 +29,9 @@ import com.machine.sdk.common.envm.iam.auth.AuthMethodEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthResultEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.starter.redis.cache.RedisCacheFunctionPermission;
+import com.machine.starter.redis.cache.RedisCacheIamPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
@@ -46,6 +49,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.machine.starter.redis.constant.RedisConstant.REDIS_CACHE_PENETRATION_PREVENT;
 import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
@@ -66,6 +71,9 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
 
     @Autowired
     private RedisCacheFunctionPermission redisCacheFunctionPermission;
+
+    @Autowired
+    private RedisCacheIamPermission permissionCache;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -138,7 +146,13 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
         if (CollectionUtil.isEmpty(permissionOutputDtoList)) {
             return List.of();
         }
-        return permissionOutputDtoList.stream().map(PermissionListOutputDto::getCode).toList();
+
+        Set<String> permissionIdSet = permissionOutputDtoList.stream().map(PermissionListOutputDto::getId).collect(Collectors.toSet());
+        PermissionTreeOutputDto allTreeOutputDto = permissionCache.treeAll();
+        Set<PermissionTreeOutputDto> permissionWithParentNodeSet = TreeUtil.getAllParentNodes(allTreeOutputDto, permissionIdSet);
+
+        return permissionWithParentNodeSet.stream()
+                .map(PermissionTreeOutputDto::getCode).collect(Collectors.toList());
     }
 
     @Override

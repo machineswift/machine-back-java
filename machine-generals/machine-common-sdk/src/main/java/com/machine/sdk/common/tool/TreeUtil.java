@@ -9,9 +9,10 @@ import java.util.*;
 import static com.machine.sdk.common.constant.CommonConstant.Data.ORGANIZATION_ROOT_PARENT_ID;
 import static com.machine.sdk.common.constant.CommonConstant.Hrm.DEPARTMENT_ROOT_PARENT_ID;
 
+
 public class TreeUtil {
 
-    private static final int DEFAULT_ARRAY_SIZE = 1024;
+    private static final int DEFAULT_ARRAY_SIZE = 2048;
     private static final int SMALL_LIST_THRESHOLD = 16;
     private static final int MIN_CHILD_CAPACITY = 8;
 
@@ -68,31 +69,26 @@ public class TreeUtil {
     /**
      * 递归遍历树结构，收集所有节点
      */
-    @SuppressWarnings("unchecked")
     public static <T extends TreeNode<T>> List<T> collectAllNodes(T root) {
         if (root == null) {
             return new ArrayList<>();
         }
 
-        int estimatedSize = Math.min(DEFAULT_ARRAY_SIZE, estimateNodeCount(root));
-        List<T> nodes = new ArrayList<>(estimatedSize);
-        nodes.add(root);  // 已经确保root是T类型，无需转换
+        List<T> nodes = new ArrayList<>(DEFAULT_ARRAY_SIZE);
+        nodes.add(root);
 
-        T[] stack = (T[]) new TreeNode[estimatedSize];
-        int top = 0;
-        stack[top++] = root;
+        Deque<T> stack = new ArrayDeque<>();
+        stack.push(root);
 
-        while (top > 0) {
-            T node = stack[--top];
+        while (!stack.isEmpty()) {
+            T node = stack.pop();
             List<T> children = node.getChildren();
             if (children != null && !children.isEmpty()) {
                 for (int i = children.size() - 1; i >= 0; i--) {
                     T child = children.get(i);
                     if (child != null) {
                         nodes.add(child);
-                        if (top < stack.length) {
-                            stack[top++] = child;
-                        }
+                        stack.push(child);
                     }
                 }
             }
@@ -201,6 +197,60 @@ public class TreeUtil {
         quickSort(nodes, 0, nodes.size() - 1, asc);
     }
 
+    /**
+     * 获取指定节点集合的所有父级节点（包括根节点）
+     */
+    public static <T extends TreeNode<T>> Set<T> getAllParentNodes(T root,
+                                                                   Set<String> targetIds) {
+        if (root == null || targetIds == null || targetIds.isEmpty()) {
+            return new HashSet<>();
+        }
+
+        // 构建ID到节点的映射和父子关系映射
+        Map<String, T> idToNode = new HashMap<>();
+        Map<String, String> childToParent = new HashMap<>();
+
+        Deque<T> stack = new ArrayDeque<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            T node = stack.pop();
+            idToNode.put(node.getId(), node);
+            List<T> children = node.getChildren();
+
+            if (children != null) {
+                for (int i = children.size() - 1; i >= 0; i--) {
+                    T child = children.get(i);
+                    if (child != null) {
+                        childToParent.put(child.getId(), node.getId());
+                        stack.push(child);
+                    }
+                }
+            }
+        }
+
+        // 收集所有父级节点
+        Set<T> result = new HashSet<>();
+        for (String targetId : targetIds) {
+            T node = idToNode.get(targetId);
+            if (node != null) {
+                result.add(node);
+                String parentId = childToParent.get(targetId);
+                while (parentId != null) {
+                    T parentNode = idToNode.get(parentId);
+                    if (parentNode != null) {
+                        result.add(parentNode);
+                        parentId = childToParent.get(parentId);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     private static <T extends TreeNode<T>> void insertionSort(List<T> nodes, boolean asc) {
         for (int i = 1; i < nodes.size(); i++) {
             T key = nodes.get(i);
@@ -274,12 +324,6 @@ public class TreeUtil {
         return parentId == null
                 || ORGANIZATION_ROOT_PARENT_ID.equals(parentId)
                 || DEPARTMENT_ROOT_PARENT_ID.equals(parentId);
-    }
-
-    private static int estimateNodeCount(TreeNode<?> root) {
-        if (root == null) return 0;
-        int childCount = root.getChildren() == null ? 0 : root.getChildren().size();
-        return Math.min(DEFAULT_ARRAY_SIZE, 1 + childCount * 4);
     }
 
     @SneakyThrows

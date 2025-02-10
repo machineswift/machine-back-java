@@ -13,6 +13,9 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class DataShopQueryPageInputDto extends PageRequest {
 
+    @Schema(description = "关键字（名称/编码）")
+    private String keyWord;
+
     @Schema(description = "名称")
     private String name;
 

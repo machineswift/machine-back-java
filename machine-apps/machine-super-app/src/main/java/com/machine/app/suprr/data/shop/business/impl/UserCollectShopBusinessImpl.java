@@ -2,7 +2,6 @@ package com.machine.app.suprr.data.shop.business.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.machine.app.suprr.data.area.business.ISuperAreaBusiness;
 import com.machine.app.suprr.data.shop.business.IUserCollectShopBusiness;
 import com.machine.app.suprr.data.shop.controller.vo.request.*;
 import com.machine.app.suprr.data.shop.controller.vo.response.SuperShopListSimpleResponseVo;
@@ -41,9 +40,6 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Autowired
     private RedisCacheDataPermission redisCacheDataPermission;
-
-    @Autowired
-    private ISuperAreaBusiness areaBusiness;
 
     @Autowired
     private IDataShopClient shopClient;

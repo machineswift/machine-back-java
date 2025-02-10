@@ -77,6 +77,10 @@
     <select id="pageShop" resultType="com.machine.service.data.shop.dao.mapper.entity.ShopEntity">
         SELECT s.* FROM t_shop s
         <where>
+            <if test="inputDto.keyWord != null and inputDto.keyWord !='' ">
+                AND (s.name like CONCAT('%', #{inputDto.keyWord}, '%') OR
+                s.code like CONCAT('%', #{inputDto.keyWord}, '%'))
+            </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
                 AND s.name like CONCAT('%', #{inputDto.name}, '%')
             </if>
@@ -150,8 +154,9 @@
         LEFT JOIN t_user_collect_shop ucs ON ucs.shop_id = s.id
         <where>
             ucs.user_id = #{inputDto.userId}
-            <if test="inputDto.name != null and inputDto.name !='' ">
-                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+            <if test="inputDto.keyWord != null and inputDto.keyWord !='' ">
+                AND (s.name like CONCAT('%', #{inputDto.keyWord}, '%') OR
+                s.code like CONCAT('%', #{inputDto.keyWord}, '%'))
             </if>
             <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
                 AND s.id IN

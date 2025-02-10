@@ -12,75 +12,48 @@
     - [machine-camunda-table](document/db/table/machine-camunda-table.sql)
     - [machine-iam-table](document/db/table/machine-iam-table.sql)
     - [machine-data-table](document/db/table/machine-data-table.sql)
-- [基础设施配置]()
-    - [docker]()
-        - [部署基础设施-DEV](document/infra/docker/DOCKER_DEV.md)
-        - [部署基础设施-PROD](document/infra/docker/DOCKER_PROD.md)
-    - [nacos]()
-        - [machine.yaml](document/infra/nacos/yml/machine.yml)
-        - [server]()
-            - [machine-gateway-server.yaml](document/infra/nacos/yml/servers/machine-gateway-server.yml)
-            - [machine-xxljob-server.yaml](document/infra/nacos/yml/servers/machine-xxljob-server.yml)
-        - [app]()
-            - [machine-iam-app.yaml](document/infra/nacos/yml/apps/machine-iam-app.yml)
-            - [machine-manage-app.yaml](document/infra/nacos/yml/apps/machine-manage-app.yml)
-            - [machine-openapi-app.yaml](document/infra/nacos/yml/apps/machine-openapi-app.yml)
-            - [machine-mq-app.yaml](document/infra/nacos/yml/apps/machine-mq-app.yml)
-            - [machine-xxljob-app.yaml](document/infra/nacos/yml/apps/machine-xxljob-app.yml)
-        - [service]()
-            - [machine-iam-service.yaml](document/infra/nacos/yml/services/machine-iam-service.yml)
-            - [machine-data-service.yaml](document/infra/nacos/yml/services/machine-data-service.yml)
-            - [machine-hrm-service.yaml](document/infra/nacos/yml/services/machine-hrm-service.yml)
-        - [test]()
-            - [machine-temp-test.yaml](document/infra/nacos/yml/test/machine-temp-test.yml)
-    - [jvm]()
-        - [dev]()
-            - [server]()
-                - [machine-gateway-server.properties](document/infra/jvm/dev/servers/machine-gateway-server.properties)
-                - [machine-xxljob-server.properties](document/infra/jvm/dev/servers/machine-xxljob-server.properties)
-            - [app]()
-                - [machine-iam-app.properties](document/infra/jvm/dev/apps/machine-iam-app.properties)
-                - [machine-manage-app.properties](document/infra/jvm/dev/apps/machine-manage-app.properties)
-                - [machine-super-app.properties](document/infra/jvm/dev/apps/machine-super-app.properties)
-                - [machine-openapi-app.properties](document/infra/jvm/dev/apps/machine-openapi-app.properties)
-                - [machine-mq-app.properties](document/infra/jvm/dev/apps/machine-mq-app.properties)
-                - [machine-xxljob-app.properties](document/infra/jvm/dev/apps/machine-xxljob-app.properties)
-            - [service]()
-                - [machine-iam-service.properties](document/infra/jvm/dev/services/machine-iam-service.properties)
-                - [machine-data-service.properties](document/infra/jvm/dev/services/machine-data-service.properties)
-                - [machine-hrm-service.properties](document/infra/jvm/dev/services/machine-hrm-service.properties)
-            - [test]()
-                - [machine-temp-test.properties](document/infra/jvm/dev/test/machine-temp-test.properties)
-      - [local-dev]()
-          - [server]()
-              - [machine-gateway-server.properties](document/infra/jvm/local/servers/machine-gateway-server.properties)
-              - [machine-xxljob-server.properties](document/infra/jvm/local/servers/machine-xxljob-server.properties)
-          - [app]()
-              - [machine-iam-app.properties](document/infra/jvm/local/apps/machine-iam-app.properties)
-              - [machine-manage-app.properties](document/infra/jvm/local/apps/machine-manage-app.properties)
-              - [machine-super-app.properties](document/infra/jvm/local/apps/machine-super-app.properties)
-              - [machine-openapi-app.properties](document/infra/jvm/local/apps/machine-openapi-app.properties)
-              - [machine-mq-app.properties](document/infra/jvm/local/apps/machine-mq-app.properties)
-              - [machine-xxljob-app.properties](document/infra/jvm/local/apps/machine-xxljob-app.properties)
-          - [service]()
-              - [machine-iam-service.properties](document/infra/jvm/local/services/machine-iam-service.properties)
-              - [machine-data-service.properties](document/infra/jvm/local/services/machine-data-service.properties)
-              - [machine-hrm-service.properties](document/infra/jvm/local/services/machine-hrm-service.properties)
-          - [test]()
-              - [machine-temp-test.properties](document/infra/jvm/local/test/machine-temp-test.properties)
-    - [docker]()
-        - [server]()
-            - [machine-gateway-server.Dockerfile](machine-servers/machine-gateway-server/Dockerfile)
-            - [machine-xxljob-server.Dockerfile](machine-servers/machine-xxljob-server/Dockerfile)
-        - [app]()
-            - [machine-iam-app.Dockerfile](machine-apps/machine-iam-app/Dockerfile)
-            - [machine-manage-app.Dockerfile](machine-apps/machine-manage-app/Dockerfile)
-            - [machine-super-app.Dockerfile](machine-apps/machine-super-app/Dockerfile)
-            - [machine-openapi-app.Dockerfile](machine-apps/machine-openapi-app/Dockerfile)
-            - [machine-xxljob-app.Dockerfile](machine-apps/machine-xxljob-app/Dockerfile)
-        - [service]()
-            - [machine-iam-service.Dockerfile](machine-services/machine-iam-service/Dockerfile)
-            - [machine-data-service.Dockerfile](machine-services/machine-data-service/Dockerfile)
-            - [machine-hrm-service.Dockerfile](machine-services/machine-hrm-service/Dockerfile)
-        - [test]()
-            - [machine-temp-test.Dockerfile](machine-tests/machine-temp-test/Dockerfile)
+- [基础设施配置](document/infra/infra.md)
+
+## 技术选型
+
+### 核心技术栈
+
+| 功能      | 名称                        | 版本         | 备注 |
+|---------|---------------------------|------------|----|
+| 微服务框架   | spring-cloud-alibaba      | 2023.0.1.2 | -  |
+| 微服务框架   | spring-cloud              | 2023.0.2   | -  |
+| 微服务框架   | spring-boot               | 3.2.8      | -  |
+| 服务注册和发现 | nacos                     | 2.3.2      | -  |
+| 配置中心    | nacos config              | 2.3.2      | -  |
+| 网关      | spring-cloud-gateway      | -          | -  |
+| 负载均衡    | spring-cloud-loadbalancer | -          | -  |
+| 服务调用    | spring-cloud-openfeign    | -          | -  |
+| 限流熔断    | 暂无                        | -          | -  |
+| 分布式事务   | 暂无                        | -          | -  |
+| 链路追踪    | skywalking                | 10.1.0     | -  |
+| 认证授权    | SpringSecurity            | 10.1.0     | -  |
+| 调度服务    | XXL-JOB                   | 3.0.0      | -  |
+| ORM     | mybatisPlus               | 3.5.8      | -  |
+
+### 基础设施
+
+| 功能    | 名称            | 版本               | 备注 |
+|-------|---------------|------------------|----|
+| JDK   | openjdk       | 21               | -  |
+| 消息服务  | RabbitMq      | 4.0.4-management | -  |
+| 搜索引擎  | 暂无            | -                | -  |
+| 文件上传  | 华为云           | -                | -  |
+| 数据库   | mysql         | 8.0.22-30        | -  |
+| 分布式缓存 | redis         | 7.4              | -  |
+| 本地缓存  | caffeine      | 3.1.8            | -  |
+| 日志搜索  | Elasticsearch | 8.17.0           | -  |
+| ORM   | mybatisPlus   | 3.5.8            | -  |
+
+### 开发支撑
+
+| 功能    | 名称      | 版本     | 备注 |
+|-------|---------|--------|----|
+| IDE   | IDE     | 2024.1 | -  |
+| 文档    | swagger | 2.2.22 | -  |
+| Maven | Maven   | 3.9.6  | -  |
+| 代码仓库  | 华为云     | -      | -  |

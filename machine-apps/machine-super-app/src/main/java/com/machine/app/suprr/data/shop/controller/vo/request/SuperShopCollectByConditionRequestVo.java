@@ -19,7 +19,7 @@ public class SuperShopCollectByConditionRequestVo {
     private ShopStatusEnum status;
 
     @Schema(description = "关键字（名称/编码）")
-    private String keyWord;
+    private String keyword;
 
     @Schema(description = "组织Id集合")
     private Set<String> organizationIdSet;

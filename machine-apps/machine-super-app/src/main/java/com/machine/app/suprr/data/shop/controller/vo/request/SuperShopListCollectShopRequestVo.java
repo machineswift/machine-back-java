@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class SuperShopListCollectShopRequestVo extends PageRequest {
 
-    @Schema(description = "店铺名称")
-    private String name;
+    @Schema(description = "关键字（名称/编码）")
+    private String keyWord;
 
 }

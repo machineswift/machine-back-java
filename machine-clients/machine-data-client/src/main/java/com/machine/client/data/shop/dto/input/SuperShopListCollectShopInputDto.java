@@ -16,7 +16,7 @@ public class SuperShopListCollectShopInputDto extends PageRequest {
     private String userId;
 
     @Schema(description = "关键字（名称/编码）")
-    private String keyWord;
+    private String keyword;
 
     @Schema(description = "店铺Id集合")
     private Set<String> shopIdSet;

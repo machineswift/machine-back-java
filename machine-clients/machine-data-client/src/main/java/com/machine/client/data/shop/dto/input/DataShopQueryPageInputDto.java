@@ -14,7 +14,7 @@ import java.util.Set;
 public class DataShopQueryPageInputDto extends PageRequest {
 
     @Schema(description = "关键字（名称/编码）")
-    private String keyWord;
+    private String keyword;
 
     @Schema(description = "名称")
     private String name;

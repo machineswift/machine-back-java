@@ -43,7 +43,9 @@
         select r.*
         from t_role r
         <where>
-            r.type = #{inputDto.type}
+            <if test="inputDto.type != null ">
+                AND r.type = #{inputDto.type}
+            </if>
             <if test="inputDto.status != null ">
                 AND r.status = #{inputDto.status}
             </if>

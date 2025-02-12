@@ -4,7 +4,6 @@ import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,8 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IamRoleQueryPageSimpleRequestVo extends PageRequest {
 
-    @NotNull(message = "类型不能为空")
-    @Schema(description = "类型（RoleTypeEnum）", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "类型（RoleTypeEnum）")
     private RoleTypeEnum type;
 
     @Schema(description = "编码")

@@ -266,40 +266,37 @@
             </dependency>
             <!--http 结束-->
 
-            <!-- 微信小程序  -->
+            <!-- 微信 开始  -->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-miniapp</artifactId>
-                <version>4.6.9.B</version>
+                <version>4.7.0</version>
             </dependency>
 
-            <!-- 微信支付  -->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-pay</artifactId>
-                <version>4.6.9.B</version>
+                <version>4.7.0</version>
             </dependency>
 
-            <!-- 微信开放平台  -->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-open</artifactId>
-                <version>4.6.9.B</version>
+                <version>4.7.0</version>
             </dependency>
 
-            <!-- 公众号（包括订阅号和服务号）-->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-mp</artifactId>
-                <version>4.6.9.B</version>
+                <version>4.7.0</version>
             </dependency>
 
-            <!-- 企业号/企业微信 -->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-cp</artifactId>
-                <version>4.6.9.B</version>
+                <version>4.7.0</version>
             </dependency>
+            <!-- 微信 结束  -->
 
             <!-- 华为 开始-->
             <dependency>
@@ -327,12 +324,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.34</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.larksuite.oapi</groupId>
                 <artifactId>oapi-sdk</artifactId>
                 <version>2.0.2</version>
@@ -345,6 +336,12 @@
                 <version>2.3.2</version>
             </dependency>
             <!-- 验证码  结束-->
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.34</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -16,6 +16,7 @@
         <module>machine-iam-service</module>
         <module>machine-data-service</module>
         <module>machine-hrm-service</module>
+        <module>machine-scm-service</module>
         <module>machine-plugin-service</module>
     </modules>
 

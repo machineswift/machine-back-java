@@ -2,6 +2,7 @@ package com.machine.app.xxljob.job;
 
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import com.xxl.job.core.util.GsonTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +25,8 @@ import java.util.concurrent.TimeUnit;
  *      2、注解配置：为Job方法添加注解 "@XxlJob(value="自定义jobhandler名称", init = "JobHandler初始化方法", destroy = "JobHandler销毁方法")"，注解value值对应的是调度中心新建任务的JobHandler属性的值。
  *      3、执行日志：需要通过 "XxlJobHelper.log" 打印执行日志；
  *      4、任务结果：默认任务结果为 "成功" 状态，不需要主动设置；如有诉求，比如设置任务结果为失败，可以通过 "XxlJobHelper.handleFail/handleSuccess" 自主设置任务结果；
+ *
+ * @author xuxueli 2019-12-11 21:52:51
  */
 @Component
 public class SampleXxlJob {
@@ -40,6 +44,7 @@ public class SampleXxlJob {
             XxlJobHelper.log("beat at:" + i);
             TimeUnit.SECONDS.sleep(2);
         }
+        // default success
     }
 
 
@@ -69,6 +74,8 @@ public class SampleXxlJob {
 
     /**
      * 3、命令行任务
+     *
+     *  参数示例："ls -a" 或者 "pwd"
      */
     @XxlJob("commandJobHandler")
     public void commandJobHandler() throws Exception {
@@ -77,9 +84,18 @@ public class SampleXxlJob {
 
         BufferedReader bufferedReader = null;
         try {
+            // valid
+            if (command==null || command.trim().length()==0) {
+                XxlJobHelper.handleFail("command empty.");
+                return;
+            }
+
+            // command split
+            String[] commandArray = command.split(" ");
+
             // command process
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command(command);
+            processBuilder.command(commandArray);
             processBuilder.redirectErrorStream(true);
 
             Process process = processBuilder.start();
@@ -116,15 +132,20 @@ public class SampleXxlJob {
 
     /**
      * 4、跨平台Http任务
+     *
      *  参数示例：
-     *      "url: http://www.baidu.com\n" +
-     *      "method: get\n" +
-     *      "data: content\n";
+     *  <pre>
+     *      {
+     *          "url": "http://www.baidu.com",
+     *          "method": "get",
+     *          "data": "hello world"
+     *      }
+     *  </pre>
      */
     @XxlJob("httpJobHandler")
     public void httpJobHandler() throws Exception {
 
-        // param parse
+        // param
         String param = XxlJobHelper.getJobParam();
         if (param==null || param.trim().length()==0) {
             XxlJobHelper.log("param["+ param +"] invalid.");
@@ -133,20 +154,19 @@ public class SampleXxlJob {
             return;
         }
 
-        String[] httpParams = param.split("\n");
-        String url = null;
-        String method = null;
-        String data = null;
-        for (String httpParam: httpParams) {
-            if (httpParam.startsWith("url:")) {
-                url = httpParam.substring(httpParam.indexOf("url:") + 4).trim();
-            }
-            if (httpParam.startsWith("method:")) {
-                method = httpParam.substring(httpParam.indexOf("method:") + 7).trim().toUpperCase();
-            }
-            if (httpParam.startsWith("data:")) {
-                data = httpParam.substring(httpParam.indexOf("data:") + 5).trim();
-            }
+        // param parse
+        String url;
+        String method;
+        String data;
+        try {
+            Map<String, String> paramMap =GsonTool.fromJson(param, Map.class);
+            url = paramMap.get("url");
+            method = paramMap.get("method");
+            data = paramMap.get("data");
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail();
+            return;
         }
 
         // param valid
@@ -156,12 +176,13 @@ public class SampleXxlJob {
             XxlJobHelper.handleFail();
             return;
         }
-        if (method==null || !Arrays.asList("GET", "POST").contains(method)) {
+        if (method==null || !Arrays.asList("GET", "POST").contains(method.toUpperCase())) {
             XxlJobHelper.log("method["+ method +"] invalid.");
 
             XxlJobHelper.handleFail();
             return;
         }
+        method = method.toUpperCase();
         boolean isPostMethod = method.equals("POST");
 
         // request

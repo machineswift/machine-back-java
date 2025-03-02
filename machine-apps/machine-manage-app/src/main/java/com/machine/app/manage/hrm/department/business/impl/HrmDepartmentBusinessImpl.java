@@ -106,6 +106,19 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
             responseVo.setLevel(parentIdList.size());
         }
 
+        {//层级
+            DepartmentTreeOutputDto treeOutputDto = departmentCache.treeAllSimple();
+            //找到指定的节点
+            DepartmentTreeOutputDto treeNode = TreeUtil.findNode(treeOutputDto, outputDto.getId());
+            //获取指定部门的所有父组织ID列表（list元素第一个是当前部门ID，最后一个是根部门ID，从左至右部门层级递增）
+            List<String> parentIdList = new ArrayList<>();
+            do {
+                parentIdList.add(treeNode.getId());
+                treeNode = TreeUtil.findNode(treeOutputDto, treeNode.getParentId());
+            } while (null != treeNode);
+
+            responseVo.setLevel(parentIdList.size());
+        }
         return responseVo;
     }
 

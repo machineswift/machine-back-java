@@ -2,6 +2,7 @@ package com.machine.client.iam.user.dto.output;
 
 import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.crm.customer.GenderEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
@@ -29,24 +30,15 @@ public class UserListOutputDto {
      */
     private String description;
 
-    /**
-     * 创建人
-     */
+    @Schema(description = "创建人ID")
     private String createBy;
 
-    /**
-     * 创建时间
-     */
-    private long createTime;
+    @Schema(description = "创建时间（Unix 时间戳）")
+    private Long createTime;
 
-    /**
-     * 修改人
-     */
+    @Schema(description = "操作人ID")
     private String updateBy;
 
-    /**
-     * 更新时间
-     */
-    private long updateTime;
-
+    @Schema(description = "更新时间（Unix 时间戳）")
+    private Long updateTime;
 }

@@ -28,8 +28,9 @@ public class BeiSenTokenInterceptor implements Interceptor {
         Response response = chain.proceed(request);
 
         if (HttpStatus.UNAUTHORIZED.value() == response.code()) {
-            //token问题重新获取token并重新发起请求
-            beiSenToken = null;
+            try (ResponseBody ignored = response.body()) {
+                beiSenToken = null;
+            }
             request = originalRequest.newBuilder()
                     .header("Authorization", "Bearer " + getToken())
                     .build();

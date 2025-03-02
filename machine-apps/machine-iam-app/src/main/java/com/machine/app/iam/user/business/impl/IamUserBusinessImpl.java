@@ -72,13 +72,13 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private MachineJwtUtil machineJwtUtil;
-
-    @Autowired
     private RedisCacheHrmDepartment departmentCache;
 
     @Autowired
     private RedisCacheIamOrganization organizationCache;
+
+    @Autowired
+    private MachineJwtUtil machineJwtUtil;
 
     @Autowired
     private IIamUserRoleTargetClient userRoleTargetClient;
@@ -116,6 +116,39 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
                 passwordEncoder.encode(requestVo.getNewPassword())));
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         blackAuthToken4AdminUpdatePassword(requestVo.getId(), request);
+    }
+
+    @Override
+    public void extractedUserIdByOrganizationIdSet(Set<String> organizationIdSet,
+                                                   Set<String> finallyqueryShopIdSet) {
+
+        Set<String> organizationShopIdSet = new HashSet<>();
+        for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
+            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
+                //未分配节点
+                List<String> userIdList = userClient.listNotBindOrganization(new DataUserNotBindOrganizationInputDto(type));
+                if (CollectionUtil.isNotEmpty(userIdList)) {
+                    organizationShopIdSet.addAll(userIdList);
+                }
+                break;
+            }
+        }
+
+        //递归查询子节点
+        Set<String> recursionOrganizationIdSet = organizationCache.recursionListSubIds(organizationIdSet);
+
+        if (CollectionUtil.isNotEmpty(recursionOrganizationIdSet)) {
+            Set<String> userIdSet = getIdByOrganizationIdSet(recursionOrganizationIdSet);
+            organizationShopIdSet.addAll(userIdSet);
+        }
+
+        //取交集
+        if (CollectionUtil.isEmpty(finallyqueryShopIdSet)) {
+            finallyqueryShopIdSet.addAll(organizationShopIdSet);
+        } else {
+            finallyqueryShopIdSet.retainAll(organizationShopIdSet);
+        }
+
     }
 
     @Override
@@ -318,7 +351,6 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         return responseVo;
     }
 
-
     @Override
     public PageResponse<IamUserSimpleListResponseVo> pageSimpled(IamUserQueryPageSimpleRequestVo request) {
         //组装UserId集合
@@ -421,6 +453,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
 
         return pageResponse;
     }
+
 
     /**
      * 角色信息
@@ -580,26 +613,5 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         inputDto.setDescription(JSON.toJSONString(hasProcessLoginLogList));
         LoginLogUtil.setUserAgentInfo(request, inputDto);
         loginLogClient.create(inputDto);
-    }
-
-    private void extractedUserIdByOrganizationIdSet(Set<String> organizationIdSet, Set<String> finallyqueryShopIdSet) {
-        for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
-            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
-                //未分配节点
-                List<String> userIdList = userClient.listNotBindOrganization(new DataUserNotBindOrganizationInputDto(type));
-                if (CollectionUtil.isNotEmpty(userIdList)) {
-                    finallyqueryShopIdSet.addAll(userIdList);
-                }
-                break;
-            }
-        }
-
-        //递归查询子节点
-        Set<String> recursionOrganizationIdSet = organizationCache.recursionListSubIds(organizationIdSet);
-
-        if (CollectionUtil.isNotEmpty(recursionOrganizationIdSet)) {
-            Set<String> userIdSet = getIdByOrganizationIdSet(recursionOrganizationIdSet);
-            finallyqueryShopIdSet.addAll(userIdSet);
-        }
     }
 }

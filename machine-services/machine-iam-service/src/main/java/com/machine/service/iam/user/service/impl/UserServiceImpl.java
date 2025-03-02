@@ -3,6 +3,7 @@ package com.machine.service.iam.user.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import cn.idev.excel.FastExcel;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.employee.ICompanyEmployeeClient;
 import com.machine.client.data.employee.IShopEmployeeClient;
@@ -29,16 +30,21 @@ import com.machine.client.iam.user.dto.output.UserListOutputDto;
 import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.crm.customer.GenderEnum;
 import com.machine.sdk.common.envm.data.CompanyEmployeeStatusEnum;
+import com.machine.sdk.common.envm.data.MaterIalTypeEnum;
 import com.machine.sdk.common.envm.data.ShopEmployeeStatusEnum;
 import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
 import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
 import com.machine.sdk.common.envm.iam.role.ShopDefaultRoleEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.StringUtil;
 import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.huawei.client.file.HuaWeiObsHttpClient;
+import com.machine.sdk.huawei.domain.UploadParamDto;
+import com.machine.sdk.huawei.util.UploadParamUtil;
 import com.machine.service.iam.organization.dao.IOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.OrganizationEntity;
 import com.machine.service.iam.permission.dao.IPermissionDao;
@@ -51,20 +57,29 @@ import com.machine.service.iam.user.dao.IUserTypeDao;
 import com.machine.service.iam.user.dao.mapper.entity.UserEntity;
 import com.machine.service.iam.user.dao.mapper.entity.UserRoleTargetRelationEntity;
 import com.machine.service.iam.user.service.IUserService;
+import com.machine.service.iam.user.service.bo.ShopUserExportBo;
 import com.machine.starter.redis.cache.RedisCacheIamPermission;
+import com.obs.services.model.PutObjectResult;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.machine.sdk.common.constant.CommonConstant.DOWNLOAD_FILE_EXPIRATION_DAYS;
 import static com.machine.sdk.common.constant.CommonConstant.Iam.ROOT_USER_ID;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements IUserService {
+
+    @Resource(name = "huaWeiObsHttpClient")
+    private HuaWeiObsHttpClient huaWeiObsHttpClient;
 
     @Autowired
     private RedisCacheIamPermission permissionCache;
@@ -908,6 +923,49 @@ public class UserServiceImpl implements IUserService {
         Page<UserListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), UserListOutputDto.class));
         return pageResult;
+    }
+
+    @Override
+    public MaterialDto exportShopUser(IamShopUserExportInputDto inputDto) {
+        List<UserEntity> entityList = userDao.listShopUser4Export(inputDto);
+        if (CollectionUtil.isEmpty(entityList)) {
+            return null;
+        }
+
+        List<ShopUserExportBo> exportBoList = new ArrayList<>();
+        for (UserEntity entity : entityList) {
+            ShopUserExportBo exportBo = new ShopUserExportBo();
+            exportBo.setId(entity.getId());
+            exportBo.setUserName(entity.getUserName());
+            exportBo.setStatus(entity.getStatus().getMsg());
+            exportBo.setCode(entity.getCode());
+            exportBo.setName(entity.getName());
+            exportBo.setPhone(entity.getPhone());
+            exportBo.setGender(entity.getGender().getMsg());
+            exportBoList.add(exportBo);
+        }
+
+        String fileName = "门店用户.xlsx";
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FastExcel.write(outputStream, ShopUserExportBo.class).sheet("门店用户").doWrite(exportBoList);
+        byte[] bytes = outputStream.toByteArray();
+        UploadParamDto uploadParamDto = UploadParamUtil.get4Download(new ByteArrayInputStream(bytes),
+                fileName, DOWNLOAD_FILE_EXPIRATION_DAYS + 30);
+
+        PutObjectResult putObjectResult;
+        try {
+            putObjectResult = huaWeiObsHttpClient.uploadFileByExpires(uploadParamDto);
+        } catch (Exception e) {
+            log.error("门店用户导出异常", e);
+            throw new IamBusinessException("iam.user.exportShop.uploadException", "上传文件失败", e);
+        }
+
+        MaterialDto materialDto = new MaterialDto();
+        materialDto.setType(MaterIalTypeEnum.FILE);
+        materialDto.setSize((long) bytes.length);
+        materialDto.setName(fileName);
+        materialDto.setUrl(putObjectResult.getObjectUrl());
+        return materialDto;
     }
 
     /**

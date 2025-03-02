@@ -47,4 +47,6 @@ public interface IUserDao {
 
     Page<UserEntity> pageSupplier(IamSupplierUserQueryPageInputDto inputDto);
 
+    List<UserEntity> listShopUser4Export(IamShopUserExportInputDto inputDto);
+
 }

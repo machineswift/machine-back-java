@@ -1,5 +1,6 @@
 package com.machine.client.iam.organization.dto.output;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
@@ -17,24 +18,15 @@ public class IamOrganizationListOutputDto {
      */
     private Long sort;
 
-    /**
-     * 创建人ID
-     */
+    @Schema(description = "创建人ID")
     private String createBy;
 
-
-    /**
-     * 创建时间（Unix 时间戳）
-     */
+    @Schema(description = "创建时间（Unix 时间戳）")
     private Long createTime;
 
-    /**
-     * 操作人ID
-     */
+    @Schema(description = "操作人ID")
     private String updateBy;
 
-    /**
-     * 更新时间（Unix 时间戳）
-     */
+    @Schema(description = "更新时间（Unix 时间戳）")
     private Long updateTime;
 }

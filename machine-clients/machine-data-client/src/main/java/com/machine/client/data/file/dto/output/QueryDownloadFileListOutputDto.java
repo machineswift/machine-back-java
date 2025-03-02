@@ -1,7 +1,7 @@
 package com.machine.client.data.file.dto.output;
 
-import com.xijie.sdk.common.envm.data.download.DownLoadFileChannelEnum;
-import com.xijie.sdk.common.envm.data.download.ExportTaskStatusEnum;
+import com.machine.sdk.common.envm.data.download.DownLoadFileChannelEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

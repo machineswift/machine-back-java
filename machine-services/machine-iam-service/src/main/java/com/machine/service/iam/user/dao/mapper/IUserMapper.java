@@ -31,4 +31,5 @@ public interface IUserMapper extends BaseMapper<UserEntity> {
     Page<UserEntity> pageSupplier(@Param("inputDto") IamSupplierUserQueryPageInputDto inputDto,
                                   IPage<UserEntity> page);
 
+    List<UserEntity> listShopUser4Export(@Param("inputDto") IamShopUserExportInputDto inputDto);
 }

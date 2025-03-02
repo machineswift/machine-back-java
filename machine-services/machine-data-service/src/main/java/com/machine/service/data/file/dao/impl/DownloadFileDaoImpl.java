@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.file.dto.input.DownloadFilePageClientInputDto;
 import com.machine.client.data.file.dto.input.DownloadFileQueryPageInputDto;
 import com.machine.client.data.file.dto.input.QueryDownloadFileQueryInputDto;
 import com.machine.service.data.file.dao.IDownloadFileDao;

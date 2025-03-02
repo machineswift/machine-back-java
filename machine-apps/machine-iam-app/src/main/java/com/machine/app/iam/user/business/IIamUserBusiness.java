@@ -17,6 +17,9 @@ public interface IIamUserBusiness {
 
     void adminChangePassword(IamAdminChangePasswordRequestVo requestVo);
 
+    void extractedUserIdByOrganizationIdSet(Set<String> organizationIdSet,
+                                            Set<String> finallyqueryShopIdSet);
+
     Set<String> getIdByDepartmentIdSet(Set<String> departmentIdSet);
 
     Set<String> getIdByOrganizationIdSet(Set<String> organizationIdSet);

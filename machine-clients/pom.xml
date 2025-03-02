@@ -16,6 +16,7 @@
         <module>machine-iam-client</module>
         <module>machine-data-client</module>
         <module>machine-hrm-client</module>
+        <module>machine-scm-client</module>
         <module>machine-plugin-client</module>
     </modules>
 

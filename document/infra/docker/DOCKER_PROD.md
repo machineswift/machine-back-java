@@ -8,8 +8,8 @@ docker network create machine
 docker run -d \
 --name redis \
 -p 6379:6379 \
---cpus=2.5 \
---memory=8g --memory-swap=8g \
+--cpus=2 \
+--memory=4g --memory-swap=8g \
 --restart unless-stopped \  
 -v /xj-data/redis/redis.conf:/etc/redis/redis.conf \
 -v /xj-data/redis/data:/data \
@@ -22,7 +22,7 @@ docker run -d \
 -e RABBITMQ_DEFAULT_USER=root \
 -e RABBITMQ_DEFAULT_PASS=XXXX \
 -p 15672:15672 -p 5672:5672  \
---cpus=1 \
+--cpus=2 \
 --memory=4g --memory-swap=4g \
 --restart unless-stopped \  
 v /xj-data/rabbitmq/data:/var/lib/rabbitmq \
@@ -44,7 +44,7 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_DB_NAME=machine_nacos \
 -e MYSQL_SERVICE_USER=root \
 -e MYSQL_SERVICE_PASSWORD=XXXX \
---cpus=0.5 \
+--cpus=1 \
 --memory=2g --memory-swap=2g \
 --restart unless-stopped \
 nacos/nacos-server:v2.3.2
@@ -60,8 +60,8 @@ docker run -p 9200:9200 -d --name elasticsearch --network machine \
 -e "discovery.type=single-node" \
 -e "xpack.security.http.ssl.enabled=false" \
 -e "xpack.license.self_generated.type=trial" \
---cpus=1.5 \
---memory=4g --memory-swap=4g \
+--cpus=4 \
+--memory=8g --memory-swap=8g \
 --restart unless-stopped \
 docker.elastic.co/elasticsearch/elasticsearch:8.17.0
 
@@ -81,8 +81,8 @@ docker run -p 5601:5601 -d --name kibana --network machine \
 -e ELASTICSEARCH_PASSWORD=kibana@2 \
 -e "xpack.security.enabled=false" \
 -e "xpack.license.self_generated.type=trial" \
---cpus=0.2 \
---memory=0.5g --memory-swap=0.5g \
+--cpus=0.5 \
+--memory=1g --memory-swap=1g \
 --restart unless-stopped \
 docker.elastic.co/kibana/kibana:8.17.0
 
@@ -98,8 +98,8 @@ docker run --name skywalking --network machine  -d \
 -e SW_CORE_METRICS_DATA_TTL=270 \
 -p 11800:11800 \
 -p 12800:12800 \
---cpus=1.8 \
---memory=3g --memory-swap=3g \
+--cpus=2 \
+--memory=4g --memory-swap=4g \
 --restart unless-stopped \
 apache/skywalking-oap-server:10.1.0
 
@@ -109,8 +109,8 @@ docker run --name skywalking-ui  -d \
 -e SW_OAP_SERVER=skywalking:12800 \
 -e SW_OAP_ADDRESS=http://skywalking:12800 \
 -p 9088:8080 \
---cpus=0.4 \
---memory=0.5g --memory-swap=0.5g \
+--cpus=0.5 \
+--memory=1g --memory-swap=1g \
 --restart unless-stopped \
 apache/skywalking-ui:10.1.0
 

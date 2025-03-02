@@ -7,6 +7,7 @@ import com.machine.app.manage.hrm.department.business.bo.HrmDepartmentExpandTree
 import com.machine.app.manage.hrm.department.controller.vo.response.*;
 import com.machine.client.hrm.department.IHrmDepartmentClient;
 import com.machine.client.hrm.department.dto.output.DepartmentDetailOutputDto;
+import com.machine.client.hrm.department.dto.output.DepartmentExpansionListOutputDto;
 import com.machine.client.hrm.department.dto.output.DepartmentListOutputDto;
 import com.machine.client.hrm.department.dto.output.DepartmentTreeOutputDto;
 import com.machine.client.hrm.employee.IHrmEmployeeDefaultClient;
@@ -18,6 +19,7 @@ import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.starter.redis.cache.RedisCacheHrmDepartment;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +59,42 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
         HrmDepartmentDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), HrmDepartmentDetailResponseVo.class);
 
         //部门负责人信息
+        // 查询部门扩展信息
+        Set<String> departmentIdSet =  new HashSet<>();
+        departmentIdSet.add(outputDto.getId());
+        Map<String, DepartmentExpansionListOutputDto> departmentExpansionMap = departmentClient.mapDepartmentExpansionByDepartmentIdSet(new IdSetRequest(departmentIdSet));
+
+        DepartmentExpansionListOutputDto departmentExpansionListOutputDto = departmentExpansionMap.getOrDefault(responseVo.getId(), new DepartmentExpansionListOutputDto());
+        // 设立日期，生效日期
+        responseVo.setEstablishDate(departmentExpansionListOutputDto.getEstablishDate());
+        responseVo.setStartDate(departmentExpansionListOutputDto.getStarDate());
+        //获取负责人ID集合
+        Set<String> employeeIdSet = new HashSet<>();
+        departmentExpansionMap.forEach((key, value) -> {
+            if (value != null && StringUtils.isNotEmpty(value.getPersonInCharge())) {
+                employeeIdSet.add(value.getPersonInCharge());
+            }
+        });
+        if(!CollectionUtil.isEmpty(employeeIdSet)){
+            //获取负责人用户信息
+            Map<String, HrmEmployeeDetailOutputDto> hrmEmployeeDetailOutputDtoMap = employeeDefaultClient.mapByIdSet(new IdSetRequest(employeeIdSet));
+
+            if (CollectionUtil.isNotEmpty(hrmEmployeeDetailOutputDtoMap)) {
+
+                HrmEmployeeDetailOutputDto hrmEmployeeDetailOutputDto = hrmEmployeeDetailOutputDtoMap.get(departmentExpansionListOutputDto.getPersonInCharge());
+                if (hrmEmployeeDetailOutputDto != null) {
+                    List<DepartmentChargeResponseVo> departmentChargeList = new ArrayList<>();
+                    DepartmentChargeResponseVo departmentCharge = new DepartmentChargeResponseVo();
+                    departmentCharge.setUserId(hrmEmployeeDetailOutputDto.getUserId());
+                    departmentCharge.setEmployeeId(hrmEmployeeDetailOutputDto.getId());
+                    departmentCharge.setName(hrmEmployeeDetailOutputDto.getName());
+                    departmentChargeList.add(departmentCharge);
+                    responseVo.setDepartmentChargeList(departmentChargeList);
+                }
+
+            }
+        }
+
         List<HrmEmployeeListOutputDto> outputDtoList4Charge = employeeDefaultClient.list4ChargeByDepartmentId(new IdRequest(responseVo.getId()));
         if (CollectionUtil.isNotEmpty(outputDtoList4Charge)) {
             List<DepartmentChargeResponseVo> departmentChargeList = new ArrayList<>();
@@ -80,17 +118,14 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
             responseVo.setParentDepartment(parentDepartment);
         }
 
-        Set<String> departmentIdSet = new HashSet<>();
+        //获取部门以及子部门的Id
+        departmentIdSet = new HashSet<>();
+        departmentIdSet.add(request.getId());
+        departmentIdSet.addAll(departmentCache.recursionListSubId(responseVo.getId()));
 
-        {  //获取部门以及子部门的Id
-            departmentIdSet.add(request.getId());
-            departmentIdSet.addAll(departmentCache.recursionListSubId(responseVo.getId()));
-        }
-
-        {//部门机构中员工的人数
-            Integer employeeNumber = employeeDefaultClient.countByDepartmentIds(new IdSetRequest(departmentIdSet));
-            responseVo.setEmployeeNumber(employeeNumber);
-        }
+        //部门机构中员工的人数
+        Integer employeeNumber = employeeDefaultClient.countByDepartmentIds(new IdSetRequest(departmentIdSet));
+        responseVo.setEmployeeNumber(employeeNumber);
 
         {//层级
             DepartmentTreeOutputDto treeOutputDto = departmentCache.treeAllSimple();
@@ -106,19 +141,6 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
             responseVo.setLevel(parentIdList.size());
         }
 
-        {//层级
-            DepartmentTreeOutputDto treeOutputDto = departmentCache.treeAllSimple();
-            //找到指定的节点
-            DepartmentTreeOutputDto treeNode = TreeUtil.findNode(treeOutputDto, outputDto.getId());
-            //获取指定部门的所有父组织ID列表（list元素第一个是当前部门ID，最后一个是根部门ID，从左至右部门层级递增）
-            List<String> parentIdList = new ArrayList<>();
-            do {
-                parentIdList.add(treeNode.getId());
-                treeNode = TreeUtil.findNode(treeOutputDto, treeNode.getParentId());
-            } while (null != treeNode);
-
-            responseVo.setLevel(parentIdList.size());
-        }
         return responseVo;
     }
 
@@ -151,19 +173,33 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
         }
 
         {//部门负责人信息
-            Map<String, List<HrmEmployeeDetailOutputDto>> map4Charge = employeeDefaultClient.map4ChargeByDepartmentIdSet(new IdSetRequest(departmentIdSet));
-            if (CollectionUtil.isNotEmpty(map4Charge)) {
+            // 查询部门扩展信息
+            Map<String,DepartmentExpansionListOutputDto> departmentExpansionMap = departmentClient.mapDepartmentExpansionByDepartmentIdSet(new IdSetRequest(departmentIdSet));
+
+            //获取负责人ID集合
+            Set<String> employeeIdSet = new HashSet<>();
+            departmentExpansionMap.forEach((key, value) -> {
+                if(value != null&& StringUtils.isNotEmpty(value.getPersonInCharge())) {
+                    employeeIdSet.add(value.getPersonInCharge());
+                }
+            });
+            //获取负责人用户信息
+            Map<String, HrmEmployeeDetailOutputDto> hrmEmployeeDetailOutputDtoMap  =employeeDefaultClient.mapByIdSet(new IdSetRequest(employeeIdSet));
+
+            if (CollectionUtil.isNotEmpty(hrmEmployeeDetailOutputDtoMap)) {
                 for (HrmDepartmentExpandTreeBo bo : expandTreeBoList) {
-                    List<HrmEmployeeDetailOutputDto> outputDtoList4Charge = map4Charge.getOrDefault(bo.getId(), new ArrayList<>());
-                    List<DepartmentChargeResponseVo> departmentChargeList = new ArrayList<>();
-                    for (HrmEmployeeDetailOutputDto dto : outputDtoList4Charge) {
+                    DepartmentExpansionListOutputDto departmentExpansionListOutputDto= departmentExpansionMap.getOrDefault(bo.getId(), new DepartmentExpansionListOutputDto());
+                    HrmEmployeeDetailOutputDto  hrmEmployeeDetailOutputDto = hrmEmployeeDetailOutputDtoMap.get(departmentExpansionListOutputDto.getPersonInCharge());
+                    if(hrmEmployeeDetailOutputDto !=null){
+                        List<DepartmentChargeResponseVo> departmentChargeList = new ArrayList<>();
                         DepartmentChargeResponseVo departmentCharge = new DepartmentChargeResponseVo();
-                        departmentCharge.setUserId(dto.getUserId());
-                        departmentCharge.setEmployeeId(dto.getId());
-                        departmentCharge.setName(dto.getName());
+                        departmentCharge.setUserId(hrmEmployeeDetailOutputDto.getUserId());
+                        departmentCharge.setEmployeeId(hrmEmployeeDetailOutputDto.getId());
+                        departmentCharge.setName(hrmEmployeeDetailOutputDto.getName());
                         departmentChargeList.add(departmentCharge);
+                        bo.setDepartmentChargeList(departmentChargeList);
                     }
-                    bo.setDepartmentChargeList(departmentChargeList);
+
                 }
             }
         }
@@ -173,14 +209,17 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
 
         //tree 后序递归累计子节点的员工数据并计算出部门和员工数量
         postorderTraversalAndCountChildren(expandTreeBo);
-
-
         return JSONUtil.toBean(JSONUtil.toJsonStr(expandTreeBo), HrmDepartmentExpandTreeResponseVo.class);
     }
 
     @Override
     public DepartmentTreeOutputDto treeAllSimple() {
         return departmentCache.treeAllSimple();
+    }
+
+    @Override
+    public void syncDepartmentPersonInCharge() {
+        departmentClient.syncDepartmentPersonInCharge();
     }
 
     private void postorderTraversalAndCountChildren(HrmDepartmentExpandTreeBo node) {

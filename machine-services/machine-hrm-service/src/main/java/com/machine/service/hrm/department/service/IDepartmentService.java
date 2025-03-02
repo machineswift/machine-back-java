@@ -1,18 +1,19 @@
 package com.machine.service.hrm.department.service;
 
 import com.machine.client.hrm.department.dto.input.DepartmentCreateInputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentDetailOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentListOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentSimpleOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentTreeOutputDto;
+import com.machine.client.hrm.department.dto.output.*;
 import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.common.model.request.IdSetRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IDepartmentService {
 
     void sync(long lastSyncTime,
               long enSyncTime);
+
+    void syncDepartmentPersonInCharge();
 
     void clearCache();
 
@@ -26,4 +27,5 @@ public interface IDepartmentService {
 
     DepartmentTreeOutputDto treeAllSimple();
 
+    Map<String, DepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest);
 }

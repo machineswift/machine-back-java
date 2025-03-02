@@ -88,6 +88,11 @@ public class RedisLockPrefixConstant {
          * 同步北森员工
          */
         public static final String HRM_SYNC_BEI_SEN_EMPLOYEE_LOCK = "hrm:sync:beiSen:employee:lock";
+
+        /**
+         * 同步北森部门负责人
+         */
+        public static final String HRM_SYNC_BEI_SEN_DEPARTMENT_PERSON_IN_CHARGE_LOCK = "hrm:sync:beiSen:department:person:in:charge:lock";
     }
 
 }

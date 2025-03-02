@@ -10,6 +10,8 @@ public interface IHrmDepartmentBusiness {
 
     void sync();
 
+    void syncDepartmentPersonInCharge();
+
     HrmDepartmentDetailResponseVo detail(IdRequest request);
 
     HrmDepartmentExpandTreeResponseVo treeAllExpand();

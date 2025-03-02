@@ -5,21 +5,24 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
 import com.machine.client.hrm.department.dto.input.DepartmentCreateInputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentDetailOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentListOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentSimpleOutputDto;
-import com.machine.client.hrm.department.dto.output.DepartmentTreeOutputDto;
+import com.machine.client.hrm.department.dto.output.*;
 import com.machine.sdk.beisen.client.organization.BeiSenOrganizationClient;
+import com.machine.sdk.beisen.client.organization.dto.input.BeiSenOrganizationInfoByCodesInputDto;
 import com.machine.sdk.beisen.client.organization.dto.input.BeiSenOrganizationTimeWindowInputDto;
+import com.machine.sdk.beisen.client.organization.dto.output.BeiSenOrganizationInfoByCodesOutputDto;
 import com.machine.sdk.beisen.client.organization.dto.output.BeiSenOrganizationInfoOutputDto;
 import com.machine.sdk.beisen.domain.BeiSenBaseResponse;
 import com.machine.sdk.beisen.envm.BeiSenDepartmentStatusEnum;
 import com.machine.sdk.common.envm.BaseEnum;
 import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.service.hrm.department.dao.IDepartmentDao;
+import com.machine.service.hrm.department.dao.IDepartmentExpansionDao;
 import com.machine.service.hrm.department.dao.mapper.entity.DepartmentEntity;
+import com.machine.service.hrm.department.dao.mapper.entity.DepartmentExpansionEntity;
 import com.machine.service.hrm.department.service.IDepartmentService;
+import com.machine.starter.redis.cache.RedisCacheHrmDepartment;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +37,7 @@ import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Hrm.HRM_DEPARTMENT_TREE_LOCK;
 import static com.machine.starter.redis.constant.RedisPrefix4HrmConstant.Department.HRM_DEPARTMENT_TREE_DATA;
@@ -53,7 +57,13 @@ public class DepartmentServiceImpl implements IDepartmentService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
+    private RedisCacheHrmDepartment departmentCache;
+
+    @Autowired
     private IDepartmentDao departmentDao;
+
+    @Autowired
+    private IDepartmentExpansionDao departmentExpansionDao;
 
     @Autowired
     private IDataLeaf4RedisClient leaf4RedisClient;
@@ -116,15 +126,50 @@ public class DepartmentServiceImpl implements IDepartmentService {
             inputDto.setName(outputDto.getName());
             inputDto.setCode(outputDto.getCode());
             inputDto.setStatus(BaseEnum.getInstance(BeiSenDepartmentStatusEnum.class, outputDto.getStatus() + ""));
-            inputDto.setEstablishDate(paraseTime(sdf, outputDto.getEstablishDate()));
-            inputDto.setStarDate(paraseTime(sdf, outputDto.getStartDate()));
-            inputDto.setStopTime(paraseTime(sdf, outputDto.getStopDate()));
             inputDto.setSort(outputDto.getOId().longValue());
             inputDtoList.add(inputDto);
         }
 
         List<DepartmentEntity> entityList = JSONUtil.toList(JSONUtil.toJsonStr(inputDtoList), DepartmentEntity.class);
         departmentDao.batchInsert(entityList);
+    }
+
+    @Override
+    public void syncDepartmentPersonInCharge() {
+        DepartmentTreeOutputDto allTree = departmentCache.treeAllSimple();
+        List<DepartmentTreeOutputDto> teeeNodeList = TreeUtil.collectAllNodes(allTree);
+        List<String> codeList = teeeNodeList.stream().map(DepartmentTreeOutputDto::getCode).toList();
+
+
+        BeiSenOrganizationInfoByCodesInputDto inputDto = new BeiSenOrganizationInfoByCodesInputDto();
+        inputDto.setCodes(codeList);
+        BeiSenBaseResponse<BeiSenOrganizationInfoByCodesOutputDto> baseResponse = BeiSenOrganizationClient
+                .getOrganizationInfoByCodes(okHttpClient, inputDto);
+
+        List<BeiSenOrganizationInfoByCodesOutputDto> outputDtoList = new ArrayList<>();
+        if (!CollectionUtil.isEmpty(baseResponse.getData())) {
+            outputDtoList.addAll(baseResponse.getData());
+        }
+
+        log.info("部门负责人信息:{}", JSONUtil.toJsonStr(outputDtoList));
+
+        if (!CollectionUtil.isEmpty(baseResponse.getData())) {
+
+            log.info("部门负责人信息:{}", JSONUtil.toJsonStr(outputDtoList));
+            Map<String, String> map = new HashMap<>();
+            if (!CollectionUtil.isEmpty(outputDtoList)) {
+                map = outputDtoList.stream().collect(Collectors.toMap(BeiSenOrganizationInfoByCodesOutputDto::getCode,
+                        v -> v.getPersonInCharge() == null ? "" : v.getPersonInCharge()));
+            }
+
+            Map<String, String> finalMap = map;
+            teeeNodeList.forEach(treeNode -> {
+                DepartmentExpansionEntity departmentExpansionEntity = new DepartmentExpansionEntity();
+                departmentExpansionEntity.setDepartmentId(treeNode.getId());
+                departmentExpansionEntity.setPersonInCharge(finalMap.get(treeNode.getCode()) == null ? "" : finalMap.get(treeNode.getCode()));
+                departmentExpansionDao.updateByDepartmentId(departmentExpansionEntity);
+            });
+        }
     }
 
     @Override
@@ -228,20 +273,33 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
     }
 
+
+    @Override
+    public Map<String, DepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest) {
+
+        List<DepartmentExpansionEntity> departmentExpansionEntityList = departmentExpansionDao.listDepartmentExpansionByDepartmentIdSet(idSetRequest.getIdSet());
+        if (CollectionUtil.isEmpty(departmentExpansionEntityList)) {
+            return Map.of();
+        }
+        //根据DepartmentId拆分Map集合
+        Map<String, DepartmentExpansionListOutputDto> depMap = new HashMap<>();
+        for (DepartmentExpansionEntity entity : departmentExpansionEntityList) {
+            depMap.put(entity.getDepartmentId(), JSONUtil.toBean(JSONUtil.toJsonStr(entity), DepartmentExpansionListOutputDto.class));
+        }
+        return depMap;
+    }
+
     /**
      * 日期转换
      */
-    private Long paraseTime(SimpleDateFormat sdf,
-                            String source) {
+    private static Long paraseTime(SimpleDateFormat sdf,
+                                   String source) {
         if (StrUtil.isBlank(source)) {
             return null;
         }
         try {
             Date date = sdf.parse(source);
-            long time = date.getTime();
-            if (time < 0) {
-                return null;
-            }
+            return date.getTime();
         } catch (ParseException e) {
             log.error("同步北森数据日期转化异常", e);
         }

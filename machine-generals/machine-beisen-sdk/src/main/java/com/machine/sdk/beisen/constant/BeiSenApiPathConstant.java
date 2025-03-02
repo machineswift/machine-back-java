@@ -68,6 +68,11 @@ public final class BeiSenApiPathConstant {
          * 查询指定组织的下级组织单元列表
          */
         public static final String GET_SUB_ORGANIZATIONS = "TenantBaseExternal/api/v5/Organization/GetSubOrganizations";
+
+        /**
+         * 查询指定组织的下级组织单元列表
+         */
+        public static final String GET_ORGANIZATIONS_BY_CODES = "TenantBaseExternal/api/v5/Organization/GetOrganizationInfoByCodes";
     }
 
 }

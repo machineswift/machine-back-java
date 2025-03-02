@@ -23,8 +23,6 @@ public interface IDepartmentService {
 
     List<DepartmentListOutputDto> listAll();
 
-    List<DepartmentSimpleOutputDto> listSub4Recursion(IdRequest request);
-
     DepartmentTreeOutputDto treeAllSimple();
 
     Map<String, DepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest);

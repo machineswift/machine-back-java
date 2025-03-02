@@ -2,7 +2,7 @@ package com.machine.service.iam.organization.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.service.iam.organization.dao.IOrganizationDao;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Organization.DATA_ORGANIZATION_TREE_KEY;
+import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserManageDataPermission.IAM_USER_MANAGE_DATA_PERMISSION_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserSuperAppDataPermission.IAM_USER_SUPER_APP_DATA_PERMISSION_KEY;
 
 @Repository
@@ -38,6 +39,7 @@ public class OrganizationDaoImpl implements IOrganizationDao {
         //缓存
         customerRedisCommands.del(DATA_ORGANIZATION_TREE_KEY + entity.getType().getName());
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(EventTypeEnum.IAM_ORGANIZATION_CREATE, new IdDto(entity.getId()));
@@ -54,6 +56,7 @@ public class OrganizationDaoImpl implements IOrganizationDao {
         //缓存
         customerRedisCommands.del(DATA_ORGANIZATION_TREE_KEY + dbEntity.getType().getName());
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(EventTypeEnum.IAM_ORGANIZATION_DELETE, new IdDto(id));
@@ -71,6 +74,7 @@ public class OrganizationDaoImpl implements IOrganizationDao {
         //缓存
         customerRedisCommands.del(DATA_ORGANIZATION_TREE_KEY + dbEntity.getType().getName());
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(EventTypeEnum.IAM_ORGANIZATION_UPDATE, new IdDto(entity.getId()));

@@ -13,7 +13,7 @@ import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.starter.redis.cache.RedisCacheDataArea;
-import com.machine.starter.redis.cache.RedisCacheDataPermission;
+import com.machine.starter.redis.cache.RedisCacheIamDataPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
     private RedisCacheDataArea redisCacheDataArea;
 
     @Autowired
-    private RedisCacheDataPermission redisCacheDataPermission;
+    private RedisCacheIamDataPermission redisCacheIamDataPermission;
 
     @Autowired
     private IDataShopClient shopClient;
@@ -63,7 +63,7 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
     public AreaTreeOutputDto treeSelfSimple(SuperAreaTreeRequestVo request) {
         AreaTreeOutputDto allTreeOutput = treeAllSimple(request);
         //数据权限
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             return allTreeOutput;
@@ -80,7 +80,7 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
     public SuperAreaTreeExpandSelfResponseVo treeSelfExpand(SuperAreaTreeRequestVo request) {
         AreaTreeOutputDto allTreeOutput = treeAllSimple(request);
         //数据权限
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             SuperAreaTreeExpandSelfResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(allTreeOutput),

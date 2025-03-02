@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum OrganizationTypeEnum implements BaseEnum<OrganizationTypeEnum, String> {
-    OPERATIONS("OPERATIONS", "运营"),
-    MARKETING("MARKETING", "市场"),
-    TAKEOUT("TAKEOUT", "外卖");
+public enum DataPermissionResultTypeEnum implements BaseEnum<DataPermissionResultTypeEnum, String> {
+    ALL("ALL", "全部"),
+    PART("PART", "部分"),
+    NONE("NONE", "无");
 
     private final String code;
     private final String msg;

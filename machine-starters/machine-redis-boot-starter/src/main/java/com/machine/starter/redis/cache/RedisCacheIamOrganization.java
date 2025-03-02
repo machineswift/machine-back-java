@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.organization.IIamOrganizationClient;
 import com.machine.client.iam.organization.dto.output.*;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;

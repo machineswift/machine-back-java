@@ -1,6 +1,6 @@
 package com.machine.service.iam.organization.dao;
 
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.service.iam.organization.dao.mapper.entity.OrganizationEntity;
 
 import java.util.List;

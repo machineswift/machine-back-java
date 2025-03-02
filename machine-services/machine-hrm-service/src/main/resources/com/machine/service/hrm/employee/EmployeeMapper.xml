@@ -10,7 +10,7 @@
         <foreach item="item" collection="departmentIdSet" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND e.status &lt;&gt; 'LEFT' ) t
+        AND e.status NOT IN ('LEFT','PENDING_HIRE') ) t
     </select>
 
     <select id="list4Charge" resultType="com.machine.service.hrm.employee.dao.mapper.entity.EmployeeEntity">
@@ -18,7 +18,7 @@
         FROM t_employee e
         WHERE e.department_id = #{departmentId}
           AND e.is_charge = 1
-          AND e.status &lt;&gt; 'LEFT'
+          AND e.status NOT IN ('LEFT','PENDING_HIRE')
     </select>
 
     <select id="listChargeByDepartmentIdSet"
@@ -30,7 +30,7 @@
             #{item}
         </foreach>
         AND e.is_charge = 1
-        AND e.status &lt;&gt; 'LEFT'
+        AND e.status NOT IN ('LEFT','PENDING_HIRE')
     </select>
 
     <select id="list" resultType="com.machine.service.hrm.employee.dao.mapper.entity.EmployeeEntity">
@@ -58,7 +58,7 @@
             <if test="inputDto.isCharge != null ">
                 AND e.is_charge = #{inputDto.isCharge}
             </if>
-            AND e.status &lt;&gt; 'LEFT'
+            AND e.status NOT IN ('LEFT','PENDING_HIRE')
         </where>
     </select>
 

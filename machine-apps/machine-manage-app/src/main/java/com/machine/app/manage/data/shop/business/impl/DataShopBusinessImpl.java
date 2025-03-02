@@ -15,7 +15,7 @@ import com.machine.client.data.shop.IShopLabelOptionRelationClient;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
 import com.machine.client.iam.organization.dto.output.IamOrganizationSimpleOutputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.envm.system.DataPersistenceStatusEnum;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DisinfectingContractDto;

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.model.dto.IdDto;
 import com.machine.sdk.self.domain.data.shop.DataShopUnBindOrganizationDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
+import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserManageDataPermission.IAM_USER_MANAGE_DATA_PERMISSION_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserSuperAppDataPermission.IAM_USER_SUPER_APP_DATA_PERMISSION_KEY;
 
 @Repository
@@ -37,6 +38,7 @@ public class ShopOrganizationRelationDaoImpl implements IShopOrganizationRelatio
     public int insert(ShopOrganizationRelationEntity entity) {
         //缓存
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(
@@ -54,6 +56,7 @@ public class ShopOrganizationRelationDaoImpl implements IShopOrganizationRelatio
         } else {
             //缓存
             customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+            customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
             //事件
             customerStreamBridge.sendWebHookEvent(
@@ -66,6 +69,7 @@ public class ShopOrganizationRelationDaoImpl implements IShopOrganizationRelatio
     public int update(ShopOrganizationRelationEntity entity) {
         //缓存
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(

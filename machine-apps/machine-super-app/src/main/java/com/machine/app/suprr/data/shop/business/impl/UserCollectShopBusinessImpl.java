@@ -19,7 +19,7 @@ import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
-import com.machine.starter.redis.cache.RedisCacheDataPermission;
+import com.machine.starter.redis.cache.RedisCacheIamDataPermission;
 import com.machine.starter.redis.cache.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
     private RedisCacheIamOrganization organizationCache;
 
     @Autowired
-    private RedisCacheDataPermission redisCacheDataPermission;
+    private RedisCacheIamDataPermission redisCacheIamDataPermission;
 
     @Autowired
     private IDataShopClient shopClient;
@@ -82,7 +82,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Override
     public Integer number(SuperShopNumberRequestVo request) {
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (null == dataPermissionDto.getShopIdSet()) {
             return 0;
         }
@@ -92,7 +92,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
     @Override
     public PageResponse<SuperShopListSimpleResponseVo> pageCollectShop(SuperShopListCollectShopRequestVo request) {
         SuperShopListCollectShopInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), SuperShopListCollectShopInputDto.class);
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             //数据权限为空，直接返回
             return new PageResponse<>(request.getCurrent(), request.getCurrent(), 0);
@@ -123,7 +123,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Override
     public PageResponse<SuperShopListSimpleResponseVo> pageSelfShop(SuperShopPageSelfShopRequestVo request) {
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             //数据权限为空，直接返回
             return new PageResponse<>(request.getCurrent(), request.getCurrent(), 0);

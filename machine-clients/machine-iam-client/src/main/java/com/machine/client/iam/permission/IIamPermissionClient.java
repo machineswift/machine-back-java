@@ -31,8 +31,11 @@ public interface IIamPermissionClient {
     @PostMapping("updateParent")
     int updateParent(@RequestBody @Validated IamPermissionUpdateParentInputDto inputDto);
 
-    @GetMapping("detail")
+    @PostMapping("detail")
     PermissionDetailOutputDto detail(@RequestBody @Validated IdRequest request);
+
+    @PostMapping("detail_by_code")
+    PermissionDetailOutputDto detailByCode(@RequestBody @Validated IdRequest request);
 
     @PostMapping("list_by_roleId")
     List<PermissionListOutputDto> listByRoleId(@RequestBody @Validated IdRequest request);

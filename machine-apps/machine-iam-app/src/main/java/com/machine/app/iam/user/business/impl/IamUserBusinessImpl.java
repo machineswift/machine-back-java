@@ -29,7 +29,7 @@ import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
 import com.machine.client.iam.user.dto.output.UserLoginLogDetailOutputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthActionEnum;

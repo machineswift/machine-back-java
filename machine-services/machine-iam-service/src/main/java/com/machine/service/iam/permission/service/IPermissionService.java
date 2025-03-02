@@ -21,6 +21,8 @@ public interface IPermissionService {
 
     PermissionDetailOutputDto detail(IdRequest request);
 
+    PermissionDetailOutputDto detailByCode(IdRequest request);
+
     List<PermissionListOutputDto> listByRoleId(IdRequest request);
 
     PermissionTreeOutputDto treeAll();

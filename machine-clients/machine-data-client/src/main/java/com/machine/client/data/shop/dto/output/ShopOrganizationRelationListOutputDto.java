@@ -1,6 +1,6 @@
 package com.machine.client.data.shop.dto.output;
 
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

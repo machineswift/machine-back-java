@@ -21,7 +21,7 @@ import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserFun
 
 @Slf4j
 @Component
-public class RedisCacheFunctionPermission {
+public class RedisCacheIamFunctionPermission {
 
     @Autowired
     private RedissonClient redissonClient;

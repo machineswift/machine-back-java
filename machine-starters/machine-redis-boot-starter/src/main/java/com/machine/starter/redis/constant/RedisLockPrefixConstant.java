@@ -23,9 +23,15 @@ public class RedisLockPrefixConstant {
         public static final String IAM_USER_FUNCTION_PERMISSION_LOCK = "iam:user:userFunctionPermission:lock";
 
         /**
-         * 用户app数据功能权限
+         * 用户app数据权限
          */
         public static final String IAM_USER_APP_DATA_PERMISSION_LOCK = "iam:user:userAppDataPermission:lock";
+
+        /**
+         * 用户app数据权限
+         */
+        public static final String IAM_USER_MANAGE_DATA_PERMISSION_LOCK = "iam:user:userManageDataPermission:lock";
+
 
         /**
          * 手机号登录短信验证码（获取验证码）

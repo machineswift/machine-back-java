@@ -9,7 +9,7 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationUpdateParent
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.service.iam.organization.service.IOrganizationService;
 import lombok.extern.slf4j.Slf4j;

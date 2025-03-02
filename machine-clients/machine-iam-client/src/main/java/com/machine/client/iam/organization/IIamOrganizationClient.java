@@ -5,7 +5,7 @@ import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutpu
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.common.config.OpenFeignDefaultConfig;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;

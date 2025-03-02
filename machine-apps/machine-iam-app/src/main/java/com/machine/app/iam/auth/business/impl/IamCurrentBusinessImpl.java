@@ -30,7 +30,7 @@ import com.machine.sdk.common.envm.iam.auth.AuthResultEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheFunctionPermission;
+import com.machine.starter.redis.cache.RedisCacheIamFunctionPermission;
 import com.machine.starter.redis.cache.RedisCacheIamPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
@@ -70,7 +70,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheFunctionPermission redisCacheFunctionPermission;
+    private RedisCacheIamFunctionPermission redisCacheIamFunctionPermission;
 
     @Autowired
     private RedisCacheIamPermission permissionCache;
@@ -128,13 +128,13 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
 
     @Override
     public List<String> functionPermission() {
-        UserAuthDetailOutputDto outputDto = redisCacheFunctionPermission.functionPermission();
+        UserAuthDetailOutputDto outputDto = redisCacheIamFunctionPermission.functionPermission();
         return outputDto.getPermissionCodeList();
     }
 
     @Override
     public List<String> functionPermission4App(IamFunctionPermission4MiniRequestVo request) {
-        UserAuthDetailOutputDto authDetailOutputDto = redisCacheFunctionPermission.functionPermission();
+        UserAuthDetailOutputDto authDetailOutputDto = redisCacheIamFunctionPermission.functionPermission();
         List<String> roleCodeList = authDetailOutputDto.getRoleCodeList();
         if (CollectionUtil.isEmpty(roleCodeList) ||
                 !roleCodeList.contains(request.getRoleCode())) {

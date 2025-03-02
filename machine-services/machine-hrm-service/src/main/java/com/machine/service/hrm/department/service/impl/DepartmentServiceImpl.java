@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -218,15 +217,6 @@ public class DepartmentServiceImpl implements IDepartmentService {
     }
 
     @Override
-    public List<DepartmentSimpleOutputDto> listSub4Recursion(IdRequest request) {
-        List<DepartmentEntity> entityList = departmentDao.listSub4Recursion(request.getId());
-        if (CollectionUtil.isEmpty(entityList)) {
-            return List.of();
-        }
-        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DepartmentSimpleOutputDto.class);
-    }
-
-    @Override
     public DepartmentTreeOutputDto treeAllSimple() {
         //获取树的动态key
         String keyCode = customerRedisCommands.get(HRM_DEPARTMENT_TREE_KEY);
@@ -287,22 +277,5 @@ public class DepartmentServiceImpl implements IDepartmentService {
             depMap.put(entity.getDepartmentId(), JSONUtil.toBean(JSONUtil.toJsonStr(entity), DepartmentExpansionListOutputDto.class));
         }
         return depMap;
-    }
-
-    /**
-     * 日期转换
-     */
-    private static Long paraseTime(SimpleDateFormat sdf,
-                                   String source) {
-        if (StrUtil.isBlank(source)) {
-            return null;
-        }
-        try {
-            Date date = sdf.parse(source);
-            return date.getTime();
-        } catch (ParseException e) {
-            log.error("同步北森数据日期转化异常", e);
-        }
-        return null;
     }
 }

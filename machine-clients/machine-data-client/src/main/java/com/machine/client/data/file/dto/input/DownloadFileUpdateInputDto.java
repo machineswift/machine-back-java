@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UpdateDownloadFileClientInputDto {
+public class DownloadFileUpdateInputDto {
 
     @Schema(description = "id")
     private String id;
@@ -21,9 +21,6 @@ public class UpdateDownloadFileClientInputDto {
 
     @Schema(description = "失败原因")
     private String failCause;
-
-    @Schema(description = "重试状态")
-    private Integer retryStatus;
 
     @Schema(description = "使用次数")
     private Integer usageCount;

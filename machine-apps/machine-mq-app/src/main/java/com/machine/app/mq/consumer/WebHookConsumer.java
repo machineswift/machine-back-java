@@ -1,5 +1,6 @@
 package com.machine.app.mq.consumer;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.output.OAuth2RegisteredClientDetailOutputDto;
@@ -56,13 +57,17 @@ public class WebHookConsumer {
 
         if (StatusEnum.DISABLE == outputDto.getStatus()) {
             log.info("WebHookFastEventConsumer-应用禁用忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));
-        }
-
-        if (null == outputDto.getWebHookInfo()) {
-            log.warn("WebHookFastEventConsumer-应用未配置回调地址忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));
+            return;
         }
 
         WebHookInfoDto webHookInfo = outputDto.getWebHookInfo();
+        if (null == webHookInfo ||
+                StrUtil.isBlank(webHookInfo.getCallBackUrl()) ||
+                StrUtil.isBlank(webHookInfo.getSecret())) {
+            log.warn("WebHookFastEventConsumer-应用未配置回调地址忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));
+            return;
+        }
+
         WebhookClient.callBack(okHttpClient, webHookInfo, requestBody);
     }
 

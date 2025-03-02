@@ -1,9 +1,8 @@
 package com.machine.app.suprr.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
-import com.machine.sdk.common.envm.data.MessageTemplateCategoryEnum;
-import com.machine.sdk.common.envm.data.MessageTemplateRiskCategoryEnum;
-import com.machine.sdk.common.envm.data.MessageTemplateTypeEnum;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageTemplateCategoryEnum;
+import com.machine.sdk.common.envm.data.message.MessageTemplateTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

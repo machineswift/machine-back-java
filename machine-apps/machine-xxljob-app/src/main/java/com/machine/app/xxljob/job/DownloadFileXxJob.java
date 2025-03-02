@@ -1,139 +1,185 @@
 package com.machine.app.xxljob.job;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.file.IDownloadFileClient;
-import com.machine.client.data.file.dto.input.CreateDownloadFileClientInputDto;
-import com.machine.client.data.file.dto.input.UpdateDownloadFileClientInputDto;
-import com.machine.client.data.file.dto.input.QueryDownloadFileInputDto;
-import com.machine.client.data.file.dto.output.QueryDownloadFileOutputDto;
+import com.machine.client.data.file.dto.input.DownloadFileContentDto;
+import com.machine.client.data.file.dto.input.DownloadFileUpdateInputDto;
+import com.machine.client.data.file.dto.input.QueryDownloadFileQueryInputDto;
+import com.machine.client.data.file.dto.output.QueryDownloadFileDetailOutputDto;
 import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
 
-@Slf4j
+
 @Component
 public class DownloadFileXxJob {
 
-    @Value("${xxjob.downloadFile.taskDownloadNumber:5}")
+    /**
+     * 同时执行任务的数量
+     */
     private static final int TASK_DOWNLOAD_NUMBER = 5;
 
-    private final IDownloadFileClient downloadFileClient;
-    private final ExecutorService executorService = Executors.newFixedThreadPool(TASK_DOWNLOAD_NUMBER);
+    private final ExecutorService executorService = new ThreadPoolExecutor(
+            TASK_DOWNLOAD_NUMBER, TASK_DOWNLOAD_NUMBER + 3,
+            300L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(TASK_DOWNLOAD_NUMBER * 2),
+            new ThreadPoolExecutor.AbortPolicy());
 
-    public DownloadFileXxJob(IDownloadFileClient downloadFileClient) {
-        this.downloadFileClient = downloadFileClient;
-    }
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private IDownloadFileClient downloadFileClient;
 
     @XxlJob("DownloadFileTaskScheduledJobHandler")
     public void downloadFileTaskScheduledJobHandler() {
-        log.info("定时任务开始");
-        XxlJobHelper.log("XXL-JOB,DownloadFileTaskScheduledJobHandler start .....");
+        XxlJobHelper.log("XXL-JOB,下载中心调度任务 start .....");
 
         try {
             AppContext.getContext().setUserId(SYSTEM_USER_ID);
-            //查询
-            List<QueryDownloadFileOutputDto> allTasks = getAllTasks();
-            //超时
-            handleOvertimeTasks(allTasks);
-            //线程池 执行任务
-            executeTasks(filterTasksToExecute(allTasks));
 
+            QueryDownloadFileQueryInputDto queryRunningInputDto = new QueryDownloadFileQueryInputDto();
+            queryRunningInputDto.setStatus(ExportTaskStatusEnum.RUNNING);
+            queryRunningInputDto.setLimit(Integer.MAX_VALUE);
+            List<QueryDownloadFileDetailOutputDto> runningTasks = downloadFileClient.queryByLimit(queryRunningInputDto);
+
+            // 处理超时任务
+            int runningTaskSize = 0;
+            int overtimeTaskSize = 0;
+            if (CollectionUtil.isNotEmpty(runningTasks)) {
+                runningTaskSize = runningTasks.size();
+                for (QueryDownloadFileDetailOutputDto runningTask : runningTasks) {
+                    String content = runningTask.getContent();
+                    DownloadFileContentDto contentDto = JSONUtil.toBean(content, DownloadFileContentDto.class);
+                    Integer usageCount = contentDto.getUsageCount();
+
+                    if (runningTask.getUpdateTime().compareTo(
+                            System.currentTimeMillis() - contentDto.getOverTimeMinute() * 60 * 1000) < 0) {
+                        overtimeTaskSize++;
+
+                        //超时 修改任务
+                        DownloadFileUpdateInputDto updateInputDto = new DownloadFileUpdateInputDto();
+                        updateInputDto.setId(runningTask.getId());
+
+                        if (usageCount >= contentDto.getFailRetryNumber()) {
+                            updateInputDto.setStatus(ExportTaskStatusEnum.DEAD);
+                        } else {
+                            updateInputDto.setStatus(ExportTaskStatusEnum.FAIL);
+                        }
+                        updateInputDto.setFailCause("执行超时");
+                        downloadFileClient.update(updateInputDto);
+                    }
+                }
+            }
+
+            // 任务是否满负荷
+            int remainingQuantity = TASK_DOWNLOAD_NUMBER - (runningTaskSize - overtimeTaskSize);
+            if (remainingQuantity <= 0) {
+                XxlJobHelper.log("XXL-JOB,下载中心调度任务 队列已满 .....");
+                return;
+            }
+
+            //失败的任务
+            QueryDownloadFileQueryInputDto queryFailInputDto = new QueryDownloadFileQueryInputDto();
+            queryFailInputDto.setStatus(ExportTaskStatusEnum.FAIL);
+            queryFailInputDto.setLimit(remainingQuantity);
+            List<QueryDownloadFileDetailOutputDto> failTasks = downloadFileClient.queryByLimit(queryFailInputDto);
+            if (CollectionUtil.isNotEmpty(failTasks)) {
+                // 剩余空队列数量
+                remainingQuantity = remainingQuantity - failTasks.size();
+                for (QueryDownloadFileDetailOutputDto failTask : failTasks) {
+                    executorService.execute(() -> executeTask(failTask));
+                }
+            }
+
+            if (remainingQuantity <= 0) {
+                XxlJobHelper.log("XXL-JOB,下载中心调度任务 队列已满 .....");
+                return;
+            }
+
+            //未开始的任务
+            QueryDownloadFileQueryInputDto queryReadyInputDto = new QueryDownloadFileQueryInputDto();
+            queryReadyInputDto.setStatus(ExportTaskStatusEnum.READY);
+            queryReadyInputDto.setLimit(remainingQuantity);
+            List<QueryDownloadFileDetailOutputDto> readyTasks = downloadFileClient.queryByLimit(queryReadyInputDto);
+            if (CollectionUtil.isNotEmpty(readyTasks)) {
+                for (QueryDownloadFileDetailOutputDto readyTask : readyTasks) {
+                    executorService.execute(() -> executeTask(readyTask));
+                }
+            }
         } catch (Exception e) {
-            log.error("定时任务执行异常", e);
             XxlJobHelper.log(e);
-            XxlJobHelper.handleFail("XXL-JOB,DownloadFileTaskScheduledJobHandler fail:" + e.getMessage());
+            XxlJobHelper.handleFail("XXL-JOB,下载中心调度任务 fail:" + e.getMessage());
         } finally {
-            XxlJobHelper.log("XXL-JOB,DownloadFileTaskScheduledJobHandler end .....");
+            XxlJobHelper.log("XXL-JOB,下载中心调度任务 end .....");
             AppContext.getContext().clear();
         }
     }
 
-    private List<QueryDownloadFileOutputDto> getAllTasks() {
-        QueryDownloadFileInputDto queryDto = new QueryDownloadFileInputDto();
-        //重试状态  0 代表可以重试  1不可以
-        queryDto.setRetryStatus(0);
-        queryDto.setPageSize(100);
-        queryDto.setStatusList(Arrays.asList(ExportTaskStatusEnum.RUNNING.getCode(), ExportTaskStatusEnum.FAIL.getCode(), ExportTaskStatusEnum.READY.getCode()));
-        return downloadFileClient.queryByLimit(queryDto);
-    }
-
-    private void handleOvertimeTasks(List<QueryDownloadFileOutputDto> allTasks) {
-        long currentTimeMillis = System.currentTimeMillis();
-        List<QueryDownloadFileOutputDto> overtimeTasks = allTasks.stream()
-                //判断 超时
-                .filter(dto -> isOvertime(dto, currentTimeMillis))
-                //设置 超时原因
-                .peek(this::markAsFail).toList();
-
-        if (!overtimeTasks.isEmpty()) {
-            List<UpdateDownloadFileClientInputDto> updateBatch = overtimeTasks.stream().map(this::convertToUpdateDto).collect(Collectors.toList());
-            downloadFileClient.batchUpdate(updateBatch);
-        }
-    }
-
-    private boolean isOvertime(QueryDownloadFileOutputDto dto,
-                               long currentTimeMillis) {
-        //超时 只有进行状态  其他状态 跳过
-        if (!ExportTaskStatusEnum.RUNNING.getCode().equals(dto.getStatus())) {
-            return false;
-        }
-        //用户自定义时间 单位是分钟
-        CreateDownloadFileClientInputDto params = JSONUtil.toBean(dto.getJsonParams(), CreateDownloadFileClientInputDto.class);
-        return params != null && currentTimeMillis - dto.getUpdateTime() > params.getOverTimeMinute() * 60000;
-    }
-
     /**
-     * 设置超时 原因
+     * 执行任务
      */
-    private void markAsFail(QueryDownloadFileOutputDto dto) {
-        dto.setStatus(ExportTaskStatusEnum.FAIL);
-        dto.setFailCause("over time");
-    }
+    private void executeTask(QueryDownloadFileDetailOutputDto outputDto) {
+        AppContext.getContext().setUserId(SYSTEM_USER_ID);
 
-    private UpdateDownloadFileClientInputDto convertToUpdateDto(QueryDownloadFileOutputDto dto) {
-        UpdateDownloadFileClientInputDto updateDto = new UpdateDownloadFileClientInputDto();
-        updateDto.setId(dto.getId());
-        updateDto.setStatus(dto.getStatus());
-        updateDto.setFailCause(dto.getFailCause());
-        return updateDto;
-    }
+        //内容
+        String id = outputDto.getId();
+        String content = outputDto.getContent();
+        DownloadFileContentDto contentDto = JSONUtil.toBean(content, DownloadFileContentDto.class);
 
-    /**
-     * 计算执行条数
-     * 不能超过当前任务总数
-     * <p> <p> <p>
-     */
-    private List<QueryDownloadFileOutputDto> filterTasksToExecute(List<QueryDownloadFileOutputDto> allTasks) {
-        //进行中条数
-        int runningTasksCount = (int) allTasks.stream().filter(dto -> dto.getStatus().equals(ExportTaskStatusEnum.RUNNING.getCode())).count();
+        try {
+            //进行中
+            DownloadFileUpdateInputDto running = new DownloadFileUpdateInputDto();
+            running.setId(id);
+            running.setStatus(ExportTaskStatusEnum.RUNNING);
+            running.setUsageCount(contentDto.getUsageCount() + 1);
+            downloadFileClient.update(running);
 
-        //任务数-进行中=空余任务数
-        return allTasks.stream().filter(dto -> dto.getStatus().equals(ExportTaskStatusEnum.FAIL.getCode()) ||
-                        dto.getStatus().equals(ExportTaskStatusEnum.READY.getCode()))
-                //保证 条数
-                .limit(TASK_DOWNLOAD_NUMBER - runningTasksCount).collect(Collectors.toList());
-    }
+            //反射
+            Object bean = applicationContext.getBean(Class.forName(contentDto.getClassName()));
+            Class<?> paramsClass = Class.forName(contentDto.getParamsClassName());
+            Method method = bean.getClass().getMethod(contentDto.getMethodName(), paramsClass);
+            MaterialDto material = (MaterialDto) method.invoke(bean, JSONUtil.toBean(contentDto.getJsonParams(), paramsClass));
 
-    private void executeTasks(List<QueryDownloadFileOutputDto> tasksToExecute) {
-        if (tasksToExecute.isEmpty()) {
-            log.info("当前没有需要执行的导出任务");
-            XxlJobHelper.log("当前没有需要执行的导出任务");
-            return;
+            // 完成
+            DownloadFileUpdateInputDto finish = new DownloadFileUpdateInputDto();
+            finish.setId(id);
+            finish.setStatus(ExportTaskStatusEnum.DEAD);
+            finish.setMaterial(material);
+            finish.setFailCause("结果为空");
+            downloadFileClient.update(finish);
+        } catch (Exception e) {
+            //异常处理
+            DownloadFileUpdateInputDto fail = new DownloadFileUpdateInputDto();
+            fail.setId(id);
+            fail.setFailCause(e.getMessage());
+            fail.setStatus(ExportTaskStatusEnum.FAIL);
+            //重试机制
+            if (contentDto.getUsageCount() >= contentDto.getFailRetryNumber()) {
+                //关闭
+                fail.setStatus(ExportTaskStatusEnum.DEAD);
+            }
+            fail.setFailCause(ExceptionUtil.stacktraceToString(e));
+            downloadFileClient.update(fail);
+        } finally {
+            AppContext.getContext().clear();
         }
-        XxlJobHelper.log("执行的导出任务明细:{}", JSONUtil.toJsonStr(tasksToExecute));
-        tasksToExecute.forEach(task -> executorService.execute(() -> downloadFileClient.invoke(task.getId())));
-        log.info("存在执行任务,结束");
     }
 }

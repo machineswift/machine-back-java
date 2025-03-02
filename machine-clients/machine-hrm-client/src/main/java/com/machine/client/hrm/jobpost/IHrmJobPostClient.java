@@ -3,7 +3,7 @@ package com.machine.client.hrm.jobpost;
 import com.machine.client.hrm.jobpost.dto.input.HrmJobPostListSimpleInputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostDetailOutputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostListSimpleOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignLongTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-hrm-service/machine-hrm-service/server/hrm/job_post", configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-hrm-service/machine-hrm-service/server/hrm/job_post",
+        configuration = OpenFeignLongTimeConfig.class)
 public interface IHrmJobPostClient {
 
     @GetMapping("sync")

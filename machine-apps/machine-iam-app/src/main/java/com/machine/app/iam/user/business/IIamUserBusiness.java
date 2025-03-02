@@ -23,6 +23,8 @@ public interface IIamUserBusiness {
 
     Set<String> getIdByRoleIdSet(Set<String> roleIdSet);
 
+    Set<String> getIdByShopIdSet(Set<String> shopIdSet);
+
     List<IamUserRoleInfoResponse> getUserRoleList(String userId);
 
     Map<String, List<IamUserRoleInfoResponse>> getUserRoleListMap(Set<String> userIdSet);

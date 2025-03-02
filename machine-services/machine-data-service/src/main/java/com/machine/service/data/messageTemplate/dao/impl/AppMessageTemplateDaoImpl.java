@@ -9,7 +9,7 @@ import com.machine.client.data.messageTemplate.dto.input.AppMessageTemplateDetai
 import com.machine.client.data.messageTemplate.dto.input.AppMessageTemplateQueryPageInputDto;
 import com.machine.client.data.messageTemplate.dto.input.AppMessageTemplateUpdateChannelInput;
 import com.machine.client.data.messageTemplate.dto.input.AppMessageTemplateUpdateStatusInputDto;
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
 import com.machine.service.data.messageTemplate.dao.IAppMessageTemplateDao;
 import com.machine.service.data.messageTemplate.dao.mapper.AppMessageTemplateMapper;
 import com.machine.service.data.messageTemplate.dao.mapper.entity.AppMessageTemplateEntity;

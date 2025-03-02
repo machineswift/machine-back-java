@@ -1,5 +1,6 @@
 package com.machine.client.data.file.dto.input;
 
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -11,7 +12,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DownloadFilePageClientInputDto extends PageRequest {
+public class DownloadFileQueryPageInputDto extends PageRequest {
+
+    @Schema(description = "用户ID)")
+    private String userId;
 
     @Schema(description = "文件名称)")
     private String fileName;
@@ -24,5 +28,4 @@ public class DownloadFilePageClientInputDto extends PageRequest {
 
     @Schema(description = "创建结束时间")
     private String createEndTime;
-
 }

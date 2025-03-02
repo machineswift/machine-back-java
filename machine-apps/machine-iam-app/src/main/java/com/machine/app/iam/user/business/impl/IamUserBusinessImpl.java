@@ -164,6 +164,23 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<String> getIdByShopIdSet(Set<String> shopIdSet) {
+        if (CollectionUtil.isEmpty(shopIdSet)) {
+            return Set.of();
+        }
+
+        IamUserRoleTargetQueryListInputDto inputDto = new IamUserRoleTargetQueryListInputDto();
+        inputDto.setTargetType(UserRoleTargetTypeEnum.SHOP);
+        inputDto.setTargetIdSet(shopIdSet);
+        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByCondition(inputDto);
+        if (CollectionUtil.isEmpty(outputDtoList)) {
+            return Set.of();
+        }
+
+        return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+    }
+
     /**
      * 用户角色信息
      */
@@ -304,13 +321,24 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
 
     @Override
     public PageResponse<IamUserSimpleListResponseVo> pageSimpled(IamUserQueryPageSimpleRequestVo request) {
-        //组装ShopId集合
+        //组装UserId集合
         boolean compute = false;
         Set<String> finallyqueryUserIdSet = new HashSet<>();
 
-        //组装ShopId集合(组织)
+        //组装UserId集合(门店)
+        Set<String> shopIdSet = request.getShopIdSet();
+        if (CollectionUtil.isNotEmpty(shopIdSet)) {
+            compute = true;
+            Set<String> userIdSet = getIdByShopIdSet(shopIdSet);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
+                finallyqueryUserIdSet.addAll(userIdSet);
+            }
+        }
+
+        //组装UserId集合(组织)
         Set<String> organizationIdSet = request.getOrganizationIdSet();
-        if (CollectionUtil.isNotEmpty(organizationIdSet)) {
+        if ((!compute || CollectionUtil.isNotEmpty(organizationIdSet))
+                && CollectionUtil.isNotEmpty(request.getOrganizationIdSet())) {
             boolean containRootId = false;
             for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
                 if (organizationIdSet.contains(type.getName().toLowerCase())) {
@@ -336,9 +364,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
             compute = true;
             Set<String> departmentIdSet = departmentCache.recursionListSubIdSet(request.getDepartmentIdSet());
             Set<String> userIdSet = new HashSet<>(getIdByDepartmentIdSet(departmentIdSet));
-            if (CollectionUtil.isEmpty(userIdSet)) {
-                return new PageResponse<>(request.getCurrent(), request.getSize(), 0);
-            } else {
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
                 //取交集
                 if (CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
                     finallyqueryUserIdSet.addAll(userIdSet);
@@ -349,13 +375,12 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         }
 
         //组装UserId集合(角色)
+        Set<String> roleIdSet = request.getRoleIdSet();
         if ((!compute || CollectionUtil.isNotEmpty(finallyqueryUserIdSet))
-                && CollectionUtil.isNotEmpty(request.getRoleIdSet())) {
+                && CollectionUtil.isNotEmpty(roleIdSet)) {
             compute = true;
-            Set<String> userIdSet = getIdByRoleIdSet(request.getRoleIdSet());
-            if (CollectionUtil.isEmpty(userIdSet)) {
-                return new PageResponse<>(request.getCurrent(), request.getSize(), 0);
-            } else {
+            Set<String> userIdSet = getIdByRoleIdSet(roleIdSet);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
                 //取交集
                 if (CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
                     finallyqueryUserIdSet.addAll(userIdSet);

@@ -1,4 +1,4 @@
-package com.machine.sdk.common.envm.data;
+package com.machine.sdk.common.envm.data.message;
 
 import com.machine.sdk.common.envm.BaseEnum;
 import lombok.AllArgsConstructor;

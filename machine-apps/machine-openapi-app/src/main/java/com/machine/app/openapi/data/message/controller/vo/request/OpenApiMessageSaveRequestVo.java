@@ -1,7 +1,7 @@
 package com.machine.app.openapi.data.message.controller.vo.request;
 
 import com.machine.client.data.informaion.output.AppMessageContentDto;
-import com.machine.sdk.common.envm.data.MessageTemplateTypeEnum;
+import com.machine.sdk.common.envm.data.message.MessageTemplateTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

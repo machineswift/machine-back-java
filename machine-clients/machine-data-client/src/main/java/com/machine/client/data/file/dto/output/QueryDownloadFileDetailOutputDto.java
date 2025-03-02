@@ -1,35 +1,48 @@
-package com.machine.app.manage.data.file.controller.vo.response;
+package com.machine.client.data.file.dto.output;
 
+import com.machine.sdk.common.envm.data.MaterIalTypeEnum;
 import com.machine.sdk.common.envm.data.download.DownLoadFileChannelEnum;
 import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
-import com.machine.sdk.common.model.dto.data.MaterialDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Schema
-public class QueryDownloadFileDetailResponseVo {
+@NoArgsConstructor
+public class QueryDownloadFileDetailOutputDto {
 
     @Schema(description = "ID")
     private String id;
 
-    @Schema(description = " 渠道（DownLoadFileChannelEnum）")
+    @Schema(description = "渠道")
     private DownLoadFileChannelEnum channel;
 
-    @Schema(description = " 任务状态（ExportTaskStatusEnum）")
+    @Schema(description = "任务状态")
     private ExportTaskStatusEnum status;
 
     @Schema(description = "用户id")
     private String userId;
 
-    @Schema(description = "附件信息")
-    private MaterialDto material;
+    @Schema(description = "文件名称")
+    private String fileName;
 
-    @Schema(description = "失败原因")
-    private String failCause;
+    @Schema(description = "文件类型")
+    private MaterIalTypeEnum fileType;
+
+    @Schema(description = "url地址md5")
+    private String urlMd5;
+
+    @Schema(description = "附件信息")
+    private String material;
 
     @Schema(description = "过期时间")
     private Long expirationIn;
+
+    @Schema(description = "内容")
+    private String content;
+
+    @Schema(description = "失败原因")
+    private String failCause;
 
     @Schema(description = "创建人")
     private String createBy;

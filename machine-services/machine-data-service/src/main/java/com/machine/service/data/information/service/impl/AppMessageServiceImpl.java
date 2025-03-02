@@ -14,7 +14,7 @@ import com.machine.client.data.messageTemplate.dto.output.AppMessageTemplateDeta
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;

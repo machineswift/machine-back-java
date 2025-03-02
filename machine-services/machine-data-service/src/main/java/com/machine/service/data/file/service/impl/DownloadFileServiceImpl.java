@@ -8,12 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.machine.client.data.file.dto.input.*;
+import com.machine.client.data.file.dto.output.QueryDownloadFileDetailOutputDto;
 import com.machine.client.data.file.dto.output.QueryDownloadFileListOutputDto;
-import com.machine.client.data.file.dto.output.QueryDownloadFileOutputDto;
 import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.common.envm.data.download.DownLoadFileChannelEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.tool.DateUtils;
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.service.data.file.dao.IDownloadFileDao;
 import com.machine.service.data.file.dao.mapper.DownloadFileEntityMapper;
@@ -30,26 +31,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.machine.sdk.common.constant.CommonConstant.DOWNLOAD_FILE_EXPIRATION_DAYS;
+
 @Slf4j
 @Service
-public class DownloadFileServiceImpl extends ServiceImpl<DownloadFileEntityMapper, DownloadFileEntity> implements IDownloadFileService {
-
-    @Autowired
-    private DownloadFileEntityMapper downloadFileEntityMapper;
-
-    /**
-     * 有效期180天
-     */
-    @Value("${file.download.expirationTime:180}")
-    private long expirationTime = 180;
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class DownloadFileServiceImpl implements IDownloadFileService {
 
     @Autowired
     private IDownloadFileDao downloadFileDao;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String createFinish(DownloadFileCreateFinishInputDto inputDto) {
         MaterialDto material = inputDto.getMaterial();
         String urlMd5 = DigestUtil.md5Hex(material.getUrl());
@@ -77,140 +69,99 @@ public class DownloadFileServiceImpl extends ServiceImpl<DownloadFileEntityMappe
     }
 
     @Override
-    public String create(CreateDownloadFileClientInputDto inputDto) {
-        String userId = AppContext.getContext().getUserId();
-        DownloadFileEntity downloadFileEntity = BeanUtil.copyProperties(inputDto, DownloadFileEntity.class);
-        downloadFileEntity.setStatus(ExportTaskStatusEnum.READY);
-        downloadFileEntity.setUserId(userId);
-        downloadFileEntity.setRetryStatus(0);
-        downloadFileEntity.setJsonParams(JSONUtil.toJsonStr(inputDto));
-        // 获取当前时间的时间戳
-        long currentTimeMillis = System.currentTimeMillis();
-        // 180天的毫秒数
-        long days = expirationTime * 24 * 60 * 60 * 1000;
-
-        long futureTimeMillis = currentTimeMillis + days;
-        downloadFileEntity.setExpirationIn(futureTimeMillis);
-        downloadFileEntity.setUserId(userId);
-        // 设置过期时间
-        return downloadFileDao.insert(downloadFileEntity);
+    @Transactional(rollbackFor = Exception.class)
+    public String createTask(DownloadFileContentDto inputDto) {
+        DownloadFileEntity insertEntity = BeanUtil.copyProperties(inputDto, DownloadFileEntity.class);
+        insertEntity.setChannel(DownLoadFileChannelEnum.SYSTEM);
+        insertEntity.setStatus(ExportTaskStatusEnum.READY);
+        insertEntity.setUserId(AppContext.getContext().getUserId());
+        insertEntity.setContent(JSONUtil.toJsonStr(inputDto));
+        insertEntity.setExpirationIn(System.currentTimeMillis() + DOWNLOAD_FILE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000L);
+        return downloadFileDao.insert(insertEntity);
     }
 
-
     @Override
-    public void updateById(UpdateDownloadFileClientInputDto inputDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public int updateById(DownloadFileUpdateInputDto inputDto) {
+        DownloadFileEntity dbEntity = downloadFileDao.getById(inputDto.getId());
+        if (null == dbEntity) {
+            return 0;
+        }
+
         DownloadFileEntity downloadFileEntity = new DownloadFileEntity();
         downloadFileEntity.setId(inputDto.getId());
         downloadFileEntity.setStatus(inputDto.getStatus());
+
+        //附件信息
+        if (null != inputDto.getMaterial()) {
+            MaterialDto material = inputDto.getMaterial();
+            downloadFileEntity.setFileName(material.getName());
+            downloadFileEntity.setFileType(material.getType());
+            downloadFileEntity.setUrlMd5(DigestUtil.md5Hex(material.getUrl()));
+            downloadFileEntity.setMaterial(JSONUtil.toJsonStr(material));
+        }
+
+        //内容
+        String content = dbEntity.getContent();
+        DownloadFileContentDto contentDto = JSONUtil.toBean(content, DownloadFileContentDto.class);
+        contentDto.setUsageCount(inputDto.getUsageCount());
+        downloadFileEntity.setContent(JSONUtil.toJsonStr(contentDto));
+
         downloadFileEntity.setFailCause(inputDto.getFailCause());
-        downloadFileEntity.setRetryStatus(inputDto.getRetryStatus());
-        downloadFileEntity.setUsageCount(inputDto.getUsageCount());
-
-//
-//        @Schema(description = "附件信息")
-//        private MaterialDto material;
-//
-
-        downloadFileEntityMapper.update(downloadFileEntity);
+        return downloadFileDao.update(downloadFileEntity);
     }
 
     @Override
-    @Transactional(rollbackFor = {Exception.class})
-    public void updateBatchById(List<UpdateDownloadFileClientInputDto> inputDto) {
-        List<DownloadFileEntity> updateBatch = BeanUtil.copyToList(inputDto, DownloadFileEntity.class);
-        this.updateBatchById(updateBatch);
-    }
-
-    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void invoke(String id) {
-        DownloadFileEntity entity = downloadFileEntityMapper.selectById(id);
-        if (entity == null) {
-            log.error("当前下载中心任务id不存在：{}", id);
+        DownloadFileEntity dbEntity = downloadFileDao.getById(id);
+        if (dbEntity == null) {
+            throw new IamBusinessException("data.downloadFile.invoke.taskNotExists", "任务不存在");
+        }
+
+        if (ExportTaskStatusEnum.READY == dbEntity.getStatus() ||
+                ExportTaskStatusEnum.RUNNING == dbEntity.getStatus()) {
             return;
         }
 
-        try {
-            UpdateDownloadFileClientInputDto running = new UpdateDownloadFileClientInputDto();
-            running.setId(id);
-            running.setUsageCount(entity.getUsageCount() + 1);
-            running.setStatus(ExportTaskStatusEnum.RUNNING);
-            //进行中
-            this.updateById(running);
-
-            CreateDownloadFileClientInputDto inputDto = JSONUtil.toBean(entity.getJsonParams(), CreateDownloadFileClientInputDto.class);
-            //反射
-            Object bean = applicationContext.getBean(Class.forName(inputDto.getClassName()));
-            Method method = bean.getClass().getMethod(inputDto.getMethodName(), String.class);
-            UpdateDownloadFileClientInputDto finish = (UpdateDownloadFileClientInputDto) method.invoke(bean, inputDto.getJsonParamsRequest());
-            finish.setId(id);
-            finish.setStatus(ExportTaskStatusEnum.FINISH);
-
-            // 完成
-            this.updateById(finish);
-
-        } catch (Exception e) {
-            //异常处理
-            handleTaskFailure(entity, e);
+        if (ExportTaskStatusEnum.FINISH == dbEntity.getStatus()) {
+            throw new IamBusinessException("data.downloadFile.invoke.taskHasFinish", "任务已经完成");
         }
+
+        if (ExportTaskStatusEnum.DEAD == dbEntity.getStatus()) {
+            throw new IamBusinessException("data.downloadFile.invoke.taskHasDead", "任务已经死亡");
+        }
+
+        DownloadFileEntity updateEntity = new DownloadFileEntity();
+        updateEntity.setId(id);
+        updateEntity.setStatus(ExportTaskStatusEnum.READY);
+        downloadFileDao.update(updateEntity);
     }
 
     @Override
-    public QueryDownloadFileOutputDto getById(String id) {
+    public QueryDownloadFileDetailOutputDto getById(String id) {
         DownloadFileEntity dbEntity = downloadFileDao.getById(id);
-        QueryDownloadFileOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(dbEntity), QueryDownloadFileOutputDto.class);
-        outputDto.setExpirationDay(DateUtils.daysUntilExpiration(dbEntity.getExpirationIn()));
-        return outputDto;
+        if (null == dbEntity) {
+            return null;
+        }
+        return JSONUtil.toBean(JSONUtil.toJsonStr(dbEntity), QueryDownloadFileDetailOutputDto.class);
     }
 
     @Override
-    public List<QueryDownloadFileOutputDto> queryByLimit(QueryDownloadFileInputDto inputDto) {
-        QueryWrapper<DownloadFileEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("status", inputDto.getStatusList())
-                //设置重试状态
-                .eq("retry_status", inputDto.getRetryStatus())
-                //创建时间
-                .orderByAsc("create_time")
-                //默认每次拉取100条
-                .last("LIMIT " + inputDto.getPageSize());
-
-        return BeanUtil.copyToList(downloadFileEntityMapper.selectList(queryWrapper), QueryDownloadFileOutputDto.class);
+    public List<QueryDownloadFileDetailOutputDto> queryByLimit(QueryDownloadFileQueryInputDto inputDto) {
+        List<DownloadFileEntity> entityList = downloadFileDao.queryByLimit(inputDto);
+        if (CollectionUtil.isEmpty(entityList)) {
+            return List.of();
+        }
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), QueryDownloadFileDetailOutputDto.class);
     }
 
     @Override
-    public Page<QueryDownloadFileListOutputDto> page(DownloadFilePageClientInputDto inputDto) {
+    public Page<QueryDownloadFileListOutputDto> page(DownloadFileQueryPageInputDto inputDto) {
         Page<DownloadFileEntity> page = downloadFileDao.page(inputDto);
-
         Page<QueryDownloadFileListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-
-        List<QueryDownloadFileListOutputDto> outputDtoList = new ArrayList<>();
-        for (DownloadFileEntity entity : page.getRecords()) {
-            QueryDownloadFileListOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), QueryDownloadFileListOutputDto.class, true);
-            //设置过期状态
-            outputDto.setExpirationDay(DateUtils.daysUntilExpiration(entity.getExpirationIn()));
-            //附件信息
-            outputDto.setMaterial(JSONUtil.toBean(entity.getMaterial(), MaterialDto.class));
-            outputDtoList.add(outputDto);
-        }
-        pageResult.setRecords(outputDtoList);
-
+        pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), QueryDownloadFileListOutputDto.class));
         return pageResult;
-    }
 
-    private void handleTaskFailure(DownloadFileEntity entity,
-                                   Throwable e) {
-        String jsonParams = entity.getJsonParams();
-        CreateDownloadFileClientInputDto inputDto = JSONUtil.toBean(jsonParams, CreateDownloadFileClientInputDto.class);
-
-        UpdateDownloadFileClientInputDto fail = new UpdateDownloadFileClientInputDto();
-        fail.setId(entity.getId());
-        fail.setFailCause(e.getMessage());
-        fail.setStatus(ExportTaskStatusEnum.FAIL);
-        //重试机制
-        if (entity.getUsageCount() >= inputDto.getFailRetryNumber()) {
-            //关闭
-            fail.setRetryStatus(1);
-        }
-        log.error("执行任务失败堆栈信息", e);
-        this.updateById(fail);
     }
 }

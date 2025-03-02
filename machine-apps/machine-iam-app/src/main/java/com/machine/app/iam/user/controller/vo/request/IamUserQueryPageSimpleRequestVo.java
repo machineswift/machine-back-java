@@ -16,6 +16,8 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class IamUserQueryPageSimpleRequestVo extends PageRequest {
+    @Schema(description = "门店ID集合")
+    private Set<String> shopIdSet;
 
     @Schema(description = "部门ID集合")
     private Set<String> departmentIdSet;

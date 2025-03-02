@@ -32,6 +32,7 @@ public class BeiSenXxlJob {
         jobPostClient.sync();
         departmentClient.sync();
         employeeLongTimeClient.sync();
+        departmentClient.syncDepartmentPersonInCharge();
         XxlJobHelper.log("XXL-JOB, 同步北森数据结束");
         AppContext.getContext().clear();
     }

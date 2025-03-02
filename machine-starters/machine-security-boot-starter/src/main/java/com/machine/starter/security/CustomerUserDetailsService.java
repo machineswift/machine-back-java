@@ -8,7 +8,7 @@ import com.machine.client.iam.user.dto.output.UserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.UserDto;
 import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.starter.redis.cache.RedisCacheFunctionPermission;
+import com.machine.starter.redis.cache.RedisCacheIamFunctionPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,14 +25,14 @@ public class CustomerUserDetailsService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheFunctionPermission redisCacheFunctionPermission;
+    private RedisCacheIamFunctionPermission redisCacheIamFunctionPermission;
 
     @Autowired
     private IIamUserClient userClient;
 
     public UserDetails loadUserDetails() throws UsernameNotFoundException {
         //查询功能权限信息
-        UserAuthDetailOutputDto userDetailDto = redisCacheFunctionPermission.functionPermission();
+        UserAuthDetailOutputDto userDetailDto = redisCacheIamFunctionPermission.functionPermission();
         return new CustomerUserDetails(userDetailDto);
     }
 

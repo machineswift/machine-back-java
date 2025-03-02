@@ -32,6 +32,9 @@
         `contact_phone`
         from t_supplier_company sc
         <where>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND sc.code = #{inputDto.code}
+            </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
                 AND sc.name like CONCAT('%', #{inputDto.name}, '%')
             </if>
@@ -45,6 +48,9 @@
     <select id="pageExpand" resultType="com.machine.service.data.supplier.dao.mapper.entity.SupplierCompanyEntity">
         select sc.* from t_supplier_company sc
         <where>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND sc.code = #{inputDto.code}
+            </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
                 AND sc.name like CONCAT('%', #{inputDto.name}, '%')
             </if>

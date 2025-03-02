@@ -1,6 +1,6 @@
 package com.machine.client.iam.organization.dto.input;
 
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -171,7 +171,8 @@ public class HrmEmployeeServiceImpl implements IHrmEmployeeService {
                     companyInputDto.setId(userId);
                     companyInputDto.setUserName(dto.getCode());
                     companyInputDto.setCode(dto.getCode());
-                    if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()) {
+                    if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()||
+                            BeiSenEmployeeStatusEnum.PENDING_HIRE == dto.getStatus()) {
                         companyInputDto.setStatus(StatusEnum.DISABLE);
                         companyInputDto.setEmployeeStatus(CompanyEmployeeStatusEnum.LEFT);
                     } else {
@@ -211,7 +212,8 @@ public class HrmEmployeeServiceImpl implements IHrmEmployeeService {
                 //修改员工信息
                 employeeDao.update(updateEntity);
 
-                if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()) {
+                if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()||
+                        BeiSenEmployeeStatusEnum.PENDING_HIRE == dto.getStatus()) {
                     //禁用用户
                     IamUserUpdateStatusInputDto userUpdateStatusInputDto = new IamUserUpdateStatusInputDto();
                     userUpdateStatusInputDto.setId(entity.getUserId());
@@ -225,7 +227,8 @@ public class HrmEmployeeServiceImpl implements IHrmEmployeeService {
                     IamCompanyUserUpdate4BeiSenInputDto customerUpdateInputDto = new IamCompanyUserUpdate4BeiSenInputDto();
                     customerUpdateInputDto.setId(entity.getUserId());
                     customerUpdateInputDto.setPhone(entity.getPhone());
-                    if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()) {
+                    if (BeiSenEmployeeStatusEnum.LEFT == dto.getStatus()||
+                            BeiSenEmployeeStatusEnum.PENDING_HIRE == dto.getStatus()) {
                         customerUpdateInputDto.setEmployeeStatus(CompanyEmployeeStatusEnum.LEFT);
                     } else {
                         customerUpdateInputDto.setEmployeeStatus(CompanyEmployeeStatusEnum.FULL_TIME);

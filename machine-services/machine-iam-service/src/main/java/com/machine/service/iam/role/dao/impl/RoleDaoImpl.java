@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserFunctionPermission.IAM_USER_FUNCTION_PERMISSION_KEY;
+import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserManageDataPermission.IAM_USER_MANAGE_DATA_PERMISSION_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserSuperAppDataPermission.IAM_USER_SUPER_APP_DATA_PERMISSION_KEY;
 
 @Repository
@@ -67,6 +68,7 @@ public class RoleDaoImpl implements IRoleDao {
         //缓存
         customerRedisCommands.del(IAM_USER_FUNCTION_PERMISSION_KEY);
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(EventTypeEnum.IAM_ROLE_UPDATE_STATUS, new IdStatusDto(roleId, status));

@@ -39,26 +39,6 @@ public class DepartmentEntity extends BaseEntity {
     private BeiSenDepartmentStatusEnum status;
 
     /**
-     * 设立日期
-     */
-    @TableField("establish_date")
-    private Long establishDate;
-
-
-    /**
-     * 生效日期
-     */
-    @TableField("start_date")
-    private Long starDate;
-
-
-    /**
-     * 失效日期
-     */
-    @TableField("stop_time")
-    private Long stopTime;
-
-    /**
      * 描述
      */
     @TableField("description")

@@ -2,11 +2,9 @@ package com.machine.client.iam.user;
 
 import com.machine.client.iam.organization.dto.input.IamUserRoleTargetQueryListInputDto;
 import com.machine.client.iam.organization.dto.output.IamUserRoleTargetListOutputDto;
-import com.machine.client.iam.user.dto.input.DataPermission4ManageInputDto;
 import com.machine.client.iam.user.dto.input.IamUserRoleInfoBindFranchiseeShopInputDto;
 import com.machine.client.iam.user.dto.input.IamUserRoleInfoUnbindFranchiseeShopInputDto;
 import com.machine.sdk.common.config.OpenFeignDefaultConfig;
-import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,12 +21,6 @@ public interface IIamUserRoleTargetClient {
 
     @PostMapping("unbind_franchisee_shop")
     boolean unbindFranchiseeShop(@RequestBody @Validated IamUserRoleInfoUnbindFranchiseeShopInputDto inputDto);
-
-    @GetMapping("data_permission_4_superApp")
-    DataPermissionDto dataPermission4SuperApp();
-
-    @PostMapping("data_permission_4_manage")
-    DataPermissionDto dataPermission4SuperManage(@RequestBody @Validated DataPermission4ManageInputDto inputDto);
 
     @PostMapping("list_userId_by_organizationIdSet")
     List<String> listUserIdByOrganizationIdSet(@RequestBody @Validated IdSetRequest request);

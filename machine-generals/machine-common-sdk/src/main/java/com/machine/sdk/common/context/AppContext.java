@@ -2,12 +2,20 @@ package com.machine.sdk.common.context;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.machine.sdk.common.envm.iam.auth.AuthMethodEnum;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class AppContext {
 
     private String userId;
 
     private String clientId;
+
+    private String permissionCode;
+
+    private String dataPermissionCode;
 
     private AuthMethodEnum authMethod;
 
@@ -20,30 +28,6 @@ public class AppContext {
         }
 
         return result;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public AuthMethodEnum getAuthMethod() {
-        return authMethod;
-    }
-
-    public void setAuthMethod(AuthMethodEnum authMethod) {
-        this.authMethod = authMethod;
     }
 
     public void clear() {

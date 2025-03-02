@@ -4,8 +4,8 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.file.IDownloadFileClient;
 import com.machine.client.data.file.dto.input.*;
+import com.machine.client.data.file.dto.output.QueryDownloadFileDetailOutputDto;
 import com.machine.client.data.file.dto.output.QueryDownloadFileListOutputDto;
-import com.machine.client.data.file.dto.output.QueryDownloadFileOutputDto;
 import com.machine.sdk.common.model.response.PageResponse;
 import com.machine.service.data.file.service.IDownloadFileService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,48 +31,41 @@ public class DownloadFileServer implements IDownloadFileClient {
     }
 
     @Override
-    @PostMapping("create")
-    public String create(@RequestBody @Validated CreateDownloadFileClientInputDto inputDto) {
+    @PostMapping("create_task")
+    public String createTask(@RequestBody @Validated DownloadFileContentDto inputDto) {
         log.info("下载中心新增任务，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return downloadFileService.create(inputDto);
+        return downloadFileService.createTask(inputDto);
     }
 
     @Override
-    @GetMapping("invoke")
-    public void invoke(@RequestParam("id") String id) {
-        log.info("下载中心任务调度，id={}", id);
+    @GetMapping("schedule_task")
+    public void scheduleTask(@RequestParam("id") String id) {
+        log.info("下载中心调度任务，id={}", id);
         downloadFileService.invoke(id);
     }
 
     @Override
     @PostMapping("update")
-    public void update(@RequestBody @Validated UpdateDownloadFileClientInputDto inputDto) {
+    public int update(@RequestBody @Validated DownloadFileUpdateInputDto inputDto) {
         log.info("下载中心修改文件，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        downloadFileService.updateById(inputDto);
-    }
-
-    @Override
-    @PostMapping("batch_update")
-    public void batchUpdate(@RequestBody @Validated List<UpdateDownloadFileClientInputDto> inputDto) {
-        log.info("下载中心批量修改文件，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        downloadFileService.updateBatchById(inputDto);
+        return downloadFileService.updateById(inputDto);
     }
 
     @Override
     @GetMapping("get_by_id")
-    public QueryDownloadFileOutputDto getById(@RequestParam("id") String id) {
+    public QueryDownloadFileDetailOutputDto getById(@RequestParam("id") String id) {
         return downloadFileService.getById(id);
     }
 
     @Override
     @PostMapping("query_by_limit")
-    public List<QueryDownloadFileOutputDto> queryByLimit(@RequestBody @Validated QueryDownloadFileInputDto inputDto) {
+    public List<QueryDownloadFileDetailOutputDto> queryByLimit(@RequestBody @Validated QueryDownloadFileQueryInputDto inputDto) {
         return downloadFileService.queryByLimit(inputDto);
     }
 
     @Override
     @PostMapping("page")
-    public PageResponse<QueryDownloadFileListOutputDto> page(@RequestBody @Validated DownloadFilePageClientInputDto inputDto) {
+    public PageResponse<QueryDownloadFileListOutputDto> page(@RequestBody @Validated DownloadFileQueryPageInputDto inputDto) {
         Page<QueryDownloadFileListOutputDto> pageResult = downloadFileService.page(inputDto);
         return new PageResponse<>(
                 pageResult.getCurrent(),

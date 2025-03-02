@@ -14,7 +14,7 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelation
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheDataPermission;
+import com.machine.starter.redis.cache.RedisCacheIamDataPermission;
 import com.machine.starter.redis.cache.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
     private RedisCacheIamOrganization organizationCache;
 
     @Autowired
-    private RedisCacheDataPermission redisCacheDataPermission;
+    private RedisCacheIamDataPermission redisCacheIamDataPermission;
 
     @Autowired
     private IDataShopOrganizationRelationClient shopOrganizationRelationClient;
@@ -45,7 +45,7 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
     public SuperOrganizationTreeSimpleSelfResponseVo treeSelfSimple(SupeOrganizationTreeRequestVo request) {
         IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             return JSONUtil.toBean(JSONUtil.toJsonStr(allTreeOutput), SuperOrganizationTreeSimpleSelfResponseVo.class);
@@ -71,7 +71,7 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
     public SuperOrganizationTreeExpandSelfResponseVo treeSelfExpand(SupeOrganizationTreeRequestVo request) {
         IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisCacheDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
 

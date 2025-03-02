@@ -50,7 +50,7 @@
                 AND r.status = #{inputDto.status}
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
-                AND r.code = #{inputDto.code}
+                AND r.code like CONCAT('%', #{inputDto.code}, '%')
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
                 AND r.name like CONCAT('%', #{inputDto.name}, '%')

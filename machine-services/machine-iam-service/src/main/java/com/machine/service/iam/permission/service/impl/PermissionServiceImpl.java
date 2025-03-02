@@ -250,6 +250,15 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
+    public PermissionDetailOutputDto detailByCode(IdRequest request) {
+        PermissionEntity entity = permissionDao.getByCode(request.getId());
+        if (null == entity) {
+            return null;
+        }
+        return JSONUtil.toBean(JSONUtil.toJsonStr(entity), PermissionDetailOutputDto.class);
+    }
+
+    @Override
     public List<PermissionListOutputDto> listByRoleId(IdRequest request) {
         List<PermissionEntity> entityList = permissionDao.listByRoleId(request.getId());
         if (CollectionUtil.isEmpty(entityList)) {

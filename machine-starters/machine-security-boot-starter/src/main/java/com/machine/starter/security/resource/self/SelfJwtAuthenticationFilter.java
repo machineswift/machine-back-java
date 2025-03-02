@@ -23,6 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.machine.sdk.common.constant.ContextConstant.PERMISSION_CODE;
 import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_TOKEN_ID;
 import static com.machine.starter.security.SecurityConstant.*;
@@ -69,6 +70,12 @@ public class SelfJwtAuthenticationFilter extends OncePerRequestFilter {
         UserDto userDto = userDetailService.loadUserInCache();
         if (!userDto.isEnabled()) {
             throw new UserStatusDisableException("您的账号已被禁用，请联系客服了解详情");
+        }
+
+        //权限编码(用户计算数据权限)
+        String permissionCode = request.getParameter(PERMISSION_CODE);
+        if (StrUtil.isNotBlank(permissionCode)) {
+            AppContext.getContext().setPermissionCode(permissionCode);
         }
 
         if (CURRENT_USER_PATH.equals(request.getRequestURI())) {

@@ -12,6 +12,7 @@
     - [machine-camunda-table](document/db/table/machine-camunda-table.sql)
     - [machine-iam-table](document/db/table/machine-iam-table.sql)
     - [machine-data-table](document/db/table/machine-data-table.sql)
+    - [machine-scm-table](document/db/table/machine-scm-table.sql)
 - [基础设施配置](document/infra/infra.md)
 
 ## 技术选型

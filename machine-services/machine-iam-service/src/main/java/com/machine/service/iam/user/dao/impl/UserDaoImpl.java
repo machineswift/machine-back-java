@@ -231,6 +231,11 @@ public class UserDaoImpl implements IUserDao {
         return userMapper.pageSupplier(inputDto, page);
     }
 
+    @Override
+    public List<UserEntity> listShopUser4Export(IamShopUserExportInputDto inputDto) {
+        return userMapper.listShopUser4Export(inputDto);
+    }
+
     private void clearFunctionPermissionByUserId(String userId) {
         String keyCode = customerRedisCommands.get(IAM_USER_FUNCTION_PERMISSION_KEY);
         if (StrUtil.isEmpty(keyCode)) {

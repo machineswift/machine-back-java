@@ -2,7 +2,7 @@ package com.machine.app.manage.data.shop.controller.vo.response;
 
 import com.machine.sdk.common.envm.data.shop.*;
 import com.machine.sdk.common.envm.iam.BusinessDistrictTypeEnum;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

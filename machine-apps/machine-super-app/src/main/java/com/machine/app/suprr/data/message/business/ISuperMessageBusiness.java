@@ -7,7 +7,7 @@ import com.machine.app.suprr.data.message.controller.vo.request.SuperReadMessage
 import com.machine.app.suprr.data.message.controller.vo.response.SuperAppMessageGroupCountResponseVo;
 import com.machine.app.suprr.data.message.controller.vo.response.SuperAppMessageListResponseVo;
 import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
 import com.machine.sdk.common.model.response.PageResponse;
 
 import java.util.List;

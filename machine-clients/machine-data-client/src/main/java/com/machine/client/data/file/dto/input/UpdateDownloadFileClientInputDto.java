@@ -1,6 +1,6 @@
 package com.machine.client.data.file.dto.input;
 
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

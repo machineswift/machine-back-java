@@ -91,14 +91,15 @@ public class RedisPrefix4IamConstant {
     public static class UserManageDataPermission {
 
         /**
-         * 用户 manage 数据功能权限 key
+         * 用户manage数据功能权限 key
          */
         public static final String IAM_USER_MANAGE_DATA_PERMISSION_KEY = "iam:user:userManageDataPermission:key";
 
         /**
-         * 用户 manage 数据权限 数据
+         * 用户manage数据权限 数据
          */
         public static final String IAM_USER_MANAGE_DATA_PERMISSION_DATA = "iam:user:userManageDataPermission:data:";
+
     }
 
 }

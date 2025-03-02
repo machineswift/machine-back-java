@@ -1,51 +1,72 @@
 package com.machine.app.manage.data.file.business.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.manage.data.file.business.IDownLoadCenterBusiness;
-import com.machine.app.manage.data.file.controller.vo.request.DownloadFileCreateRequestVo;
 import com.machine.app.manage.data.file.controller.vo.request.DownloadFilePageRequestVo;
 import com.machine.app.manage.data.file.controller.vo.response.QueryDownloadFileDetailResponseVo;
 import com.machine.app.manage.data.file.controller.vo.response.QueryDownloadFileListResponseVo;
 import com.machine.client.data.file.IDownloadFileClient;
-import com.machine.client.data.file.dto.input.CreateDownloadFileClientInputDto;
-import com.machine.client.data.file.dto.input.DownloadFilePageClientInputDto;
+import com.machine.client.data.file.dto.input.DownloadFileQueryPageInputDto;
+import com.machine.client.data.file.dto.output.QueryDownloadFileDetailOutputDto;
 import com.machine.client.data.file.dto.output.QueryDownloadFileListOutputDto;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
 
     @Autowired
-    private IDownloadFileClient iDownloadFileClient;
+    private IDownloadFileClient downloadFileClient;
 
     @Override
-    public String create(DownloadFileCreateRequestVo inputDto) {
-        return iDownloadFileClient.create(BeanUtil.copyProperties(inputDto, CreateDownloadFileClientInputDto.class));
-    }
-
-    @Override
-    public void invoke(IdRequest request) {
-        iDownloadFileClient.invoke(request.getId());
+    public void scheduleTask(IdRequest request) {
+        downloadFileClient.scheduleTask(request.getId());
     }
 
     @Override
     public QueryDownloadFileDetailResponseVo detail(IdRequest request) {
-        return BeanUtil.copyProperties(iDownloadFileClient.getById(request.getId()), QueryDownloadFileDetailResponseVo.class);
+        QueryDownloadFileDetailOutputDto outputDto = downloadFileClient.getById(request.getId());
+        if (outputDto == null) {
+            return null;
+        }
+
+        QueryDownloadFileDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), QueryDownloadFileDetailResponseVo.class);
+        if (StrUtil.isNotBlank(outputDto.getMaterial())) {
+            responseVo.setMaterial(JSONUtil.toBean(JSONUtil.toJsonStr(outputDto.getMaterial()), MaterialDto.class));
+        }
+        return responseVo;
     }
 
     @Override
     public PageResponse<QueryDownloadFileListResponseVo> page(DownloadFilePageRequestVo inputDto) {
-        PageResponse<QueryDownloadFileListOutputDto> page = iDownloadFileClient.page(
-                BeanUtil.copyProperties(inputDto, DownloadFilePageClientInputDto.class));
+        PageResponse<QueryDownloadFileListOutputDto> page = downloadFileClient.page(
+                BeanUtil.copyProperties(inputDto, DownloadFileQueryPageInputDto.class));
 
-        return new PageResponse<>(
+        PageResponse<QueryDownloadFileListResponseVo> pageResponse = new PageResponse<>(
                 page.getCurrent(),
                 page.getSize(),
-                page.getTotal(),
-                JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), QueryDownloadFileListResponseVo.class));
+                page.getTotal());
+        if (CollectionUtil.isEmpty(page.getRecords())) {
+            return pageResponse;
+        }
+
+        List<QueryDownloadFileListResponseVo> responseVoList = new ArrayList<>();
+        for (QueryDownloadFileListOutputDto outputDto : page.getRecords()) {
+            QueryDownloadFileListResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), QueryDownloadFileListResponseVo.class);
+            responseVo.setMaterial(JSONUtil.toBean(JSONUtil.toJsonStr(outputDto.getMaterial()), MaterialDto.class));
+            responseVoList.add(responseVo);
+        }
+        pageResponse.setRecords(responseVoList);
+
+        return pageResponse;
     }
 }

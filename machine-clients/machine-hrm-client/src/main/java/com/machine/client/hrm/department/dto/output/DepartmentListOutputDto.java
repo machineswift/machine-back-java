@@ -14,21 +14,6 @@ public class DepartmentListOutputDto {
     private String name;
 
     /**
-     * 设立日期
-     */
-    private Long establishDate;
-
-    /**
-     * 生效日期
-     */
-    private Long startDate;
-
-    /**
-     * 失效日期
-     */
-    private Long stopTime;
-
-    /**
      * 排序
      */
     private Long sort;

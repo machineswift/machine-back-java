@@ -36,6 +36,14 @@ public class HrmDepartmentController {
         departmentBusiness.sync();
     }
 
+    @Operation(summary = "同步部门负责人数据")
+    @GetMapping("sync_departmentPersonInCharge")
+    public void syncDepartmentPersonInCharge() {
+        log.info("同步部门负责人数据，userId={}", AppContext.getContext().getUserId());
+        departmentBusiness.syncDepartmentPersonInCharge();
+
+    }
+
     @Operation(summary = "详情")
     @PostMapping("detail")
     public HrmDepartmentDetailResponseVo detail(@RequestBody @Validated IdRequest request) {

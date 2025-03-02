@@ -65,6 +65,12 @@ public class IamPermissionServer implements IIamPermissionClient {
     }
 
     @Override
+    @PostMapping("detail_by_code")
+    public PermissionDetailOutputDto detailByCode(@RequestBody @Validated IdRequest request) {
+        return permissionService.detailByCode(request);
+    }
+
+    @Override
     @PostMapping("list_by_roleId")
     public List<PermissionListOutputDto> listByRoleId(@RequestBody @Validated IdRequest request) {
         return permissionService.listByRoleId(request);

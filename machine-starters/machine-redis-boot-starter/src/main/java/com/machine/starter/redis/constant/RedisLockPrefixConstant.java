@@ -23,9 +23,15 @@ public class RedisLockPrefixConstant {
         public static final String IAM_USER_FUNCTION_PERMISSION_LOCK = "iam:user:userFunctionPermission:lock";
 
         /**
-         * 用户app数据功能权限
+         * 用户app数据权限
          */
         public static final String IAM_USER_APP_DATA_PERMISSION_LOCK = "iam:user:userAppDataPermission:lock";
+
+        /**
+         * 用户app数据权限
+         */
+        public static final String IAM_USER_MANAGE_DATA_PERMISSION_LOCK = "iam:user:userManageDataPermission:lock";
+
 
         /**
          * 手机号登录短信验证码（获取验证码）
@@ -88,6 +94,11 @@ public class RedisLockPrefixConstant {
          * 同步北森员工
          */
         public static final String HRM_SYNC_BEI_SEN_EMPLOYEE_LOCK = "hrm:sync:beiSen:employee:lock";
+
+        /**
+         * 同步北森部门负责人
+         */
+        public static final String HRM_SYNC_BEI_SEN_DEPARTMENT_PERSON_IN_CHARGE_LOCK = "hrm:sync:beiSen:department:person:in:charge:lock";
     }
 
 }

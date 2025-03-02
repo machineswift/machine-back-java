@@ -17,19 +17,15 @@ public class HuaWeiObsSdkHttpConfig {
     @Value("${huawei.obs.upload.endPoint:XXX}")
     private String endPoint;
 
-    @Value("${huawei.obs.upload.bucketName:machine-app-file}")
+    @Value("${huawei.obs.upload.bucketName:xijie-app-file}")
     private String bucketName;
 
-    @Value("${huawei.obs.upload.parentDir:machine}")
+    @Value("${huawei.obs.upload.parentDir:xi_jie}")
     private String parentDir;
-
-    //@Value("${huawei.obs.upload.expires}")
-    private Integer expires = 180;
 
     @Bean(name = "huaWeiObsHttpClient")
     public HuaWeiObsHttpClient huaWeiObsHttpClient() {
-        return new HuaWeiObsHttpClient(ak, sk, endPoint, bucketName, parentDir, expires);
+        return new HuaWeiObsHttpClient(ak, sk, endPoint, bucketName, parentDir);
     }
-
 
 }

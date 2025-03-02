@@ -38,7 +38,7 @@ public class OpenFeignLongTimeConfig {
     @Bean
     public Request.Options options() {
         return new Request.Options(5L, TimeUnit.SECONDS,
-                60 * 60L, TimeUnit.SECONDS, false);
+                2 * 60 * 60L, TimeUnit.SECONDS, false);
     }
 
     @Bean

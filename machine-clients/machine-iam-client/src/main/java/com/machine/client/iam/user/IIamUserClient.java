@@ -6,6 +6,7 @@ import com.machine.client.iam.user.dto.UserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
 import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -101,4 +102,6 @@ public interface IIamUserClient {
     @PostMapping("page_supplier_user")
     PageResponse<UserListOutputDto> pageSupplierUser(@RequestBody @Validated IamSupplierUserQueryPageInputDto inputDto);
 
+    @PostMapping("export_shop_user")
+    MaterialDto exportShopUser(@RequestBody @Validated IamShopUserExportInputDto inputDto);
 }

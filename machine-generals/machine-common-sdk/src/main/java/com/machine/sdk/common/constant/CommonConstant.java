@@ -21,6 +21,11 @@ public class CommonConstant {
      */
     public static final char SEPARATOR_HYPHEN = '-';
 
+    /**
+     * 下载中心文件过期天数
+     */
+    public static final int DOWNLOAD_FILE_EXPIRATION_DAYS = 180;
+
 
     public static class Iam {
         /**

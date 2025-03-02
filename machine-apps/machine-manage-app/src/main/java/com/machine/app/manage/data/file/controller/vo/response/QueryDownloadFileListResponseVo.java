@@ -1,8 +1,8 @@
 package com.machine.app.manage.data.file.controller.vo.response;
 
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
 import com.machine.sdk.common.envm.data.MaterIalTypeEnum;
 import com.machine.sdk.common.envm.data.download.DownLoadFileChannelEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -32,8 +32,8 @@ public class QueryDownloadFileListResponseVo {
     @Schema(description = "失败原因")
     private String failCause;
 
-    @Schema(description = "过期天数,-1代表失效")
-    private Integer expirationDay;
+    @Schema(description = "过期时间")
+    private Long expirationIn;
 
     @Schema(description = "更新时间")
     private Long updateTime;

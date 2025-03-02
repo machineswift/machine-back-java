@@ -1,9 +1,9 @@
 package com.machine.sdk.common.tool;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.excel.read.metadata.ReadSheet;
+import cn.idev.excel.EasyExcel;
+import cn.idev.excel.context.AnalysisContext;
+import cn.idev.excel.event.AnalysisEventListener;
+import cn.idev.excel.read.metadata.ReadSheet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.InputStream;

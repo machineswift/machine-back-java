@@ -9,7 +9,7 @@ import com.machine.client.data.shop.dto.output.ShopOrganizationRelationListOutpu
 import com.machine.client.iam.organization.IIamOrganizationClient;
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.exception.data.DataBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;

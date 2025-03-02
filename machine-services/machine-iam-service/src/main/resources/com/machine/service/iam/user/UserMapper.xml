@@ -230,4 +230,48 @@
         GROUP BY u.id
         ORDER BY u.create_time DESC
     </select>
+
+    <select id="listShopUser4Export" resultType="com.machine.service.iam.user.dao.mapper.entity.UserEntity">
+        SELECT u.* FROM t_user u
+        LEFT JOIN t_user_type_relation utr on utr.user_id = u.id
+        <where>
+            utr.user_type in ('SHOP','FRANCHISEE')
+            AND u.id NOT IN (SELECT user_id FROM t_user_type_relation WHERE user_type = 'COMPANY')
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.userName != null and inputDto.userName !='' ">
+                AND u.user_name like CONCAT('%', #{inputDto.userName}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND u.code like CONCAT('%', #{inputDto.code}, '%')
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
 </mapper>

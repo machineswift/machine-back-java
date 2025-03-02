@@ -2,9 +2,9 @@ package com.machine.service.data.file.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
 import com.machine.sdk.common.envm.data.MaterIalTypeEnum;
 import com.machine.sdk.common.envm.data.download.DownLoadFileChannelEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +29,7 @@ public class DownloadFileEntity extends BaseEntity {
     /**
      * 用户id
      */
-    @TableField("user_Id")
+    @TableField("user_id")
     private String userId;
 
     /**
@@ -37,6 +37,7 @@ public class DownloadFileEntity extends BaseEntity {
      */
     @TableField("file_name")
     private String fileName;
+
     /**
      * 文件类型
      */
@@ -62,16 +63,10 @@ public class DownloadFileEntity extends BaseEntity {
     private Long expirationIn;
 
     /**
-     * 重试标志  0可以重试  1不可以重试
+     * 内容
      */
-    @TableField("retry_status")
-    private Integer retryStatus;
-
-    /**
-     * 调用次数
-     */
-    @TableField("usage_count")
-    private Integer usageCount;
+    @TableField("content")
+    private String content;
 
     /**
      * 失败原因
@@ -79,16 +74,4 @@ public class DownloadFileEntity extends BaseEntity {
     @TableField("fail_cause")
     private String failCause;
 
-    /**
-     * JSON反射相关数据
-     * {
-     * "className": "",
-     * "methodName": "",
-     * "jsonParamsRequest": "",
-     * "failRetryNumber": 0,
-     * "overTimeMinute": 0
-     * }
-     */
-    @TableField("json_params")
-    private String jsonParams;
 }

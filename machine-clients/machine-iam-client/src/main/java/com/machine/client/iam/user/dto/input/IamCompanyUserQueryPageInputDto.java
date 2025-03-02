@@ -1,13 +1,11 @@
 package com.machine.client.iam.user.dto.input;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.UserTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data

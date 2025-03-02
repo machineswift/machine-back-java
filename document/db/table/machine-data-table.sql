@@ -447,27 +447,26 @@ CREATE TABLE `t_app_message` (
 
 DROP TABLE IF EXISTS `t_download_file`;
 CREATE TABLE `t_download_file` (
-	`id` VARCHAR ( 32 ) NOT NULL COMMENT 'ID',
-	`channel` VARCHAR ( 8 ) NOT NULL COMMENT '渠道（DownLoadFileChannelEnum）',
-	`status` VARCHAR ( 8 ) NOT NULL COMMENT '任务状态(ExportTaskStatusEnum)',
-	`user_id` VARCHAR ( 32 ) NOT NULL COMMENT '用户id',
-	`file_type` VARCHAR ( 16 ) NOT NULL DEFAULT 'FILE' COMMENT '文件类型（MaterIalTypeEnum）',
-	`file_name` VARCHAR ( 64 ) NOT NULL COMMENT '文件名称',
-	`url_md5` VARCHAR ( 32 ) NOT NULL  COMMENT 'url地址md5',
-	`material` VARCHAR ( 4096 ) NOT NULL COMMENT '附件信息',
-	`expiration_in` BIGINT UNSIGNED NOT NULL COMMENT '过期时间',
-	`usage_count` INT DEFAULT '0' COMMENT '调用次数',
-	`retry_status` INT DEFAULT '1' COMMENT '重试标志  0可以重试  1不可以重试',
-	`fail_cause` TEXT COMMENT '失败原因',
-	`json_params` TEXT COMMENT '入参',
-	`create_by` VARCHAR ( 32 ) NOT NULL COMMENT '创建人',
-	`create_time` BIGINT UNSIGNED NOT NULL COMMENT '创建时间',
-	`update_by` VARCHAR ( 32 ) NOT NULL COMMENT '修改人',
-	`update_time` BIGINT UNSIGNED NOT NULL COMMENT '更新时间',
-	PRIMARY KEY ( `id` ),
-	KEY `idx_01` ( `user_id` ) USING BTREE,
-	KEY `idx_02` ( `url_md5` ) USING BTREE,
-KEY `idx_03` ( `create_time` ) USING BTREE
+  `id` VARCHAR ( 32 ) NOT NULL COMMENT 'ID',
+  `channel` VARCHAR ( 8 ) NOT NULL COMMENT '渠道（DownLoadFileChannelEnum）',
+  `status` VARCHAR ( 8 ) NOT NULL COMMENT '任务状态(ExportTaskStatusEnum)',
+  `user_id` VARCHAR ( 32 ) NOT NULL COMMENT '用户id',
+  `file_type` VARCHAR ( 16 ) NOT NULL DEFAULT 'FILE' COMMENT '文件类型（MaterIalTypeEnum）',
+  `file_name` VARCHAR ( 64 ) NOT NULL DEFAULT '' COMMENT '文件名称',
+  `url_md5` VARCHAR ( 32 ) NOT NULL DEFAULT '' COMMENT 'url地址md5',
+  `material` VARCHAR ( 4096 ) NOT NULL DEFAULT '' COMMENT '附件信息',
+  `expiration_in` BIGINT UNSIGNED NOT NULL COMMENT '过期时间',
+  `content` TEXT COMMENT '内容',
+  `fail_cause` TEXT COMMENT '失败原因',
+  `create_by` VARCHAR ( 32 ) NOT NULL COMMENT '创建人',
+  `create_time` BIGINT UNSIGNED NOT NULL COMMENT '创建时间',
+  `update_by` VARCHAR ( 32 ) NOT NULL COMMENT '修改人',
+  `update_time` BIGINT UNSIGNED NOT NULL COMMENT '更新时间',
+  PRIMARY KEY ( `id` ),
+  KEY `idx_01` ( `user_id` ) USING BTREE,
+  KEY `idx_02` ( `url_md5` ) USING BTREE,
+  KEY `idx_03` ( `create_time` ) USING BTREE,
+KEY `idx_04` ( `expiration_in` ) USING BTREE
 ) COMMENT = '下载文件表';
 
 DROP TABLE IF EXISTS `t_sms_record`;

@@ -8,6 +8,7 @@ import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.client.iam.user.dto.UserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -222,5 +223,12 @@ public class IamUserServer implements IIamUserClient {
                 pageResult.getSize(),
                 pageResult.getTotal(),
                 pageResult.getRecords());
+    }
+
+    @Override
+    @PostMapping("export_shop_user")
+    public MaterialDto exportShopUser(@RequestBody @Validated IamShopUserExportInputDto inputDto) {
+        log.info("导出门店员工，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return userService.exportShopUser(inputDto);
     }
 }

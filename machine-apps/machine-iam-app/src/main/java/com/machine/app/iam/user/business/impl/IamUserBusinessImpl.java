@@ -29,7 +29,7 @@ import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
 import com.machine.client.iam.user.dto.output.UserLoginLogDetailOutputDto;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthActionEnum;
@@ -72,13 +72,13 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private MachineJwtUtil machineJwtUtil;
-
-    @Autowired
     private RedisCacheHrmDepartment departmentCache;
 
     @Autowired
     private RedisCacheIamOrganization organizationCache;
+
+    @Autowired
+    private MachineJwtUtil machineJwtUtil;
 
     @Autowired
     private IIamUserRoleTargetClient userRoleTargetClient;
@@ -116,6 +116,39 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
                 passwordEncoder.encode(requestVo.getNewPassword())));
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         blackAuthToken4AdminUpdatePassword(requestVo.getId(), request);
+    }
+
+    @Override
+    public void extractedUserIdByOrganizationIdSet(Set<String> organizationIdSet,
+                                                   Set<String> finallyqueryShopIdSet) {
+
+        Set<String> organizationShopIdSet = new HashSet<>();
+        for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
+            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
+                //未分配节点
+                List<String> userIdList = userClient.listNotBindOrganization(new DataUserNotBindOrganizationInputDto(type));
+                if (CollectionUtil.isNotEmpty(userIdList)) {
+                    organizationShopIdSet.addAll(userIdList);
+                }
+                break;
+            }
+        }
+
+        //递归查询子节点
+        Set<String> recursionOrganizationIdSet = organizationCache.recursionListSubIds(organizationIdSet);
+
+        if (CollectionUtil.isNotEmpty(recursionOrganizationIdSet)) {
+            Set<String> userIdSet = getIdByOrganizationIdSet(recursionOrganizationIdSet);
+            organizationShopIdSet.addAll(userIdSet);
+        }
+
+        //取交集
+        if (CollectionUtil.isEmpty(finallyqueryShopIdSet)) {
+            finallyqueryShopIdSet.addAll(organizationShopIdSet);
+        } else {
+            finallyqueryShopIdSet.retainAll(organizationShopIdSet);
+        }
+
     }
 
     @Override
@@ -157,6 +190,23 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         }
 
         List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByRoleIdSet(new IdSetRequest(roleIdSet));
+        if (CollectionUtil.isEmpty(outputDtoList)) {
+            return Set.of();
+        }
+
+        return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> getIdByShopIdSet(Set<String> shopIdSet) {
+        if (CollectionUtil.isEmpty(shopIdSet)) {
+            return Set.of();
+        }
+
+        IamUserRoleTargetQueryListInputDto inputDto = new IamUserRoleTargetQueryListInputDto();
+        inputDto.setTargetType(UserRoleTargetTypeEnum.SHOP);
+        inputDto.setTargetIdSet(shopIdSet);
+        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByCondition(inputDto);
         if (CollectionUtil.isEmpty(outputDtoList)) {
             return Set.of();
         }
@@ -301,16 +351,26 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         return responseVo;
     }
 
-
     @Override
     public PageResponse<IamUserSimpleListResponseVo> pageSimpled(IamUserQueryPageSimpleRequestVo request) {
-        //组装ShopId集合
+        //组装UserId集合
         boolean compute = false;
         Set<String> finallyqueryUserIdSet = new HashSet<>();
 
-        //组装ShopId集合(组织)
+        //组装UserId集合(门店)
+        Set<String> shopIdSet = request.getShopIdSet();
+        if (CollectionUtil.isNotEmpty(shopIdSet)) {
+            compute = true;
+            Set<String> userIdSet = getIdByShopIdSet(shopIdSet);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
+                finallyqueryUserIdSet.addAll(userIdSet);
+            }
+        }
+
+        //组装UserId集合(组织)
         Set<String> organizationIdSet = request.getOrganizationIdSet();
-        if (CollectionUtil.isNotEmpty(organizationIdSet)) {
+        if ((!compute || CollectionUtil.isNotEmpty(organizationIdSet))
+                && CollectionUtil.isNotEmpty(request.getOrganizationIdSet())) {
             boolean containRootId = false;
             for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
                 if (organizationIdSet.contains(type.getName().toLowerCase())) {
@@ -336,9 +396,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
             compute = true;
             Set<String> departmentIdSet = departmentCache.recursionListSubIdSet(request.getDepartmentIdSet());
             Set<String> userIdSet = new HashSet<>(getIdByDepartmentIdSet(departmentIdSet));
-            if (CollectionUtil.isEmpty(userIdSet)) {
-                return new PageResponse<>(request.getCurrent(), request.getSize(), 0);
-            } else {
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
                 //取交集
                 if (CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
                     finallyqueryUserIdSet.addAll(userIdSet);
@@ -349,13 +407,12 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         }
 
         //组装UserId集合(角色)
+        Set<String> roleIdSet = request.getRoleIdSet();
         if ((!compute || CollectionUtil.isNotEmpty(finallyqueryUserIdSet))
-                && CollectionUtil.isNotEmpty(request.getRoleIdSet())) {
+                && CollectionUtil.isNotEmpty(roleIdSet)) {
             compute = true;
-            Set<String> userIdSet = getIdByRoleIdSet(request.getRoleIdSet());
-            if (CollectionUtil.isEmpty(userIdSet)) {
-                return new PageResponse<>(request.getCurrent(), request.getSize(), 0);
-            } else {
+            Set<String> userIdSet = getIdByRoleIdSet(roleIdSet);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
                 //取交集
                 if (CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
                     finallyqueryUserIdSet.addAll(userIdSet);
@@ -396,6 +453,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
 
         return pageResponse;
     }
+
 
     /**
      * 角色信息
@@ -555,26 +613,5 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         inputDto.setDescription(JSON.toJSONString(hasProcessLoginLogList));
         LoginLogUtil.setUserAgentInfo(request, inputDto);
         loginLogClient.create(inputDto);
-    }
-
-    private void extractedUserIdByOrganizationIdSet(Set<String> organizationIdSet, Set<String> finallyqueryShopIdSet) {
-        for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
-            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
-                //未分配节点
-                List<String> userIdList = userClient.listNotBindOrganization(new DataUserNotBindOrganizationInputDto(type));
-                if (CollectionUtil.isNotEmpty(userIdList)) {
-                    finallyqueryShopIdSet.addAll(userIdList);
-                }
-                break;
-            }
-        }
-
-        //递归查询子节点
-        Set<String> recursionOrganizationIdSet = organizationCache.recursionListSubIds(organizationIdSet);
-
-        if (CollectionUtil.isNotEmpty(recursionOrganizationIdSet)) {
-            Set<String> userIdSet = getIdByOrganizationIdSet(recursionOrganizationIdSet);
-            finallyqueryShopIdSet.addAll(userIdSet);
-        }
     }
 }

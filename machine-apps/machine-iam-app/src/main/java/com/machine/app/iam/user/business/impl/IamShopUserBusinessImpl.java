@@ -9,6 +9,8 @@ import com.machine.client.data.employee.IShopEmployeeClient;
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCertificateOutputDto;
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.ShopEmployeeDetailOutputDto;
+import com.machine.client.data.file.IDownloadFileClient;
+import com.machine.client.data.file.dto.input.DownloadFileContentDto;
 import com.machine.client.data.franchisee.IFranchiseeClient;
 import com.machine.client.data.franchisee.dto.output.DataFranchiseeDetailOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
@@ -18,11 +20,12 @@ import com.machine.client.iam.user.IIamUserTypeClient;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
+import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,12 +33,11 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.machine.sdk.common.constant.CommonConstant.Data.ORGANIZATION_ROOT_PARENT_ID;
+
 @Slf4j
 @Component
 public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
-
-    @Autowired
-    private RedisCacheIamOrganization organizationCache;
 
     @Autowired
     private IamUserBusinessImpl userBusiness;
@@ -51,6 +53,9 @@ public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
 
     @Autowired
     private IIamUserTypeClient userTypeClient;
+
+    @Autowired
+    private IDownloadFileClient downloadFileClient;
 
     @Override
     public String create(IamShopUserCreateRequestVo request) {
@@ -126,16 +131,16 @@ public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
 
     @Override
     public PageResponse<IamShopUserExpandListResponseVo> pageExpand(IamShopUserQueryPageExpandRequestVo request) {
-        IamShopUserQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamShopUserQueryPageInputDto.class);
-        //组x z装UserId集合
-        Set<String> queryUserIdSet = new HashSet<>();
-        if (CollectionUtil.isNotEmpty(request.getOrganizationIdSet())) {
-            queryUserIdSet.addAll(userBusiness.getIdByOrganizationIdSet(
-                    //递归查询所有子节点
-                    organizationCache.recursionListSubIds(request.getOrganizationIdSet())));
+        //组装UserId集合
+        Set<String> finallyqueryUserIdSet = new HashSet<>();
+        boolean compute = isCompute(request.getOrganizationIdSet(), request.getRoleIdSet(), finallyqueryUserIdSet);
+
+        if (compute && CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
+            return new PageResponse<>(request.getCurrent(), request.getSize(), 0);
         }
-        queryUserIdSet.addAll(userBusiness.getIdByRoleIdSet(request.getRoleIdSet()));
-        inputDto.setUserIdSet(queryUserIdSet);
+
+        IamShopUserQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamShopUserQueryPageInputDto.class);
+        inputDto.setUserIdSet(finallyqueryUserIdSet);
 
         //分页查询用户信息
         PageResponse<UserListOutputDto> pageOutputDto = userClient.pageShopUser(inputDto);
@@ -176,5 +181,66 @@ public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
         }
 
         return pageResponse;
+    }
+
+    @Override
+    public void export(IamShopUserExportRequestVo request) {
+        //组装UserId集合
+        Set<String> finallyqueryUserIdSet = new HashSet<>();
+        boolean compute = isCompute(request.getOrganizationIdSet(), request.getRoleIdSet(), finallyqueryUserIdSet);
+
+        if (compute && CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
+            throw new IamBusinessException("iam.shopUser.export.emptyResult", "结果为空");
+        }
+
+        IamShopUserExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamShopUserExportInputDto.class);
+        inputDto.setUserIdSet(finallyqueryUserIdSet);
+
+        //创建下载任务
+        DownloadFileContentDto downloadTask = new DownloadFileContentDto();
+        downloadTask.setClassName(IIamUserClient.class.getName());
+        downloadTask.setMethodName("exportShopUser");
+        downloadTask.setParamsClassName(IamShopUserExportInputDto.class.getName());
+        downloadTask.setJsonParams(JSONUtil.toJsonStr(inputDto));
+        downloadFileClient.createTask(downloadTask);
+    }
+
+
+    private boolean isCompute(Set<String> organizationIdSet,
+                              Set<String> roleIdSet,
+                              Set<String> finallyqueryUserIdSet) {
+        boolean compute = false;
+        //组装UserId集合(角色)
+        if (CollectionUtil.isNotEmpty(roleIdSet)) {
+            compute = true;
+            Set<String> userIdSet = userBusiness.getIdByRoleIdSet(roleIdSet);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
+                finallyqueryUserIdSet.addAll(userIdSet);
+            }
+        }
+
+
+        //组装UserId集合(组织)
+        if ((!compute || CollectionUtil.isNotEmpty(organizationIdSet))
+                && CollectionUtil.isNotEmpty(organizationIdSet)) {
+            boolean containRootId = false;
+            for (OrganizationTypeEnum type : OrganizationTypeEnum.values()) {
+                if (organizationIdSet.contains(type.getName().toLowerCase())) {
+                    //包含根组织直接返回
+                    containRootId = true;
+                    break;
+                }
+            }
+
+            if (organizationIdSet.contains(ORGANIZATION_ROOT_PARENT_ID)) {
+                containRootId = true;
+            }
+
+            if (!containRootId) {
+                compute = true;
+                userBusiness.extractedUserIdByOrganizationIdSet(organizationIdSet, finallyqueryUserIdSet);
+            }
+        }
+        return compute;
     }
 }

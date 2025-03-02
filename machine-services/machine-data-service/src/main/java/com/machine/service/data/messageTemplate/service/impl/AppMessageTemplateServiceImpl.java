@@ -9,7 +9,7 @@ import com.machine.client.data.messageTemplate.dto.input.*;
 import com.machine.client.data.messageTemplate.dto.output.AppMessageTemplateDetailOutputDto;
 import com.machine.client.data.messageTemplate.dto.output.AppMessageTemplateInfoDto;
 import com.machine.client.data.messageTemplate.dto.output.AppMessageTemplateListOutPutDto;
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
 import com.machine.sdk.common.model.response.PageResponse;
 import com.machine.sdk.common.tool.BaseEnumUtil;
 import com.machine.service.data.messageTemplate.dao.IAppMessageTemplateDao;

@@ -2,10 +2,12 @@ package com.machine.service.hrm.department.server;
 
 import com.machine.client.hrm.department.IHrmDepartmentClient;
 import com.machine.client.hrm.department.dto.output.DepartmentDetailOutputDto;
+import com.machine.client.hrm.department.dto.output.DepartmentExpansionListOutputDto;
 import com.machine.client.hrm.department.dto.output.DepartmentListOutputDto;
 import com.machine.client.hrm.department.dto.output.DepartmentTreeOutputDto;
 import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.service.hrm.department.service.IDepartmentService;
 import com.machine.service.hrm.sync.service.ISyncService;
 import com.machine.service.hrm.sync.service.bo.HrmSyncDto;
@@ -17,9 +19,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.machine.client.data.config.constant.DataSystemConfigCodeConstant.BeiSen.CODE_DEPARTMENT_SYNC_TIME;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Hrm.HRM_SYNC_BEI_SEN_DEPARTMENT_LOCK;
+import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Hrm.HRM_SYNC_BEI_SEN_DEPARTMENT_PERSON_IN_CHARGE_LOCK;
 
 @Slf4j
 @RestController
@@ -56,6 +60,23 @@ public class HrmDepartmentServer implements IHrmDepartmentClient {
     }
 
     @Override
+    public void syncDepartmentPersonInCharge() {
+        RLock lock = redissonClient.getLock(HRM_SYNC_BEI_SEN_DEPARTMENT_PERSON_IN_CHARGE_LOCK);
+        try {
+            lock.lock();
+
+            log.info("同步部门信息负责人开始，userId={}", AppContext.getContext().getUserId());
+
+            //同步数据
+            departmentService.syncDepartmentPersonInCharge();
+
+            log.info("同步部门信息负责人结束");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
     @GetMapping("clear_cache")
     public void clearCache() {
         log.info("清理区部门缓存");
@@ -78,5 +99,10 @@ public class HrmDepartmentServer implements IHrmDepartmentClient {
     @GetMapping("tree_all_simple")
     public DepartmentTreeOutputDto treeAllSimple() {
         return departmentService.treeAllSimple();
+    }
+
+    @Override
+    public Map<String, DepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest) {
+        return departmentService.mapDepartmentExpansionByDepartmentIdSet(idSetRequest);
     }
 }

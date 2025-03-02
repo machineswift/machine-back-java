@@ -2,13 +2,11 @@ package com.machine.app.manage.data.message.controller.vo.request;
 
 import com.machine.client.data.informaion.input.AppMessageTemplateDto;
 import com.machine.client.data.messageTemplate.dto.output.AppMessageTemplateInfoDto;
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
-import com.machine.sdk.common.envm.data.MessageTemplateTypeEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
+import com.machine.sdk.common.envm.data.message.MessageTemplateTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;

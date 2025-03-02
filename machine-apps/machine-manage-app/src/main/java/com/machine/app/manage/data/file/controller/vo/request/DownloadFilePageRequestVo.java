@@ -1,6 +1,6 @@
 package com.machine.app.manage.data.file.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.ExportTaskStatusEnum;
+import com.machine.sdk.common.envm.data.download.ExportTaskStatusEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

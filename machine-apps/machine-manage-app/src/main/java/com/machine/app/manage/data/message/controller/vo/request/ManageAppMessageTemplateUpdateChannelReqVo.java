@@ -1,14 +1,11 @@
 package com.machine.app.manage.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.MessageChannelEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.common.envm.data.message.MessageChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data

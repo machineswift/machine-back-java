@@ -17,10 +17,6 @@ public interface IUserRoleTargetService {
 
     boolean unbindFranchiseeShop(IamUserRoleInfoUnbindFranchiseeShopInputDto inputDto);
 
-    DataPermissionDto dataPermission4SuperApp();
-
-    DataPermissionDto dataPermission4SuperManage(DataPermission4ManageInputDto inputDto);
-
     List<String> listUserIdByOrganizationIdSet(IdSetRequest request);
 
     List<IamUserRoleTargetListOutputDto> listByUserId(IdRequest request);

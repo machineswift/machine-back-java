@@ -6,6 +6,7 @@ import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.client.iam.user.dto.UserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.UserListOutputDto;
+import com.machine.sdk.common.model.dto.data.MaterialDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 
@@ -67,5 +68,7 @@ public interface IUserService {
     Page<UserListOutputDto> pageShop(IamShopUserQueryPageInputDto inputDto);
 
     Page<UserListOutputDto> pageSupplier(IamSupplierUserQueryPageInputDto inputDto);
+
+    MaterialDto exportShopUser(IamShopUserExportInputDto inputDto);
 
 }

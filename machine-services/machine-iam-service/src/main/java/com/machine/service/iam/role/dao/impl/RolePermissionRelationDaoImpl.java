@@ -9,6 +9,7 @@ import com.machine.starter.redis.function.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserFunctionPermission.IAM_USER_FUNCTION_PERMISSION_KEY;
@@ -40,6 +41,13 @@ public class RolePermissionRelationDaoImpl implements IRolePermissionRelationDao
     public List<RolePermissionRelationEntity> selectByRoleId(String roleId) {
         Wrapper<RolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<RolePermissionRelationEntity>()
                 .eq(RolePermissionRelationEntity::getRoleId, roleId);
+        return rolePermissionRelationMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<RolePermissionRelationEntity> selectByRoleIds(Collection<String> roleIds) {
+        Wrapper<RolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<RolePermissionRelationEntity>()
+                .in(RolePermissionRelationEntity::getRoleId, roleIds);
         return rolePermissionRelationMapper.selectList(queryWrapper);
     }
 

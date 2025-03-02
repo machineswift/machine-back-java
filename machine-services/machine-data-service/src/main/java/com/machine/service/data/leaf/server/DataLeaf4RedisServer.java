@@ -1,7 +1,7 @@
 package com.machine.service.data.leaf.server;
 
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
-import com.machine.sdk.common.envm.iam.OrganizationTypeEnum;
+import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.service.data.leaf.service.ILeafService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

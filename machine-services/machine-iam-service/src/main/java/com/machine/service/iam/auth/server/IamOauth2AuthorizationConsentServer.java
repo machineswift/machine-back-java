@@ -29,20 +29,17 @@ public class IamOauth2AuthorizationConsentServer implements IIamOauth2Authorizat
     @PostMapping("save")
     public void save(@RequestBody Oauth2AuthorizationConsentInputDto dto) {
         authorizationConsentService.save(dto);
-
     }
 
     @Override
     @PostMapping("remove")
     public void remove(@RequestBody Oauth2AuthorizationConsentInputDto dto) {
         authorizationConsentService.remove(dto);
-
     }
 
     @Override
     @PostMapping("findById")
     public Oauth2AuthorizationConsentOutputDto findById(@RequestBody Oauth2AuthorizationConsentInputDto dto) {
         return authorizationConsentService.findById(dto);
-
     }
 }

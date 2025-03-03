@@ -25,10 +25,10 @@ public interface IIamPermissionClient {
     @PostMapping("update")
     int update(@RequestBody @Validated IamPermissionUpdateInputDto inputDto);
 
-    @PostMapping("updateStatus")
+    @PostMapping("update_status")
     int updateStatus(@RequestBody @Validated IamPermissionUpdateStatusInputDto inputDto);
 
-    @PostMapping("updateParent")
+    @PostMapping("update_parent")
     int updateParent(@RequestBody @Validated IamPermissionUpdateParentInputDto inputDto);
 
     @PostMapping("detail")

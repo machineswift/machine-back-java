@@ -45,14 +45,14 @@ public class IamPermissionServer implements IIamPermissionClient {
     }
 
     @Override
-    @PostMapping("updateStatus")
+    @PostMapping("update_status")
     public int updateStatus(@RequestBody @Validated IamPermissionUpdateStatusInputDto inputDto) {
         log.info("修改权限状态，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return permissionService.updateStatus(inputDto);
     }
 
     @Override
-    @PostMapping("updateParent")
+    @PostMapping("update_parent")
     public int updateParent(@RequestBody @Validated IamPermissionUpdateParentInputDto inputDto) {
         log.info("修改权限父节点，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return permissionService.updateParent(inputDto);

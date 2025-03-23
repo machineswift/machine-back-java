@@ -14,12 +14,13 @@ import com.machine.client.data.shop.dto.input.DataShopQueryListAllInputDto;
 import com.machine.client.data.shop.dto.output.DataShopListOutputDto;
 import com.machine.client.data.shop.dto.output.ShopOrganizationRelationListOutputDto;
 import com.machine.client.iam.organization.IIamOrganizationClient;
-import com.machine.client.iam.organization.IIamOrganizationUserRelationClient;
+import com.machine.client.iam.user.IIamUserOrganizationRelationClient;
 import com.machine.client.iam.organization.dto.input.*;
 import com.machine.client.iam.organization.dto.output.*;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.IIamUserRoleTargetClient;
 import com.machine.client.iam.user.dto.input.DataUserNotBindOrganizationInputDto;
+import com.machine.client.iam.user.dto.output.IamUserOrganizationRelationOutputDto;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -59,7 +60,7 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
     private IIamUserRoleTargetClient userRoleTargetClient;
 
     @Autowired
-    private IIamOrganizationUserRelationClient organizationUserRelationClient;
+    private IIamUserOrganizationRelationClient userOrganizationRelationClient;
 
     @Autowired
     private IDataShopOrganizationRelationClient shopOrganizationRelationClient;
@@ -166,7 +167,7 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
         }
 
         { //部门负责人信息
-            Map<String, String> organizationIdUserIdMap = organizationUserRelationClient.mapByOrganizationIdSet(new IdSetRequest(organizationIdSet));
+            Map<String, String> organizationIdUserIdMap = userOrganizationRelationClient.mapLeaderByOrganizationIdSet(new IdSetRequest(organizationIdSet));
             if (CollectionUtil.isNotEmpty(organizationIdUserIdMap)) {
                 Set<String> leaderIdSet = new HashSet<>(organizationIdUserIdMap.values());
                 Map<String, UserDetailOutputDto> leaderDetailMap = userClient.mapByIdSet(new IdSetRequest(leaderIdSet));
@@ -279,7 +280,7 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
         }
 
         { //部门负责人信息
-            Map<String, String> organizationIdUserIdMap = organizationUserRelationClient.mapByOrganizationIdSet(new IdSetRequest(organizationIdSet));
+            Map<String, String> organizationIdUserIdMap = userOrganizationRelationClient.mapLeaderByOrganizationIdSet(new IdSetRequest(organizationIdSet));
             if (CollectionUtil.isNotEmpty(organizationIdUserIdMap)) {
                 Set<String> leaderIdSet = new HashSet<>(organizationIdUserIdMap.values());
                 Map<String, UserDetailOutputDto> leaderDetailMap = userClient.mapByIdSet(new IdSetRequest(leaderIdSet));
@@ -389,8 +390,8 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
         responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
 
         //部门负责人信息
-        IamOrganizationUserRelationOutputDto relationOutputDto =
-                organizationUserRelationClient.selectByOrganizationId(new IdRequest(organizationId));
+        IamUserOrganizationRelationOutputDto relationOutputDto =
+                userOrganizationRelationClient.selectLeaderByOrganizationId(new IdRequest(organizationId));
         if (null != relationOutputDto) {
             UserDetailOutputDto userDetailOutputDto = userClient.detail(new IdRequest(relationOutputDto.getUserId()));
             responseVo.setOrganizationLeader(JSONUtil.toBean(

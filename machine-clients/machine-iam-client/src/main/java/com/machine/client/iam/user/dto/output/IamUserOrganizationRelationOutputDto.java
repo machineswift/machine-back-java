@@ -1,10 +1,11 @@
-package com.machine.client.iam.organization.dto.output;
+package com.machine.client.iam.user.dto.output;
 
+import com.machine.sdk.common.envm.iam.UserDepartmentRelationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class IamOrganizationUserRelationOutputDto {
+public class IamUserOrganizationRelationOutputDto {
 
     @Schema(description = "ID")
     private String id;
@@ -14,6 +15,9 @@ public class IamOrganizationUserRelationOutputDto {
 
     @Schema(description = "组织Id")
     private String organizationId;
+
+    @Schema(description = "关系类型（UserDepartmentRelationTypeEnum）")
+    private UserDepartmentRelationTypeEnum type;
 
     @Schema(description = "排序")
     private Long sort;

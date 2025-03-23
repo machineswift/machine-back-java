@@ -13,14 +13,15 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationUpdateParent
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
+import com.machine.sdk.common.envm.iam.UserDepartmentRelationTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.service.iam.organization.dao.IOrganizationDao;
-import com.machine.service.iam.organization.dao.IOrganizationUserRelationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.OrganizationEntity;
 import com.machine.service.iam.organization.service.IOrganizationService;
+import com.machine.service.iam.user.dao.IUserOrganizationRelationDao;
 import com.machine.service.iam.user.dao.IUserRoleTargetRelationDao;
 import com.machine.starter.redis.cache.RedisCacheIamOrganization;
 import com.machine.starter.redis.function.CustomerRedisCommands;
@@ -59,7 +60,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     private IUserRoleTargetRelationDao userRoleTargetRelationDao;
 
     @Autowired
-    private IOrganizationUserRelationDao organizationUserRelationDao;
+    private IUserOrganizationRelationDao userOrganizationRelationDao;
 
     @Autowired
     private IDataLeaf4CodeClient leafClient;
@@ -97,7 +98,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
         //添加组织负责人
         if (StrUtil.isNotBlank(inputDto.getLeaderId())) {
-            organizationUserRelationDao.insert(organizationId, inputDto.getLeaderId());
+            userOrganizationRelationDao.insert(organizationId, inputDto.getLeaderId(), UserDepartmentRelationTypeEnum.LEADER);
         }
         return organizationId;
     }
@@ -139,7 +140,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
         //删除部门负责人
         for (String id : idSet) {
-            organizationUserRelationDao.deleteByOrganizationId(id);
+            userOrganizationRelationDao.deleteLeaderByOrganizationId(id);
         }
 
         return count;
@@ -165,9 +166,9 @@ public class OrganizationServiceImpl implements IOrganizationService {
         }
 
         //修改部门负责人
-        organizationUserRelationDao.deleteByOrganizationId(inputDto.getId());
+        userOrganizationRelationDao.deleteLeaderByOrganizationId(inputDto.getId());
         if (StrUtil.isNotBlank(inputDto.getLeaderId())) {
-            organizationUserRelationDao.insert(inputDto.getId(), inputDto.getLeaderId());
+            userOrganizationRelationDao.insert(inputDto.getId(), inputDto.getLeaderId(),UserDepartmentRelationTypeEnum.LEADER);
         }
 
         OrganizationEntity updateEntity = new OrganizationEntity();

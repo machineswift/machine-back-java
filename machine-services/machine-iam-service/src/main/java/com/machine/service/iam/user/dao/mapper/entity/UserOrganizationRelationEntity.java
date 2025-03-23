@@ -25,7 +25,7 @@ public class UserOrganizationRelationEntity extends BaseEntity {
      * 组织id
      */
     @TableField("organization_id")
-    private String permissionId;
+    private String organizationId;
 
     /**
      * {@link UserDepartmentRelationTypeEnum}

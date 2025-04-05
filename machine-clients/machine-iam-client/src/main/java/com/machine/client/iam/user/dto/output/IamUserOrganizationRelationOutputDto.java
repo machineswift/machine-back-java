@@ -15,9 +15,6 @@ public class IamUserOrganizationRelationOutputDto {
     @Schema(description = "组织Id")
     private String organizationId;
 
-    @Schema(description = "关系类型（UserDepartmentRelationTypeEnum）")
-    private UserDepartmentRelationTypeEnum type;
-
     @Schema(description = "排序")
     private Long sort;
 

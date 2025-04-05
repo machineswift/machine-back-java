@@ -44,8 +44,10 @@ public enum EventTypeEnum implements BaseEnum<EventTypeEnum, String> {
     IAM_USER_UPDATE_PHONE("IAM_USER_UPDATE_PHONE", "修改用户手机号"),
     IAM_USER_UPDATE_PASSWORD("IAM_USER_UPDATE_PASSWORD", "修改用户密码"),
     IAM_USER_UPDATE_BASE("IAM_USER_UPDATE_BASE", "修改用户基础信息"),
-    IAM_USER_UPDATE_ROLE("IAM_USER_UPDATE_ROLE", "修改用户关联角色"),
 
+
+    IAM_USER_UPDATE_ROLE("IAM_USER_UPDATE_ROLE", "修改用户关联角色"),
+    IAM_USER_UPDATE_ORGANIZATION("IAM_USER_UPDATE_ORGANIZATION", "修改用户关联组织"),
     ////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////// DATA /////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////

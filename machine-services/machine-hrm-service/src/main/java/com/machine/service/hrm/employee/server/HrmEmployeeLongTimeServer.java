@@ -3,7 +3,6 @@ package com.machine.service.hrm.employee.server;
 import com.machine.client.hrm.employee.IHrmEmployeeLongTimeClient;
 import com.machine.sdk.common.context.AppContext;
 import com.machine.service.hrm.employee.service.IHrmEmployeeService;
-import com.machine.service.hrm.sync.service.ISyncService;
 import com.machine.service.hrm.sync.service.bo.HrmSyncDto;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

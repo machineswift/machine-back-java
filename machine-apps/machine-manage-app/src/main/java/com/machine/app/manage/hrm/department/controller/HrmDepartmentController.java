@@ -3,9 +3,7 @@ package com.machine.app.manage.hrm.department.controller;
 import com.machine.app.manage.hrm.department.business.IHrmDepartmentBusiness;
 import com.machine.app.manage.hrm.department.controller.vo.response.*;
 import com.machine.client.hrm.department.dto.output.DepartmentTreeOutputDto;
-import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.model.request.IdRequest;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -21,28 +19,6 @@ public class HrmDepartmentController {
 
     @Autowired
     private IHrmDepartmentBusiness departmentBusiness;
-
-    @Hidden
-    @Operation(summary = "清理缓存")
-    @GetMapping("clear_cache")
-    public void clearCache() {
-        departmentBusiness.clearCache();
-    }
-
-    @Operation(summary = "同步部门数据")
-    @GetMapping("sync")
-    public void sync() {
-        log.info("同步部门数据，userId={}", AppContext.getContext().getUserId());
-        departmentBusiness.sync();
-    }
-
-    @Operation(summary = "同步部门负责人数据")
-    @GetMapping("sync_departmentPersonInCharge")
-    public void syncDepartmentPersonInCharge() {
-        log.info("同步部门负责人数据，userId={}", AppContext.getContext().getUserId());
-        departmentBusiness.syncDepartmentPersonInCharge();
-
-    }
 
     @Operation(summary = "详情")
     @PostMapping("detail")

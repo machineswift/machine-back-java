@@ -24,8 +24,8 @@ import com.machine.service.iam.role.dao.IRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.entity.RoleEntity;
 import com.machine.service.iam.role.dao.mapper.entity.RolePermissionRelationEntity;
 import com.machine.service.iam.role.service.IRoleService;
-import com.machine.service.iam.user.dao.IUserRoleTargetRelationDao;
-import com.machine.service.iam.user.dao.mapper.entity.UserRoleTargetRelationEntity;
+import com.machine.service.iam.user.dao.IUserRoleRelationDao;
+import com.machine.service.iam.user.dao.mapper.entity.UserRoleRelationEntity;
 import com.machine.starter.redis.cache.RedisCacheIamPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,19 +43,19 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements IRoleService {
 
     @Autowired
+    private IDataLeaf4CodeClient leafClient;
+
+    @Autowired
     private RedisCacheIamPermission permissionCache;
 
     @Autowired
     private IRoleDao roleDao;
 
     @Autowired
+    private IUserRoleRelationDao userRoleRelationDao;
+
+    @Autowired
     private IRolePermissionRelationDao rolePermissionRelationDao;
-
-    @Autowired
-    private IUserRoleTargetRelationDao userRoleTargetRelationDao;
-
-    @Autowired
-    private IDataLeaf4CodeClient leafClient;
 
     @Autowired
     private IHrmJobPostRoleRelationClient jobPostRoleRelationClient;
@@ -143,9 +143,9 @@ public class RoleServiceImpl implements IRoleService {
         }
 
         //是否关联用户
-        List<UserRoleTargetRelationEntity> userRoleTargetRelationEntityList = userRoleTargetRelationDao
+        List<UserRoleRelationEntity> userRoleRelationEntityList = userRoleRelationDao
                 .selectByRoleId(request.getId());
-        if (!CollectionUtil.isEmpty(userRoleTargetRelationEntityList)) {
+        if (!CollectionUtil.isEmpty(userRoleRelationEntityList)) {
             throw new IamBusinessException("iam.role.delete.associationUser", "角色关联用户，不能删除");
         }
 

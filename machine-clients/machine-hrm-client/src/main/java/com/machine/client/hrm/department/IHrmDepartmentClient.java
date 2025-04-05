@@ -20,18 +20,6 @@ import java.util.Map;
         configuration = OpenFeignDefaultConfig.class)
 public interface IHrmDepartmentClient {
 
-    @GetMapping("sync")
-    void sync();
-
-    @GetMapping("syncDepartmentPersonInCharge")
-    void syncDepartmentPersonInCharge();
-
-    /**
-     * 清理缓存
-     */
-    @GetMapping("clear_cache")
-    void clearCache();
-
     @PostMapping("detail_by_id")
     DepartmentDetailOutputDto detailById(@RequestBody @Validated IdRequest request);
 

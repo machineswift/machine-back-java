@@ -26,8 +26,8 @@ public interface IDataShopOrganizationRelationClient {
     /**
      * 获取组织是否关联的门店信息
      */
-    @PostMapping("is_association_shop_by_organizationIdSet")
-    Boolean isAssociationShopByOrganizationIdSet(@RequestBody @Validated Set<String> organizationIdSet);
+    @PostMapping("is_association_shop_by_organizationId")
+    Boolean isAssociationShopByOrganizationId(@RequestBody @Validated IdRequest request);
 
     /**
      * 获取门店和组织的Map<ShopId,OrganizationId>

@@ -4,7 +4,6 @@ import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Data
@@ -12,32 +11,23 @@ import java.util.List;
 public class IamUserRoleInfoResponse {
 
     @Schema(description = "角色ID")
-    private String roleId;
+    private String id;
 
     @Schema(description = "角色类型（RoleTypeEnum）")
-    private RoleTypeEnum roleType;
+    private RoleTypeEnum type;
 
     @Schema(description = "角色名称")
-    private String roleName;
+    private String name;
 
     @Schema(description = "角色编码")
-    private String roleCode;
-
-    @Schema(description = "组织集合")
-    private List<TargetInfo> organizationList;
+    private String code;
 
     @Schema(description = "门店集合")
-    private List<TargetInfo> shopList;
-
-    @Schema(description = "项目集合")
-    private List<TargetInfo> projectList;
-
-    @Schema(description = "公司集合")
-    private List<TargetInfo> companytList;
+    private List<BusinessInfo> shopList;
 
     @Data
     @Schema
-    public static class TargetInfo {
+    public static class BusinessInfo {
 
         @Schema(description = "id")
         private String id;

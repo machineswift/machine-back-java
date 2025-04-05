@@ -8,39 +8,28 @@ import lombok.Data;
 @Data
 public class IamRoleDetailOutputDto {
 
+    @Schema(description = "ID")
     private String id;
 
+    @Schema(description = "父ID")
     private String parentId;
 
-    /**
-     * 类型
-     * {@link RoleTypeEnum}
-     */
+    @Schema(description = "类型（RoleTypeEnum）")
     private RoleTypeEnum type;
 
-    /**
-     * 编码
-     */
+    @Schema(description = "编码")
     private String code;
 
-    /**
-     * 名称
-     */
+    @Schema(description = "名称")
     private String name;
 
-    /**
-     * 状态（StatusEnum）
-     */
+    @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
 
-    /**
-     * 描述
-     */
+    @Schema(description = "描述")
     private String description;
 
-    /**
-     * 排序
-     */
+    @Schema(description = "排序")
     private Long sort;
 
     @Schema(description = "创建人ID")

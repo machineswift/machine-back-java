@@ -11,7 +11,6 @@ import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.service.data.employee.service.IShopEmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,34 +32,6 @@ public class ShopEmployeeServer implements IShopEmployeeClient {
     public String create(@RequestBody @Validated DataShopEmployeeCreateInputDto inputDto) {
         log.info("新增门店员工数据，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return shopEmployeeService.create(inputDto);
-    }
-
-    @Override
-    @PostMapping("update_status")
-    public int updateStatus(@RequestBody @Validated DataShopEmployeeUpdateStatusInputDto inputDto) {
-        log.info("修改门店员工状态，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return shopEmployeeService.updateStatus(inputDto);
-    }
-
-    @Override
-    @PostMapping("update_phone")
-    public int updatePhone(@RequestBody @Validated OpenapiShopEmployeeUpdatePhoneInputDto inputDto) {
-        log.info("修改门店员工手机号，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return shopEmployeeService.updatePhone(inputDto);
-    }
-
-    @Override
-    @PostMapping("update_identity_card")
-    public int updateIdentityCard(@RequestBody @Validated OpenApiShopEmployeeUpdateIdentityCardInputDto inputDto) {
-        log.info("修改身份证，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return shopEmployeeService.updateIdentityCard(inputDto);
-    }
-
-    @Override
-    @PostMapping("update_health_certificate")
-    public int updateHealthCertificate(@RequestBody @Validated OpenApiShopEmployeeUpdateHealthCertificateInputDto inputDto) {
-        log.info("修改健康证，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return shopEmployeeService.updateHealthCertificate(inputDto);
     }
 
     @Override

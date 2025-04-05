@@ -37,9 +37,9 @@ public class DataShopOrganizationRelationServer implements IDataShopOrganization
     }
 
     @Override
-    @PostMapping("is_association_shop_by_organizationIdSet")
-    public Boolean isAssociationShopByOrganizationIdSet(@RequestBody @Validated Set<String> organizationIdSet) {
-        return shopOrganizationRelationService.isAssociationShopByOrganizationIdSet(organizationIdSet);
+    @PostMapping("is_association_shop_by_organizationId")
+    public Boolean isAssociationShopByOrganizationId(@RequestBody @Validated IdRequest request) {
+        return shopOrganizationRelationService.isAssociationShopByOrganizationId(request);
     }
 
     @Override

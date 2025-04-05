@@ -11,16 +11,10 @@ import com.machine.client.data.employee.dto.input.DataCompanyEmployeeCreateInput
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeUpdateInputDto;
 import com.machine.client.data.employee.dto.input.DataShopEmployeeCreateInputDto;
 import com.machine.client.data.employee.dto.input.DataShopEmployeeUpdateInputDto;
-import com.machine.client.data.employee.dto.output.ShopEmployeeDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4CodeClient;
-import com.machine.client.data.shop.IDataShopClient;
-import com.machine.client.data.shop.dto.input.DataShopCodeInoutDto;
-import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
-import com.machine.client.data.supplier.ISupplierCompanyClient;
 import com.machine.client.data.supplier.ISupplierUserClient;
 import com.machine.client.data.supplier.dto.input.DataSupplierCreateInputDto;
 import com.machine.client.data.supplier.dto.input.DataSupplierUpdateInputDto;
-import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
 import com.machine.client.iam.permission.dto.output.PermissionTreeOutputDto;
 import com.machine.client.iam.user.dto.output.UserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
@@ -32,9 +26,8 @@ import com.machine.sdk.common.envm.crm.customer.GenderEnum;
 import com.machine.sdk.common.envm.data.CompanyEmployeeStatusEnum;
 import com.machine.sdk.common.envm.data.MaterIalTypeEnum;
 import com.machine.sdk.common.envm.data.ShopEmployeeStatusEnum;
-import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
+import com.machine.sdk.common.envm.iam.UserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
-import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
 import com.machine.sdk.common.envm.iam.role.ShopDefaultRoleEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
@@ -45,17 +38,15 @@ import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.sdk.huawei.client.file.HuaWeiObsHttpClient;
 import com.machine.sdk.huawei.domain.UploadParamDto;
 import com.machine.sdk.huawei.util.UploadParamUtil;
-import com.machine.service.iam.organization.dao.IOrganizationDao;
-import com.machine.service.iam.organization.dao.mapper.entity.OrganizationEntity;
 import com.machine.service.iam.permission.dao.IPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.entity.PermissionEntity;
 import com.machine.service.iam.role.dao.IRoleDao;
 import com.machine.service.iam.role.dao.mapper.entity.RoleEntity;
-import com.machine.service.iam.user.dao.IUserDao;
-import com.machine.service.iam.user.dao.IUserRoleTargetRelationDao;
-import com.machine.service.iam.user.dao.IUserTypeDao;
+import com.machine.service.iam.user.dao.*;
 import com.machine.service.iam.user.dao.mapper.entity.UserEntity;
-import com.machine.service.iam.user.dao.mapper.entity.UserRoleTargetRelationEntity;
+import com.machine.service.iam.user.dao.mapper.entity.UserOrganizationRelationEntity;
+import com.machine.service.iam.user.dao.mapper.entity.UserRoleBusinessRelationEntity;
+import com.machine.service.iam.user.dao.mapper.entity.UserRoleRelationEntity;
 import com.machine.service.iam.user.service.IUserService;
 import com.machine.service.iam.user.service.bo.ShopUserExportBo;
 import com.machine.starter.redis.cache.RedisCacheIamPermission;
@@ -69,6 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.DOWNLOAD_FILE_EXPIRATION_DAYS;
@@ -94,16 +86,16 @@ public class UserServiceImpl implements IUserService {
     private IRoleDao roleDao;
 
     @Autowired
-    private IDataShopClient shopClient;
-
-    @Autowired
-    private IOrganizationDao organizationDao;
-
-    @Autowired
     private IPermissionDao permissionDao;
 
     @Autowired
-    private IUserRoleTargetRelationDao userRoleTargetRelationDao;
+    private IUserRoleRelationDao userRoleRelationDao;
+
+    @Autowired
+    private IUserOrganizationRelationDao userOrganizationRelationDao;
+
+    @Autowired
+    private IUserRoleBusinessRelationDao userRoleBusinessRelationDao;
 
     @Autowired
     private IDataLeaf4CodeClient leaf4CodeClient;
@@ -116,9 +108,6 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private ISupplierUserClient supplierClient;
-
-    @Autowired
-    private ISupplierCompanyClient supplierCompanyClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -153,8 +142,6 @@ public class UserServiceImpl implements IUserService {
             userTypeDao.insertOrUpdate(userId, UserTypeEnum.COMPANY);
         }
 
-        //关联角色
-        insertUserRoleInfo4Company(userId, inputDto.getRoleIdSet());
 
         //创建公司员工
         DataCompanyEmployeeCreateInputDto createInputDto = new DataCompanyEmployeeCreateInputDto();
@@ -201,7 +188,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         //关联角色
-        insertUserRoleInfo(userId, inputDto.getUserRoleList());
+        updateUserRoleInfo(userId, inputDto.getUserRoleList());
 
         //创建门店员工
         DataShopEmployeeCreateInputDto createInputDto = new DataShopEmployeeCreateInputDto();
@@ -211,104 +198,6 @@ public class UserServiceImpl implements IUserService {
         createInputDto.setHealthCertificate(inputDto.getHealthCertificate());
         shopEmployeeClient.create(createInputDto);
         return userId;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public String createShopUser4Openapi(IamShopUserCreate4OpenapiInputDto inputDto) {
-        //验证角色是否正确
-        String roleCode = inputDto.getRoleCode();
-        if (!ShopDefaultRoleEnum.STORE_MANAGER.getName().equals(roleCode) &&
-                !ShopDefaultRoleEnum.SALES_CLERK.getName().equals(roleCode)) {
-            throw new IamBusinessException("iam.user.createShopUser4Openapi.roleCodeWrong", "角色编码错误");
-        }
-
-        //验证门店编码是否存在
-        DataShopDetailOutputDto dataShopDetailOutputDto = shopClient.getByCode(new DataShopCodeInoutDto(inputDto.getShopCode()));
-        if (null == dataShopDetailOutputDto) {
-            throw new IamBusinessException("iam.user.createShopUser4Openapi.shopCodeNotExists", "门店编码不存在");
-        }
-
-        String userId;
-        UserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
-        if (null == phoneEntity) {
-            //生成门店员工编码
-            String code = leaf4CodeClient.iamUserMdyg();
-
-            //创建用户
-            UserEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), UserEntity.class);
-            insertEntity.setUserName(code);
-            insertEntity.setStatus(StatusEnum.ENABLE);
-            insertEntity.setPassword(StringUtil.generatePassword());
-            insertEntity.setCode(code);
-            userId = userDao.insert(insertEntity);
-        } else {
-            userId = phoneEntity.getId();
-        }
-
-        //创建门店员工
-        String employeeId;
-        ShopEmployeeDetailOutputDto outputDto = shopEmployeeClient.getByUserId(new IdRequest(userId));
-        if (null == outputDto) {
-            //增加身份
-            userTypeDao.insertOrUpdate(userId, UserTypeEnum.SHOP);
-
-            //创建门店员工
-            DataShopEmployeeCreateInputDto createInputDto = new DataShopEmployeeCreateInputDto();
-            createInputDto.setUserId(userId);
-            createInputDto.setEmployeeStatus(ShopEmployeeStatusEnum.FULL_TIME);
-            createInputDto.setIdentityCard(inputDto.getIdentityCard());
-            createInputDto.setHealthCertificate(inputDto.getHealthCertificate());
-            employeeId = shopEmployeeClient.create(createInputDto);
-        } else {
-            employeeId = outputDto.getId();
-        }
-
-        //关联角色
-        List<UserRoleTargetRelationEntity> relationEntityList = userRoleTargetRelationDao.
-                listByUserAndRoleIdId(userId, roleCode.toLowerCase());
-        if (CollectionUtil.isEmpty(relationEntityList)) {
-            UserRoleTargetRelationEntity insertRelationEntity = new UserRoleTargetRelationEntity();
-            insertRelationEntity.setUserId(userId);
-            insertRelationEntity.setRoleId(roleCode.toLowerCase());
-            insertRelationEntity.setTargetId(dataShopDetailOutputDto.getId());
-            insertRelationEntity.setTargetType(UserRoleTargetTypeEnum.SHOP);
-            userRoleTargetRelationDao.insert(userId, insertRelationEntity);
-        } else {
-            UserRoleTargetRelationEntity dBRelationEntity = null;
-            for (UserRoleTargetRelationEntity relationEntity : relationEntityList) {
-                if (roleCode.toLowerCase().equals(relationEntity.getRoleId())) {
-                    if (null == relationEntity.getTargetType()) {
-                        //为空
-                        dBRelationEntity = relationEntity;
-                        break;
-                    } else {
-                        if (relationEntity.getTargetId().equals(dataShopDetailOutputDto.getId())) {
-                            dBRelationEntity = relationEntity;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (null == dBRelationEntity) {
-                UserRoleTargetRelationEntity insertRelationEntity = new UserRoleTargetRelationEntity();
-                insertRelationEntity.setUserId(userId);
-                insertRelationEntity.setRoleId(roleCode.toLowerCase());
-                insertRelationEntity.setTargetId(dataShopDetailOutputDto.getId());
-                insertRelationEntity.setTargetType(UserRoleTargetTypeEnum.SHOP);
-                userRoleTargetRelationDao.insert(userId, insertRelationEntity);
-            } else {
-                if (null == dBRelationEntity.getTargetType()) {
-                    dBRelationEntity.setTargetType(UserRoleTargetTypeEnum.SHOP);
-                    dBRelationEntity.setTargetId(dataShopDetailOutputDto.getId());
-                    userRoleTargetRelationDao.update(dBRelationEntity);
-                } else {
-                    throw new IamBusinessException("iam.user.createShopUser4Openapi.shopEmployeeAlreadyExists", "门店员工已存在");
-                }
-            }
-        }
-        return employeeId;
     }
 
     @Override
@@ -346,7 +235,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         //关联角色
-        insertUserRoleInfo(userId, inputDto.getUserRoleList());
+        updateUserRoleInfo(userId, inputDto.getUserRoleList());
 
         //创建供应商
         DataSupplierCreateInputDto createInputDto = new DataSupplierCreateInputDto();
@@ -370,44 +259,35 @@ public class UserServiceImpl implements IUserService {
             }
 
             //添加角色(加盟商)
-            List<UserRoleTargetRelationEntity> relationEntityList = userRoleTargetRelationDao.listByUserAndRoleIdId(
+            UserRoleRelationEntity userRoleRelationEntity = userRoleRelationDao.getByUk(
                     userId, ShopDefaultRoleEnum.FRANCHISEE.getName().toLowerCase());
-            if (CollectionUtil.isEmpty(relationEntityList)) {
-                UserRoleTargetRelationEntity relationInsertEntity = new UserRoleTargetRelationEntity();
-                relationInsertEntity.setUserId(userId);
-                relationInsertEntity.setRoleId(ShopDefaultRoleEnum.FRANCHISEE.getName().toLowerCase());
-                userRoleTargetRelationDao.insert(userId, relationInsertEntity);
+            if (null == userRoleRelationEntity) {
+                userRoleRelationDao.insert(userId, ShopDefaultRoleEnum.FRANCHISEE.getName().toLowerCase());
             }
 
             return userId;
-        }
+        } else {
+            //获取编码
+            String code = leaf4CodeClient.iamUserJmsyg();
 
-        //获取编码
-        String code = leaf4CodeClient.iamUserJmsyg();
+            //添加用户
+            UserEntity insertEntity = new UserEntity();
+            insertEntity.setUserName(code);
+            insertEntity.setCode(code);
+            insertEntity.setStatus(StatusEnum.ENABLE);
+            insertEntity.setPassword(StringUtil.generatePassword());
+            insertEntity.setPhone(inputDto.getPhone());
+            insertEntity.setName(inputDto.getName());
+            insertEntity.setGender(GenderEnum.UNDEFINED);
+            String userId = userDao.insert(insertEntity);
 
-        //添加用户
-        UserEntity insertEntity = new UserEntity();
-        insertEntity.setUserName(code);
-        insertEntity.setCode(code);
-        insertEntity.setStatus(StatusEnum.ENABLE);
-        insertEntity.setPassword(StringUtil.generatePassword());
-        insertEntity.setPhone(inputDto.getPhone());
-        insertEntity.setName(inputDto.getName());
-        insertEntity.setGender(GenderEnum.UNDEFINED);
-        String userId = userDao.insert(insertEntity);
-
-        //添加身份
-        if (!userTypeDao.exists(userId, UserTypeEnum.FRANCHISEE)) {
+            //添加身份
             userTypeDao.insertOrUpdate(userId, UserTypeEnum.FRANCHISEE);
+
+            //添加角色(加盟商)
+            userRoleRelationDao.insert(userId, ShopDefaultRoleEnum.FRANCHISEE.getName().toLowerCase());
+            return userId;
         }
-
-        //添加角色(加盟商)
-        UserRoleTargetRelationEntity relationInsertEntity = new UserRoleTargetRelationEntity();
-        relationInsertEntity.setUserId(userId);
-        relationInsertEntity.setRoleId(ShopDefaultRoleEnum.FRANCHISEE.getName().toLowerCase());
-        userRoleTargetRelationDao.insert(userId, relationInsertEntity);
-
-        return userId;
     }
 
     @Override
@@ -448,9 +328,7 @@ public class UserServiceImpl implements IUserService {
             throw new IamBusinessException("iam.user.updateShopUser.typeNotCompany", "不是公司用户不能修改");
         }
 
-        //关联角色
-        userRoleTargetRelationDao.deleteByUserId(inputDto.getId());
-        insertUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
+        updateUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
         return 1;
     }
 
@@ -546,8 +424,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         //关联角色
-        userRoleTargetRelationDao.deleteByUserId(inputDto.getId());
-        insertUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
+        updateUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
 
         //修改门店员工
         DataShopEmployeeUpdateInputDto updateInputDto = new DataShopEmployeeUpdateInputDto();
@@ -555,95 +432,6 @@ public class UserServiceImpl implements IUserService {
         updateInputDto.setIdentityCard(inputDto.getIdentityCard());
         updateInputDto.setHealthCertificate(inputDto.getHealthCertificate());
         return shopEmployeeClient.updateByUserId(updateInputDto);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateShopUserRole(IamShopUserUpdateRoleInputDto inputDto) {
-        String userId = inputDto.getId();
-        //验证角色是否重复
-        List<IamShopUserUpdateRoleInputDto.UserRoleUpdateDto> userRoleInputList = inputDto.getUserRoleList();
-        if (CollectionUtil.isEmpty(userRoleInputList)) {
-            throw new IamBusinessException("iam.user.updateShopUserRole.roleIsEmpty", "角色为空");
-        }
-        Set<String> inputRoleIdSet = userRoleInputList.stream().map(IamShopUserUpdateRoleInputDto.UserRoleUpdateDto::getRoleId).collect(Collectors.toSet());
-        if (inputRoleIdSet.size() != userRoleInputList.size()) {
-            throw new IamBusinessException("iam.user.updateShopUserRole.roleRepeat", "角色重复");
-        }
-
-        UserEntity dbEntity = userDao.getById(userId);
-        if (null == dbEntity) {
-            throw new IamBusinessException("iam.user.updateShopUserRole.userNotExists", "用户不存在");
-        }
-
-        if (!userTypeDao.exists(userId, UserTypeEnum.SHOP)) {
-            throw new IamBusinessException("iam.user.updateShopUserRole.typeNotShop", "不是门店员工不能修改");
-        }
-
-        //查询角色
-        List<RoleEntity> dbRoleEntityList = roleDao.selectByIdSet(inputRoleIdSet);
-        if (CollectionUtil.isEmpty(dbRoleEntityList) || dbRoleEntityList.size() != inputRoleIdSet.size()) {
-            for (RoleEntity roleEntity : dbRoleEntityList) {
-                inputRoleIdSet.remove(roleEntity.getId());
-            }
-            throw new IamBusinessException("iam.user.updateShopUserRole.roleNotExists", "角色不存在，roleId:" + JSONUtil.toJsonStr(inputRoleIdSet));
-        }
-
-        for (RoleEntity entity : dbRoleEntityList) {
-            if (ShopDefaultRoleEnum.FRANCHISEE.getName().equals(entity.getCode())) {
-                throw new IamBusinessException("iam.user.updateShopUserRole.franchiseeRole", "不支持修改加盟商角色");
-            }
-            if (RoleTypeEnum.SHOP != entity.getType()) {
-                throw new IamBusinessException("iam.user.updateShopUserRole.notShopRole", "不支持修改非门店类型角色");
-            }
-        }
-
-        //删除角色
-        List<UserRoleTargetRelationEntity> dbTTargetRelationEntityList = userRoleTargetRelationDao.listByUserId(userId);
-        Set<String> deleteIdSet = new HashSet<>();
-        for (UserRoleTargetRelationEntity dbTargetRelationEntity : dbTTargetRelationEntityList) {
-            RoleEntity roleEntity = roleDao.getById(dbTargetRelationEntity.getRoleId());
-            if (null == roleEntity) {
-                deleteIdSet.add(dbTargetRelationEntity.getId());
-            } else if (RoleTypeEnum.SHOP == roleEntity.getType() &&
-                    !ShopDefaultRoleEnum.FRANCHISEE.getName().equals(roleEntity.getCode())) {
-                deleteIdSet.add(dbTargetRelationEntity.getId());
-            }
-        }
-        if (CollectionUtil.isNotEmpty(deleteIdSet)) {
-            userRoleTargetRelationDao.deleteByIdSet(userId, deleteIdSet);
-        }
-
-        //新增角色
-        List<UserRoleTargetRelationEntity> insertEntityList = new ArrayList<>();
-        for (IamShopUserUpdateRoleInputDto.UserRoleUpdateDto dto : userRoleInputList) {
-            Set<String> shopIdSet = dto.getShopIdSet();
-            if (CollectionUtil.isEmpty(shopIdSet)) {
-                throw new IamBusinessException("iam.user.updateShopUserRole.shopIdEmpty", "门店信息为空，roleId:" + dto.getRoleId());
-            }
-
-            List<DataShopDetailOutputDto> shopDetailOutputDtoList = shopClient.listByIdSet(new IdSetRequest(shopIdSet));
-            if (CollectionUtil.isEmpty(shopDetailOutputDtoList) || shopIdSet.size() != shopDetailOutputDtoList.size()) {
-                for (DataShopDetailOutputDto outputDto : shopDetailOutputDtoList) {
-                    shopIdSet.remove(outputDto.getId());
-                }
-                throw new IamBusinessException("iam.user.updateShopUserRole.shopNotExists",
-                        "门店不存在，shopId:" + JSONUtil.toJsonStr(shopIdSet));
-            }
-
-            for (String shopId : shopIdSet) {
-                UserRoleTargetRelationEntity entity = new UserRoleTargetRelationEntity();
-                entity.setUserId(userId);
-                entity.setRoleId(dto.getRoleId());
-
-
-                entity.setTargetId(shopId);
-                entity.setTargetType(UserRoleTargetTypeEnum.SHOP);
-                entity.setSort(0L);
-                insertEntityList.add(entity);
-            }
-        }
-        userRoleTargetRelationDao.batchInsert(userId, insertEntityList);
     }
 
     @Override
@@ -698,8 +486,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         //关联角色
-        userRoleTargetRelationDao.deleteByUserId(inputDto.getId());
-        insertUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
+        updateUserRoleInfo(inputDto.getId(), inputDto.getUserRoleList());
 
         //修改供应商
         DataSupplierUpdateInputDto createInputDto = new DataSupplierUpdateInputDto();
@@ -711,63 +498,94 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updateUserRole(IamCompanyUserUpdateInputDto inputDto) {
+    public void updateUserRole(IamCompanyUserUpdateInputDto inputDto) {
         String userId = inputDto.getId();
 
         //验证角色是否重复
-        List<IamUserRoleInfoUpdateInputDto> userRoleInputList = inputDto.getUserRoleList();
-        if (CollectionUtil.isEmpty(userRoleInputList)) {
+        List<IamUserRoleInfoUpdateInputDto> inputUserRoleList = inputDto.getUserRoleList();
+        if (CollectionUtil.isEmpty(inputUserRoleList)) {
             throw new IamBusinessException("iam.user.updateSupplierUser.roleIsEmpty", "角色为空");
         }
-        Set<String> inputRoleIdSet = userRoleInputList.stream().map(IamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
-        if (inputRoleIdSet.size() != userRoleInputList.size()) {
+        Set<String> inputRoleIdSet = inputUserRoleList.stream().map(IamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
+        if (inputRoleIdSet.size() != inputUserRoleList.size()) {
             throw new IamBusinessException("iam.user.updateSupplierUser.roleRepeat", "角色重复");
         }
 
         UserEntity dbEntity = userDao.getById(inputDto.getId());
         if (null == dbEntity) {
-            return 0;
+            return;
         }
 
-        //删除角色
-        userRoleTargetRelationDao.deleteByRoleIdSet(userId, userRoleInputList.stream().map(IamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet()));
+        {//用户组织关系
+            Set<String> inputOrganizationIdSet = inputDto.getOrganizationIdSet();
 
-        //新增角色
-        List<UserRoleTargetRelationEntity> insertEntityList = new ArrayList<>();
-        for (IamUserRoleInfoUpdateInputDto dto : userRoleInputList) {
-            Set<String> shopIdSet = dto.getShopIdSet();
-            Set<String> organizationIdSet = dto.getOrganizationIdSet();
-
-            if (CollectionUtil.isNotEmpty(shopIdSet)) {
-                for (String shopId : shopIdSet) {
-                    UserRoleTargetRelationEntity entity = new UserRoleTargetRelationEntity();
-                    entity.setUserId(userId);
-                    entity.setRoleId(dto.getRoleId());
-
-
-                    entity.setTargetId(shopId);
-                    entity.setTargetType(UserRoleTargetTypeEnum.SHOP);
-                    entity.setSort(0L);
-                    insertEntityList.add(entity);
-                }
+            List<UserOrganizationRelationEntity> dbEntityList = userOrganizationRelationDao.listByUserId(userId);
+            Set<String> dbOrganizationIdSet = new HashSet<>();
+            if (CollectionUtil.isNotEmpty(dbEntityList)) {
+                dbOrganizationIdSet = dbEntityList.stream()
+                        .map(UserOrganizationRelationEntity::getOrganizationId).collect(Collectors.toSet());
             }
 
-            if (CollectionUtil.isNotEmpty(organizationIdSet)) {
-                for (String organizationId : organizationIdSet) {
-                    UserRoleTargetRelationEntity entity = new UserRoleTargetRelationEntity();
-                    entity.setUserId(userId);
-                    entity.setRoleId(dto.getRoleId());
+            Set<String> deleteOrganizationIdSet = new HashSet<>(dbOrganizationIdSet);
+            Set<String> insertOrganizationIdSet = new HashSet<>(inputOrganizationIdSet);
 
+            deleteOrganizationIdSet.removeAll(inputOrganizationIdSet);
+            insertOrganizationIdSet.removeAll(dbOrganizationIdSet);
 
-                    entity.setTargetId(organizationId);
-                    entity.setTargetType(UserRoleTargetTypeEnum.ORGANIZATION);
-                    entity.setSort(0L);
-                    insertEntityList.add(entity);
-                }
-            }
+            userOrganizationRelationDao.deleteByUserId(userId, deleteOrganizationIdSet);
+            userOrganizationRelationDao.insertByUserId(userId, insertOrganizationIdSet);
         }
-        userRoleTargetRelationDao.batchInsert(userId, insertEntityList);
-        return 1;
+
+
+        {//用户角色关系
+            List<UserRoleRelationEntity> dbRoleRelationEntityList = userRoleRelationDao.listByUserId(userId);
+            Set<String> dbRoleIdSet = new HashSet<>();
+            if (CollectionUtil.isNotEmpty(dbRoleRelationEntityList)) {
+                dbRoleIdSet = dbRoleRelationEntityList.stream()
+                        .map(UserRoleRelationEntity::getRoleId).collect(Collectors.toSet());
+            }
+
+            Set<String> deleteRoleIdSet = new HashSet<>(dbRoleIdSet);
+            Set<String> insertRoleIdSet = new HashSet<>(inputRoleIdSet);
+
+            deleteRoleIdSet.removeAll(inputRoleIdSet);
+            insertRoleIdSet.removeAll(dbRoleIdSet);
+
+            userRoleRelationDao.deleteByUserId(userId, deleteRoleIdSet);
+            userRoleRelationDao.insertByUserId(userId, insertRoleIdSet);
+
+            dbRoleRelationEntityList = userRoleRelationDao.listByUserId(userId);
+
+            {//用户角色关系业务数据
+                Set<String> userRoleRelationIdSet = dbRoleRelationEntityList
+                        .stream().map(UserRoleRelationEntity::getId).collect(Collectors.toSet());
+                Map<String, UserRoleRelationEntity> roleIdRelationInfoMap = dbRoleRelationEntityList.stream()
+                        .collect(Collectors.toMap(UserRoleRelationEntity::getRoleId, Function.identity()));
+
+                //删除用户角色关系业务数据
+                userRoleBusinessRelationDao.deleteByUserRoleRelationIdSet(userId, userRoleRelationIdSet);
+
+                //新增用户角色关系业务数据
+                List<UserRoleBusinessRelationEntity> insertBusinessRelationEntityList = new ArrayList<>();
+                for (IamUserRoleInfoUpdateInputDto userRoleInfoUpdateInputDto : inputUserRoleList) {
+                    String roleId = userRoleInfoUpdateInputDto.getRoleId();
+                    Set<String> shopIdSet = userRoleInfoUpdateInputDto.getShopIdSet();
+                    if (CollectionUtil.isEmpty(shopIdSet)) {
+                        continue;
+                    }
+
+                    for (String shopId : shopIdSet) {
+                        UserRoleBusinessRelationEntity insertBusinessRelationEntity = new UserRoleBusinessRelationEntity();
+                        insertBusinessRelationEntity.setUserRoleRelationId(roleIdRelationInfoMap.get(roleId).getId());
+                        insertBusinessRelationEntity.setBusinessId(shopId);
+                        insertBusinessRelationEntity.setBusinessType(UserRoleBusinessTypeEnum.SHOP);
+                        insertBusinessRelationEntityList.add(insertBusinessRelationEntity);
+                    }
+                }
+                userRoleBusinessRelationDao.batchInsert(userId, insertBusinessRelationEntityList);
+            }
+
+        }
     }
 
     @Override
@@ -791,7 +609,6 @@ public class UserServiceImpl implements IUserService {
         if (null == userEntity) {
             return null;
         }
-
 
         UserAuthDetailOutputDto detailDto = new UserAuthDetailOutputDto();
         detailDto.setUserId(userEntity.getId());
@@ -966,147 +783,6 @@ public class UserServiceImpl implements IUserService {
         materialDto.setName(fileName);
         materialDto.setUrl(putObjectResult.getObjectUrl());
         return materialDto;
-    }
-
-    /**
-     * 关联角色（公司用户）
-     */
-    private void insertUserRoleInfo4Company(String userId,
-                                            Set<String> roleIdSet) {
-        if (CollectionUtil.isEmpty(roleIdSet)) {
-            return;
-        }
-        List<RoleEntity> roleEntityList = roleDao.selectByIdSet(roleIdSet);
-        if (CollectionUtil.isEmpty(roleEntityList)) {
-            return;
-        }
-
-        List<UserRoleTargetRelationEntity> insertEntityList = new ArrayList<>(roleEntityList.size());
-        for (RoleEntity roleEntity : roleEntityList) {
-            UserRoleTargetRelationEntity e = new UserRoleTargetRelationEntity();
-            e.setUserId(userId);
-            e.setRoleId(roleEntity.getId());
-            insertEntityList.add(e);
-        }
-        userRoleTargetRelationDao.batchInsert(userId, insertEntityList);
-    }
-
-    /**
-     * 关联角色（门店员工/供应商员工）
-     */
-    private void insertUserRoleInfo(String userId,
-                                    List<IamUserRoleInfoUpdateInputDto> userRoleList) {
-        if (CollectionUtil.isEmpty(userRoleList)) {
-            return;
-        }
-
-        Set<String> inputRoleIdset = new HashSet<>();
-        Set<String> inputShopIdSet = new HashSet<>();
-        Set<String> inputOrganizationIdSet = new HashSet<>();
-        Set<String> inputCompanyIdSet = new HashSet<>();
-
-        for (IamUserRoleInfoUpdateInputDto inputDto : userRoleList) {
-            inputRoleIdset.add(inputDto.getRoleId());
-
-            if (CollectionUtil.isNotEmpty(inputDto.getShopIdSet())) {
-                inputShopIdSet.addAll(inputDto.getShopIdSet());
-            }
-
-            if (CollectionUtil.isNotEmpty(inputDto.getOrganizationIdSet())) {
-                inputOrganizationIdSet.addAll(inputDto.getOrganizationIdSet());
-            }
-
-            if (CollectionUtil.isNotEmpty(inputDto.getCompanyIdSet())) {
-                inputCompanyIdSet.addAll(inputDto.getCompanyIdSet());
-            }
-        }
-
-        List<RoleEntity> roleEntityList = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(inputRoleIdset)) {
-            roleEntityList = roleDao.selectByIdSet(inputRoleIdset);
-        }
-        List<DataShopDetailOutputDto> dataShopDetailOutputDtoList = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(inputShopIdSet)) {
-            dataShopDetailOutputDtoList = shopClient.listByIdSet(new IdSetRequest(inputShopIdSet));
-        }
-        List<OrganizationEntity> organizationEntityList = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(inputOrganizationIdSet)) {
-            organizationEntityList = organizationDao.selectByIdSet(inputOrganizationIdSet);
-        }
-
-        List<DataSupplierCompanySimpleListOutputDto> companyOutputList = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(inputCompanyIdSet)) {
-            companyOutputList = supplierCompanyClient.listByIdSet(new IdSetRequest(inputCompanyIdSet));
-        }
-
-        Set<String> dbRoleIdset = roleEntityList.stream().map(RoleEntity::getId).collect(Collectors.toSet());
-        Set<String> dbShopIdSet = dataShopDetailOutputDtoList.stream().map(DataShopDetailOutputDto::getId).collect(Collectors.toSet());
-        Set<String> dbOrganizationIdSet = organizationEntityList.stream().map(OrganizationEntity::getId).collect(Collectors.toSet());
-        Set<String> dbCompanyIdSet = companyOutputList.stream().map(DataSupplierCompanySimpleListOutputDto::getId).collect(Collectors.toSet());
-
-
-        List<UserRoleTargetRelationEntity> insertEntityList = new ArrayList<>();
-        for (IamUserRoleInfoUpdateInputDto inputDto : userRoleList) {
-            String roleId = inputDto.getRoleId();
-            Set<String> shopIdSet = inputDto.getShopIdSet();
-            Set<String> organizationIdSet = inputDto.getOrganizationIdSet();
-            Set<String> companyIdSet = inputDto.getCompanyIdSet();
-
-            if (!dbRoleIdset.contains(roleId)) {
-                continue;
-            }
-
-            List<UserRoleTargetRelationEntity> singleRoleList = new ArrayList<>();
-            if (CollectionUtil.isNotEmpty(shopIdSet)) {
-                for (String shopId : shopIdSet) {
-                    if (dbShopIdSet.contains(shopId)) {
-                        UserRoleTargetRelationEntity e = new UserRoleTargetRelationEntity();
-                        e.setUserId(userId);
-                        e.setRoleId(roleId);
-                        e.setTargetType(UserRoleTargetTypeEnum.SHOP);
-                        e.setTargetId(shopId);
-                        singleRoleList.add(e);
-                    }
-                }
-            }
-
-            if (CollectionUtil.isNotEmpty(organizationIdSet)) {
-                for (String organizationId : organizationIdSet) {
-                    if (dbOrganizationIdSet.contains(organizationId)) {
-                        UserRoleTargetRelationEntity e = new UserRoleTargetRelationEntity();
-                        e.setUserId(userId);
-                        e.setRoleId(roleId);
-                        e.setTargetType(UserRoleTargetTypeEnum.ORGANIZATION);
-                        e.setTargetId(organizationId);
-                        singleRoleList.add(e);
-                    }
-                }
-            }
-
-            if (CollectionUtil.isNotEmpty(companyIdSet)) {
-                for (String companyId : companyIdSet) {
-                    if (dbCompanyIdSet.contains(companyId)) {
-                        UserRoleTargetRelationEntity e = new UserRoleTargetRelationEntity();
-                        e.setUserId(userId);
-                        e.setRoleId(roleId);
-                        e.setTargetType(UserRoleTargetTypeEnum.COMPANY);
-                        e.setTargetId(companyId);
-                        singleRoleList.add(e);
-                    }
-                }
-            }
-
-            //如果为空，增加一条没有target的数据
-            if (CollectionUtil.isEmpty(singleRoleList)) {
-                UserRoleTargetRelationEntity e = new UserRoleTargetRelationEntity();
-                e.setUserId(userId);
-                e.setRoleId(roleId);
-                singleRoleList.add(e);
-            }
-
-            insertEntityList.addAll(singleRoleList);
-        }
-        userRoleTargetRelationDao.batchInsert(userId, insertEntityList);
     }
 
     private UserDto getUserDto(UserEntity entity) {

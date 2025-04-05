@@ -18,10 +18,9 @@ import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.service.iam.organization.dao.IOrganizationDao;
-import com.machine.service.iam.organization.dao.IOrganizationUserRelationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.OrganizationEntity;
 import com.machine.service.iam.organization.service.IOrganizationService;
-import com.machine.service.iam.user.dao.IUserRoleTargetRelationDao;
+import com.machine.service.iam.user.dao.IUserOrganizationRelationDao;
 import com.machine.starter.redis.cache.RedisCacheIamOrganization;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
@@ -56,10 +55,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     private IOrganizationDao organizationDao;
 
     @Autowired
-    private IUserRoleTargetRelationDao userRoleTargetRelationDao;
-
-    @Autowired
-    private IOrganizationUserRelationDao organizationUserRelationDao;
+    private IUserOrganizationRelationDao userOrganizationRelationDao;
 
     @Autowired
     private IDataLeaf4CodeClient leafClient;
@@ -97,7 +93,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
         //添加组织负责人
         if (StrUtil.isNotBlank(inputDto.getLeaderId())) {
-            organizationUserRelationDao.insert(organizationId, inputDto.getLeaderId());
+            userOrganizationRelationDao.insert(organizationId, inputDto.getLeaderId(), UserDepartmentRelationTypeEnum.LEADER);
         }
         return organizationId;
     }
@@ -105,7 +101,8 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int delete(IdRequest request) {
-        OrganizationEntity entity = organizationDao.getById(request.getId());
+        String id = request.getId();
+        OrganizationEntity entity = organizationDao.getById(id);
         if (null == entity) {
             return 0;
         }
@@ -115,34 +112,24 @@ public class OrganizationServiceImpl implements IOrganizationService {
             throw new IamBusinessException("iam.organization.delete.rootOrganization", "根组织不能删除");
         }
 
-        //递归获取所有的子节点
-        Set<String> idSet = new HashSet<>();
-        idSet.add(entity.getId());
-        idSet.addAll(organizationCache.recursionListSubId(entity.getType(), entity.getId()));
+        //判断是否有子节点
+        if (organizationCache.recursionListSubId(entity.getType(), entity.getId()).size() > 1) {
+            throw new IamBusinessException("iam.organization.delete.hasChildrenNode", "组织有子节点不能删除");
+        }
 
-        //获取组织是否关联的门店信息
-        Boolean isAssociationShop = shopOrganizationRelationClient.isAssociationShopByOrganizationIdSet(idSet);
+        //获取组织是否关联门店信息
+        Boolean isAssociationShop = shopOrganizationRelationClient.isAssociationShopByOrganizationId(new IdRequest(id));
         if (isAssociationShop) {
             throw new IamBusinessException("iam.organization.delete.associationShop", "组织关联门店不能删除");
         }
 
-        //获取组织是否关联的角色
-        Boolean isAssociationRole = userRoleTargetRelationDao.isAssociationRoleByOrganizationIdSet(idSet);
+        //获取组织是否关联用户
+        boolean isAssociationRole = userOrganizationRelationDao.isAssociationUserByOrganizationId(id);
         if (isAssociationRole) {
-            throw new IamBusinessException("iam.organization.delete.associationRole", "组织关联用户/角色不能删除");
+            throw new IamBusinessException("iam.organization.delete.associationRole", "组织关联用户不能删除");
         }
 
-        int count = 0;
-        for (String id : idSet) {
-            count = count + organizationDao.delete(id);
-        }
-
-        //删除部门负责人
-        for (String id : idSet) {
-            organizationUserRelationDao.deleteByOrganizationId(id);
-        }
-
-        return count;
+        return organizationDao.delete(id);
     }
 
     @Override
@@ -165,9 +152,9 @@ public class OrganizationServiceImpl implements IOrganizationService {
         }
 
         //修改部门负责人
-        organizationUserRelationDao.deleteByOrganizationId(inputDto.getId());
+        userOrganizationRelationDao.deleteLeaderByOrganizationId(inputDto.getId());
         if (StrUtil.isNotBlank(inputDto.getLeaderId())) {
-            organizationUserRelationDao.insert(inputDto.getId(), inputDto.getLeaderId());
+            userOrganizationRelationDao.insert(inputDto.getId(), inputDto.getLeaderId(), UserDepartmentRelationTypeEnum.LEADER);
         }
 
         OrganizationEntity updateEntity = new OrganizationEntity();

@@ -30,12 +30,6 @@ public interface IFranchiseeClient {
     @PostMapping("update_phone")
     int updatePhone(@RequestBody @Validated OpenApiFranchiseeUpdatePhoneInputDto inputDto);
 
-    @PostMapping("update_identity_card")
-    int updateIdentityCard(@RequestBody @Validated OpenApiFranchiseeUpdateIdentityCardInputDto inputDto);
-
-    @PostMapping("update_health_certificate")
-    int updateHealthCertificate(@RequestBody @Validated OpenApiFranchiseeUpdateHealthCertificateInputDto inputDto);
-
     @PostMapping("update")
     int update(@RequestBody @Validated DataFranchiseeUpdateInputDto inputDto);
 

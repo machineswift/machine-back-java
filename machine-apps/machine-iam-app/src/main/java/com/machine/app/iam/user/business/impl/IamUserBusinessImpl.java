@@ -8,35 +8,22 @@ import com.machine.app.iam.user.business.IIamUserBusiness;
 import com.machine.app.iam.user.controller.vo.request.*;
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.app.iam.user.controller.vo.response.ShopUserSimpleListResponseVo;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
-import com.machine.client.data.supplier.ISupplierCompanyClient;
-import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
 import com.machine.client.hrm.employee.IHrmEmployeeDefaultClient;
 import com.machine.client.hrm.employee.dto.input.HrmEmployeeQueryIListInputDto;
 import com.machine.client.hrm.employee.dto.output.HrmEmployeeListOutputDto;
-import com.machine.client.iam.organization.dto.input.IamUserRoleTargetQueryListInputDto;
-import com.machine.client.iam.organization.dto.output.IamOrganizationSimpleOutputDto;
-import com.machine.client.iam.organization.dto.output.IamUserRoleTargetListOutputDto;
 import com.machine.client.iam.role.IIamRoleClient;
 import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserLoginLogClient;
-import com.machine.client.iam.user.IIamUserRoleTargetClient;
-import com.machine.client.iam.user.IIamUserTypeClient;
+import com.machine.client.iam.user.*;
 import com.machine.client.iam.user.dto.input.*;
-import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
-import com.machine.client.iam.user.dto.output.UserListOutputDto;
-import com.machine.client.iam.user.dto.output.UserLoginLogDetailOutputDto;
+import com.machine.client.iam.user.dto.output.*;
+import com.machine.sdk.common.envm.iam.UserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.OrganizationTypeEnum;
-import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.envm.iam.UserTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthActionEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthMethodEnum;
 import com.machine.sdk.common.envm.iam.auth.AuthResultEnum;
-import com.machine.sdk.common.envm.iam.role.CompanyDefaultRoleEnum;
-import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -54,6 +41,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.Data.ORGANIZATION_ROOT_PARENT_ID;
@@ -81,9 +69,6 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     private MachineJwtUtil machineJwtUtil;
 
     @Autowired
-    private IIamUserRoleTargetClient userRoleTargetClient;
-
-    @Autowired
     private IDataShopClient shopClient;
 
     @Autowired
@@ -102,7 +87,13 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     private IHrmEmployeeDefaultClient employeeDefaultClient;
 
     @Autowired
-    private ISupplierCompanyClient supplierCompanyClient;
+    private IIamUserRoleRelationClient userRoleRelationClient;
+
+    @Autowired
+    private IIamUserOrganizationRelationClient userOrganizationRelationClient;
+
+    @Autowired
+    private IIamUserRoleBusinessRelationClient iamUserRoleBusinessRelationClient;
 
 
     @Override
@@ -173,14 +164,12 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         }
 
         //查询组织关联的用户信息
-        IamUserRoleTargetQueryListInputDto input = new IamUserRoleTargetQueryListInputDto();
-        input.setTargetType(UserRoleTargetTypeEnum.ORGANIZATION);
-        input.setTargetIdSet(organizationIdSet);
-        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByCondition(input);
+        List<IamUserOrganizationRelationOutputDto> outputDtoList = userOrganizationRelationClient.listByOrganizationIdSet(
+                new IdSetRequest(organizationIdSet));
         if (CollectionUtil.isEmpty(outputDtoList)) {
             return Set.of();
         }
-        return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+        return outputDtoList.stream().map(IamUserOrganizationRelationOutputDto::getUserId).collect(Collectors.toSet());
     }
 
     @Override
@@ -189,12 +178,12 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
             return Set.of();
         }
 
-        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByRoleIdSet(new IdSetRequest(roleIdSet));
+        List<IamUserRoleRelationListOutputDto> outputDtoList = userRoleRelationClient.listByRoleIdSet(new IdSetRequest(roleIdSet));
         if (CollectionUtil.isEmpty(outputDtoList)) {
             return Set.of();
         }
 
-        return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+        return outputDtoList.stream().map(IamUserRoleRelationListOutputDto::getUserId).collect(Collectors.toSet());
     }
 
     @Override
@@ -203,15 +192,22 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
             return Set.of();
         }
 
-        IamUserRoleTargetQueryListInputDto inputDto = new IamUserRoleTargetQueryListInputDto();
-        inputDto.setTargetType(UserRoleTargetTypeEnum.SHOP);
-        inputDto.setTargetIdSet(shopIdSet);
-        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByCondition(inputDto);
-        if (CollectionUtil.isEmpty(outputDtoList)) {
+        List<IamUserRoleBusinessRelationListOutputDto> userRoleBusinessRelationListOutputDtoList =
+                iamUserRoleBusinessRelationClient.listByShopIdSet(new IdSetRequest(shopIdSet));
+        if (CollectionUtil.isEmpty(userRoleBusinessRelationListOutputDtoList)) {
             return Set.of();
         }
 
-        return outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+        Set<String> userRoleRelationIdSet = userRoleBusinessRelationListOutputDtoList.stream()
+                .map(IamUserRoleBusinessRelationListOutputDto::getId).collect(Collectors.toSet());
+
+        List<IamUserRoleRelationListOutputDto> userRoleRelationListOutputDtoList =
+                userRoleRelationClient.listByIdSet(new IdSetRequest(userRoleRelationIdSet));
+        if (CollectionUtil.isEmpty(userRoleRelationListOutputDtoList)) {
+            return Set.of();
+        }
+
+        return userRoleRelationListOutputDtoList.stream().map(IamUserRoleRelationListOutputDto::getUserId).collect(Collectors.toSet());
     }
 
     /**
@@ -219,136 +215,78 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
      */
     @Override
     public List<IamUserRoleInfoResponse> getUserRoleList(String userId) {
-        List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList = userRoleTargetClient.listByUserId(new IdRequest(userId));
-        if (CollectionUtil.isEmpty(singleUserTargetInfoList)) {
+        List<IamUserRoleRelationListOutputDto> userRoleRelationListOutputDtoList =
+                userRoleRelationClient.listByUserId(new IdRequest(userId));
+
+        if (CollectionUtil.isEmpty(userRoleRelationListOutputDtoList)) {
             return List.of();
         }
 
-        //角色信息
-        Map<String, IamRoleDetailOutputDto> roleMap = getRoleMap(singleUserTargetInfoList);
-        //组织信息
-        Map<String, IamOrganizationSimpleOutputDto> organizationMap = getOrganizationMap(singleUserTargetInfoList);
-        //门店信息
-        Map<String, DataShopDetailOutputDto> shopMap = getShopMap(singleUserTargetInfoList);
-        //公司信息
-        Map<String, DataSupplierCompanySimpleListOutputDto> companyMap = getCompanyMap(singleUserTargetInfoList);
+        //用户角色关系Map
+        Map<String, IamUserRoleRelationListOutputDto> userRoleRelationMap = userRoleRelationListOutputDtoList.stream()
+                .collect(Collectors.toMap(IamUserRoleRelationListOutputDto::getId, Function.identity()));
 
-        return assembleUserRoleInfo(singleUserTargetInfoList, roleMap, organizationMap, shopMap, companyMap);
+        //角色信息
+        Set<String> roleIdSet = userRoleRelationListOutputDtoList.stream()
+                .map(IamUserRoleRelationListOutputDto::getRoleId).collect(Collectors.toSet());
+        Map<String, IamRoleDetailOutputDto> roleIdInfoMap = roleClient.mapByIdSet(new IdSetRequest(roleIdSet));
+
+        //角色业务关系
+        Set<String> userRoleRelationIdSet = userRoleRelationListOutputDtoList.stream()
+                .map(IamUserRoleRelationListOutputDto::getId).collect(Collectors.toSet());
+        List<IamUserRoleBusinessRelationListOutputDto> userRoleBusinessRelationListOutputDtoList =
+                iamUserRoleBusinessRelationClient.listByUserRoleRelationIdSet(new IdSetRequest(userRoleRelationIdSet));
+
+        //门店信息
+        Map<String, DataShopDetailOutputDto> shopIdInfoMap = getShopIdInfoMap(userRoleBusinessRelationListOutputDtoList);
+
+        return assembleUserRoleInfo(userRoleBusinessRelationListOutputDtoList, userRoleRelationMap, roleIdInfoMap, shopIdInfoMap);
     }
 
 
     @Override
     public Map<String, List<IamUserRoleInfoResponse>> getUserRoleListMap(Set<String> userIdSet) {
-        List<IamUserRoleTargetListOutputDto> roleTargetListOutputDtoList = userRoleTargetClient.listByUserIdSet(new IdSetRequest(userIdSet));
-        if (CollectionUtil.isEmpty(roleTargetListOutputDtoList)) {
+        List<IamUserRoleRelationListOutputDto> userRoleRelationListOutputDtoList =
+                userRoleRelationClient.listByUserIdSet(new IdSetRequest(userIdSet));
+        if (CollectionUtil.isEmpty(userRoleRelationListOutputDtoList)) {
             return Map.of();
         }
 
-        //角色信息
-        Map<String, IamRoleDetailOutputDto> roleMap = getRoleMap(roleTargetListOutputDtoList);
-        //组织信息
-        Map<String, IamOrganizationSimpleOutputDto> organizationMap = getOrganizationMap(roleTargetListOutputDtoList);
-        //门店信息
-        Map<String, DataShopDetailOutputDto> shopMap = getShopMap(roleTargetListOutputDtoList);
-        //公司信息
-        Map<String, DataSupplierCompanySimpleListOutputDto> companyMap = getCompanyMap(roleTargetListOutputDtoList);
+        //用户角色关系Map
+        Map<String, IamUserRoleRelationListOutputDto> userRoleRelationMap = userRoleRelationListOutputDtoList.stream()
+                .collect(Collectors.toMap(IamUserRoleRelationListOutputDto::getId, Function.identity()));
 
+        //角色信息
+        Set<String> roleIdSet = userRoleRelationListOutputDtoList.stream()
+                .map(IamUserRoleRelationListOutputDto::getRoleId).collect(Collectors.toSet());
+        Map<String, IamRoleDetailOutputDto> roleIdInfoMap = roleClient.mapByIdSet(new IdSetRequest(roleIdSet));
+
+
+        //角色业务关系
+        Set<String> userRoleRelationIdSet = userRoleRelationListOutputDtoList.stream()
+                .map(IamUserRoleRelationListOutputDto::getId).collect(Collectors.toSet());
+        List<IamUserRoleBusinessRelationListOutputDto> userRoleBusinessRelationListOutputDtoList =
+                iamUserRoleBusinessRelationClient.listByUserRoleRelationIdSet(new IdSetRequest(userRoleRelationIdSet));
+
+        //门店信息
+        Map<String, DataShopDetailOutputDto> shopIdInfoMap = getShopIdInfoMap(userRoleBusinessRelationListOutputDtoList);
 
         //根据UserId拆分Map集合
-        Map<String, List<IamUserRoleTargetListOutputDto>> userRoleTargetMap = new HashMap<>();
-        for (IamUserRoleTargetListOutputDto outputDto : roleTargetListOutputDtoList) {
-            String userId = outputDto.getUserId();
-            List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetMap.computeIfAbsent(userId, k -> new ArrayList<>());
+        Map<String, List<IamUserRoleBusinessRelationListOutputDto>> userRoleBusinessRelationMap = new HashMap<>();
+        for (IamUserRoleBusinessRelationListOutputDto outputDto : userRoleBusinessRelationListOutputDtoList) {
+            String userId = userRoleRelationMap.get(outputDto.getUserRoleRelationId()).getUserId();
+            List<IamUserRoleBusinessRelationListOutputDto> outputDtoList = userRoleBusinessRelationMap
+                    .computeIfAbsent(userId, k -> new ArrayList<>());
             outputDtoList.add(outputDto);
         }
 
         //组装返回信息
         Map<String, List<IamUserRoleInfoResponse>> userRoleResponseMap = new HashMap<>();
-        for (Map.Entry<String, List<IamUserRoleTargetListOutputDto>> entity : userRoleTargetMap.entrySet()) {
+        for (Map.Entry<String, List<IamUserRoleBusinessRelationListOutputDto>> entity : userRoleBusinessRelationMap.entrySet()) {
             String userId = entity.getKey();
-            List<IamUserRoleTargetListOutputDto> outputDtoList = entity.getValue();
-            userRoleResponseMap.put(userId, assembleUserRoleInfo(outputDtoList, roleMap, organizationMap, shopMap, companyMap));
+            userRoleResponseMap.put(userId, assembleUserRoleInfo(entity.getValue(), userRoleRelationMap, roleIdInfoMap, shopIdInfoMap));
         }
         return userRoleResponseMap;
-    }
-
-    @Override
-    public ShopUserSimpleListResponseVo listByShopId(IamUserQueryListByShopIdRequestVo request) {
-        //查询门店角色Id
-        List<String> roleIdList = roleClient.listIdByType(RoleTypeEnum.SHOP);
-        roleIdList.add(CompanyDefaultRoleEnum.AREA_MANAGER.name().toLowerCase());
-        roleIdList.add(CompanyDefaultRoleEnum.INSPECTOR.name().toLowerCase());
-
-        //查询用户信息
-        //查询组织关联的用户信息
-        IamUserRoleTargetQueryListInputDto input = new IamUserRoleTargetQueryListInputDto();
-        input.setTargetType(UserRoleTargetTypeEnum.SHOP);
-        input.setTargetIdSet(Set.of(request.getShopId()));
-        input.setRoleIdSet(new HashSet<>(roleIdList));
-        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByCondition(input);
-
-        ShopUserSimpleListResponseVo responseVo = new ShopUserSimpleListResponseVo();
-        if (CollectionUtil.isEmpty(outputDtoList)) {
-            return responseVo;
-        }
-
-
-        //查询用户信息
-        Set<String> userIdSet = outputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
-        Map<String, UserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
-
-        //类型信息
-        Map<String, List<UserTypeEnum>> userTypeMap = userTypeClient.mapTypeByUserIdSet(new IdSetRequest(userIdSet));
-
-        //角色信息
-        Map<String, List<IamUserRoleInfoResponse>> userRoleResponseMap = getUserRoleListMap(userIdSet);
-
-
-        //组装数据
-        List<ShopUserSimpleListResponseVo.ShopUserInfo> shopUserInfoList = new ArrayList<>();
-        for (UserDetailOutputDto dto : userMap.values()) {
-            ShopUserSimpleListResponseVo.ShopUserInfo shopUserInfo = new ShopUserSimpleListResponseVo.ShopUserInfo();
-            shopUserInfo.setId(dto.getId());
-            shopUserInfo.setName(dto.getName());
-            shopUserInfo.setCode(dto.getCode());
-            shopUserInfo.setPhone(dto.getPhone());
-            shopUserInfo.setUserTypeList(userTypeMap.get(dto.getId()));
-            shopUserInfo.setUserRoleList(userRoleResponseMap.get(dto.getId()));
-            shopUserInfoList.add(shopUserInfo);
-        }
-
-
-        //区域经理/督导
-        List<ShopUserSimpleListResponseVo.ShopUserInfo> areaManagementList = new ArrayList<>();
-        //门店员工
-        List<ShopUserSimpleListResponseVo.ShopUserInfo> storeManagerList = new ArrayList<>();
-
-        for (ShopUserSimpleListResponseVo.ShopUserInfo info : shopUserInfoList) {
-            List<IamUserRoleInfoResponse> userRoleList = info.getUserRoleList();
-            boolean addAreaManagement = false;
-            boolean addStoreManager = false;
-            for (IamUserRoleInfoResponse userRole : userRoleList) {
-                if (userRole.getRoleType().equals(RoleTypeEnum.SHOP)) {
-                    if (!addAreaManagement) {
-                        addAreaManagement = true;
-                        storeManagerList.add(info);
-                    }
-                } else {
-                    if (!addStoreManager) {
-                        addStoreManager = true;
-                        areaManagementList.add(info);
-                    }
-                }
-
-                if (addAreaManagement && addStoreManager) {
-                    break;
-                }
-            }
-        }
-
-        responseVo.setAreaManagementList(areaManagementList);
-        responseVo.setStoreManagerList(storeManagerList);
-        return responseVo;
     }
 
     @Override
@@ -454,136 +392,62 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         return pageResponse;
     }
 
+    private List<IamUserRoleInfoResponse> assembleUserRoleInfo(List<IamUserRoleBusinessRelationListOutputDto> outputDtoList,
+                                                               Map<String, IamUserRoleRelationListOutputDto> userRoleRelationMap,
+                                                               Map<String, IamRoleDetailOutputDto> roleIdInfoMap,
+                                                               Map<String, DataShopDetailOutputDto> shopIdInfoMap) {
+        //组装角色信息
+        List<IamUserRoleInfoResponse> userRoleList = new ArrayList<>();
+        Map<String, IamUserRoleInfoResponse> userRoleMap = new HashMap<>();
+        for (IamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
+            //用户角色关系信息
+            IamUserRoleRelationListOutputDto userRoleRelationListOutputDto = userRoleRelationMap
+                    .get(outputDto.getUserRoleRelationId());
 
-    /**
-     * 角色信息
-     */
-    private Map<String, IamRoleDetailOutputDto> getRoleMap(List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList) {
-        Set<String> idSet = new HashSet<>();
-        for (IamUserRoleTargetListOutputDto outputDto : singleUserTargetInfoList) {
-            idSet.add(outputDto.getRoleId());
-        }
-        if (CollectionUtil.isEmpty(idSet)) {
-            return Map.of();
-        }
-        return roleClient.mapByIdSet(new IdSetRequest(idSet));
-    }
+            String roleId = userRoleRelationListOutputDto.getRoleId();
+            IamUserRoleInfoResponse userRoleInfoResponse = userRoleMap.get(roleId);
 
-    /**
-     * 组织信息
-     */
-    private Map<String, IamOrganizationSimpleOutputDto> getOrganizationMap(List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList) {
-        Set<String> idSet = new HashSet<>();
-        for (IamUserRoleTargetListOutputDto outputDto : singleUserTargetInfoList) {
-            if (UserRoleTargetTypeEnum.ORGANIZATION == outputDto.getTargetType()) {
-                idSet.add(outputDto.getTargetId());
+            if (null == userRoleInfoResponse) {
+                IamRoleDetailOutputDto roleDetailOutputDto = roleIdInfoMap.get(roleId);
+                userRoleInfoResponse = new IamUserRoleInfoResponse();
+                userRoleInfoResponse.setId(roleDetailOutputDto.getId());
+                userRoleInfoResponse.setType(roleDetailOutputDto.getType());
+                userRoleInfoResponse.setName(roleDetailOutputDto.getName());
+                userRoleInfoResponse.setCode(roleDetailOutputDto.getCode());
+                userRoleMap.put(roleId, userRoleInfoResponse);
+                userRoleList.add(userRoleInfoResponse);
+            }
+
+            if (UserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
+                DataShopDetailOutputDto shopDetailOutputDto = shopIdInfoMap.get(outputDto.getBusinessId());
+                List<IamUserRoleInfoResponse.BusinessInfo> shopList = userRoleInfoResponse.getShopList();
+                if (null == shopList) {
+                    shopList = new ArrayList<>();
+                    userRoleInfoResponse.setShopList(shopList);
+                }
+
+                IamUserRoleInfoResponse.BusinessInfo businessInfo = new IamUserRoleInfoResponse.BusinessInfo();
+                businessInfo.setId(outputDto.getId());
+                businessInfo.setCode(shopDetailOutputDto.getCode());
+                businessInfo.setName(shopDetailOutputDto.getName());
+                businessInfo.setSort(outputDto.getSort());
+                shopList.add(businessInfo);
             }
         }
-        if (CollectionUtil.isEmpty(idSet)) {
-            return Map.of();
-        }
-        return organizationCache.mapByIdSet(idSet);
+        return userRoleList;
     }
 
-    /**
-     * 门店信息
-     */
-    private Map<String, DataShopDetailOutputDto> getShopMap(List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList) {
+    private Map<String, DataShopDetailOutputDto> getShopIdInfoMap(List<IamUserRoleBusinessRelationListOutputDto> outputDtoList) {
         Set<String> idSet = new HashSet<>();
-        for (IamUserRoleTargetListOutputDto outputDto : singleUserTargetInfoList) {
-            if (UserRoleTargetTypeEnum.SHOP == outputDto.getTargetType()) {
-                idSet.add(outputDto.getTargetId());
+        for (IamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
+            if (UserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
+                idSet.add(outputDto.getBusinessId());
             }
         }
         if (CollectionUtil.isEmpty(idSet)) {
             return Map.of();
         }
         return shopClient.mapByIdSet(new IdSetRequest(idSet));
-    }
-
-    /**
-     * 公司信息
-     */
-    private Map<String, DataSupplierCompanySimpleListOutputDto> getCompanyMap(List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList) {
-        Set<String> idSet = new HashSet<>();
-        for (IamUserRoleTargetListOutputDto outputDto : singleUserTargetInfoList) {
-            if (UserRoleTargetTypeEnum.COMPANY == outputDto.getTargetType()) {
-                idSet.add(outputDto.getTargetId());
-            }
-        }
-        if (CollectionUtil.isEmpty(idSet)) {
-            return Map.of();
-        }
-        return supplierCompanyClient.mapByIdSet(new IdSetRequest(idSet));
-    }
-
-
-    private List<IamUserRoleInfoResponse> assembleUserRoleInfo(List<IamUserRoleTargetListOutputDto> singleUserTargetInfoList,
-                                                               Map<String, IamRoleDetailOutputDto> roleMap,
-                                                               Map<String, IamOrganizationSimpleOutputDto> organizationMap,
-                                                               Map<String, DataShopDetailOutputDto> shopMap,
-                                                               Map<String, DataSupplierCompanySimpleListOutputDto> companyMap) {
-        //组装角色信息
-        List<IamUserRoleInfoResponse> userRoleList = new ArrayList<>();
-        Map<String, IamUserRoleInfoResponse> userRoleMap = new HashMap<>();
-        for (IamUserRoleTargetListOutputDto dto : singleUserTargetInfoList) {
-            IamUserRoleInfoResponse userRoleInfoResponse = userRoleMap.get(dto.getRoleId());
-            if (null == userRoleInfoResponse) {
-                IamRoleDetailOutputDto roleDetailOutputDto = roleMap.get(dto.getRoleId());
-                userRoleInfoResponse = new IamUserRoleInfoResponse();
-                userRoleInfoResponse.setRoleId(roleDetailOutputDto.getId());
-                userRoleInfoResponse.setRoleType(roleDetailOutputDto.getType());
-                userRoleInfoResponse.setRoleName(roleDetailOutputDto.getName());
-                userRoleInfoResponse.setRoleCode(roleDetailOutputDto.getCode());
-                userRoleMap.put(dto.getRoleId(), userRoleInfoResponse);
-                userRoleList.add(userRoleInfoResponse);
-            }
-
-            if (UserRoleTargetTypeEnum.ORGANIZATION == dto.getTargetType()) {
-                IamOrganizationSimpleOutputDto outputDto = organizationMap.get(dto.getTargetId());
-                List<IamUserRoleInfoResponse.TargetInfo> organizationList = userRoleInfoResponse.getOrganizationList();
-                if (null == organizationList) {
-                    organizationList = new ArrayList<>();
-                    userRoleInfoResponse.setOrganizationList(organizationList);
-                }
-
-                IamUserRoleInfoResponse.TargetInfo targetInfo = new IamUserRoleInfoResponse.TargetInfo();
-                targetInfo.setId(outputDto.getId());
-                targetInfo.setCode(outputDto.getCode());
-                targetInfo.setName(outputDto.getName());
-                targetInfo.setSort(dto.getSort());
-                organizationList.add(targetInfo);
-            } else if (UserRoleTargetTypeEnum.SHOP == dto.getTargetType()) {
-                DataShopDetailOutputDto outputDto = shopMap.get(dto.getTargetId());
-                List<IamUserRoleInfoResponse.TargetInfo> shopList = userRoleInfoResponse.getShopList();
-                if (null == shopList) {
-                    shopList = new ArrayList<>();
-                    userRoleInfoResponse.setShopList(shopList);
-                }
-
-                IamUserRoleInfoResponse.TargetInfo targetInfo = new IamUserRoleInfoResponse.TargetInfo();
-                targetInfo.setId(outputDto.getId());
-                targetInfo.setCode(outputDto.getCode());
-                targetInfo.setName(outputDto.getName());
-                targetInfo.setSort(dto.getSort());
-                shopList.add(targetInfo);
-            } else if (UserRoleTargetTypeEnum.COMPANY == dto.getTargetType()) {
-                DataSupplierCompanySimpleListOutputDto outputDto = companyMap.get(dto.getTargetId());
-                List<IamUserRoleInfoResponse.TargetInfo> companyList = userRoleInfoResponse.getCompanytList();
-                if (null == companyList) {
-                    companyList = new ArrayList<>();
-                    userRoleInfoResponse.setCompanytList(companyList);
-                }
-
-                IamUserRoleInfoResponse.TargetInfo targetInfo = new IamUserRoleInfoResponse.TargetInfo();
-                targetInfo.setId(outputDto.getId());
-                targetInfo.setCode(outputDto.getCode());
-                targetInfo.setName(outputDto.getName());
-                targetInfo.setSort(dto.getSort());
-                companyList.add(targetInfo);
-            }
-        }
-        return userRoleList;
     }
 
 

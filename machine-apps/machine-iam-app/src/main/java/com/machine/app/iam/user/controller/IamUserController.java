@@ -5,7 +5,6 @@ import com.machine.app.iam.user.controller.vo.request.IamAdminChangePasswordRequ
 import com.machine.app.iam.user.business.IIamUserBusiness;
 import com.machine.app.iam.user.controller.vo.request.*;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.app.iam.user.controller.vo.response.ShopUserSimpleListResponseVo;
 import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,12 +36,6 @@ public class IamUserController {
         log.info("管理员修改密码，userId={} updateId={}",
                 AppContext.getContext().getUserId(), request.getId());
         userBusiness.adminChangePassword(request);
-    }
-
-    @Operation(summary = "根据门店查询用户(区域经理、督导、门店用户，应用于组件弹窗)")
-    @PostMapping("list_by_shopId")
-    public ShopUserSimpleListResponseVo listByShopId(@RequestBody @Validated IamUserQueryListByShopIdRequestVo request) {
-        return userBusiness.listByShopId(request);
     }
 
     @Operation(summary = "分页查询(应用于组件弹窗)")

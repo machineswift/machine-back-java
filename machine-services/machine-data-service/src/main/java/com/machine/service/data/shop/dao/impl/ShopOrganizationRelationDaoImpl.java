@@ -79,8 +79,8 @@ public class ShopOrganizationRelationDaoImpl implements IShopOrganizationRelatio
     }
 
     @Override
-    public Boolean isAssociationShopByOrganizationIdSet(Set<String> organizationIdSet) {
-        return shopOrganizationRelationMapper.isAssociationShop(organizationIdSet);
+    public Boolean isAssociationShopByOrganizationId(String organizationId) {
+        return shopOrganizationRelationMapper.isAssociationShop(organizationId);
     }
 
     @Override

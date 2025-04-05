@@ -10,7 +10,6 @@ import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import com.machine.service.hrm.jobpost.service.IJobPostService;
-import com.machine.service.hrm.sync.service.ISyncService;
 import com.machine.service.hrm.sync.service.bo.HrmSyncDto;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

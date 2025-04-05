@@ -8,10 +8,10 @@ import com.machine.client.data.franchisee.dto.output.DataFranchiseeListOutputDto
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeIdentityCardOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserRoleTargetClient;
+import com.machine.client.iam.user.IIamUserRoleBusinessRelationClient;
 import com.machine.client.iam.user.dto.input.IamFranchiseeUserCreateInputDto;
-import com.machine.client.iam.user.dto.input.IamUserRoleInfoBindFranchiseeShopInputDto;
-import com.machine.client.iam.user.dto.input.IamUserRoleInfoUnbindFranchiseeShopInputDto;
+import com.machine.client.iam.user.dto.input.IamUserRoleInfoFranchiseeBindShopInputDto;
+import com.machine.client.iam.user.dto.input.IamUserRoleInfoFranchiseeUnBindShopInputDto;
 import com.machine.client.iam.user.dto.input.IamUserUpdatePhoneInputDto;
 import com.machine.sdk.common.envm.system.DataPersistenceStatusEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
@@ -48,7 +48,7 @@ public class FranchiseeServiceImpl implements IFranchiseeService {
     private IIamUserClient userClient;
 
     @Autowired
-    private IIamUserRoleTargetClient userRoleTargetClient;
+    private IIamUserRoleBusinessRelationClient userRoleBusinessRelationClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -100,8 +100,8 @@ public class FranchiseeServiceImpl implements IFranchiseeService {
         }
 
         //加盟商角色绑定的门店
-        userRoleTargetClient.bindFranchiseeShop(
-                new IamUserRoleInfoBindFranchiseeShopInputDto(entity.getUserId(), dbShopEntity.getId()));
+        userRoleBusinessRelationClient.bindFranchiseeShop(
+                new IamUserRoleInfoFranchiseeBindShopInputDto(entity.getUserId(), dbShopEntity.getId()));
 
         //添加加盟商和门店的关系
         FranchiseeShopRelationEntity dbRelationEntity = franchiseeShopRelationDao.getByShopId(dbShopEntity.getId());
@@ -135,8 +135,8 @@ public class FranchiseeServiceImpl implements IFranchiseeService {
         }
 
         //加盟商角色解绑的门店
-        userRoleTargetClient.unbindFranchiseeShop(
-                new IamUserRoleInfoUnbindFranchiseeShopInputDto(entity.getUserId(), dbShopEntity.getId()));
+        userRoleBusinessRelationClient.unbindFranchiseeShop(
+                new IamUserRoleInfoFranchiseeUnBindShopInputDto(entity.getUserId(), dbShopEntity.getId()));
 
         //删除加盟商和门店的关系
         franchiseeShopRelationDao.deleteByUk(inputDto.getId(), dbShopEntity.getId(), dbShopEntity.getCode());

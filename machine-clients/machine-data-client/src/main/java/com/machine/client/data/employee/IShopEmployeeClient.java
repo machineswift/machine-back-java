@@ -21,18 +21,6 @@ public interface IShopEmployeeClient {
     @PostMapping("create")
     String create(@RequestBody @Validated DataShopEmployeeCreateInputDto inputDto);
 
-    @PostMapping("update_status")
-    int updateStatus(@RequestBody @Validated DataShopEmployeeUpdateStatusInputDto inputDto);
-
-    @PostMapping("update_phone")
-    int updatePhone(@RequestBody @Validated OpenapiShopEmployeeUpdatePhoneInputDto inputDto);
-
-    @PostMapping("update_identity_card")
-    int updateIdentityCard(@RequestBody @Validated OpenApiShopEmployeeUpdateIdentityCardInputDto inputDto);
-
-    @PostMapping("update_health_certificate")
-    int updateHealthCertificate(@RequestBody @Validated OpenApiShopEmployeeUpdateHealthCertificateInputDto inputDto);
-
     @PostMapping("update_by_userId")
     int updateByUserId(@RequestBody @Validated DataShopEmployeeUpdateInputDto inputDto);
 

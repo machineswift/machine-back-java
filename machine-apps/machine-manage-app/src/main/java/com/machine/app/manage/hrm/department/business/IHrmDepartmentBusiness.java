@@ -6,12 +6,6 @@ import com.machine.sdk.common.model.request.IdRequest;
 
 public interface IHrmDepartmentBusiness {
 
-    void clearCache();
-
-    void sync();
-
-    void syncDepartmentPersonInCharge();
-
     HrmDepartmentDetailResponseVo detail(IdRequest request);
 
     HrmDepartmentExpandTreeResponseVo treeAllExpand();

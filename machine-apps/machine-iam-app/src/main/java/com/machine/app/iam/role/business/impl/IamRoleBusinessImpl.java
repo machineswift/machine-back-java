@@ -10,7 +10,6 @@ import com.machine.app.iam.role.controller.vo.response.IamRoleExpandListResponse
 import com.machine.app.iam.role.controller.vo.response.IamRoleSimpleListResponseVo;
 import com.machine.client.hrm.jobpost.IHrmJobPostClient;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostListSimpleOutputDto;
-import com.machine.client.iam.organization.dto.output.IamUserRoleTargetListOutputDto;
 import com.machine.client.iam.role.IIamRoleClient;
 import com.machine.client.iam.role.IIamRolePermissionClient;
 import com.machine.client.iam.role.dto.input.IamRoleCreateInputDto;
@@ -21,7 +20,8 @@ import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.role.dto.output.IamRoleListOutputDto;
 import com.machine.client.iam.role.dto.output.IamRolePermissionListOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserRoleTargetClient;
+import com.machine.client.iam.user.IIamUserRoleRelationClient;
+import com.machine.client.iam.user.dto.output.IamUserRoleRelationListOutputDto;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
 import com.machine.sdk.common.envm.iam.role.CompanyDefaultRoleEnum;
 import com.machine.sdk.common.envm.iam.role.RoleTypeEnum;
@@ -54,8 +54,7 @@ public class IamRoleBusinessImpl implements IIamRoleBusiness {
     private IIamRolePermissionClient rolePermissionClient;
 
     @Autowired
-    private IIamUserRoleTargetClient userRoleTargetClient;
-
+    private IIamUserRoleRelationClient userRoleRelationClient;
 
     @Override
     public String create(IamRoleCreateRequestVo requestVo) {
@@ -172,9 +171,9 @@ public class IamRoleBusinessImpl implements IIamRoleBusiness {
 
         //关联人数
         Set<String> roleIdSet = pageResponse.getRecords().stream().map(IamRoleExpandListResponseVo::getId).collect(Collectors.toSet());
-        List<IamUserRoleTargetListOutputDto> outputDtoList = userRoleTargetClient.listByRoleIdSet(new IdSetRequest(roleIdSet));
+        List<IamUserRoleRelationListOutputDto> outputDtoList = userRoleRelationClient.listByRoleIdSet(new IdSetRequest(roleIdSet));
         Map<String, Set<String>> roleUserIdSetMap = new HashMap<>();
-        for (IamUserRoleTargetListOutputDto dto : outputDtoList) {
+        for (IamUserRoleRelationListOutputDto dto : outputDtoList) {
             Set<String> userIdSetItem = roleUserIdSetMap.computeIfAbsent(dto.getRoleId(), k -> new HashSet<>());
             userIdSetItem.add(dto.getUserId());
         }

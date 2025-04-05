@@ -10,20 +10,6 @@ import java.util.List;
 
 public interface IOpenApiFranchiseeBusiness {
 
-    String create(OpenApiFranchiseeCreateRequestVo request);
-
-    void bindShop(OpenApiFranchiseeBindShopRequestVo request);
-
-    void unbindShop(OpenApiFranchiseeUnbindShopRequestVo request);
-
-    void updatePhone(OpenApiFranchiseeUpdatePhoneRequestVo request);
-
-    void update(OpenApiFranchiseeUpdateRequestVo request);
-
-    void updateIdentityCard(OpenApiFranchiseeUpdateIdentityCardRequestVo request);
-
-    void updateHealthCertificate(OpenApiFranchiseeUpdateHealthCertificateRequestVo request);
-
     OpenApiFranchiseeDetailResponseVo detail(OpenApiFranchiseeIdRequestVo request);
 
     OpenapiFranchiseeIdentityCardResponseVo identityCard(OpenApiFranchiseeIdRequestVo request);

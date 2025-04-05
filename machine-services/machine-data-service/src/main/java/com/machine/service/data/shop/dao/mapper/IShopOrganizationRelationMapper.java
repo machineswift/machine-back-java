@@ -12,7 +12,7 @@ import java.util.Set;
 @Mapper
 public interface IShopOrganizationRelationMapper extends BaseMapper<ShopOrganizationRelationEntity> {
 
-    Boolean isAssociationShop(@Param("organizationIdSet") Set<String> organizationIdSet);
+    Boolean isAssociationShop(@Param("organizationId") String organizationId);
 
     List<String> listShopIdByOrganizationIdSet(@Param("organizationIdSet") Set<String> organizationIdSet);
 

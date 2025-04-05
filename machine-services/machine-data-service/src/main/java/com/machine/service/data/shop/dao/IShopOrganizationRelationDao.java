@@ -12,11 +12,11 @@ public interface IShopOrganizationRelationDao {
     int insert(ShopOrganizationRelationEntity entity);
 
     int deleteOneByUk(String shopId,
-                       OrganizationTypeEnum organizationType);
+                      OrganizationTypeEnum organizationType);
 
     int update(ShopOrganizationRelationEntity entity);
 
-    Boolean isAssociationShopByOrganizationIdSet(Set<String> organizationIdSet);
+    Boolean isAssociationShopByOrganizationId(String organizationId);
 
     ShopOrganizationRelationEntity selectOneByUk(String shopId,
                                                  String organizationId);

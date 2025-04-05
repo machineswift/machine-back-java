@@ -29,50 +29,6 @@ public class OpenApiFranchiseeBusinessImpl implements IOpenApiFranchiseeBusiness
     private IFranchiseeClient franchiseeClient;
 
     @Override
-    public String create(OpenApiFranchiseeCreateRequestVo request) {
-        DataFranchiseeCreateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataFranchiseeCreateInputDto.class);
-        return franchiseeClient.create(inputDto);
-    }
-
-    @Override
-    public void bindShop(OpenApiFranchiseeBindShopRequestVo request) {
-        DataFranchiseeBindShopInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataFranchiseeBindShopInputDto.class);
-        franchiseeClient.bindShop(inputDto);
-    }
-
-    @Override
-    public void unbindShop(OpenApiFranchiseeUnbindShopRequestVo request) {
-        DataFranchiseeUnbindShopInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataFranchiseeUnbindShopInputDto.class);
-        franchiseeClient.unbindShop(inputDto);
-    }
-
-    @Override
-    public void updatePhone(OpenApiFranchiseeUpdatePhoneRequestVo request) {
-        OpenApiFranchiseeUpdatePhoneInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), OpenApiFranchiseeUpdatePhoneInputDto.class);
-        franchiseeClient.updatePhone(inputDto);
-    }
-
-    @Override
-    public void update(OpenApiFranchiseeUpdateRequestVo request) {
-        DataFranchiseeUpdateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataFranchiseeUpdateInputDto.class);
-        franchiseeClient.update(inputDto);
-    }
-
-    @Override
-    public void updateIdentityCard(OpenApiFranchiseeUpdateIdentityCardRequestVo request) {
-        OpenApiFranchiseeUpdateIdentityCardInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request),
-                OpenApiFranchiseeUpdateIdentityCardInputDto.class);
-        franchiseeClient.updateIdentityCard(inputDto);
-    }
-
-    @Override
-    public void updateHealthCertificate(OpenApiFranchiseeUpdateHealthCertificateRequestVo request) {
-        OpenApiFranchiseeUpdateHealthCertificateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request),
-                OpenApiFranchiseeUpdateHealthCertificateInputDto.class);
-        franchiseeClient.updateHealthCertificate(inputDto);
-    }
-
-    @Override
     public OpenApiFranchiseeDetailResponseVo detail(OpenApiFranchiseeIdRequestVo request) {
         DataFranchiseeDetailOutputDto outputDto = franchiseeClient.detail(new IdRequest(request.getId()));
         if (outputDto == null) {

@@ -1,6 +1,5 @@
 package com.machine.service.hrm.employee.service;
 
-import com.machine.client.hrm.employee.dto.input.HrmEmployeeBatchInsertInputDto;
 import com.machine.client.hrm.employee.dto.input.HrmEmployeeQueryIListInputDto;
 import com.machine.client.hrm.employee.dto.output.HrmEmployeeDetailOutputDto;
 import com.machine.client.hrm.employee.dto.output.HrmEmployeeListOutputDto;
@@ -11,11 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IHrmEmployeeService {
-
-    void sync(long lastSyncTime,
-              long enSyncTime);
-
-    void batchCreate(HrmEmployeeBatchInsertInputDto inputDto);
 
     Integer countByDepartmentIds(IdSetRequest request);
 

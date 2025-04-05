@@ -13,14 +13,6 @@ public interface IShopEmployeeService {
 
     String create(DataShopEmployeeCreateInputDto inputDto);
 
-    int updateStatus(DataShopEmployeeUpdateStatusInputDto inputDto);
-
-    int updatePhone(OpenapiShopEmployeeUpdatePhoneInputDto inputDto);
-
-    int updateIdentityCard(OpenApiShopEmployeeUpdateIdentityCardInputDto inputDto);
-
-    int updateHealthCertificate(OpenApiShopEmployeeUpdateHealthCertificateInputDto inputDto);
-
     int updateByUserId(DataShopEmployeeUpdateInputDto inputDto);
 
     ShopEmployeeDetailOutputDto detail(IdRequest request);

@@ -99,8 +99,8 @@ public class ShopOrganizationRelationServiceImpl implements IShopOrganizationRel
     }
 
     @Override
-    public Boolean isAssociationShopByOrganizationIdSet(Set<String> organizationIdSet) {
-        return shopOrganizationRelationDao.isAssociationShopByOrganizationIdSet(organizationIdSet);
+    public Boolean isAssociationShopByOrganizationId(IdRequest request) {
+        return shopOrganizationRelationDao.isAssociationShopByOrganizationId(request.getId());
     }
 
     @Override

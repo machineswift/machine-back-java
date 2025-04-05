@@ -7,9 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UserRoleBusinessTypeEnum implements BaseEnum<UserRoleBusinessTypeEnum, String> {
-    ORGANIZATION("ORGANIZATION", "组织"),
-    SHOP("SHOP", "门店"),
-    COMPANY("COMPANY", "公司");
+    SHOP("SHOP", "门店");
 
     private final String code;
     private final String msg;

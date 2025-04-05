@@ -18,11 +18,9 @@ import com.machine.client.iam.user.IIamUserOrganizationRelationClient;
 import com.machine.client.iam.organization.dto.input.*;
 import com.machine.client.iam.organization.dto.output.*;
 import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserRoleTargetClient;
 import com.machine.client.iam.user.dto.input.DataUserNotBindOrganizationInputDto;
 import com.machine.client.iam.user.dto.output.IamUserOrganizationRelationOutputDto;
 import com.machine.client.iam.user.dto.output.UserDetailOutputDto;
-import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
@@ -55,9 +53,6 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
 
     @Autowired
     private IIamOrganizationClient organizationClient;
-
-    @Autowired
-    private IIamUserRoleTargetClient userRoleTargetClient;
 
     @Autowired
     private IIamUserOrganizationRelationClient userOrganizationRelationClient;
@@ -122,10 +117,8 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
                 .listByOrganizationIdSet(new IdSetRequest(organizationIdSet));
 
         //查询组织关联的用户信息
-        IamUserRoleTargetQueryListInputDto input = new IamUserRoleTargetQueryListInputDto();
-        input.setTargetType(UserRoleTargetTypeEnum.ORGANIZATION);
-        input.setTargetIdSet(organizationIdSet);
-        List<IamUserRoleTargetListOutputDto> iamUserRoleTargetListOutputDtoList = userRoleTargetClient.listByCondition(input);
+        List<IamUserOrganizationRelationOutputDto> userOrganizationRelationOutputDtoList = userOrganizationRelationClient
+                .listByOrganizationIdSet(new IdSetRequest(organizationIdSet));
 
         //组装中间对象信息
         List<IamOrganizationExpandTreeBo> expandTreeBoList = JSONUtil.toList(JSONUtil.toJsonStr(outputDtoList), IamOrganizationExpandTreeBo.class);
@@ -142,8 +135,8 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
         }
 
         { //用户数量
-            for (IamUserRoleTargetListOutputDto dto : iamUserRoleTargetListOutputDtoList) {
-                IamOrganizationExpandTreeBo bo = organizationMap.get(dto.getTargetId());
+            for (IamUserOrganizationRelationOutputDto dto : userOrganizationRelationOutputDtoList) {
+                IamOrganizationExpandTreeBo bo = organizationMap.get(dto.getOrganizationId());
                 bo.getUserIdSet().add(dto.getUserId());
                 bo.setUserNumber(bo.getUserIdSet().size());
             }
@@ -374,10 +367,8 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
                 .listByOrganizationIdSet(new IdSetRequest(organizationIdSet));
 
         //查询组织关联的用户信息;
-        IamUserRoleTargetQueryListInputDto input = new IamUserRoleTargetQueryListInputDto();
-        input.setTargetType(UserRoleTargetTypeEnum.ORGANIZATION);
-        input.setTargetIdSet(organizationIdSet);
-        List<IamUserRoleTargetListOutputDto> iamUserRoleTargetListOutputDtoList = userRoleTargetClient.listByCondition(input);
+        List<IamUserOrganizationRelationOutputDto> userOrganizationRelationOutputDtoList = userOrganizationRelationClient
+                .listByOrganizationIdSet(new IdSetRequest(organizationIdSet));
 
         //填充修改人创建人信息
         Set<String> userIdSet = new HashSet<>();
@@ -391,7 +382,7 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
 
         //部门负责人信息
         IamUserOrganizationRelationOutputDto relationOutputDto =
-                userOrganizationRelationClient.selectLeaderByOrganizationId(new IdRequest(organizationId));
+                userOrganizationRelationClient.getLeaderByOrganizationId(new IdRequest(organizationId));
         if (null != relationOutputDto) {
             UserDetailOutputDto userDetailOutputDto = userClient.detail(new IdRequest(relationOutputDto.getUserId()));
             responseVo.setOrganizationLeader(JSONUtil.toBean(
@@ -407,10 +398,10 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
         }
 
         //组织下人员数量
-        if (CollectionUtil.isEmpty(iamUserRoleTargetListOutputDtoList)) {
+        if (CollectionUtil.isEmpty(userOrganizationRelationOutputDtoList)) {
             responseVo.setUserNumber(0);
         } else {
-            Set<String> userIdSetTemp = iamUserRoleTargetListOutputDtoList.stream().map(IamUserRoleTargetListOutputDto::getUserId).collect(Collectors.toSet());
+            Set<String> userIdSetTemp = userOrganizationRelationOutputDtoList.stream().map(IamUserOrganizationRelationOutputDto::getUserId).collect(Collectors.toSet());
             responseVo.setUserNumber(userIdSetTemp.size());
         }
 

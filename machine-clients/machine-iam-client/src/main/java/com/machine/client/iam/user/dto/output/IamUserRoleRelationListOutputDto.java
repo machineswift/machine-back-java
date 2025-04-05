@@ -1,25 +1,24 @@
-package com.machine.client.iam.organization.dto.output;
+package com.machine.client.iam.user.dto.output;
 
-import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Data
-public class IamUserRoleTargetListOutputDto {
+@NoArgsConstructor
+public class IamUserRoleRelationListOutputDto {
 
+    @Schema(description = "ID")
     private String id;
 
+    @Schema(description = "用户ID")
     private String userId;
 
+    @Schema(description = "角色id")
     private String roleId;
 
-    private String targetId;
-
-    private UserRoleTargetTypeEnum targetType;
-
-    /**
-     * 排序
-     */
+    @Schema(description = "排序")
     private Long sort;
 
     @Schema(description = "创建人ID")
@@ -34,5 +33,3 @@ public class IamUserRoleTargetListOutputDto {
     @Schema(description = "更新时间（Unix 时间戳）")
     private Long updateTime;
 }
-
-

@@ -11,27 +11,35 @@ import java.util.List;
 public class OpenapiUserRoleInfoResponse {
 
     @Schema(description = "角色ID")
-    private String roleId;
-
-    @Schema(description = "角色编码")
-    private String roleCode;
-
-    @Schema(description = "角色名称")
-    private String roleName;
+    private String id;
 
     @Schema(description = "角色类型（RoleTypeEnum）")
-    private RoleTypeEnum roleType;
+    private RoleTypeEnum type;
 
-    @Schema(description = "门店ID集合")
-    private List<String> shopIdList;
+    @Schema(description = "角色名称")
+    private String name;
 
-    @Schema(description = "组织ID集合")
-    private List<String> organizationIdList;
+    @Schema(description = "角色编码")
+    private String code;
 
-    @Schema(description = "项目ID集合")
-    private List<String> projectIdList;
+    @Schema(description = "门店集合")
+    private List<BusinessInfo> shopList;
 
-    @Schema(description = "公司ID集合")
-    private List<String> companyIdList;
+    @Data
+    @Schema
+    public static class BusinessInfo {
+
+        @Schema(description = "id")
+        private String id;
+
+        @Schema(description = "名称")
+        private String name;
+
+        @Schema(description = "编码")
+        private String code;
+
+        @Schema(description = "排序")
+        private Long sort;
+    }
 
 }

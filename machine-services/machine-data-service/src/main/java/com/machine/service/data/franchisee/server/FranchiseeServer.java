@@ -56,20 +56,6 @@ public class FranchiseeServer implements IFranchiseeClient {
     }
 
     @Override
-    @PostMapping("update_identity_card")
-    public int updateIdentityCard(@RequestBody @Validated OpenApiFranchiseeUpdateIdentityCardInputDto inputDto) {
-        log.info("修改身份证，inputDto:{}", JSONUtil.toJsonStr(inputDto));
-        return franchiseeService.updateIdentityCard(inputDto);
-    }
-
-    @Override
-    @PostMapping("update_health_certificate")
-    public int updateHealthCertificate(@RequestBody @Validated OpenApiFranchiseeUpdateHealthCertificateInputDto inputDto) {
-        log.info("修改健康证，inputDto:{}", JSONUtil.toJsonStr(inputDto));
-        return franchiseeService.updateHealthCertificate(inputDto);
-    }
-
-    @Override
     @PostMapping("update")
     public int update(@RequestBody @Validated DataFranchiseeUpdateInputDto inputDto) {
         log.info("修改加盟商，inputDto:{}", JSONUtil.toJsonStr(inputDto));

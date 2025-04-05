@@ -10,13 +10,6 @@ import java.util.Map;
 
 public interface IDepartmentService {
 
-    void sync(long lastSyncTime,
-              long enSyncTime);
-
-    void syncDepartmentPersonInCharge();
-
-    void clearCache();
-
     String create(DepartmentCreateInputDto inputDto);
 
     DepartmentDetailOutputDto detailById(IdRequest request);

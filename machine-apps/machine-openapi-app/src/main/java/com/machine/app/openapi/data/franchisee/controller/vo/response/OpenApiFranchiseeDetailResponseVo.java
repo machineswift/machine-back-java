@@ -4,8 +4,6 @@ import com.machine.sdk.common.envm.data.CertificateTypeEnum;
 import com.machine.sdk.common.envm.data.EducationalQualificationEnum;
 import com.machine.sdk.common.envm.data.FranchiseeEntityTypeEnum;
 import com.machine.sdk.common.envm.data.WorkExperienceTypeEnum;
-import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -35,12 +33,6 @@ public class OpenApiFranchiseeDetailResponseVo {
 
     @Schema(description = "证件号码")
     private String certificateNumber;
-
-    @Schema(description = "身份证信息")
-    private IdentityCardDto identityCard;
-
-    @Schema(description = "健康证信息")
-    private HealthCertificateDto healthCertificate;
 
     @Schema(description = "学历（EducationalQualificationEnum）")
     private EducationalQualificationEnum educationalQualification;

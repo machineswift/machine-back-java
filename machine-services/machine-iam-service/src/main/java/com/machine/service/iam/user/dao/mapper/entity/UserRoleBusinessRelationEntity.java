@@ -2,7 +2,7 @@ package com.machine.service.iam.user.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.iam.UserRoleTargetTypeEnum;
+import com.machine.sdk.common.envm.iam.UserRoleBusinessTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,31 +11,26 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_user_role_target_relation")
-public class UserRoleTargetRelationEntity extends BaseEntity {
-    /**
-     * 用户ID
-     */
-    @TableField("user_id")
-    private String userId;
+@TableName("t_user_role_business_relation")
+public class UserRoleBusinessRelationEntity extends BaseEntity {
 
     /**
-     * 角色id
+     * 用户角色关系ID
      */
-    @TableField("role_id")
-    private String roleId;
+    @TableField("user_role_relation_id")
+    private String userRoleRelationId;
 
     /**
-     * 目标id
+     * 业务id
      */
-    @TableField("target_id")
-    private String targetId;
+    @TableField("business_id")
+    private String businessId;
 
     /**
      * 类型
      */
-    @TableField("target_type")
-    private UserRoleTargetTypeEnum targetType;
+    @TableField("business_type")
+    private UserRoleBusinessTypeEnum businessType;
 
     /**
      * 排序

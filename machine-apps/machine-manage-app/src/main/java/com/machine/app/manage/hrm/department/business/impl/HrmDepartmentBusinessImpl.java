@@ -40,16 +40,6 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
     private IHrmEmployeeDefaultClient employeeDefaultClient;
 
     @Override
-    public void clearCache() {
-        departmentClient.clearCache();
-    }
-
-    @Override
-    public void sync() {
-        departmentClient.sync();
-    }
-
-    @Override
     public HrmDepartmentDetailResponseVo detail(IdRequest request) {
         DepartmentDetailOutputDto outputDto = departmentClient.detailById(new IdRequest(request.getId()));
         if (null == outputDto) {
@@ -215,11 +205,6 @@ public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
     @Override
     public DepartmentTreeOutputDto treeAllSimple() {
         return departmentCache.treeAllSimple();
-    }
-
-    @Override
-    public void syncDepartmentPersonInCharge() {
-        departmentClient.syncDepartmentPersonInCharge();
     }
 
     private void postorderTraversalAndCountChildren(HrmDepartmentExpandTreeBo node) {

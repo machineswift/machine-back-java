@@ -4,7 +4,6 @@ import com.machine.app.iam.user.controller.vo.request.IamAdminChangePasswordRequ
 import com.machine.app.iam.user.controller.vo.request.*;
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.app.iam.user.controller.vo.response.ShopUserSimpleListResponseVo;
 import com.machine.sdk.common.model.response.PageResponse;
 
 import java.util.List;
@@ -31,8 +30,6 @@ public interface IIamUserBusiness {
     List<IamUserRoleInfoResponse> getUserRoleList(String userId);
 
     Map<String, List<IamUserRoleInfoResponse>> getUserRoleListMap(Set<String> userIdSet);
-
-    ShopUserSimpleListResponseVo listByShopId(IamUserQueryListByShopIdRequestVo request);
 
     PageResponse<IamUserSimpleListResponseVo> pageSimpled(IamUserQueryPageSimpleRequestVo request);
 

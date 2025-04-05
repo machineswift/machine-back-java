@@ -19,8 +19,6 @@ public interface IUserService {
 
     String createShopUser(IamShopUserCreateInputDto inputDto);
 
-    String createShopUser4Openapi(IamShopUserCreate4OpenapiInputDto inputDto);
-
     String createSupplierUser(IamSupplierUserCreateInputDto inputDto);
 
     String createFranchiseeUser(IamFranchiseeUserCreateInputDto inputDto);
@@ -37,11 +35,9 @@ public interface IUserService {
 
     int updateShopUser(IamShopUserUpdateInputDto inputDto);
 
-    void updateShopUserRole(IamShopUserUpdateRoleInputDto inputDto);
-
     int updateSupplierUser(IamSupplierUserUpdateInputDto inputDto);
 
-    int updateUserRole(IamCompanyUserUpdateInputDto inputDto);
+    void updateUserRole(IamCompanyUserUpdateInputDto inputDto);
 
     int countNotBindOrganization(DataUserNotBindOrganizationInputDto inputDto);
 

@@ -79,26 +79,6 @@ public class RedisLockPrefixConstant {
          * 部门树
          */
         public static final String HRM_DEPARTMENT_TREE_LOCK = "hrm:department:tree:lock";
-
-        /**
-         * 同步北森职务
-         */
-        public static final String HRM_SYNC_BEI_SEN_JOB_POST_LOCK = "hrm:sync:beiSen:jobPost:lock";
-
-        /**
-         * 同步北森部门
-         */
-        public static final String HRM_SYNC_BEI_SEN_DEPARTMENT_LOCK = "hrm:sync:beiSen:department:lock";
-
-        /**
-         * 同步北森员工
-         */
-        public static final String HRM_SYNC_BEI_SEN_EMPLOYEE_LOCK = "hrm:sync:beiSen:employee:lock";
-
-        /**
-         * 同步北森部门负责人
-         */
-        public static final String HRM_SYNC_BEI_SEN_DEPARTMENT_PERSON_IN_CHARGE_LOCK = "hrm:sync:beiSen:department:person:in:charge:lock";
     }
 
 }

@@ -7,14 +7,8 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.ShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.ShopEmployeeListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.input.IamUserUpdatePhoneInputDto;
-import com.machine.client.iam.user.dto.input.IamUserUpdateStatusInputDto;
-import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.data.CertificateStatusEnum;
-import com.machine.sdk.common.envm.data.ShopEmployeeStatusEnum;
 import com.machine.sdk.common.envm.system.DataPersistenceStatusEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -35,9 +29,6 @@ public class ShopEmployeeServiceImpl implements IShopEmployeeService {
     @Autowired
     private IShopEmployeeDao shopEmployeeDao;
 
-    @Autowired
-    private IIamUserClient userClient;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String create(DataShopEmployeeCreateInputDto inputDto) {
@@ -48,54 +39,6 @@ public class ShopEmployeeServiceImpl implements IShopEmployeeService {
         //健康证
         shopEmployeeDao.updateHealthCertificate(shopEmployeeId, DataPersistenceStatusEnum.PERMANENT, inputDto.getHealthCertificate());
         return shopEmployeeId;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int updateStatus(DataShopEmployeeUpdateStatusInputDto inputDto) {
-        ShopEmployeeEntity dbEntity = shopEmployeeDao.getById(inputDto.getId());
-        if (null == dbEntity) {
-            return 0;
-        }
-
-        if (inputDto.getEmployeeStatus() == dbEntity.getEmployeeStatus()) {
-            return 0;
-        }
-
-        if (ShopEmployeeStatusEnum.LEFT == inputDto.getEmployeeStatus()) {
-            userClient.updateStatus(new IamUserUpdateStatusInputDto(dbEntity.getUserId(), StatusEnum.DISABLE));
-        }
-
-        return shopEmployeeDao.updateStatus(inputDto.getId(), inputDto.getEmployeeStatus());
-    }
-
-    @Override
-    public int updatePhone(OpenapiShopEmployeeUpdatePhoneInputDto inputDto) {
-        ShopEmployeeEntity entity = shopEmployeeDao.getById(inputDto.getId());
-        if (null == entity) {
-            throw new IamBusinessException("data.shopEmployee.updatePhone.shopEmployeeNotExists", "门店员工不存在");
-        }
-        return userClient.updatePhone(new IamUserUpdatePhoneInputDto(entity.getUserId(), inputDto.getPhone()));
-    }
-
-    @Override
-    public int updateIdentityCard(OpenApiShopEmployeeUpdateIdentityCardInputDto inputDto) {
-        ShopEmployeeEntity dbEntity = shopEmployeeDao.getById(inputDto.getId());
-        if (null == dbEntity) {
-            return 0;
-        }
-        //身份证
-        return shopEmployeeDao.updateIdentityCard(dbEntity.getId(), inputDto.getPersistenceStatus(), inputDto.getIdentityCard());
-    }
-
-    @Override
-    public int updateHealthCertificate(OpenApiShopEmployeeUpdateHealthCertificateInputDto inputDto) {
-        ShopEmployeeEntity dbEntity = shopEmployeeDao.getById(inputDto.getId());
-        if (null == dbEntity) {
-            return 0;
-        }
-        //健康证
-        return shopEmployeeDao.updateHealthCertificate(dbEntity.getId(), inputDto.getPersistenceStatus(), inputDto.getHealthCertificate());
     }
 
     @Override

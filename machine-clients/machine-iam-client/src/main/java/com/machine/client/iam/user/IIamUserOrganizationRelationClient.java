@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 
 @FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/user_organization_relation",
@@ -24,7 +25,9 @@ public interface IIamUserOrganizationRelationClient {
     /**
      * <组织负责人关系>
      */
-    @PostMapping("select_leader_by_organizationId")
-    IamUserOrganizationRelationOutputDto selectLeaderByOrganizationId(@RequestBody @Validated IdRequest request);
+    @PostMapping("get_leader_by_organizationId")
+    IamUserOrganizationRelationOutputDto getLeaderByOrganizationId(@RequestBody @Validated IdRequest request);
 
+    @PostMapping("list_by_organizationIdSet")
+    List<IamUserOrganizationRelationOutputDto> listByOrganizationIdSet(@RequestBody @Validated IdSetRequest request);
 }

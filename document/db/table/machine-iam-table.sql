@@ -195,24 +195,25 @@ CREATE TABLE `t_user_role_relation`
     `update_by`   VARCHAR(32) NOT NULL COMMENT '修改人',
     `update_time` BIGINT UNSIGNED NOT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_01` ( `user_id`,`role_id` ) USING BTREE
+    UNIQUE KEY `uk_01` ( `user_id`,`role_id` ) USING BTREE,
+    KEY           `idx_01` ( `role_id` ) USING BTREE
 ) COMMENT = '用户角色关系表';
 
 DROP TABLE IF EXISTS `t_user_role_business_relation`;
 CREATE TABLE `t_user_role_business_relation`
 (
-    `id`            VARCHAR(32) NOT NULL COMMENT 'ID',
-    `user_role_id`  VARCHAR(32) NOT NULL COMMENT '用户ID',
-    `business_id`   VARCHAR(32) NOT NULL COMMENT '业务id',
-    `business_type` VARCHAR(16) NOT NULL COMMENT '类型（UserRoleBusinessTypeEnum）',
-    `sort`          BIGINT UNSIGNED NOT NULL default 0 COMMENT '排序',
-    `create_by`     VARCHAR(32) NOT NULL COMMENT '创建人',
-    `create_time`   BIGINT UNSIGNED NOT NULL COMMENT '创建时间',
-    `update_by`     VARCHAR(32) NOT NULL COMMENT '修改人',
-    `update_time`   BIGINT UNSIGNED NOT NULL COMMENT '更新时间',
+    `id`                    VARCHAR(32) NOT NULL COMMENT 'ID',
+    `user_role_relation_id` VARCHAR(32) NOT NULL COMMENT '用户角色关系ID',
+    `business_id`           VARCHAR(32) NOT NULL COMMENT '业务id',
+    `business_type`         VARCHAR(16) NOT NULL COMMENT '类型（UserRoleBusinessTypeEnum）',
+    `sort`                  BIGINT UNSIGNED NOT NULL default 0 COMMENT '排序',
+    `create_by`             VARCHAR(32) NOT NULL COMMENT '创建人',
+    `create_time`           BIGINT UNSIGNED NOT NULL COMMENT '创建时间',
+    `update_by`             VARCHAR(32) NOT NULL COMMENT '修改人',
+    `update_time`           BIGINT UNSIGNED NOT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_01` (`user_role_id`,`business_id`,`business_type`) USING BTREE,
-    KEY             `idx_02` ( `business_id`,`business_type` ) USING BTREE
+    UNIQUE KEY `uk_01` (`user_role_relation_id`,`business_id`,`business_type`) USING BTREE,
+    KEY                     `idx_01` ( `business_id`,`business_type` ) USING BTREE
 ) COMMENT = '用户角色业务关系表';
 
 DROP TABLE IF EXISTS `t_organization`;
@@ -236,8 +237,8 @@ CREATE TABLE `t_organization`
     KEY           `idx_02` ( `update_time` ) USING BTREE
 ) COMMENT = '组织表';
 
-DROP TABLE IF EXISTS `t_userorganization__relation`;
-CREATE TABLE `t_user_organization__relation`
+DROP TABLE IF EXISTS `t_user_organization_relation`;
+CREATE TABLE `t_user_organization_relation`
 (
     `id`              VARCHAR(32) NOT NULL COMMENT 'ID',
     `user_id`         VARCHAR(32) NOT NULL COMMENT '用户ID',

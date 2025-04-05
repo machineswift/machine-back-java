@@ -15,7 +15,7 @@ public interface IShopOrganizationRelationService {
 
     void bindOrganization(ShopBindOrganizationInputDto inputDto);
 
-    Boolean isAssociationShopByOrganizationIdSet(Set<String> organizationIdSet);
+    Boolean isAssociationShopByOrganizationId(IdRequest request);
 
     List<String> listShopIdByOrganizationIdSet(IdSetRequest request);
 

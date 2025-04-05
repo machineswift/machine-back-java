@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 @Slf4j
 @Service
 public class UserOrganizationRelationServiceImpl implements IUserOrganizationRelationService {
@@ -26,7 +25,7 @@ public class UserOrganizationRelationServiceImpl implements IUserOrganizationRel
 
     @Override
     public Map<String, String> mapLeaderByOrganizationIdSet(IdSetRequest request) {
-        List<UserOrganizationRelationEntity> entityList = userOrganizationRelationDao.mapLeaderByOrganizationIdSet(request.getIdSet());
+        List<UserOrganizationRelationEntity> entityList = userOrganizationRelationDao.listLeaderByOrganizationIdSet(request.getIdSet());
         if (CollectionUtil.isEmpty(entityList)) {
             return Map.of();
         }
@@ -39,11 +38,20 @@ public class UserOrganizationRelationServiceImpl implements IUserOrganizationRel
     }
 
     @Override
-    public IamUserOrganizationRelationOutputDto selectLeaderByOrganizationId(IdRequest request) {
-        UserOrganizationRelationEntity entity = userOrganizationRelationDao.selectLeaderByOrganizationId(request.getId());
+    public IamUserOrganizationRelationOutputDto getLeaderByOrganizationId(IdRequest request) {
+        UserOrganizationRelationEntity entity = userOrganizationRelationDao.getLeaderByOrganizationId(request.getId());
         if (entity == null) {
             return null;
         }
         return JSONUtil.toBean(JSONUtil.toJsonStr(entity), IamUserOrganizationRelationOutputDto.class);
+    }
+
+    @Override
+    public List<IamUserOrganizationRelationOutputDto> listByOrganizationIdSet(IdSetRequest request) {
+        List<UserOrganizationRelationEntity> entityList = userOrganizationRelationDao.listByOrganizationIdSet(request.getIdSet());
+        if (CollectionUtil.isEmpty(entityList)) {
+            return List.of();
+        }
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), IamUserOrganizationRelationOutputDto.class);
     }
 }

@@ -27,9 +27,6 @@ public interface IIamUserClient {
     @PostMapping("create_shop_user")
     String createShopUser(@RequestBody @Validated IamShopUserCreateInputDto inputDto);
 
-    @PostMapping("create_shop_user_4_openapi")
-    String createShopUser4Openapi(@RequestBody @Validated IamShopUserCreate4OpenapiInputDto inputDto);
-
     @PostMapping("create_supplier_user")
     String createSupplierUser(@RequestBody @Validated IamSupplierUserCreateInputDto inputDto);
 
@@ -54,14 +51,11 @@ public interface IIamUserClient {
     @PostMapping("update_shop_user")
     int updateShopUser(@RequestBody @Validated IamShopUserUpdateInputDto inputDto);
 
-    @PostMapping("update_shop_user_role")
-    void updateShopUserRole(@RequestBody @Validated IamShopUserUpdateRoleInputDto inputDto);
-
     @PostMapping("update_supplier_user")
     int updateSupplierUser(@RequestBody @Validated IamSupplierUserUpdateInputDto inputDto);
 
     @PostMapping("update_user_role")
-    int updateUserRole(@RequestBody @Validated IamCompanyUserUpdateInputDto inputDto);
+    void updateUserRole(@RequestBody @Validated IamCompanyUserUpdateInputDto inputDto);
 
     @PostMapping("count_not_bind_Organization")
     int countNotBindOrganization(@RequestBody @Validated DataUserNotBindOrganizationInputDto inputDto);

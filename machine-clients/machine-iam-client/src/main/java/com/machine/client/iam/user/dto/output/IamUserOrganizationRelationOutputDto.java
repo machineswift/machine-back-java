@@ -1,6 +1,5 @@
 package com.machine.client.iam.user.dto.output;
 
-import com.machine.sdk.common.envm.iam.UserDepartmentRelationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

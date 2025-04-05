@@ -16,8 +16,6 @@ public class DataPermissionDto {
 
     private Set<String> shopIdSet;
 
-    private Set<String> projectIdSet;
-
     public DataPermissionDto(DataPermissionResultTypeEnum resultType) {
         this.resultType = resultType;
     }

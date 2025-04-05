@@ -1,8 +1,6 @@
 package com.machine.app.openapi.data.employee.controller.vo.response;
 
 import com.machine.sdk.common.envm.data.ShopEmployeeStatusEnum;
-import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -17,12 +15,6 @@ public class OpenapiShopEmployeeDetailResponseVo {
 
     @Schema(description = "用户Id")
     private String userId;
-
-    @Schema(description = "身份证信息")
-    private IdentityCardDto identityCard;
-
-    @Schema(description = "健康证信息")
-    private HealthCertificateDto healthCertificate;
 
     @Schema(description = "创建时间（Unix 时间戳）")
     private Long createTime;

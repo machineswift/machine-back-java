@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class IamUserRoleInfoUnbindFranchiseeShopInputDto {
+public class IamUserRoleInfoFranchiseeBindShopInputDto {
 
     @NotBlank(message = "用户ID不能为空")
     @Schema(description = "用户ID")
@@ -17,8 +17,8 @@ public class IamUserRoleInfoUnbindFranchiseeShopInputDto {
     @Schema(description = "门店ID")
     private String shopId;
 
-    public IamUserRoleInfoUnbindFranchiseeShopInputDto(String userId,
-                                                       String shopId) {
+    public IamUserRoleInfoFranchiseeBindShopInputDto(String userId,
+                                                     String shopId) {
         this.userId = userId;
         this.shopId = shopId;
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,8 +28,14 @@ public class IamUserOrganizationRelationServer implements IIamUserOrganizationRe
     }
 
     @Override
-    @PostMapping("select_leader_by_organizationId")
-    public IamUserOrganizationRelationOutputDto selectLeaderByOrganizationId(@RequestBody @Validated IdRequest request) {
-        return userOrganizationRelationService.selectLeaderByOrganizationId(request);
+    @PostMapping("get_leader_by_organizationId")
+    public IamUserOrganizationRelationOutputDto getLeaderByOrganizationId(@RequestBody @Validated IdRequest request) {
+        return userOrganizationRelationService.getLeaderByOrganizationId(request);
+    }
+
+    @Override
+    @PostMapping("list_by_organizationIdSet")
+    public List<IamUserOrganizationRelationOutputDto> listByOrganizationIdSet(@RequestBody @Validated IdSetRequest request) {
+        return userOrganizationRelationService.listByOrganizationIdSet(request);
     }
 }

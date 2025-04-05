@@ -3,13 +3,9 @@
 <mapper namespace="com.machine.service.data.shop.dao.mapper.IShopOrganizationRelationMapper">
 
     <select id="isAssociationShop" resultType="java.lang.Boolean">
-        SELECT EXISTS (
-        SELECT 1 FROM t_shop_organization_relation
-        WHERE organization_id in
-        <foreach item="item" collection="organizationIdSet" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
+        SELECT EXISTS (SELECT 1
+                       FROM t_shop_organization_relation
+                       WHERE organization_id = #{organizationId})
     </select>
 
     <select id="listShopIdByOrganizationIdSet" resultType="java.lang.String">

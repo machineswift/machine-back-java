@@ -43,8 +43,5 @@ public class IamCompanyUserCreateInputDto {
      */
     private String description;
 
-    /**
-     * 角色ID集合
-     */
-    private Set<String> roleIdSet;
+
 }

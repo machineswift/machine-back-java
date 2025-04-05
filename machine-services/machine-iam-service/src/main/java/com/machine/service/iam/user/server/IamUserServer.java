@@ -44,13 +44,6 @@ public class IamUserServer implements IIamUserClient {
     }
 
     @Override
-    @PostMapping("create_shop_user_4_openapi")
-    public String createShopUser4Openapi(@RequestBody @Validated IamShopUserCreate4OpenapiInputDto inputDto) {
-        log.info("Openapi创建门店员工，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return userService.createShopUser4Openapi(inputDto);
-    }
-
-    @Override
     @PostMapping("create_supplier_user")
     public String createSupplierUser(IamSupplierUserCreateInputDto inputDto) {
         log.info("创建供应商用户，inputDto={}", JSONUtil.toJsonStr(inputDto));
@@ -107,13 +100,6 @@ public class IamUserServer implements IIamUserClient {
     }
 
     @Override
-    @PostMapping("update_shop_user_role")
-    public void updateShopUserRole(@RequestBody @Validated IamShopUserUpdateRoleInputDto inputDto) {
-        log.info("修改门店用户角色，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        userService.updateShopUserRole(inputDto);
-    }
-
-    @Override
     @PostMapping("update_supplier_user")
     public int updateSupplierUser(@RequestBody @Validated IamSupplierUserUpdateInputDto inputDto) {
         log.info("修改供应商用户，inputDto={}", JSONUtil.toJsonStr(inputDto));
@@ -122,9 +108,9 @@ public class IamUserServer implements IIamUserClient {
 
     @Override
     @PostMapping("update_user_role")
-    public int updateUserRole(@RequestBody @Validated IamCompanyUserUpdateInputDto inputDto) {
+    public void updateUserRole(@RequestBody @Validated IamCompanyUserUpdateInputDto inputDto) {
         log.info("修改用户角色，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return userService.updateUserRole(inputDto);
+        userService.updateUserRole(inputDto);
     }
 
     @Override

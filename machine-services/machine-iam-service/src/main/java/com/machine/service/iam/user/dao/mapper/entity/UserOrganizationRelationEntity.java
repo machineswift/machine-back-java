@@ -2,7 +2,6 @@ package com.machine.service.iam.user.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.iam.UserDepartmentRelationTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,13 +25,6 @@ public class UserOrganizationRelationEntity extends BaseEntity {
      */
     @TableField("organization_id")
     private String organizationId;
-
-    /**
-     * {@link UserDepartmentRelationTypeEnum}
-     */
-    @TableField("type")
-    private UserDepartmentRelationTypeEnum type;
-
 
     /**
      * 排序

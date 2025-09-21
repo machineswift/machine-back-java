@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拓扑图可视化</title>
+    <script src="./echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1621 0%, #1c2331 100%);
+            color: #e9ecef;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            color: #adb5bd;
+            font-size: 1.1rem;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        .chart-container {
+            background: #1e2839;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            height: 700px;
+            position: relative;
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            background: #1e2839;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #4facfe;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #2a3447;
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00f2fe;
+            margin: 5px 0;
+        }
+        .stat-label {
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        button {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        }
+        .node-info {
+            line-height: 1.6;
+        }
+        .node-info div {
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .node-info span:first-child {
+            color: #adb5bd;
+        }
+        .node-info span:last-child {
+            font-weight: 500;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .search-box {
+            background: #2a3447;
+            border: 1px solid #3e4a61;
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: white;
+            width: 200px;
+        }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #4facfe;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        .zoom-controls {
+            position: absolute;
+            right: 30px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2a3447;
+            color: white;
+            border: 1px solid #3e4a61;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .zoom-btn:hover {
+            background: #3e4a61;
+        }
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: #2a3447;
+            color: #adb5bd;
+            border: 1px solid #3e4a61;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .filter-btn.active {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+        .drag-hint {
+            position: absolute;
+            bottom: 70px;
+            right: 30px;
+            background: rgba(46, 50, 65, 0.8);
+            color: #adb5bd;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>拓扑图可视化系统</h1>
+            <p class="subtitle">基于Spring Boot + ECharts的分布式系统拓扑图</p>
+        </header>
+
+        <div class="toolbar">
+            <div class="filter-controls">
+                <button class="filter-btn active" data-type="all">全部节点</button>
+                <button class="filter-btn" data-type="service">服务节点</button>
+                <button class="filter-btn" data-type="database">数据库节点</button>
+                <button class="filter-btn" data-type="gateway">网关节点</button>
+            </div>
+            <div>
+                <input type="text" class="search-box" placeholder="搜索节点..." id="search-input">
+            </div>
+            <div>
+                <button id="export-btn">导出图片</button>
+                <button id="save-layout-btn" style="margin-left: 10px;">保存布局</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="chart-container">
+                <div id="graph-chart" style="width: 100%; height: 100%;"></div>
+                <div id="loading" class="loading">加载中...</div>
+                <div class="drag-hint">
+                    <span>💡</span> 拖拽节点可调整位置
+                </div>
+                <div class="zoom-controls">
+                    <div class="zoom-btn" id="zoom-in">+</div>
+                    <div class="zoom-btn" id="zoom-reset">↺</div>
+                    <div class="zoom-btn" id="zoom-out">-</div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h2>📊 系统概览</h2>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="vertex-count">0</div>
+                            <div class="stat-label">节点数量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="edge-count">0</div>
+                            <div class="stat-label">连接数量</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔍 节点详情</h2>
+                    <div class="node-info" id="node-details">
+                        <div><span>节点名称:</span> <span id="node-name">-</span></div>
+                        <div><span>连接数:</span> <span id="node-degree">-</span></div>
+                        <div><span>状态:</span> <span id="node-status">-</span></div>
+                        <div><span>类型:</span> <span id="node-type">-</span></div>
+                        <div><span>聚类:</span> <span id="node-cluster">-</span></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🎛️ 图操作</h2>
+                    <div class="controls">
+                        <button id="layout-btn">切换布局</button>
+                        <button id="cluster-btn">切换聚类</button>
+                        <button id="reset-btn">重置视图</button>
+                        <button id="refresh-btn">刷新数据</button>
+                        <button id="restore-layout-btn">恢复布局</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📑 图例说明</h2>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #4facfe;"></div>
+                            <span>服务节点</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #00f2fe;"></div>
+                            <span>数据库节点</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #ff6b6b;"></div>
+                            <span>网关节点</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 拓扑图可视化系统 | 基于ECharts实现</p>
+        </footer>
+    </div>
+
+    <script>
+        // 初始化ECharts实例
+        const chartDom = document.getElementById('graph-chart');
+        const myChart = echarts.init(chartDom);
+        const loadingElement = document.getElementById('loading');
+        
+        // 存储原始数据和处理后的数据
+        let originalGraphData = null;
+        let processedNodes = [];
+        let processedLinks = [];
+        let currentLayout = 'force';
+        let enableClustering = true;
+        let currentZoom = 1;
+        let isDragging = false;
+        let savedLayouts = {};
+        
+        // 图表配置选项
+        let option = {
+            title: {
+                text: '系统拓扑图',
+                textStyle: {
+                    color: '#e9ecef'
+                },
+                left: 'center'
+            },
+            tooltip: {
+                formatter: function(params) {
+                    if (params.dataType === 'node') {
+                        return `节点: ${params.name}<br/>连接数: ${params.value}<br/>聚类: ${params.data.cluster || '无'}`;
+                    } else {
+                        return `连接: ${params.data.source} → ${params.data.target}`;
+                    }
+                }
+            },
+            legend: {
+                show: false
+            },
+            animation: true,
+            animationDuration: 1500,
+            animationEasing: 'cubicOut',
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                force: {
+                    repulsion: 300,
+                    gravity: 0.05,
+                    edgeLength: [50, 200],
+                    layoutAnimation: true,
+                    friction: 0.8
+                },
+                data: [],
+                links: [],
+                categories: [{
+                    name: '服务节点'
+                }, {
+                    name: '数据库节点'
+                }, {
+                    name: '网关节点'
+                }],
+                roam: true,
+                zoom: 1,
+                focusNodeAdjacency: true,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}',
+                    color: '#e9ecef',
+                    fontSize: 12
+                },
+                lineStyle: {
+                    color: 'source',
+                    curveness: 0.2,
+                    width: 1.5,
+                    opacity: 0.6
+                },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: {
+                        width: 3,
+                        opacity: 1
+                    }
+                },
+                // 启用节点拖拽
+                draggable: true
+            }]
+        };
+
+        // 设置初始选项
+        myChart.setOption(option);
+
+        // 显示加载状态
+        function showLoading() {
+            loadingElement.style.display = 'block';
+            myChart.showLoading();
+        }
+
+        // 隐藏加载状态
+        function hideLoading() {
+            loadingElement.style.display = 'none';
+            myChart.hideLoading();
+        }
+
+        // 从后端API获取数据
+        async function fetchGraphData() {
+            showLoading();
+            try {
+                // 使用模拟数据，实际应用中替换为真实API调用
+                 const response = await fetch('http://localhost:8080/machine-gateway-server/machine-temp-test/temp/graph/test');
+                 const result = await response.json();
+                
+               
+
+                if (result.code === "SUCCESS") {
+                    originalGraphData = result.data;
+                    processGraphData(originalGraphData);
+                } else {
+                    console.error('API返回错误:', result.message);
+                    alert('获取数据失败: ' + result.message);
+                }
+            } catch (error) {
+                console.error('获取数据失败:', error);
+                alert('获取数据失败，请检查网络连接或API地址是否正确');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 使用社区检测算法进行节点聚类
+        function detectCommunities(nodes, links) {
+            // 简化的Louvain社区检测算法
+            const communities = {};
+            const nodeCommunity = {};
+            
+            // 初始化每个节点为自己的社区
+            nodes.forEach((node, i) => {
+                communities[i] = new Set([node.name]);
+                nodeCommunity[node.name] = i;
+            });
+            
+            // 迭代优化社区分配
+            let changed = true;
+            let iterations = 0;
+            
+            while (changed && iterations < 10) {
+                changed = false;
+                iterations++;
+                
+                nodes.forEach(node => {
+                    const currentCommunity = nodeCommunity[node.name];
+                    const neighborCommunities = new Map();
+                    
+                    // 找到所有邻居节点所在的社区
+                    links.forEach(link => {
+                        if (link.source === node.name) {
+                            const comm = nodeCommunity[link.target];
+                            neighborCommunities.set(comm, (neighborCommunities.get(comm) || 0) + 1);
+                        } else if (link.target === node.name) {
+                            const comm = nodeCommunity[link.source];
+                            neighborCommunities.set(comm, (neighborCommunities.get(comm) || 0) + 1);
+                        }
+                    });
+                    
+                    // 找到连接最紧密的社区
+                    let bestCommunity = currentCommunity;
+                    let maxConnections = -1;
+                    
+                    neighborCommunities.forEach((count, comm) => {
+                        if (count > maxConnections) {
+                            maxConnections = count;
+                            bestCommunity = comm;
+                        }
+                    });
+                    
+                    // 如果找到更好的社区，移动节点
+                    if (bestCommunity !== currentCommunity) {
+                        // 从原社区移除
+                        communities[currentCommunity].delete(node.name);
+                        
+                        // 添加到新社区
+                        communities[bestCommunity].add(node.name);
+                        nodeCommunity[node.name] = bestCommunity;
+                        
+                        changed = true;
+                    }
+                });
+            }
+            
+            // 为每个节点分配社区ID
+            const communityMap = {};
+            let communityId = 1;
+            
+            Object.values(communities).forEach(community => {
+                if (community.size > 0) {
+                    community.forEach(nodeName => {
+                        communityMap[nodeName] = communityId;
+                    });
+                    communityId++;
+                }
+            });
+            
+            return communityMap;
+        }
+
+        // 处理图数据
+        function processGraphData(graphData) {
+            // 更新统计信息
+            document.getElementById('vertex-count').textContent = graphData.vertexCount;
+            document.getElementById('edge-count').textContent = graphData.edgeCount;
+            
+            // 计算每个节点的连接数
+            const nodeDegrees = {};
+            graphData.vertices.forEach(vertex => {
+                nodeDegrees[vertex] = 0;
+            });
+            
+            // 计算每个节点的真实连接数（不考虑双向重复）
+            const uniqueConnections = new Set();
+            
+            graphData.edges.forEach(edge => {
+                const key1 = `${edge.source}-${edge.destination}`;
+                const key2 = `${edge.destination}-${edge.source}`;
+                
+                // 只计算一次连接，避免双向连接重复计数
+                if (!uniqueConnections.has(key1) && !uniqueConnections.has(key2)) {
+                    nodeDegrees[edge.source]++;
+                    nodeDegrees[edge.destination]++;
+                    uniqueConnections.add(key1);
+                }
+            });
+            
+            // 准备节点数据
+            processedNodes = graphData.vertices.map(vertex => {
+                // 根据节点名称分配类型（在实际应用中应根据业务逻辑分配）
+                let category = 0; // 默认服务节点
+                
+                if (vertex >= 'U' && vertex <= 'Z') {
+                    category = 1; // 数据库节点
+                } else if (vertex >= 'A' && vertex <= 'F') {
+                    category = 2; // 网关节点
+                }
+                
+                // 检查是否有保存的位置信息
+                let fixed = false;
+                let x, y;
+                
+                if (savedLayouts[vertex]) {
+                    fixed = true;
+                    x = savedLayouts[vertex].x;
+                    y = savedLayouts[vertex].y;
+                }
+                
+                return {
+                    name: vertex,
+                    value: nodeDegrees[vertex], // 实际连接数
+                    symbolSize: 20 + Math.min(nodeDegrees[vertex] * 3, 40), // 节点大小基于连接数
+                    category: category,
+                    itemStyle: {
+                        color: category === 0 ? '#4facfe' : category === 1 ? '#00f2fe' : '#ff6b6b'
+                    },
+                    fixed: fixed,
+                    x: x,
+                    y: y,
+                    draggable: true
+                };
+            });
+            
+            // 准备边数据 - 去除重复的双向连接
+            processedLinks = [];
+            const addedEdges = new Set();
+            
+            graphData.edges.forEach(edge => {
+                const key1 = `${edge.source}-${edge.destination}`;
+                const key2 = `${edge.destination}-${edge.source}`;
+                
+                // 只添加一次连接，避免双向连接重复显示
+                if (!addedEdges.has(key1) && !addedEdges.has(key2)) {
+                    processedLinks.push({
+                        source: edge.source,
+                        target: edge.destination,
+                        lineStyle: {
+                            color: '#7e8eab',
+                            opacity: 0.6
+                        }
+                    });
+                    addedEdges.add(key1);
+                }
+            });
+            
+            // 应用社区检测算法
+            if (enableClustering) {
+                applyClustering(processedNodes, processedLinks);
+            }
+            
+            // 更新图表
+            updateChart();
+        }
+
+        // 应用聚类算法
+        function applyClustering(nodes, links) {
+            const communityMap = detectCommunities(nodes, links);
+            
+            // 为每个节点添加聚类信息
+            nodes.forEach(node => {
+                node.cluster = communityMap[node.name] || 0;
+                
+                // 根据聚类分配不同的符号和颜色
+                if (node.cluster > 0) {
+                    // 保持原有类别颜色，但添加聚类标识
+                    node.symbol = 'circle';
+                    node.itemStyle = {
+                        ...node.itemStyle,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    };
+                }
+            });
+            
+            // 为同一聚类的边添加相同颜色
+            links.forEach(link => {
+                const sourceCluster = nodes.find(n => n.name === link.source)?.cluster || 0;
+                const targetCluster = nodes.find(n => n.name === link.target)?.cluster || 0;
+                
+                if (sourceCluster === targetCluster && sourceCluster > 0) {
+                    // 同一聚类的边使用相同颜色
+                    const hue = (sourceCluster * 137.5) % 360; // 使用黄金角分布颜色
+                    link.lineStyle = {
+                        color: `hsla(${hue}, 70%, 60%, 0.7)`,
+                        width: 1.5
+                    };
+                } else {
+                    // 跨聚类的边使用灰色
+                    link.lineStyle = {
+                        color: 'rgba(200, 200, 200, 0.3)',
+                        width: 1
+                    };
+                }
+            });
+        }
+
+        // 更新图表显示
+        function updateChart() {
+            myChart.setOption({
+                series: [{
+                    data: processedNodes,
+                    links: processedLinks,
+                    layout: currentLayout,
+                    force: {
+                        repulsion: currentLayout === 'force' ? 300 : 50,
+                        gravity: currentLayout === 'force' ? 0.05 : 0.2
+                    }
+                }]
+            });
+        }
+
+        // 保存当前布局到本地存储
+        function saveLayout() {
+            const currentOption = myChart.getOption();
+            const nodes = currentOption.series[0].data;
+            
+            const layout = {};
+            nodes.forEach(node => {
+                if (node.x !== undefined && node.y !== undefined) {
+                    layout[node.name] = {
+                        x: node.x,
+                        y: node.y
+                    };
+                }
+            });
+            
+            savedLayouts = layout;
+            localStorage.setItem('topologyLayout', JSON.stringify(layout));
+            alert('布局已保存！刷新页面后可使用"恢复布局"功能恢复。');
+        }
+
+        // 从本地存储恢复布局
+        function restoreLayout() {
+            const savedLayout = localStorage.getItem('topologyLayout');
+            if (savedLayout) {
+                try {
+                    savedLayouts = JSON.parse(savedLayout);
+                    if (originalGraphData) {
+                        processGraphData(originalGraphData);
+                    }
+                    alert('布局已恢复！');
+                } catch (e) {
+                    console.error('恢复布局失败:', e);
+                    alert('恢复布局失败，数据格式错误');
+                }
+            } else {
+                alert('没有找到保存的布局');
+            }
+        }
+
+        // 初始化加载数据
+        fetchGraphData();
+
+        // 添加交互事件
+        myChart.on('click', function(params) {
+            if (params.dataType === 'node') {
+                // 更新节点详情信息
+                document.getElementById('node-name').textContent = params.name;
+                document.getElementById('node-degree').textContent = params.value;
+                document.getElementById('node-status').textContent = '正常';
+                document.getElementById('node-type').textContent = 
+                    params.data.category === 0 ? '服务节点' : 
+                    params.data.category === 1 ? '数据库节点' : '网关节点';
+                document.getElementById('node-cluster').textContent = params.data.cluster || '无';
+                
+                // 高亮相关节点和边
+                myChart.dispatchAction({
+                    type: 'focusNodeAdjacency',
+                    seriesIndex: 0,
+                    dataIndex: params.dataIndex
+                });
+            }
+        });
+
+        // 添加节点拖拽事件
+        myChart.on('drag', function(params) {
+            isDragging = true;
+        });
+
+        myChart.on('dragend', function(params) {
+            isDragging = false;
+            // 更新节点位置信息
+            if (params.dataType === 'node') {
+                const nodeIndex = params.dataIndex;
+                processedNodes[nodeIndex].x = params.event.offsetX;
+                processedNodes[nodeIndex].y = params.event.offsetY;
+                processedNodes[nodeIndex].fixed = true;
+            }
+        });
+
+        // 添加按钮事件
+        document.getElementById('layout-btn').addEventListener('click', function() {
+            // 切换布局逻辑
+            currentLayout = currentLayout === 'force' ? 'circular' : 'force';
+            updateChart();
+        });
+
+        document.getElementById('cluster-btn').addEventListener('click', function() {
+            // 切换聚类显示
+            enableClustering = !enableClustering;
+            if (originalGraphData) {
+                processGraphData(originalGraphData);
+            }
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            myChart.dispatchAction({
+                type: 'graphRoam',
+                zoom: 1,
+                originX: 0,
+                originY: 0
+            });
+            currentZoom = 1;
+        });
+
+        document.getElementById('refresh-btn').addEventListener('click', function() {
+            fetchGraphData();
+        });
+
+        document.getElementById('export-btn').addEventListener('click', function() {
+            const imgData = myChart.getDataURL({
+                type: 'png',
+                pixelRatio: 2,
+                backgroundColor: '#1e2839'
+            });
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = '拓扑图.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // 保存布局按钮
+        document.getElementById('save-layout-btn').addEventListener('click', saveLayout);
+
+        // 恢复布局按钮
+        document.getElementById('restore-layout-btn').addEventListener('click', restoreLayout);
+
+        // 缩放控制
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            currentZoom *= 1.2;
+            myChart.dispatchAction({
+                type: 'graphRoam',
+                zoom: currentZoom,
+                originX: 0,
+                originY: 0
+            });
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            currentZoom /= 1.2;
+            myChart.dispatchAction({
+                type: 'graphRoam',
+                zoom: currentZoom,
+                originX: 0,
+                originY: 0
+            });
+        });
+
+        document.getElementById('zoom-reset').addEventListener('click', function() {
+            currentZoom = 1;
+            myChart.dispatchAction({
+                type: 'graphRoam',
+                zoom: currentZoom,
+                originX: 0,
+                originY: 0
+            });
+        });
+
+        // 节点过滤
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filterType = this.dataset.type;
+                let filteredNodes = processedNodes;
+                
+                if (filterType !== 'all') {
+                    const categoryMap = {
+                        'service': 0,
+                        'database': 1,
+                        'gateway': 2
+                    };
+                    
+                    filteredNodes = processedNodes.filter(node => 
+                        node.category === categoryMap[filterType]
+                    );
+                }
+                
+                myChart.setOption({
+                    series: [{
+                        data: filteredNodes
+                    }]
+                });
+            });
+        });
+
+        // 搜索功能
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (!searchTerm) {
+                myChart.setOption({
+                    series: [{
+                        data: processedNodes
+                    }]
+                });
+                return;
+            }
+            
+            const filteredNodes = processedNodes.filter(node => 
+                node.name.toLowerCase().includes(searchTerm)
+            );
+            
+            myChart.setOption({
+                series: [{
+                    data: filteredNodes
+                }]
+            });
+        });
+
+        // 响应窗口大小变化
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+
+        // 页面加载时检查是否有保存的布局
+        window.addEventListener('load', function() {
+            const savedLayout = localStorage.getItem('topologyLayout');
+            if (savedLayout) {
+                try {
+                    savedLayouts = JSON.parse(savedLayout);
+                } catch (e) {
+                    console.error('加载保存的布局失败:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

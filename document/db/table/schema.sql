@@ -1,0 +1,10 @@
+CREATE DATABASE machine_nacos CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_infra CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_camunda CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+CREATE DATABASE machine_iam CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_data CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_hrm CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_crm CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_scm CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_tpp CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;

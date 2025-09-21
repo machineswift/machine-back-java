@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 日志输出格式 -->
+    <property name="log.pattern_console"
+              value="%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %magenta([%thread]) %yellow([%tid]) %highlight([%-5level]) %green([%logger{128}]) -%msg%n"/>
+
+    <property name="log.pattern_grpc"
+              value="【%d{yyyy-MM-dd HH:mm:ss.SSS}】【%thread】【%tid】【%-5level】【%logger{128}】-%msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <Pattern>${log.pattern_console}</Pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出 - 只在需要异步的环境中使用 -->
+    <springProfile name="SIT,TEST,UAT">
+        <appender name="console-async" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>2048</queueSize>
+            <neverBlock>false</neverBlock>
+            <appender-ref ref="console"/>
+        </appender>
+    </springProfile>
+
+    <!-- 使用gRpc将日志发送到skywalking服务端 -->
+    <appender name="grpc-log" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <Pattern>${log.pattern_grpc}</Pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- 本地、开发环境配置 -->
+    <springProfile name="LOCAL,DEV">
+        <root level="INFO">
+            <appender-ref ref="console"/>
+            <appender-ref ref="grpc-log"/>
+        </root>
+        <logger name="com.machine.client" level="DEBUG"/>
+    </springProfile>
+
+    <!-- 内测、测试、预发布环境配置 -->
+    <springProfile name="SIT,TEST,UAT">
+        <root level="INFO">
+            <appender-ref ref="console-async"/>
+            <appender-ref ref="grpc-log"/>
+        </root>
+        <logger name="com.machine.client" level="DEBUG"/>
+    </springProfile>
+
+    <!-- 压测、生产环境配置 -->
+    <springProfile name="PET,SIM,PROD">
+        <root level="INFO">
+            <appender-ref ref="grpc-log"/>
+        </root>
+        <logger name="com.machine.client" level="DEBUG"/>
+    </springProfile>
+</configuration>

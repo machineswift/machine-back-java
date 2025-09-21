@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: ${machine.redis.host}
+      port: ${machine.redis.port}
+      password: ${machine.redis.password}
+      database: ${machine.redis.database:0}
+      timeout: ${machine.redis.timeout:5000}
+
+  redis:
+    host: ${machine.redis.host}
+    port: ${machine.redis.port}
+    password: ${machine.redis.password}
+    database: ${machine.redis.database:0}

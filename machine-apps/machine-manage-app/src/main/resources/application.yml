@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+#  tomcat:
+#    threads:
+#      min-spare: 256
+#      max: 2048
+#    max-connections: 20480
+#    accept-count: 2048
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: machine-manage-app
+  cloud:
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yaml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+  config:
+    import:
+      - nacos:machine.yaml?refreshEnabled=true
+      - nacos:${spring.application.name}.yaml?refreshEnabled=true

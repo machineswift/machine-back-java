@@ -1,0 +1,23 @@
+spring:
+  rabbitmq:
+    host: ${machine.rabbitmq.host}
+    username: ${machine.rabbitmq.username}
+    password: ${machine.rabbitmq.password}
+    port: 5672
+    virtualHost: machine
+  cloud:
+    function:
+      definition: |
+        mqFunction;mqConsumer;
+    stream:
+      bindings:
+        mqProducer:
+          destination: mq-producer-topic
+        mqFunction-in-0:
+          destination: mq-producer-topic
+          group: mq-group
+        mqFunction-out-0:
+          destination: mq-function-topic
+        mqConsumer-in-0:
+          destination: mq-function-topic
+          group: mq-group

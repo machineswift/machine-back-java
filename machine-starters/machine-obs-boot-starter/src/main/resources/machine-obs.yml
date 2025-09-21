@@ -1,0 +1,31 @@
+dromara:
+  x-file-storage:
+    default-platform: minio-1 #默认使用的存储平台
+    thumbnail-suffix: ".min.jpg"
+    minio:
+      - platform: minio-1
+        enable-storage: ${machine.obs.minio-1.enable-storage:true}
+        access-key: ${machine.obs.minio-1.access-key}
+        secret-key: ${machine.obs.minio-1.secret-key}
+        end-point: ${machine.obs.minio-1.end-point}
+        bucket-name: machine
+        domain: ${machine.obs.minio-1.domain}
+        base-path: machine/ # 基础路径
+    huawei-obs:
+      - platform: huawei-obs-1 # 存储平台标识
+        enable-storage: ${machine.obs.huawei-obs-1.enable-storage:false}
+        access-key: ${machine.obs.huawei-obs-1.access-key}
+        secret-key: ${machine.obs.huawei-obs-1.secret-key}
+        end-point: ${machine.obs.huawei-obs-1.end-point}
+        bucket-name: machine
+        domain: ${machine.obs.huawei-obs-1.domain}
+        base-path: machine/ # 基础路径
+    aliyun-oss:
+      - platform: aliyun-oss-1 # 存储平台标识
+        enable-storage: ${machine.obs.aliyun-oss-1.enable-storage:false}
+        access-key: ${machine.obs.aliyun-oss-1.access-key}
+        secret-key: ${machine.obs.aliyun-oss-1.secret-key}
+        end-point: ${machine.obs.aliyun-osss-1.end-point}
+        bucket-name: machine
+        domain: ${machine.obs.aliyun-oss-1.domain}
+        base-path: machine/ # 基础路径

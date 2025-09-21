@@ -1,0 +1,2 @@
+# Nacos 自动配置类
+com.machine.starter.nacos.NacosAutoConfiguration

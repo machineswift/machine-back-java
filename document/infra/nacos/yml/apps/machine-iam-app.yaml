@@ -1,0 +1,13 @@
+auth2:
+  redirectFrontUri: http://localhost:5173/#/auth2/callback
+
+  gitee:
+    clientId: XXX
+    clientSecret: XXX
+    redirectUri: http://localhost:8080/machine-gateway-server/machine-iam-app/iam/auth2/callback/gitee
+
+  feiShu:
+    clientId: XXX
+    clientSecret: XXX
+    redirectUri: http://localhost:8080/machine-gateway-server/machine-iam-app/iam/auth2/callback/fei_shu
+

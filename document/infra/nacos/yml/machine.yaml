@@ -1,0 +1,45 @@
+machine:
+  jwt:
+    secret: XXX
+  datasource:
+    host: 127.0.0.1
+    username: root
+    password: root
+  rabbitmq:
+    host: localhost
+    username: machine
+    password: machine
+  rocketmq:
+    host: localhost
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: redis
+  obs:
+    minio-1:
+      enable-storage: true
+      access-key: root
+      secret-key: root1234
+      end-point: http://localhost:9000
+      domain: http://localhost:9000
+    huawei-obs-1:
+      enable-storage: false
+      access-key: XXX
+      secret-key: XXX
+      end-point: http://XXXXX.XXX.XX
+      domain: http://XXXXX.XXX.XXX
+    aliyun-oss-1:
+      enable-storage: false
+      access-key: XXX
+      secret-key: XXX
+      end-point: http://XXXXX.XXX.XX
+      domain: http://XXXXX.XXX.XXX
+
+beisen:
+  appKey: XXX
+  appSecret: XXX
+
+feiShu:
+  message:
+    appId: XXX
+    appSecret: XXX

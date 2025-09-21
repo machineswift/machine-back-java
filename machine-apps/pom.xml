@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.machine</groupId>
+        <artifactId>machine</artifactId>
+        <version>1.1.0-RELEASE</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>machine-apps</artifactId>
+    <packaging>pom</packaging>
+    <description>app 服务集合</description>
+
+    <modules>
+        <module>machine-iam-app</module>
+        <module>machine-manage-app</module>
+        <module>machine-super-app</module>
+        <module>machine-openapi-app</module>
+        <module>machine-mq-app</module>
+        <module>machine-xxljob-app</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
+</project>

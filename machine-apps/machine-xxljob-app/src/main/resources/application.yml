@@ -1,0 +1,51 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: machine-xxljob-app
+  data:
+    redis:
+      host: ${machine.redis.host}
+      port: ${machine.redis.port}
+      password: ${machine.redis.password}
+      database: ${machine.redis.database:0}
+
+  cloud:
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yaml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+  config:
+    import:
+      - nacos:machine.yaml?refreshEnabled=true
+      - nacos:${spring.application.name}.yaml?refreshEnabled=true
+
+xxl:
+  job:
+    admin:
+      timeout: 3
+      addresses: ${XXL_JOB_ADMIN_ADDRESS}
+    accessToken: default_token
+    executor:
+      appname: machine-xxljob-app
+      # 宿主机的ip
+      ip: ${XXL_JOB_EXECUTOR_HOST_IP}
+      port: 9999
+      # 宿主机的端口
+      address: http://${xxl.job.executor.ip}:${XXL_JOB_EXECUTOR_HOST_PORT}
+      logpath: /Users/machine/data/applogs/xxl-job/jobhandler
+      logretentiondays: 30

@@ -1,0 +1,9 @@
+server:
+  error:
+    include-message: always
+    include-exception: true
+#    include-stacktrace: always
+
+token:
+  private-key-path: "keys/private.key"
+  public-key-path: "keys/public.key"

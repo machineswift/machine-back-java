@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.machine</groupId>
+        <artifactId>machine</artifactId>
+        <version>1.1.0-RELEASE</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>machine-starters</artifactId>
+    <packaging>pom</packaging>
+    <description>starter 集合</description>
+
+    <modules>
+        <module>machine-common-boot-starter</module>
+        <module>machine-nacos-boot-starter</module>
+        <module>machine-security-boot-starter</module>
+        <module>machine-redis-boot-starter</module>
+        <module>machine-mq-boot-starter</module>
+        <module>machine-obs-boot-starter</module>
+        <module>machine-mybatis-boot-starter</module>
+        <module>machine-wechat-boot-starter</module>
+        <module>machine-sdk-boot-starter</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
+</project>

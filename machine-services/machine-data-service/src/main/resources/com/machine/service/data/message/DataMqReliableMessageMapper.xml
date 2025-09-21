@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.machine.service.data.mesage.dao.mapper.DataMqReliableMessageMapper">
+
+    <update id="update4Exception">
+        UPDATE t_data_mq_reliable_message
+        SET resend_times  = resend_times + 1,
+            next_exe_time = GREATEST(next_exe_time, UNIX_TIMESTAMP()*1000) AS max_value  + nextUnixTimestamp,
+            last_consumer_time = UNIX_TIMESTAMP()*1000,
+            update_time  = UNIX_TIMESTAMP()*1000
+        WHERE id = #{id}
+    </update>
+
+    <update id="update4Resend">
+        UPDATE t_data_mq_reliable_message
+        SET resend_times  = resend_times + 1,
+            next_exe_time = GREATEST(next_exe_time, UNIX_TIMESTAMP()*1000) AS max_value + nextUnixTimestamp,
+            update_time   = UNIX_TIMESTAMP()*1000
+        WHERE id = #{id}
+          AND update_time = #{updateTime}
+    </update>
+
+    <select id="contain" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM t_data_mq_reliable_message WHERE id = {id});
+    </select>
+
+    <select id="dynamicSelect" resultType="com.machine.service.data.mesage.dao.mapper.entity.DataMqReliableMessageEntity">
+        SELECT *
+        FROM t_data_mq_reliable_message
+        WHERE next_exe_time &lt; #{unixTimestamp}
+          AND update_time &lt; #{unixTimestamp}
+        ORDER BY next_exe_time LIMIT 50
+    </select>
+
+</mapper>

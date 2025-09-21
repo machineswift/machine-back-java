@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.plugin.xgj.dao.mapper.IXgjUserMapper">
+
+    <select id="listByOffset" resultType="com.machine.service.plugin.xgj.dao.mapper.entity.XgjUserEntity">
+        select u.*
+        from xgj_user u
+        <where>
+            u.dr = 0
+            <if test="offset != null ">
+                AND u.id > #{offset}
+            </if>
+        </where>
+        ORDER BY u.id ASC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.franchisee.dao.mapper.DataFranchiseeMapper">
+
+    <select id="listUserIdByCondition" resultType="java.lang.String">
+        select f.user_id
+        from t_data_franchisee f
+        <where>
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND f.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.data.franchisee.dao.mapper.entity.DataFranchiseeEntity">
+        select f.*
+        from t_data_franchisee f
+        <where>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND f.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY f.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.crm.customer.dao.mapper.CrmCustomerMapper">
+
+    <select id="selectPage" resultType="com.machine.service.crm.customer.dao.mapper.entity.CrmCustomerEntity">
+        select c.*
+        from t_crm_customer c
+        <where>
+            <if test="inputDto.code != null and inputDto.code !=''">
+                AND LOWER(c.code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.identityCardNumber != null and inputDto.identityCardNumber !=''">
+                AND LOWER(c.identity_card_number) LIKE LOWER(CONCAT('%', #{inputDto.identityCardNumber}, '%'))
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND c.create_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND c.create_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY c.create_time DESC
+    </select>
+
+</mapper>

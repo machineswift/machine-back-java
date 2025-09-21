@@ -1,0 +1,136 @@
+package com.machine.sdk.self.envm;
+
+import com.machine.sdk.common.envm.BaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum EventTypeEnum implements BaseEnum<EventTypeEnum, String> {
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////// IAM /////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 组织
+     */
+    IAM_ORGANIZATION_CREATE("IAM_ORGANIZATION_CREATE", "创建组织"),
+    IAM_ORGANIZATION_DELETE("IAM_ORGANIZATION_DELETE", "删除组织"),
+    IAM_ORGANIZATION_UPDATE("IAM_ORGANIZATION_UPDATE", "修改组织"),
+    IAM_ORGANIZATION_UPDATE_PARENT_ID("IAM_ORGANIZATION_UPDATE", "修改父组织ID"),
+
+    /**
+     * 角色
+     */
+    IAM_ROLE_CREATE("IAM_ROLE_CREATE", "创建角色"),
+    IAM_ROLE_DELETE("IAM_ROLE_DELETE", "删除角色"),
+    IAM_ROLE_UPDATE("IAM_ROLE_UPDATE", "修改角色"),
+    IAM_ROLE_UPDATE_STATUS("IAM_ROLE_UPDATE_STATUS", "修改角色状态"),
+
+    /**
+     * 权限
+     */
+    IAM_PERMISSION_CREATE("IAM_PERMISSION_CREATE", "创建权限"),
+    IAM_PERMISSION_DELETE("IAM_PERMISSION_DELETE", "删除权限"),
+    IAM_PERMISSION_UPDATE("IAM_PERMISSION_UPDATE", "修改权限"),
+
+    /**
+     * 用户
+     */
+    IAM_USER_CREATE("IAM_USER_CREATE", "创建用户"),
+    IAM_USER_DELETE("IAM_USER_DELETE", "删除用户"),
+    IAM_USER_UPDATE_STATUS("IAM_USER_UPDATE_STATUS", "修改用户状态"),
+    IAM_USER_UPDATE_PHONE("IAM_USER_UPDATE_PHONE", "修改用户手机号"),
+    IAM_USER_UPDATE_PASSWORD("IAM_USER_UPDATE_PASSWORD", "修改用户密码"),
+    IAM_USER_UPDATE_BASE("IAM_USER_UPDATE_BASE", "修改用户基础信息"),
+
+
+    IAM_USER_UPDATE_ROLE("IAM_USER_UPDATE_ROLE", "修改用户关联角色"),
+    IAM_USER_UPDATE_ORGANIZATION("IAM_USER_UPDATE_ORGANIZATION", "修改用户关联组织"),
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////// DATA /////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 公司员工
+     */
+    DATA_COMPANY_EMPLOYEE_CREATE("DATA_COMPANY_EMPLOYEE_CREATE", "创建公司员工"),
+    DATA_COMPANY_EMPLOYEE_DELETE("DATA_COMPANY_EMPLOYEE_DELETE", "删除公司员工"),
+    DATA_COMPANY_EMPLOYEE_UPDATE_STATUS("DATA_COMPANY_EMPLOYEE_UPDATE_STATUS", "修改公司员工状态"),
+    DATA_COMPANY_EMPLOYEE_UPDATE_BASE("DATA_COMPANY_EMPLOYEE_UPDATE_BASE", "修改公司员工基本信息"),
+
+    /**
+     * 门店员工
+     */
+    DATA_SHOP_EMPLOYEE_CREATE("DATA_SHOP_EMPLOYEE_CREATE", "创建门店员工"),
+    DATA_SHOP_EMPLOYEE_DELETE("DATA_SHOP_EMPLOYEE_DELETE", "删除门店员工"),
+    DATA_SHOP_EMPLOYEE_UPDATE_STATUS("DATA_SHOP_EMPLOYEE_UPDATE_STATUS", "修改门店员工状态"),
+    DATA_SHOP_EMPLOYEE_UPDATE_IDENTITY_CARD("DATA_SHOP_EMPLOYEE_UPDATE_IDENTITY_CARD", "修改门店员身份证"),
+    DATA_SHOP_EMPLOYEE_UPDATE_HEALTH_CERTIFICATE("DATA_SHOP_EMPLOYEE_UPDATE_HEALTH_CERTIFICATE", "修改门店员工健康证"),
+    DATA_SHOP_EMPLOYEE_UPDATE_BASE("DATA_SHOP_EMPLOYEE_UPDATE_BASE", "修改门店员工基本信息"),
+
+    /**
+     * 加盟商
+     */
+    DATA_FRANCHISEE_CREATE("DATA_FRANCHISEE_CREATE", "创建加盟商"),
+    DATA_FRANCHISEE_DELETE("DATA_FRANCHISEE_DELETE", "删除加盟商"),
+    DATA_FRANCHISEE_UPDATE_STATUS("DATA_FRANCHISEE_UPDATE_STATUS", "修改加盟商状态"),
+    DATA_FRANCHISEE_UPDATE_BASE("DATA_FRANCHISEE_UPDATE_BASE", "修改加盟商基础信息"),
+    DATA_FRANCHISEE_UPDATE_IDENTITY_CARD("DATA_FRANCHISEE_UPDATE_IDENTITY_CARD", "修改加盟商身份证"),
+    DATA_FRANCHISEE_UPDATE_HEALTH_CERTIFICATE("DATA_FRANCHISEE_UPDATE_HEALTH_CERTIFICATE", "修改加盟商健康证"),
+    DATA_FRANCHISEE_BIND_SHOP("DATA_FRANCHISEE_BIND_SHOP", "加盟商绑定门店"),
+    DATA_FRANCHISEE_UNBIND_SHOP("DATA_FRANCHISEE_UNBIND_SHOP", "加盟商解绑门店"),
+
+    /**
+     * 供应商
+     */
+    DATA_SUPPLIER_CREATE("DATA_SUPPLIER_CREATE", "创建供应商"),
+    DATA_SUPPLIER_DELETE("DATA_SUPPLIER_DELETE", "删除供应商"),
+    DATA_SUPPLIER_UPDATE_STATUS("DATA_SUPPLIER_UPDATE_STATUS", "修改供应商状态"),
+    DATA_SUPPLIER_UPDATE_BASE("DATA_SUPPLIER_UPDATE_BASE", "修改供应商基础信息"),
+    DATA_SUPPLIER_UPDATE_SUPPLIER_COMPANY("DATA_SUPPLIER_UPDATE_SUPPLIER_COMPANY", "修改供应商关联的公司"),
+
+    /**
+     * 供应商公司
+     */
+    DATA_SUPPLIER_COMPANY_CREATE("DATA_SUPPLIER_COMPANY_CREATE", "创建供应商公司"),
+    DATA_SUPPLIER_COMPANY_DELETE("DATA_SUPPLIER_COMPANY_DELETE", "删除供应商公司"),
+    DATA_SUPPLIER_COMPANY_UPDATE_STATUS("DATA_SUPPLIER_COMPANY_UPDATE_STATUS", "修改供应商公司状态"),
+    DATA_SUPPLIER_COMPANY_UPDATE_BASE("DATA_SUPPLIER_COMPANY_UPDATE_BASE", "修改供应商公司基础信息"),
+
+    /**
+     * 门店标签
+     */
+    DATA_SHOP_LABEL_CREATE("DATA_SHOP_LABEL_CREATE", "创建门店标签"),
+    DATA_SHOP_LABEL_DELETE("DATA_SHOP_LABEL_DELETE", "删除门店标签"),
+    DATA_SHOP_LABEL_UPDATE_BASE("DATA_SHOP_LABEL_UPDATE_BASE", "修改门店标签基本信息"),
+    DATA_SHOP_LABEL_UPDATE_STATUS("DATA_SHOP_LABEL_UPDATE_STATUS", "修改门店标签状态"),
+
+    /**
+     * 门店
+     */
+    DATA_SHOP_CREATE("DATA_SHOP_CREATE", "创建门店"),
+    DATA_SHOP_DELETE("DATA_SHOP_DELETE", "删除门店"),
+    DATA_SHOP_UPDATE("DATA_SHOP_UPDATE", "修改门店"),
+    DATA_SHOP_UPDATE_BUSINESS_STATUS("DATA_SHOP_UPDATE_BUSINESS_STATUS", "修改门店经营状态"),
+    DATA_SHOP_UPDATE_OPERATION_STATUS("DATA_SHOP_UPDATE_OPERATION_STATUS", "修改门店运营状态"),
+    DATA_SHOP_UPDATE_PHYSICAL_STATUS("DATA_SHOP_UPDATE_PHYSICAL_STATUS", "修改门店物理状态"),
+    DATA_SHOP_UPDATE_SHOP_BUSINESS_LICENSE("DATA_SHOP_UPDATE_SHOP_BUSINESS_LICENSE", "修改门店营业执照"),
+    DATA_SHOP_UPDATE_FOOD_BUSINESS_LICENSE("DATA_SHOP_UPDATE_FOOD_BUSINESS_LICENSE", "修改经营许可证"),
+    DATA_SHOP_UPDATE_DISINFECTING_CONTRACT("DATA_SHOP_UPDATE_DISINFECTING_CONTRACT", "修改消杀合同"),
+    DATA_SHOP_UPDATE_SHOP_FRONT_PHOTO("DATA_SHOP_UPDATE_SHOP_FRONT_PHOTO", "修改门头照"),
+    DATA_SHOP_UPDATE_UPDATE_SHOP_LABEL("DATA_SHOP_UPDATE_UPDATE_SHOP_LABEL", "修改门店关联标签"),
+    DATA_SHOP_UPDATE_UPDATE_SHOP_ORGANIZATION("DATA_SHOP_UPDATE_UPDATE_SHOP_ORGANIZATION", "修改门店关联组织"),
+    DATA_SHOP_UPDATE_UNBIND_SHOP_ORGANIZATION("DATA_SHOP_UPDATE_UNBIND_SHOP_ORGANIZATION", "门店解绑组织");
+
+
+
+    private final String code;
+    private final String message;
+
+    @Override
+    public String getName() {
+        return this.name();
+    }
+}

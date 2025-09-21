@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.hrm.jobpost.dao.mapper.IJobPostMapper">
+
+    <select id="selectByRoleId" resultType="com.machine.service.hrm.jobpost.dao.mapper.entity.JobPostEntity">
+        SELECT jp.*
+        FROM t_hrm_job_post jp
+        LEFT JOIN t_hrm_job_post_role_relation jprr ON jprr.job_post_id = jp.id
+        WHERE jprr.role_id = #{roleId}
+        ORDER BY jp.sort
+    </select>
+
+    <select id="pageSimple" resultType="com.machine.service.hrm.jobpost.dao.mapper.entity.JobPostEntity">
+        SELECT jp.*
+        FROM t_hrm_job_post jp
+        <where>
+            <if test="inputDto.status != null ">
+                AND jp.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND jp.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+        </where>
+        ORDER BY jp.sort
+    </select>
+
+</mapper>

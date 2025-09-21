@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.user.dao.mapper.IamUserLoginLogMapper">
+
+    <select id="getLoginSuccessByUserId" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
+        select ull.*
+        from t_iam_user_login_log ull
+        WHERE ull.user_id = #{userId}
+          AND ull.auth_action in ('LOGIN', 'REFRESH_TOKEN')
+          AND ull.auth_result = 'SUCCESS'
+        ORDER BY ull.create_time DESC
+    </select>
+
+    <select id="getLoginSuccessByAccessTokenId" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
+        select ull.* from t_iam_user_login_log ull
+        WHERE ull.access_token_id = #{accessTokenId}
+        AND ull.auth_action in ('LOGIN','REFRESH_TOKEN')
+        AND ull.auth_result = 'SUCCESS'
+        ORDER BY ull.create_time DESC
+    </select>
+
+    <select id="selectAvailableToken" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
+        select
+        `id`,
+        `access_token_id`,
+        `refresh_token_id`,
+        `access_token_expire`,
+        `refresh_token_expire`,
+        `access_token`,
+        `refresh_token`
+        from t_iam_user_login_log ull
+        <where>
+            ull.user_id IN
+            <foreach item="item" collection="inputDto.userIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND (ull.access_token_expire > #{inputDto.currentTimeMillis} OR
+             ull.refresh_token_expire > #{inputDto.currentTimeMillis} )
+        </where>
+        ORDER BY ull.create_time DESC
+    </select>
+
+    <select id="selectPage" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
+        select
+        `id`,
+        `user_id`,
+        `username`,
+        `auth_action`,
+        `auth_method`,
+        `auth_result`,
+        `code`,
+        `phone`,
+        `name`,
+        `ip_address`,
+        `platform`,
+        `user_agent`,
+        `fail_reason`,
+        `description`,
+        `create_by`,
+        `create_time`,
+        `update_by`,
+        `update_time`
+        from t_iam_user_login_log ull
+        <where>
+            <if test="inputDto.userIdSet != null and inputDto.userIdSet.size > 0 ">
+                AND ull.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.authAction != null  ">
+                AND ull.auth_action = #{inputDto.authAction}
+            </if>
+            <if test="inputDto.authMethod != null  ">
+                AND ull.auth_method = #{inputDto.authMethod}
+            </if>
+            <if test="inputDto.authResult != null  ">
+                AND ull.auth_result = #{inputDto.authResult}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND ull.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND ull.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY ull.create_time DESC
+    </select>
+
+</mapper>

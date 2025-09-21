@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.user.dao.mapper.IamUserOrganizationRelationMapper">
+
+    <select id="listUserIdByOrganizationId" resultType="java.lang.Boolean">
+        SELECT EXISTS (SELECT 1
+                       FROM t_iam_user_organization_relation
+                       WHERE organization_id = #{organizationId})
+    </select>
+
+    <select id="listUserIdByOrganizationIdSet" resultType="java.lang.String">
+        SELECT tor.user_id
+        FROM t_iam_user_organization_relation tor
+        WHERE tor.organization_id IN
+        <foreach item="item" collection="organizationIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

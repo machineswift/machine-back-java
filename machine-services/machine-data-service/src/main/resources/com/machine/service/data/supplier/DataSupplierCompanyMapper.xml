@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.supplier.dao.mapper.DataSupplierCompanyMapper">
+
+    <select id="listBySupplierId" resultType="com.machine.service.data.supplier.dao.mapper.entity.DataSupplierCompanyEntity">
+        select sc.*
+        FROM t_data_supplier_company sc
+                 LEFT JOIN t_data_supplier_company_relation scr ON scr.company_id = sc.id
+        WHERE scr.supplier_id = #{supplierId}
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.data.supplier.dao.mapper.entity.DataSupplierCompanyEntity">
+        select sc.*
+        from t_data_supplier_company sc
+        <where>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND sc.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY sc.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+    <select id="pageSample" resultType="com.machine.service.data.supplier.dao.po.DataSupplierCompanySimpleListPo">
+        select
+        `id`,
+        `name`,
+        `status`,
+        `business_category`,
+        `code`,
+        `contact_name`,
+        `contact_phone`
+        from t_data_supplier_company sc
+        <where>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND sc.code = #{inputDto.code}
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND sc.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND sc.status = #{inputDto.status}
+            </if>
+        </where>
+        ORDER BY sc.id DESC
+    </select>
+
+    <select id="pageExpand" resultType="com.machine.service.data.supplier.dao.mapper.entity.DataSupplierCompanyEntity">
+        select sc.* from t_data_supplier_company sc
+        <where>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND sc.code = #{inputDto.code}
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND sc.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND sc.status = #{inputDto.status}
+            </if>
+        </where>
+        ORDER BY sc.id DESC
+    </select>
+
+
+</mapper>

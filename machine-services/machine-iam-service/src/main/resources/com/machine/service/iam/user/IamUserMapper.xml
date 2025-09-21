@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.user.dao.mapper.IamUserMapper">
+
+    <select id="countNotBindOrganization" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM t_iam_user u
+        WHERE u.id NOT IN (SELECT uor.user_id
+                           FROM t_iam_user_organization_relation uor
+                           WHERE uor.organization_type = #{inputDto.organizationType})
+    </select>
+
+    <select id="getByThirdPartyUuid" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.*
+        FROM t_iam_user u
+                 LEFT JOIN t_iam_user_third_party_user_relation utpur ON utpur.user_id = u.id
+                 LEFT JOIN t_iam_third_party_user tpu ON tpu.id = utpur.third_party_user_id
+        WHERE tpu.source = #{source} AND tpu.uuid = #{thirdPartyUuid}
+    </select>
+
+    <select id="listIdByShopIdSet" resultType="java.lang.String">
+        SELECT urr.user_id
+        FROM t_iam_user_role_relation urr
+        LEFT JOIN t_iam_user_role_business_relation urbr ON urbr.user_role_relation_id = urr.id
+        WHERE urbr.business_type = 'SHOP'
+        AND urbr.business_id IN
+        <foreach item="item" collection="shopIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listNotBindOrganization" resultType="java.lang.String">
+        SELECT u.id
+        FROM t_iam_user u
+        WHERE u.id NOT IN (SELECT uor.user_id
+                           FROM t_iam_user_organization_relation uor
+                           WHERE uor.organization_type = #{inputDto.organizationType})
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        select u.*
+        from t_iam_user u
+        <if test="inputDto.userType != null  ">
+            LEFT JOIN t_iam_user_type_relation utr on utr.user_id = u.id
+        </if>
+        <where>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.userType != null  ">
+                AND utr.user_type = #{inputDto.userType}
+            </if>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND u.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY u.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+    <select id="selectPage" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.* FROM t_iam_user u
+        <where>
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.username != null and inputDto.username !='' ">
+                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.gender != null  ">
+                AND u.gender = #{inputDto.gender}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
+
+    <select id="pageCompany" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.* FROM t_iam_user u
+        LEFT JOIN t_iam_user_type_relation utr on utr.user_id = u.id
+        <where>
+            utr.user_type = 'COMPANY'
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.username != null and inputDto.username !='' ">
+                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
+
+    <select id="pageShop" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.* FROM t_iam_user u
+        LEFT JOIN t_iam_user_type_relation utr on utr.user_id = u.id
+        <where>
+            utr.user_type in ('SHOP','FRANCHISEE')
+            AND u.id NOT IN (SELECT user_id FROM t_iam_user_type_relation WHERE user_type = 'COMPANY')
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.username != null and inputDto.username !='' ">
+                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
+
+    <select id="pageSupplier" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.* FROM t_iam_user u
+        LEFT JOIN t_iam_user_type_relation utr on utr.user_id = u.id
+        <where>
+            utr.user_type in ('SUPPLIER')
+            AND u.id NOT IN (SELECT user_id FROM t_iam_user_type_relation WHERE user_type IN
+            ('COMPANY','SHOP','FRANCHISEE'))
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.username != null and inputDto.username !='' ">
+                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
+
+    <select id="listShopUser4Export" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserEntity">
+        SELECT u.* FROM t_iam_user u
+        <where>
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND u.id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.username != null and inputDto.username !='' ">
+                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.status != null  ">
+                AND u.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND u.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND u.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
+</mapper>

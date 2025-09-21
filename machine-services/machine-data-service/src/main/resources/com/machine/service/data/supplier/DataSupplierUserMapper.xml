@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.supplier.dao.mapper.DataSupplierUserMapper">
+
+    <select id="listUserIdByCondition" resultType="java.lang.String">
+        select su.user_id
+        from t_data_supplier_user su
+        <where>
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND su.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.data.supplier.dao.mapper.entity.DataSupplierUserEntity">
+        select su.*
+        from t_data_supplier_user su
+        <where>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND su.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY su.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+</mapper>

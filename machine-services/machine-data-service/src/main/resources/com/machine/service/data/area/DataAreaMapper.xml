@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.area.dao.mapper.DataAreaMapper">
+
+    <update id="updateIdByCode">
+        update t_data_area set id = #{code}
+        WHERE code = #{code}
+    </update>
+
+</mapper>

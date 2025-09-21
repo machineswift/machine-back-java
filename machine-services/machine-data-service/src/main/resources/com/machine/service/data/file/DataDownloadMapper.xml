@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.machine.service.data.file.dao.mapper.DataDownloadEntityMapper">
+
+    <select id="selectPage" resultType="com.machine.service.data.file.dao.mapper.entity.DataDownloadEntity">
+        SELECT d.* FROM t_data_download d
+        <if test="inputDto.fileName != null and inputDto.fileName !='' ">
+            left join t_data_attachment a on a.id = d.attachment_id
+        </if>
+        <where>
+            <if test="inputDto.fileName != null and inputDto.fileName !='' ">
+                AND a.name like CONCAT('%', #{inputDto.fileName}, '%')
+            </if>
+            <if test="inputDto.statusList != null  and inputDto.statusList.size > 0">
+                AND d.status IN
+                <foreach item="item" collection="inputDto.statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.userId != null and inputDto.userId !='' ">
+                AND d.create_id = #{inputDto.userId}
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND d.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND d.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY d.create_time DESC
+    </select>
+
+</mapper>
+

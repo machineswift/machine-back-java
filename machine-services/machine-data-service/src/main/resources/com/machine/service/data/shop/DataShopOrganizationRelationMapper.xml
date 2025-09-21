@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.shop.dao.mapper.DataShopOrganizationRelationMapper">
+
+    <select id="isAssociationShop" resultType="java.lang.Boolean">
+        SELECT EXISTS (SELECT 1
+                       FROM t_data_shop_organization_relation
+                       WHERE organization_id = #{organizationId})
+    </select>
+
+    <select id="listShopIdByOrganizationIdSet" resultType="java.lang.String">
+        SELECT sor.shop_id FROM t_data_shop_organization_relation sor
+        WHERE organization_id in
+        <foreach item="item" collection="organizationIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY sor.shop_id
+    </select>
+
+    <select id="listByCondition"
+            resultType="com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity">
+        SELECT sor.* FROM t_shop_data_organization_relation sor
+        <where>
+            <if test="inputDto.organizationType != null  ">
+                AND sor.organization_type = #{inputDto.organizationType}
+            </if>
+            <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
+                AND sor.shop_id IN
+                <foreach item="item" collection="inputDto.shopIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.organizationIdSet != null  and inputDto.organizationIdSet.size > 0">
+                AND sor.organization_id IN
+                <foreach item="item" collection="inputDto.organizationIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

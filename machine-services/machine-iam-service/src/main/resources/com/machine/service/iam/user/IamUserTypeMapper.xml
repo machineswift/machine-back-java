@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.user.dao.mapper.IamUserTypeMapper">
+
+    <select id="existsType" resultType="java.lang.Boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM t_iam_user_type_relation utr
+        WHERE utr.user_id = #{inputDto.userId}
+        <if test="inputDto.userType != null  ">
+            AND utr.user_type = #{inputDto.userType}
+        </if>
+        <if test="inputDto.userTypeList != null  and inputDto.userTypeList.size > 0">
+            AND utr.user_type IN
+            <foreach item="item" collection="inputDto.userTypeList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        )
+    </select>
+
+</mapper>

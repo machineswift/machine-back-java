@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.role.dao.mapper.IamRoleMapper">
+
+    <select id="listAllCode" resultType="java.lang.String">
+        select r.code
+        from t_iam_role r
+    </select>
+
+    <select id="listSubId" resultType="java.lang.String">
+        select r.id
+        from t_iam_role r
+        where r.parent_id = #{inputDto.id}
+        <if test="inputDto.status != null ">
+            AND r.status = #{inputDto.status}
+        </if>
+    </select>
+
+    <select id="listIdByType" resultType="java.lang.String">
+        select r.id
+        from t_iam_role r
+        where r.type = #{type}
+    </select>
+
+    <select id="listSub" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity">
+        select r.*
+        from t_iam_role r
+        where r.parent_id = #{inputDto.id}
+        <if test="inputDto.status != null ">
+            AND r.status = #{inputDto.status}
+        </if>
+    </select>
+
+    <select id="selectByUserId" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity">
+        SELECT r.*
+        FROM t_iam_role r
+                 LEFT JOIN t_iam_user_role_relation urr ON urr.role_id = r.id
+        WHERE urr.user_id = #{userId}
+        GROUP BY r.id
+    </select>
+
+    <select id="selectPage" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity">
+        select r.*
+        from t_iam_role r
+        <where>
+            <if test="inputDto.type != null ">
+                AND r.type = #{inputDto.type}
+            </if>
+            <if test="inputDto.status != null ">
+                AND r.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.code != null and inputDto.code !=''">
+                AND LOWER(r.code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND r.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
+                AND r.create_by IN
+                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
+                AND r.update_by IN
+                <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND r.create_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND r.create_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND r.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND r.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        ORDER BY r.sort DESC, r.create_time DESC
+    </select>
+
+</mapper>

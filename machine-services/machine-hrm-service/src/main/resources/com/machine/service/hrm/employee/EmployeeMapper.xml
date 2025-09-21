@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.hrm.employee.dao.mapper.IEmployeeMapper">
+
+    <select id="countByDepartmentIds" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM (SELECT DISTINCT e.id
+        FROM t_hrm_employee e
+        WHERE e.department_id in
+        <foreach item="item" collection="departmentIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND e.status NOT IN ('LEFT','PENDING_HIRE') ) t
+    </select>
+
+    <select id="list4Charge" resultType="com.machine.service.hrm.employee.dao.mapper.entity.EmployeeEntity">
+        SELECT e.*
+        FROM t_hrm_employee e
+        WHERE e.department_id = #{departmentId}
+          AND e.is_charge = 1
+          AND e.status NOT IN ('LEFT','PENDING_HIRE')
+    </select>
+
+    <select id="listChargeByDepartmentIdSet"
+            resultType="com.machine.service.hrm.employee.dao.mapper.entity.EmployeeEntity">
+        SELECT e.*
+        FROM t_hrm_employee e
+        WHERE e.department_id in
+        <foreach item="item" collection="departmentIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND e.is_charge = 1
+        AND e.status NOT IN ('LEFT','PENDING_HIRE')
+    </select>
+
+    <select id="list" resultType="com.machine.service.hrm.employee.dao.mapper.entity.EmployeeEntity">
+        SELECT e.*
+        FROM t_hrm_employee e
+        <where>
+            <if test="inputDto.userIdSet != null and inputDto.size > 0">
+                AND e.user_id in
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.departmentIdSet != null and inputDto.departmentIdSet.size > 0">
+                AND e.department_id in
+                <foreach item="item" collection="inputDto.departmentIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.statusSet != null and inputDto.statusSet.size > 0">
+                AND e.status in
+                <foreach item="item" collection="inputDto.statusSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.isCharge != null ">
+                AND e.is_charge = #{inputDto.isCharge}
+            </if>
+            AND e.status NOT IN ('LEFT','PENDING_HIRE')
+        </where>
+    </select>
+
+
+</mapper>

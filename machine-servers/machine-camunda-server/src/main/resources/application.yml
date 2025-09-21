@@ -1,0 +1,46 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: machine-camunda-server
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 4096MB
+  cloud:
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yaml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+  config:
+    import:
+      - nacos:machine.yaml?refreshEnabled=true
+      - nacos:${spring.application.name}.yaml?refreshEnabled=true
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${machine.datasource.host}:3306/machine_camunda?useUnicode=true&autoReconnect=true&allowMultiQueries=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${machine.datasource.username}
+    password: ${machine.datasource.password}
+
+camunda:
+  bpm:
+    admin-user:
+      id: root
+      password: root

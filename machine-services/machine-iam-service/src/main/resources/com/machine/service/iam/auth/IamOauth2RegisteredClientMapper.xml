@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.auth.dao.mapper.IamOauth2RegisteredClientMapper">
+
+    <select id="allClientId" resultType="java.lang.String">
+        SELECT orc.client_id FROM t_iam_oauth2_registered_client orc
+        <where>
+            <if test="status != null ">
+                AND orc.status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

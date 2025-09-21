@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.brand.dao.mapper.DataBrandMapper">
+
+    <select id="selectPage" resultType="com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity">
+        select b.*
+        from t_data_brand b
+        <where>
+            <if test="inputDto.status != null ">
+                AND b.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(b.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND b.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
+                AND b.create_by IN
+                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
+                AND b.update_by IN
+                <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND b.create_time >= #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND b.create_time <![CDATA[ <= ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND b.update_time >= #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND b.update_time <![CDATA[ <= ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        ORDER BY b.create_time DESC
+    </select>
+
+</mapper>

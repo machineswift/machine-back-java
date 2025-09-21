@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.shop.dao.mapper.DataShopLabelOptionRelationMapper">
+
+    <select id="listLabelOptionIdByShopId" resultType="java.lang.String">
+        SELECT slor.label_option_id
+        FROM t_data_shop_label_option_relation slor
+        WHERE slor.shop_id = #{shopId}
+    </select>
+
+    <select id="listShopIdByLabelOptionId" resultType="java.lang.String">
+       SELECT slor.shop_id
+       FROM t_data_shop_label_option_relation slor
+       WHERE slor.label_option_id = #{labelOptionId}
+    </select>
+
+    <select id="listShopIdByLabelOptionIds" resultType="java.lang.String">
+        SELECT slor.shop_id
+        FROM t_data_shop_label_option_relation slor
+        WHERE slor.label_option_id IN
+        <foreach item="item" collection="labelOptionIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="countShopByLabelOptionIds" resultType="com.machine.sdk.common.model.dto.IdCountDto">
+        SELECT count(0) AS count, t.label_option_id as id
+        FROM
+            ( SELECT slor.label_option_id, slor.shop_id
+               FROM t_data_shop_label_option_relation slor
+               LEFT JOIN t_data_shop s ON s.id = slor.shop_id
+                WHERE slor.label_option_id IN
+                <foreach item="item" collection="labelOptionIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            ) t
+        GROUP BY
+            t.label_option_id
+    </select>
+
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.machine.service.data.mesage.dao.mapper.DataAppMessageMapper">
+
+    <update id="disposeMessage">
+        update t_data_app_message set dispose = 1 where batch_code = #{batchCode} and receiver = #{receiver}
+    </update>
+
+    <update id="readMessage">
+        update t_data_app_message set readed = 1 where batch_code = #{batchCode} and receiver = #{receiver}
+    </update>
+
+
+    <select id="managePage" resultType="com.machine.client.data.message.dto.output.AppMessageListOutputDto">
+        SELECT
+            tam.*,
+            tamt.template_category,
+            tamt.template_type
+        FROM
+            t_data_app_message tam
+                LEFT JOIN t_data_app_message_template tamt ON tam.message_template_id = tamt.id
+        WHERE
+            tam.dr = 0 and tamt.dr = 0
+        <if test="inputDto.channel != null">
+            AND tam.channel = #{inputDto.channel}
+        </if>
+        <if test="inputDto.templateType != null">
+            AND tamt.template_type = #{inputDto.templateType}
+        </if>
+        <if test="inputDto.templateCategory != null">
+            AND tamt.template_category = #{inputDto.templateCategory}
+        </if>
+        <if test="inputDto.dispose != null">
+            AND tam.dispose = #{inputDto.dispose}
+        </if>
+        <if test="inputDto.informContent != null and inputDto.informContent !='' ">
+            AND tam.content like CONCAT(CONCAT('%', #{inputDto.informContent}), '%')
+        </if>
+        <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
+            AND tam.update_by IN
+            <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inputDto.updateStartTime != null">
+            and tam.update_time &gt;= #{inputDto.updateStartTime}
+        </if>
+        <if test="inputDto.updateEndTime != null ">
+            and tam.update_time &lt;= #{inputDto.updateEndTime}
+        </if>
+
+    </select>
+
+    <select id="superPage" resultType="com.machine.client.data.message.dto.output.AppMessageListSuperOutputDto">
+        SELECT
+        tam.*,
+        tamt.template_category,
+        tamt.template_type
+        FROM
+        t_app_message tam
+        LEFT JOIN t_app_message_template tamt ON tam.message_template_id = tamt.id
+        WHERE
+        tam.dr = 0 and tamt.dr = 0
+        and tam.receiver = #{inputDto.receiver}
+        <if test="inputDto.channel != null">
+            AND tam.channel = #{inputDto.channel}
+        </if>
+        <if test="inputDto.templateType != null">
+            AND tamt.template_type = #{inputDto.templateType}
+        </if>
+        <if test="inputDto.templateTypeEnums != null and inputDto.templateTypeEnums.size > 0  ">
+            AND tamt.template_type IN
+            <foreach item="item" collection="inputDto.templateTypeEnums" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inputDto.templateCategory != null">
+            AND tamt.template_category = #{inputDto.templateCategory}
+        </if>
+        <if test="inputDto.dispose != null">
+            AND tam.dispose = #{inputDto.dispose}
+        </if>
+        <if test="inputDto.readed != null">
+            AND tam.readed = #{inputDto.readed}
+        </if>
+        <if test="inputDto.informContent != null and inputDto.informContent !='' ">
+            AND tam.content like CONCAT(CONCAT('%', #{request.informContent}), '%')
+        </if>
+        <if test="inputDto.updateStartTime != null">
+            and tam.update_time &gt;= #{inputDto.updateStartTime}
+        </if>
+        <if test="inputDto.updateEndTime != null ">
+            and tam.update_time &lt;= #{inputDto.updateEndTime}
+        </if>
+        order by tam.update_time desc
+    </select>
+
+    <select id="groupCount" resultType="com.machine.client.data.message.dto.output.AppMessageGroupCountOutputDto">
+        WITH RankedMessages AS (
+            SELECT
+                tmt.template_category,
+                am.inform_content,
+                am.update_time,
+                COUNT(am.id) OVER (PARTITION BY tmt.template_category) AS count,
+            ROW_NUMBER() OVER (PARTITION BY tmt.template_category ORDER BY am.update_time DESC) AS rn
+        FROM
+            t_app_message am
+            JOIN
+            t_app_message_template tmt ON am.message_template_id = tmt.id
+        <where>
+            <if test="inputDto.receiver != null and inputDto.receiver !=''">
+                AND am.receiver = #{inputDto.receiver}
+            </if>
+            <if test="inputDto.readed != null">
+                AND am.readed = #{inputDto.readed}
+            </if>
+            <if test="inputDto.channel != null and inputDto.channel !=''">
+                AND am.channel = #{inputDto.channel}
+            </if>
+        </where>
+            )
+        SELECT
+            template_category,
+            inform_content,
+            update_time,
+            count
+        FROM
+            RankedMessages
+        WHERE
+            rn = 1
+        ORDER BY
+            template_category;
+    </select>
+
+    <select id="getUnreadCount" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            t_app_message tam
+                LEFT JOIN t_app_message_template tamt ON tam.message_template_id = tamt.id
+        WHERE
+            tam.dr = 0
+          AND tamt.dr = 0
+          AND tam.readed = 0
+        AND tam.receiver = #{inputDto.receiver}
+        <if test="inputDto.templateCategory != null">
+            AND tamt.template_category = #{inputDto.templateCategory}
+        </if>
+    </select>
+</mapper>

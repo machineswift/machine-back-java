@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.sms.dao.mapper.SmsRecordMapper">
+
+    <select id="countByCondition" resultType="java.lang.Integer">
+        select count(0)
+        from t_data_sms_record sr
+        <where>
+            <if test="inputDto.category != null  ">
+                AND sr.category = #{inputDto.category}
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND sr.code = #{inputDto.code}
+            </if>
+            <if test="inputDto.result != null ">
+                AND sr.result = #{inputDto.result}
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !='' ">
+                AND sr.phone = #{inputDto.phone}
+            </if>
+            <if test="inputDto.startTime != null ">
+                AND sr.create_time >= #{inputDto.startTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

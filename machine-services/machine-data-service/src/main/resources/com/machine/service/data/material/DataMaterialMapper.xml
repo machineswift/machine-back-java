@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.material.dao.mapper.DataMaterialMapper">
+
+    <sql id="selectPageCommonConditions">
+        <if test="inputDto.type != null">
+            AND m.type = #{inputDto.type}
+        </if>
+        <if test="inputDto.status != null">
+            AND m.status = #{inputDto.status}
+        </if>
+        <if test="inputDto.title != null and inputDto.title !=''">
+            AND m.title LIKE CONCAT('%', #{inputDto.title}, '%')
+        </if>
+        <if test="inputDto.name != null and inputDto.name !=''">
+            AND m.name LIKE CONCAT('%', #{inputDto.name}, '%')
+        </if>
+        <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0">
+            AND m.create_by IN
+            <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0">
+            AND m.update_by IN
+            <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inputDto.createStartTime != null">
+            AND m.create_time >= #{inputDto.createStartTime}
+        </if>
+        <if test="inputDto.createEndTime != null">
+            AND m.create_time <![CDATA[ <= ]]> #{inputDto.createEndTime}
+        </if>
+        <if test="inputDto.updateStartTime != null">
+            AND m.update_time >= #{inputDto.updateStartTime}
+        </if>
+        <if test="inputDto.updateEndTime != null">
+            AND m.update_time <![CDATA[ <= ]]> #{inputDto.updateEndTime}
+        </if>
+    </sql>
+
+    <select id="selectPage" resultType="com.machine.service.data.material.dao.mapper.entity.DataMaterialEntity">
+        SELECT t.* FROM (
+        <!-- 查询已分类的素材 -->
+        SELECT m.*
+        FROM t_data_material m
+        <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+            INNER JOIN t_material_category_relation mcr ON mcr.material_id = m.id
+        </if>
+        <where>
+            <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+                AND mcr.category_id IN
+                <foreach item="item" collection="inputDto.categoryIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <include refid="selectPageCommonConditions"/>
+        </where>
+        GROUP BY m.id
+
+        <!-- 当需要包含未分类素材时 -->
+        <if test="inputDto.containVirtualNode != null and inputDto.containVirtualNode">
+            UNION
+
+            <!-- 查询未分类的素材 -->
+            SELECT m.*
+            FROM t_data_material m
+            WHERE NOT EXISTS (
+            SELECT 1 FROM t_material_category_relation mcr
+            WHERE mcr.material_id = m.id
+            )
+            <include refid="selectPageCommonConditions"/>
+        </if>
+        ) t
+        ORDER BY t.update_time DESC
+    </select>
+</mapper>

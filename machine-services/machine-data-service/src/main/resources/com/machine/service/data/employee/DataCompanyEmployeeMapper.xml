@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.employee.dao.mapper.DataCompanyEmployeeMapper">
+
+    <select id="listUserIdByCondition" resultType="java.lang.String">
+        select ce.user_id
+        from t_data_company_employee ce
+        <where>
+            <if test="inputDto.employeeStatus != null  ">
+                AND ce.employee_status = #{inputDto.employeeStatus}
+            </if>
+            <if test="inputDto.userIdSet != null  and inputDto.userIdSet.size > 0">
+                AND ce.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="listByOffset" resultType="com.machine.service.data.employee.dao.mapper.entity.DataCompanyEmployeeEntity">
+        select ce.*
+        from t_data_company_employee ce
+        <where>
+            <if test="inputDto.employeeStatus != null  ">
+                AND ce.employee_status = #{inputDto.employeeStatus}
+            </if>
+            <if test="inputDto.offset != null and inputDto.offset !='' ">
+                AND ce.id > #{inputDto.offset}
+            </if>
+        </where>
+        ORDER BY ce.id ASC
+        LIMIT #{inputDto.size}
+    </select>
+
+</mapper>

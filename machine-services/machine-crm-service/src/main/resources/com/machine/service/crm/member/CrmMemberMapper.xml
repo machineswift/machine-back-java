@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.crm.member.dao.mapper.CrmMemberMapper">
+
+    <select id="selectPage" resultType="com.machine.service.crm.member.dao.mapper.entity.CrmMemberEntity">
+        select m.*
+        from t_crm_member m
+        <where>
+            <if test="inputDto.code != null and inputDto.code !=''">
+                AND LOWER(m.code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.email != null and inputDto.email !=''">
+                AND LOWER(m.email) LIKE LOWER(CONCAT('%', #{inputDto.email}, '%'))
+            </if>
+            <if test="inputDto.phone != null and inputDto.phone !=''">
+                AND LOWER(m.phone) LIKE LOWER(CONCAT('%', #{inputDto.phone}, '%'))
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND m.create_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND m.create_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY m.create_time DESC
+    </select>
+</mapper>

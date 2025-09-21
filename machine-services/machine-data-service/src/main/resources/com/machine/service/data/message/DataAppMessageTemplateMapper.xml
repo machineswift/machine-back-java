@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.machine.service.data.mesage.dao.mapper.DataAppMessageTemplateMapper">
+
+    <select id="page"
+            resultType="com.machine.service.data.mesage.dao.mapper.entity.DataAppMessageTemplateEntity">
+        SELECT
+        *
+        FROM
+        t_data_app_message_template
+        WHERE
+        dr = 0
+        <if test="request.channels != null and request.channels.size > 0">
+            and ( 0 = 1
+            <foreach item="item" collection="request.channels" >
+                or channel like CONCAT('%', #{item}, '%')
+            </foreach>
+            )
+        </if>
+
+        <if test="request.templateType != null">
+            AND template_type = #{request.templateType}
+        </if>
+        <if test="request.templateCategory != null">
+            AND template_category = #{request.templateCategory}
+        </if>
+        <if test="request.status != null">
+            AND status = #{request.status}
+        </if>
+        <if test="request.updateUserIdSet != null and request.updateUserIdSet.size > 0">
+            AND update_by IN
+            <foreach item="item" collection="request.updateUserIdSet" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="request.updateStartTime != null">
+            and update_time &gt;= #{request.updateStartTime}
+        </if>
+        <if test="request.updateEndTime != null ">
+            and update_time &lt;= #{request.updateEndTime}
+        </if>
+    </select>
+</mapper>

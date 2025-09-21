@@ -1,0 +1,103 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  application:
+    name: machine-gateway-server
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: machine-iam-app
+              uri: lb://machine-iam-app
+              predicates:
+                - Path=/machine-gateway-server/machine-iam-app/**
+              filters:
+                - StripPrefix=1
+
+            - id: machine-super-app
+              uri: lb://machine-super-app
+              predicates:
+                - Path=/machine-gateway-server/machine-super-app/**
+              filters:
+                - StripPrefix=1
+
+            - id: machine-openapi-app
+              uri: lb://machine-openapi-app
+              predicates:
+                - Path=/machine-gateway-server/machine-openapi-app/**
+              filters:
+                - StripPrefix=1
+
+            - id: machine-manage-app
+              uri: lb://machine-manage-app
+              predicates:
+                - Path=/machine-gateway-server/machine-manage-app/**
+              filters:
+                - StripPrefix=1
+
+            - id: machine-temp-test
+              uri: lb://machine-temp-test
+              predicates:
+                - Path=/machine-gateway-server/machine-temp-test/**
+              filters:
+                - StripPrefix=1
+
+
+            ########################################################
+            ###################### swagger #########################
+            ########################################################
+
+
+            - id: machine-iam-app_swagger
+              uri: lb://machine-iam-app
+              predicates:
+                - Path=/machine-iam-app/v3/api-docs/**
+
+            - id: machine-super-app_swagger
+              uri: lb://machine-super-app
+              predicates:
+                - Path=/machine-super-app/v3/api-docs/**
+
+            - id: machine-openapi-app_swagger
+              uri: lb://machine-openapi-app
+              predicates:
+                - Path=/machine-openapi-app/v3/api-docs/**
+
+            - id: machine-manage-app_swagger
+              uri: lb://machine-manage-app
+              predicates:
+                - Path=/machine-manage-app/v3/api-docs/**
+
+            - id: machine-xxljob-server
+              uri: lb://machine-xxljob-server
+              predicates:
+                - Path=/machine-xxljob-server/**
+
+            - id: machine-camunda-server
+              uri: lb://machine-camunda-server
+              predicates:
+                - Path=/machine-camunda-server/**
+    nacos:
+      config:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        file-extension: yaml
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+      discovery:
+        server-addr: ${machine.nacos.server-addr}
+        username: ${machine.nacos.username}
+        password: ${machine.nacos.password}
+        namespace: MACHINE_${spring.profiles.active}
+        group: MACHINE_GROUP
+  config:
+    import:
+      - nacos:machine.yaml?refreshEnabled=true
+      - nacos:${spring.application.name}.yaml?refreshEnabled=true

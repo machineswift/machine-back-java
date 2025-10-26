@@ -6,7 +6,7 @@ import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateStatusInputDto;
 import com.machine.client.data.brand.dto.output.DataBrandDetailOutputDto;
 import com.machine.client.data.brand.dto.output.DataBrandListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/brand",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/brand",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataBrandClient {
 
     @PostMapping("create")
@@ -43,3 +43,6 @@ public interface IDataBrandClient {
     Map<String, DataBrandDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
 }
+
+
+

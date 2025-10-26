@@ -1,6 +1,6 @@
 package com.machine.app.manage.crm.member.controller.vo.response;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +31,7 @@ public class CrmMemberExpandListResponseVo {
 
     @NotNull(message = "性别不能为空")
     @Schema(description = "性别（CrmGenderEnum）", requiredMode = Schema.RequiredMode.REQUIRED)
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "生日年")
     private Integer birthYear;

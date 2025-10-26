@@ -4,7 +4,7 @@ import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/shop_organization_relation",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/shop_organization_relation",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataShopOrganizationRelationClient {
 
     @PostMapping("bind_organization")
@@ -64,3 +64,6 @@ public interface IDataShopOrganizationRelationClient {
             @RequestBody @Validated IamOrganizationShopRelationQueryListInputDto inputDto);
 
 }
+
+
+

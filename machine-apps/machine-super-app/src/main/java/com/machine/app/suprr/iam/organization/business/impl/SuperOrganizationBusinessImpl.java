@@ -14,8 +14,8 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelation
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheIamDataPermission;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisCacheIamDataPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -8,7 +8,6 @@ import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.SecurityConstant;
 import com.machine.sdk.common.exception.iam.authentication.JwtTokenBlackException;
-import com.machine.sdk.common.exception.iam.authentication.RefreshTokenUseException;
 import com.machine.starter.security.util.MachineJwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -51,18 +50,11 @@ public class SelfJwtAuthenticationFilter extends OncePerRequestFilter {
             throw new AuthenticationCredentialsNotFoundException("token 为空");
         }
 
-        Claims claim = machineJwtUtil.getClaimsByToken(jwt.substring(SecurityConstant.BEARER_TYPE.length() + 1));
+        Claims claims = machineJwtUtil.getClaimsByToken(jwt.substring(SecurityConstant.BEARER_TYPE.length() + 1));
 
-        if (null != claim.get(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
-            //验证是否是 RefreshToken
-            if (!REFRESH_TOKEN_PATH.equals(request.getRequestURI())) {
-                throw new RefreshTokenUseException("RefreshToken 不能用于访问资源");
-            }
-        }
-
-        AppContext.getContext().setUserId(claim.get(USER_ID_KEY, String.class));
+        AppContext.getContext().setUserId(claims.get(USER_ID_KEY, String.class));
         //验证是否为黑名单
-        if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claim.getId())) {
+        if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claims.getId())) {
             throw new JwtTokenBlackException("登录失效，请重新登录");
         }
 

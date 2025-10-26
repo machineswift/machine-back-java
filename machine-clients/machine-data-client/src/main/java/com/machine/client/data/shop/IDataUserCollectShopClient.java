@@ -3,7 +3,7 @@ package com.machine.client.data.shop;
 import com.machine.client.data.shop.dto.input.DataSuperShopCollectIdInputDto;
 import com.machine.client.data.shop.dto.input.DataSuperShopListCollectShopInputDto;
 import com.machine.client.data.shop.dto.output.DataShopListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/user_collect_shop",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/user_collect_shop",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataUserCollectShopClient {
 
     @PostMapping("collect_shop")
@@ -27,3 +27,6 @@ public interface IDataUserCollectShopClient {
     PageResponse<DataShopListOutputDto> pageCollectShop(@RequestBody @Validated DataSuperShopListCollectShopInputDto inputDto);
 
 }
+
+
+

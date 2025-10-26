@@ -14,7 +14,7 @@ import com.machine.client.data.attachment.dto.input.DataAttachmentCategoryUpdate
 import com.machine.client.data.attachment.dto.output.DataAttachmentCategoryDetailOutputDto;
 import com.machine.client.data.attachment.dto.output.DataAttachmentCategoryTreeSimpleOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.starter.redis.cache.RedisCacheDataAttachmentCategory;
+import com.machine.starter.redis.cache.data.RedisCacheDataAttachmentCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

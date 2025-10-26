@@ -8,6 +8,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.code.kaptcha.Producer;
 import com.machine.app.iam.auth.business.IIamAuthBusiness;
+import com.machine.app.iam.auth.controller.vo.request.IamAuthAccessTokenRequestVo;
 import com.machine.app.iam.auth.controller.vo.request.IamAuthSmsCaptchaRequestVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCaptchaResponseVo;
 import com.machine.client.data.config.IDataIamConfigClient;
@@ -29,10 +30,10 @@ import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.exception.iam.authentication.AuthTokenUseException;
+import com.machine.sdk.common.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.tool.StringUtil;
 import com.machine.starter.redis.function.CustomerRedisCommands;
-import com.machine.starter.security.SecurityConstant;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.MachineJwtUtil;
 import com.machine.starter.security.util.LoginLogUtil;
@@ -45,6 +46,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -237,22 +240,28 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
     }
 
     @Override
-    public IamAuthLoginResponse accessToken(HttpServletRequest request) {
-        String refreshToken = request.getHeader(AUTH_TOKEN_HEADER_KEY).substring(SecurityConstant.BEARER_TYPE.length() + 1);
-        Claims claimFromToken = machineJwtUtil.getClaimsByToken(refreshToken);
-        if (null == claimFromToken.get(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
+    public IamAuthLoginResponse accessToken(IamAuthAccessTokenRequestVo request) {
+        String refreshToken = request.getRefreshToken();
+        Claims claims = machineJwtUtil.getClaimsByToken(refreshToken);
+        if (null == claims.get(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
             throw new AuthTokenUseException("AccessToken不能用于换取Token");
+        }
+
+        AppContext.getContext().setUserId(claims.get(USER_ID_KEY, String.class));
+        //验证是否为黑名单
+        if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claims.getId())) {
+            throw new JwtTokenBlackException("refreshToken失效，请重新登录");
         }
 
         String accessTokenId = UUID.randomUUID().toString().replaceAll("-", "");
         long accessTokenExpire = System.currentTimeMillis() + AUTH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4AuthToken = new HashMap<>();
         claimMap4AuthToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, accessTokenId);
-        claimMap4AuthToken.put(USER_ID_KEY, claimFromToken.get(USER_ID_KEY, String.class));
+        claimMap4AuthToken.put(USER_ID_KEY, claims.get(USER_ID_KEY, String.class));
 
         //生成 jwt token
         String accessToken = machineJwtUtil.generateToken(
-                claimFromToken.getSubject(),
+                claims.getSubject(),
                 claimMap4AuthToken,
                 accessTokenExpire);
 
@@ -263,12 +272,14 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
         inputDto.setAuthMethod(IamAuthMethodEnum.REFRESH_TOKEN);
         inputDto.setAuthResult(IamAuthResultEnum.SUCCESS);
         inputDto.setAccessTokenId(accessTokenId);
-        inputDto.setRefreshTokenId(claimFromToken.getId());
+        inputDto.setRefreshTokenId(claims.getId());
         inputDto.setAccessTokenExpire(accessTokenExpire);
-        inputDto.setRefreshTokenExpire(claimFromToken.getExpiration().getTime());
+        inputDto.setRefreshTokenExpire(claims.getExpiration().getTime());
         inputDto.setAccessToken(accessToken);
         inputDto.setRefreshToken(refreshToken);
-        LoginLogUtil.setUserAgentInfo(request, inputDto);
+
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        LoginLogUtil.setUserAgentInfo(servletRequest, inputDto);
         loginLogClient.create(inputDto);
 
         return new IamAuthLoginResponse(accessToken, accessTokenExpire);

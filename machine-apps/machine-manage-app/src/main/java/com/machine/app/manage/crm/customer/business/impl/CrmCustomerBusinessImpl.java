@@ -3,7 +3,12 @@ package com.machine.app.manage.crm.customer.business.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.manage.crm.customer.business.ICrmCustomerBusiness;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerDetailResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerExpandListResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerListResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerCreateRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerQueryPageRequestVo;
+import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerUpdateRequestVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberDetailResponseVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberExpandListResponseVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberListResponseVo;
@@ -38,7 +43,7 @@ public class CrmCustomerBusinessImpl implements ICrmCustomerBusiness {
     private ICrmCustomerClient crmCustomerClient;
 
     @Override
-    public String create(CrmMemberCreateRequestVo request) {
+    public String create(CrmCustomerCreateRequestVo request) {
         CrmCustomerCreateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), CrmCustomerCreateInputDto.class);
         return crmCustomerClient.create(inputDto);
     }
@@ -49,18 +54,18 @@ public class CrmCustomerBusinessImpl implements ICrmCustomerBusiness {
     }
 
     @Override
-    public void update(CrmMemberUpdateRequestVo request) {
+    public void update(CrmCustomerUpdateRequestVo request) {
         CrmCustomerUpdateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), CrmCustomerUpdateInputDto.class);
         crmCustomerClient.update(inputDto);
     }
 
     @Override
-    public CrmMemberDetailResponseVo detail(IdRequest request) {
+    public CrmCustomerDetailResponseVo detail(IdRequest request) {
         CrmCustomerDetailOutputDto outputDto = crmCustomerClient.detail(request);
         if (null == outputDto) {
             return null;
         }
-        CrmMemberDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), CrmMemberDetailResponseVo.class);
+        CrmCustomerDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), CrmCustomerDetailResponseVo.class);
 
         { //填充修改人创建人信息
             Set<String> userIdSet = new HashSet<>();
@@ -74,7 +79,7 @@ public class CrmCustomerBusinessImpl implements ICrmCustomerBusiness {
     }
 
     @Override
-    public PageResponse<CrmMemberListResponseVo> pageSimple(CrmCustomerQueryPageRequestVo request) {
+    public PageResponse<CrmCustomerListResponseVo> pageSimple(CrmCustomerQueryPageRequestVo request) {
         CrmCustomerQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), CrmCustomerQueryPageInputDto.class);
         PageResponse<CrmCustomerListOutputDto> page = crmCustomerClient.selectPage(inputDto);
 
@@ -86,11 +91,11 @@ public class CrmCustomerBusinessImpl implements ICrmCustomerBusiness {
                 page.getCurrent(),
                 page.getSize(),
                 page.getTotal(),
-                JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), CrmMemberListResponseVo.class));
+                JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), CrmCustomerListResponseVo.class));
     }
 
     @Override
-    public PageResponse<CrmMemberExpandListResponseVo> pageExpand(CrmCustomerQueryPageRequestVo request) {
+    public PageResponse<CrmCustomerExpandListResponseVo> pageExpand(CrmCustomerQueryPageRequestVo request) {
         //查询分页数据
         CrmCustomerQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), CrmCustomerQueryPageInputDto.class);
         PageResponse<CrmCustomerListOutputDto> pageOutput = crmCustomerClient.selectPage(inputDto);
@@ -100,18 +105,18 @@ public class CrmCustomerBusinessImpl implements ICrmCustomerBusiness {
         }
 
         //转化为返回数据
-        PageResponse<CrmMemberExpandListResponseVo> pageResponse = new PageResponse<>(
+        PageResponse<CrmCustomerExpandListResponseVo> pageResponse = new PageResponse<>(
                 pageOutput.getCurrent(),
                 pageOutput.getSize(),
                 pageOutput.getTotal(),
-                JSONUtil.toList(JSONUtil.toJsonStr(pageOutput.getRecords()), CrmMemberExpandListResponseVo.class));
+                JSONUtil.toList(JSONUtil.toJsonStr(pageOutput.getRecords()), CrmCustomerExpandListResponseVo.class));
 
 
         {//创建人、修改人姓名
-            Set<String> userIdSet = pageResponse.getRecords().stream().map(CrmMemberExpandListResponseVo::getCreateBy).collect(Collectors.toSet());
-            userIdSet.addAll(pageResponse.getRecords().stream().map(CrmMemberExpandListResponseVo::getUpdateBy).collect(Collectors.toSet()));
+            Set<String> userIdSet = pageResponse.getRecords().stream().map(CrmCustomerExpandListResponseVo::getCreateBy).collect(Collectors.toSet());
+            userIdSet.addAll(pageResponse.getRecords().stream().map(CrmCustomerExpandListResponseVo::getUpdateBy).collect(Collectors.toSet()));
             Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
-            for (CrmMemberExpandListResponseVo vo : pageResponse.getRecords()) {
+            for (CrmCustomerExpandListResponseVo vo : pageResponse.getRecords()) {
                 vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
                 vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());
             }

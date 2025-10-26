@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-plugin-service
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-plugin-service_master:{{imageVersion}}
+          image: machine-plugin-service_master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

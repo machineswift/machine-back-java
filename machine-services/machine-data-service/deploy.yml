@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-data-service
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-data-service_master:{{imageVersion}}
+          image: machine-data-service_master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

@@ -1,6 +1,6 @@
 package com.machine.client.iam.user.dto.input;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class IamUserCreateInputDto {
     private String phone;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "描述")
     private String description;

@@ -6,7 +6,7 @@ import com.machine.client.data.material.dto.input.DataMaterialQueryPageInputDto;
 import com.machine.client.data.material.dto.input.DataMaterialUpdateInputDto;
 import com.machine.client.data.material.dto.output.DataMaterialDetailOutputDto;
 import com.machine.client.data.material.dto.output.DataMaterialListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/material",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/material",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataMaterialClient {
 
     @PostMapping("create_temporary")
@@ -39,3 +39,6 @@ public interface IDataMaterialClient {
     @PostMapping("select_page")
     PageResponse<DataMaterialListOutputDto> selectPage(@RequestBody @Validated DataMaterialQueryPageInputDto inputDto);
 }
+
+
+

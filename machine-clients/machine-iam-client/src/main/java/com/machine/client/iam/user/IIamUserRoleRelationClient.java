@@ -1,7 +1,7 @@
 package com.machine.client.iam.user;
 
 import com.machine.client.iam.user.dto.output.IamUserRoleRelationListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/user_role_relation",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/user_role_relation",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamUserRoleRelationClient {
 
     @PostMapping("list_by_userId")
@@ -31,3 +31,6 @@ public interface IIamUserRoleRelationClient {
     @PostMapping("countUser_by_roleIdSet")
     Map<String, Integer> countUserByRoleIdSet(@RequestBody @Validated IdSetRequest request);
 }
+
+
+

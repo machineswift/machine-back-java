@@ -4,7 +4,7 @@ import com.machine.client.iam.organization.dto.input.*;
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/organization",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/organization",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamOrganizationClient {
 
     @PostMapping("create")
@@ -36,12 +36,12 @@ public interface IIamOrganizationClient {
     IamOrganizationDetailOutputDto detail(@RequestBody @Validated IdRequest request);
 
     @GetMapping("list_all_by_type")
-    List<IamOrganizationListOutputDto> listAllByType(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType);
+    List<IamOrganizationListOutputDto> listAllByType(@RequestParam("type") IamOrganizationTypeEnum type);
 
-    /**
-     * 区域树
-     */
     @GetMapping("tree_all_simple")
-    IamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType);
+    IamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestParam("type") IamOrganizationTypeEnum type);
 
 }
+
+
+

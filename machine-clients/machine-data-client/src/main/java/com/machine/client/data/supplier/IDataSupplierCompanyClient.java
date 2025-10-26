@@ -4,7 +4,7 @@ import com.machine.client.data.supplier.dto.input.*;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyListOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/supplier_company",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/supplier_company",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataSupplierCompanyClient {
 
     @PostMapping("create")
@@ -51,3 +51,6 @@ public interface IDataSupplierCompanyClient {
     PageResponse<DataSupplierCompanyListOutputDto> pageExpand(@RequestBody @Validated DataSupplierCompanyPageInputDto inputDto);
 
 }
+
+
+

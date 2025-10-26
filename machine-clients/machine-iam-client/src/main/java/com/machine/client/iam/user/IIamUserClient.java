@@ -6,7 +6,8 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.common.annotation.SkipUserIdCheck;
 import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
@@ -19,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/user",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/user",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamUserClient {
 
     @PostMapping("create")
@@ -47,19 +48,23 @@ public interface IIamUserClient {
     @GetMapping("get_by_userId")
     IamUserDto getByUserId(@RequestParam("userId") String userId);
 
+    @SkipUserIdCheck
     @GetMapping("get_by_username")
     IamUserDto getByUserName(@RequestParam("username") String username);
 
+    @SkipUserIdCheck
+    @GetMapping("get_by_phone")
+    IamUserDto getByPhone(@RequestParam("phone") String phone);
+
+    @SkipUserIdCheck
     @GetMapping("get_by_thirdPartyUuid")
     IamUserDto getByThirdPartyUuid(@RequestParam("source") IamAuth2SourceEnum source,
                                    @RequestParam("thirdPartyUuid") String thirdPartyUuid);
 
-    @GetMapping("get_by_phone")
-    IamUserDto getByPhone(@RequestParam("phone") String phone);
-
     @PostMapping("detail")
     IamUserDetailOutputDto detail(@RequestBody @Validated IdRequest request);
 
+    @SkipUserIdCheck
     @PostMapping("detail_auth")
     IamUserAuthDetailOutputDto detailAuth(@RequestBody @Validated IdRequest request);
 

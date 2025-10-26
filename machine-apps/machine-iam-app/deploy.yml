@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-iam-app
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-iam-app-master:{{imageVersion}}
+          image: machine-iam-app-master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

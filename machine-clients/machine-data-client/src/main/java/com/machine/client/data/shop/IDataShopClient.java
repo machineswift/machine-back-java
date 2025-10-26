@@ -2,7 +2,7 @@ package com.machine.client.data.shop;
 
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/shop",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/shop",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataShopClient {
 
     @PostMapping("create")

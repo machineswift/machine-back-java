@@ -3,7 +3,7 @@ package com.machine.client.data.file;
 import com.machine.client.data.file.dto.input.*;
 import com.machine.client.data.file.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.file.dto.output.DataDownloadListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/download_file",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/download_file",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataDownloadClient {
 
     @PostMapping("create_task")
@@ -36,3 +36,5 @@ public interface IDataDownloadClient {
     @PostMapping("select_page")
     PageResponse<DataDownloadListOutputDto> selectPage(@RequestBody @Validated DataDownloadQueryPageInputDto inputDto);
 }
+
+

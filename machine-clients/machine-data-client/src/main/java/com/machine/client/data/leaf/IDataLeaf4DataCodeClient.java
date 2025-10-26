@@ -1,11 +1,11 @@
 package com.machine.client.data.leaf;
 
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/leaf_4_data",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/leaf_4_data",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataLeaf4DataCodeClient {
 
     /**
@@ -13,7 +13,6 @@ public interface IDataLeaf4DataCodeClient {
      */
     @GetMapping("brand_code")
     String brandCode();
-
 
     /**
      * 素材分类编码
@@ -26,6 +25,12 @@ public interface IDataLeaf4DataCodeClient {
      */
     @GetMapping("attachment_category_code")
     String attachmentCategoryCode();
+
+    /**
+     * 智能标签分类编码
+     */
+    @GetMapping("tag_category_code")
+    String tagCategoryCode();
 
     /**
      * 门店编码
@@ -45,4 +50,13 @@ public interface IDataLeaf4DataCodeClient {
     @GetMapping("supplier_company_code")
     String supplierCompanyCode();
 
+    /**
+     * 标签编码
+     */
+    @GetMapping("tag_code")
+    String tagCode();
+
 }
+
+
+

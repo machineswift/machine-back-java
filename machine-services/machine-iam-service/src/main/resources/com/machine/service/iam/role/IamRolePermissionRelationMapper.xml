@@ -5,7 +5,7 @@
     <select id="selectByPermissionCode" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRolePermissionRelationEntity">
         SELECT rpr.* FROM t_iam_role_permission_relation rpr
                               LEFT JOIN t_iam_permission p ON p.id = rpr.permission_id
-        WHERE p.`code` = #{permissionCode}
+        WHERE p.code = #{permissionCode}
     </select>
 
 </mapper>

@@ -31,16 +31,16 @@ public class CommonIamConstant {
         /**
          * 根组织父Id
          */
-        public static final String ORGANIZATION_ROOT_PARENT_ID = "root";
+        public static final String DATA_ORGANIZATION_ROOT_PARENT_ID = "root";
 
         /**
          * 虚拟组织Id【未分配】
          */
-        public static final String ORGANIZATION_VIRTUAL_NODE = "organization_virtual_node";
+        public static final String DATA_ORGANIZATION_VIRTUAL_NODE = "organization_virtual_node";
 
         /**
          * 虚拟组织名称【未分配】
          */
-        public static final String ORGANIZATION_VIRTUAL_NODE_NAME = "未分配";
+        public static final String DATA_ORGANIZATION_VIRTUAL_NODE_NAME = "未分配";
     }
 }

@@ -1,7 +1,7 @@
 package com.machine.client.iam.user.dto.input;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class IamUserQueryPageInputDto extends PageRequest {
     private String phone;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "用户ID集合")
     private Set<String> userIdSet;

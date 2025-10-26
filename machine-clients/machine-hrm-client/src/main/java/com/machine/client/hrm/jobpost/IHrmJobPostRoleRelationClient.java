@@ -2,7 +2,7 @@ package com.machine.client.hrm.jobpost;
 
 import com.machine.client.hrm.jobpost.dto.input.HrmJobPosRoleRelationBatchInsertInputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostRoleRelationListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "machine-hrm-service/machine-hrm-service/server/hrm/job_post_role_relation", configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-hrm-service", path = "machine-hrm-service/server/hrm/job_post_role_relation",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IHrmJobPostRoleRelationClient {
 
     @PostMapping("batch_create")
@@ -27,3 +28,6 @@ public interface IHrmJobPostRoleRelationClient {
     @PostMapping("list_by_jobPostIds")
     List<HrmJobPostRoleRelationListOutputDto> listByJobPostIds(@RequestBody @Validated IdSetRequest request);
 }
+
+
+

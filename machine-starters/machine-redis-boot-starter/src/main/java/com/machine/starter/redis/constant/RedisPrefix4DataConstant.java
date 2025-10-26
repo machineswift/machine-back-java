@@ -70,4 +70,18 @@ public class RedisPrefix4DataConstant {
          */
         public static final String DATA_ATTACHMENT_CATEGORY_TREE_DATA = "data:attachmentCategory:tree:data:";
     }
+
+
+    public static class TagCategory {
+
+        /**
+         * 智能标签分类 key
+         */
+        public static final String DATA_TAG_CATEGORY_TREE_KEY = "data:tagCategory:tree:key:";
+
+        /**
+         * 智能标签分类 数据
+         */
+        public static final String DATA_TAG_CATEGORY_TREE_DATA = "data:tagCategory:tree:data:";
+    }
 }

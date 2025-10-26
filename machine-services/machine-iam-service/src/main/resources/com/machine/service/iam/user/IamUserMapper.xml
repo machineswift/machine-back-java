@@ -98,7 +98,6 @@
                 AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
             </if>
         </where>
-        GROUP BY u.id
         ORDER BY u.create_time DESC
     </select>
 
@@ -141,7 +140,6 @@
                 AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
             </if>
         </where>
-        GROUP BY u.id
         ORDER BY u.create_time DESC
     </select>
 
@@ -185,7 +183,6 @@
                 AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
             </if>
         </where>
-        GROUP BY u.id
         ORDER BY u.create_time DESC
     </select>
 
@@ -271,7 +268,6 @@
                 AND u.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
             </if>
         </where>
-        GROUP BY u.id
         ORDER BY u.create_time DESC
     </select>
 </mapper>

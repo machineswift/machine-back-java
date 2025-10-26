@@ -18,7 +18,7 @@ import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.client.iam.userbk.dto.input.*;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
@@ -229,7 +229,7 @@ public class UserBkServiceImpl implements IUserBkService {
             insertEntity.setPassword(StringUtil.generatePassword());
             insertEntity.setPhone(inputDto.getPhone());
             insertEntity.setName(inputDto.getName());
-            insertEntity.setGender(CrmGenderEnum.UNDEFINED);
+            insertEntity.setGender(GenderEnum.UNDEFINED);
             String userId = userDao.insert(insertEntity);
 
             //添加身份

@@ -34,6 +34,22 @@ machine:
       secret-key: XXX
       end-point: http://XXXXX.XXX.XX
       domain: http://XXXXX.XXX.XXX
+  ai:
+    deepseek:
+      api-key: XXXXXX
+      chat:
+        options:
+          model: deepseek-chat
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: deepseek-r1:8b
+    dashscope:
+      api-key: XXXXXX
+      chat:
+        options:
+          model: qwen-plus
 
 beisen:
   appKey: XXX

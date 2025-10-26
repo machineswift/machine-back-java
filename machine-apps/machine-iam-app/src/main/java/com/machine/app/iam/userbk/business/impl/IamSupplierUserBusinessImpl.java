@@ -27,7 +27,7 @@ import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.machine.service.crm.customer.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,6 +36,6 @@ public class CrmCustomerEntity extends BaseEntity {
      * 性别
      */
     @TableField("gender")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
 }

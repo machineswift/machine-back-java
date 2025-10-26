@@ -26,7 +26,7 @@ import com.machine.service.iam.role.dao.mapper.entity.IamRolePermissionRelationE
 import com.machine.service.iam.role.service.IIamRoleService;
 import com.machine.service.iam.user.dao.IIamUserRoleRelationDao;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
-import com.machine.starter.redis.cache.RedisCacheIamPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -22,12 +22,6 @@
 
         <dependency>
             <groupId>com.machine</groupId>
-            <artifactId>machine-sdk-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.machine</groupId>
             <artifactId>machine-common-sdk</artifactId>
             <version>${project.version}</version>
         </dependency>

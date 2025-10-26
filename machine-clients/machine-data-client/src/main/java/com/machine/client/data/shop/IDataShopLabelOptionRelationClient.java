@@ -1,6 +1,6 @@
 package com.machine.client.data.shop;
 
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/shop_label_option_relation",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/shop_label_option_relation",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataShopLabelOptionRelationClient {
 
     @PostMapping("list_label_optionId_by_shopId")
@@ -38,3 +38,6 @@ public interface IDataShopLabelOptionRelationClient {
     Map<String, List<String>> mapLabelOptionIdByShopIds(@RequestBody @Validated IdSetRequest request);
 
 }
+
+
+

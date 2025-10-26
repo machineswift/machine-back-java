@@ -5,7 +5,7 @@ import com.machine.client.crm.customer.dto.input.CrmCustomerQueryPageInputDto;
 import com.machine.client.crm.customer.dto.input.CrmCustomerUpdateInputDto;
 import com.machine.client.crm.customer.dto.output.CrmCustomerDetailOutputDto;
 import com.machine.client.crm.customer.dto.output.CrmCustomerListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,8 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "machine-crm-service/machine-crm-service/server/crm/customer",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-crm-service",  path = "machine-crm-service/server/crm/customer",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface ICrmCustomerClient {
 
     @PostMapping("create")
@@ -32,3 +32,6 @@ public interface ICrmCustomerClient {
     @PostMapping("select_page")
     PageResponse<CrmCustomerListOutputDto> selectPage(@RequestBody @Validated CrmCustomerQueryPageInputDto inputDto);
 }
+
+
+

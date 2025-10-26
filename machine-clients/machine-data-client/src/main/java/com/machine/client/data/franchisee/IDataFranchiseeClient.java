@@ -6,7 +6,7 @@ import com.machine.client.data.franchisee.dto.output.DataFranchiseeListOutputDto
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeIdentityCardOutputDto;
 import com.machine.client.data.supplier.dto.input.DataFranchiseeListUserIdInputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/franchisee",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/franchisee",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataFranchiseeClient {
 
     @PostMapping("create")
@@ -57,3 +57,6 @@ public interface IDataFranchiseeClient {
     List<DataFranchiseeListOutputDto> listByOffset(@RequestBody @Validated DataFranchiseeQueryListOffsetInputDto inputDto);
 
 }
+
+
+

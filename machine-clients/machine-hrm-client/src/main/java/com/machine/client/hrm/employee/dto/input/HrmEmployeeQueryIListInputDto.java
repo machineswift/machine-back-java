@@ -1,6 +1,6 @@
 package com.machine.client.hrm.employee.dto.input;
 
-import com.machine.sdk.beisen.envm.BeiSenEmployeeStatusEnum;
+import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +24,7 @@ public class HrmEmployeeQueryIListInputDto {
     /**
      * 状态集合
      */
-    private Set<BeiSenEmployeeStatusEnum> statusSet;
+    private Set<HrmEmployeeStatusEnum> statusSet;
 
     /**
      * 是否是部门负责人
@@ -36,14 +36,8 @@ public class HrmEmployeeQueryIListInputDto {
                                          boolean onJob) {
         this.userIdSet = userIdSet;
         if (onJob) {
-            Set<BeiSenEmployeeStatusEnum> statusSet = new HashSet<>();
-            statusSet.add(BeiSenEmployeeStatusEnum.PENDING_HIRE);
-            statusSet.add(BeiSenEmployeeStatusEnum.PROBATION);
-            statusSet.add(BeiSenEmployeeStatusEnum.FULL_TIME);
-            statusSet.add(BeiSenEmployeeStatusEnum.TRANSFER_OUT);
-            statusSet.add(BeiSenEmployeeStatusEnum.PENDING_TRANSFER_IN);
-            statusSet.add(BeiSenEmployeeStatusEnum.RETIRED);
-            statusSet.add(BeiSenEmployeeStatusEnum.INFORMAL);
+            Set<HrmEmployeeStatusEnum> statusSet = new HashSet<>();
+            statusSet.add(HrmEmployeeStatusEnum.FULL_TIME);
             this.statusSet = statusSet;
         }
     }
@@ -54,14 +48,8 @@ public class HrmEmployeeQueryIListInputDto {
         this.departmentIdSet = departmentIdSet;
         this.isCharge = isCharge;
         if (onJob) {
-            Set<BeiSenEmployeeStatusEnum> statusSet = new HashSet<>();
-            statusSet.add(BeiSenEmployeeStatusEnum.PENDING_HIRE);
-            statusSet.add(BeiSenEmployeeStatusEnum.PROBATION);
-            statusSet.add(BeiSenEmployeeStatusEnum.FULL_TIME);
-            statusSet.add(BeiSenEmployeeStatusEnum.TRANSFER_OUT);
-            statusSet.add(BeiSenEmployeeStatusEnum.PENDING_TRANSFER_IN);
-            statusSet.add(BeiSenEmployeeStatusEnum.RETIRED);
-            statusSet.add(BeiSenEmployeeStatusEnum.INFORMAL);
+            Set<HrmEmployeeStatusEnum> statusSet = new HashSet<>();
+            statusSet.add(HrmEmployeeStatusEnum.FULL_TIME);
             this.statusSet = statusSet;
         }
     }

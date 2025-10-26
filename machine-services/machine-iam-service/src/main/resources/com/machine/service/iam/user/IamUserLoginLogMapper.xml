@@ -21,13 +21,13 @@
 
     <select id="selectAvailableToken" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
         select
-        `id`,
-        `access_token_id`,
-        `refresh_token_id`,
-        `access_token_expire`,
-        `refresh_token_expire`,
-        `access_token`,
-        `refresh_token`
+        id,
+        access_token_id,
+        refresh_token_id,
+        access_token_expire,
+        refresh_token_expire,
+        access_token,
+        refresh_token
         from t_iam_user_login_log ull
         <where>
             ull.user_id IN
@@ -42,24 +42,24 @@
 
     <select id="selectPage" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">
         select
-        `id`,
-        `user_id`,
-        `username`,
-        `auth_action`,
-        `auth_method`,
-        `auth_result`,
-        `code`,
-        `phone`,
-        `name`,
-        `ip_address`,
-        `platform`,
-        `user_agent`,
-        `fail_reason`,
-        `description`,
-        `create_by`,
-        `create_time`,
-        `update_by`,
-        `update_time`
+        id,
+        user_id,
+        username,
+        auth_action,
+        auth_method,
+        auth_result,
+        code,
+        phone,
+        name,
+        ip_address,
+        platform,
+        user_agent,
+        fail_reason,
+        description,
+        create_by,
+        create_time,
+        update_by,
+        update_time
         from t_iam_user_login_log ull
         <where>
             <if test="inputDto.userIdSet != null and inputDto.userIdSet.size > 0 ">

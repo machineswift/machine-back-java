@@ -1,13 +1,14 @@
 package com.machine.client.data.leaf;
 
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/leaf_4_redis",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/leaf_4_redis",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataLeaf4RedisClient {
 
     /**
@@ -58,5 +59,14 @@ public interface IDataLeaf4RedisClient {
      * 组织树数据的redis动态key
      */
     @GetMapping("data_organization_tree")
-    String dataOrganizationTree(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType);
+    String dataOrganizationTree(@RequestParam("type") IamOrganizationTypeEnum type);
+
+    /**
+     * 智能标签分类树数据的redis动态key
+     */
+    @GetMapping("data_tag_category_tree")
+    String dataTagCategoryTree(@RequestParam("type") ProfileSubjectTypeEnum type);
 }
+
+
+

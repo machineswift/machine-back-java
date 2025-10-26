@@ -3,7 +3,7 @@ package com.machine.client.iam.role;
 import com.machine.client.iam.role.dto.input.*;
 import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.role.dto.output.IamRoleListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/role", configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/role",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamRoleClient {
 
     @PostMapping("create")
@@ -52,3 +53,6 @@ public interface IIamRoleClient {
     Map<String, IamRoleDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
 }
+
+
+

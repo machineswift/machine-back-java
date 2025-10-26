@@ -23,8 +23,8 @@ public interface IIamOrganizationService {
 
     IamOrganizationDetailOutputDto detail(IdRequest request);
 
-    List<IamOrganizationListOutputDto> listAllByType(IamOrganizationTypeEnum organizationType);
+    List<IamOrganizationListOutputDto> listAllByType(IamOrganizationTypeEnum type);
 
-    IamOrganizationTreeSimpleOutputDto treeAllSimple(IamOrganizationTypeEnum organizationType);
+    IamOrganizationTreeSimpleOutputDto treeAllSimple(IamOrganizationTypeEnum type);
 
 }

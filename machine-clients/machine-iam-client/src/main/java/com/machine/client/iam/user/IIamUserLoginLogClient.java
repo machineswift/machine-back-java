@@ -6,7 +6,7 @@ import com.machine.client.iam.user.dto.input.IamUserLoginLogQueryPageInputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogAvailableOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogDetailOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/user_login_log",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/user_login_log",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamUserLoginLogClient {
 
     @PostMapping("create")
@@ -41,3 +41,6 @@ public interface IIamUserLoginLogClient {
     PageResponse<IamUserLoginLogListOutputDto> page(@RequestBody @Validated IamUserLoginLogQueryPageInputDto inputDto);
 
 }
+
+
+

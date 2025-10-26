@@ -1,13 +1,12 @@
 package com.machine.sdk.beisen.envm;
 
 import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.envm.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum BeiSenJobPostStatusEnum implements BaseEnum<StatusEnum, String> {
+public enum BeiSenJobPostStatusEnum implements BaseEnum<BeiSenJobPostStatusEnum, String> {
     DISABLE("0", "停用"),
     ENABLE("1", "启用");
 

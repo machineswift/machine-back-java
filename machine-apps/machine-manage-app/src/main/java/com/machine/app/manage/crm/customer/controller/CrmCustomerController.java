@@ -2,7 +2,12 @@ package com.machine.app.manage.crm.customer.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.machine.app.manage.crm.customer.business.ICrmCustomerBusiness;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerDetailResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerExpandListResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerListResponseVo;
+import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerCreateRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerQueryPageRequestVo;
+import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerUpdateRequestVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberDetailResponseVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberExpandListResponseVo;
 import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberListResponseVo;
@@ -33,15 +38,15 @@ public class CrmCustomerController {
 
     @Operation(summary = "创建客户")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:CREATE')")
-    public IdResponse<String> create(@RequestBody @Validated CrmMemberCreateRequestVo request) {
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:CREATE')")
+    public IdResponse<String> create(@RequestBody @Validated CrmCustomerCreateRequestVo request) {
         log.info("创建客户，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(crmCustomerBusiness.create(request));
     }
 
     @Operation(summary = "删除客户")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:DELETE')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.delete(request);
@@ -49,30 +54,30 @@ public class CrmCustomerController {
 
     @Operation(summary = "修改客户")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:UPDATE')")
-    public void update(@RequestBody @Validated CrmMemberUpdateRequestVo request) {
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:UPDATE')")
+    public void update(@RequestBody @Validated CrmCustomerUpdateRequestVo request) {
         log.info("修改客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.update(request);
     }
 
     @Operation(summary = "客户详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:DETAIL')")
-    public CrmMemberDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:DETAIL')")
+    public CrmCustomerDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return crmCustomerBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询客户(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:PAGE_SIMPLE')")
-    public PageResponse<CrmMemberListResponseVo> pageSimple(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:PAGE_SIMPLE')")
+    public PageResponse<CrmCustomerListResponseVo> pageSimple(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
         return crmCustomerBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询客户(应用于客户管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('CRM:SALES:CUSTOMER:PAGE_EXPAND')")
-    public PageResponse<CrmMemberExpandListResponseVo> pageExpand(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:PAGE_EXPAND')")
+    public PageResponse<CrmCustomerExpandListResponseVo> pageExpand(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
         return crmCustomerBusiness.pageExpand(request);
     }
 }

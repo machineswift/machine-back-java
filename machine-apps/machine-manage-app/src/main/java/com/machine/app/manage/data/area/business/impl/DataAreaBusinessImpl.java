@@ -20,7 +20,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheDataArea;
+import com.machine.starter.redis.cache.data.RedisCacheDataArea;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

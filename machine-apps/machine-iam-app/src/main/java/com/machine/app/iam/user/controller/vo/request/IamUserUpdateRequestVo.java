@@ -1,13 +1,10 @@
 package com.machine.app.iam.user.controller.vo.request;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Schema
@@ -27,7 +24,7 @@ public class IamUserUpdateRequestVo {
     private String name;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "描述")
     private String description;

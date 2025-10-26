@@ -1,6 +1,6 @@
 package com.machine.app.iam.userbk.vo.request;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class IamSupplierUserCreateRequestVo {
     private String phone;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "归属公司Id集合")
     private LinkedHashSet<String> companyIdSet;

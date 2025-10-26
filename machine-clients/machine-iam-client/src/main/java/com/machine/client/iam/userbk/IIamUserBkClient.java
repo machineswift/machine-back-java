@@ -2,15 +2,15 @@ package com.machine.client.iam.userbk;
 
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.client.iam.userbk.dto.input.*;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "machine-iam-service/machine-iam-service/server/iam/userbk",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/userbk",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamUserBkClient {
 
     @PostMapping("create_company_user")
@@ -44,3 +44,6 @@ public interface IIamUserBkClient {
     PageResponse<IamUserListOutputDto> pageSupplierUser(@RequestBody @Validated IamSupplierUserQueryPageInputDto inputDto);
 
 }
+
+
+

@@ -3,7 +3,7 @@ package com.machine.client.data.label;
 import com.machine.client.data.label.dto.input.*;
 import com.machine.client.data.label.dto.output.DataLabelOptionDetailOutputDto;
 import com.machine.client.data.label.dto.output.DataLabelOptionListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/label_option",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/label_option",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataLabelOptionClient {
 
     @PostMapping("create")
@@ -40,3 +40,6 @@ public interface IDataLabelOptionClient {
     Map<String, DataLabelOptionListOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
 }
+
+
+

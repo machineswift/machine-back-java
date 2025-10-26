@@ -3,7 +3,7 @@ package com.machine.service.iam.user.dao.mapper.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,7 +55,7 @@ public class IamUserEntity extends BaseEntity {
      * 性别
      */
     @TableField("gender")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     /**
      * 描述

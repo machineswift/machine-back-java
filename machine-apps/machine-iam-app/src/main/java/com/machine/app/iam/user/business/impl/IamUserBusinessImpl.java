@@ -31,8 +31,8 @@ import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
-import com.machine.starter.redis.cache.RedisCacheHrmDepartment;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.hrm.RedisCacheHrmDepartment;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
@@ -49,8 +49,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_ROOT_PARENT_ID;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 import static com.machine.sdk.common.constant.CommonIamConstant.User.ROOT_USER_ID;
 import static com.machine.starter.security.util.LoginLogUtil.blackAllAvailableToken;
 
@@ -167,7 +167,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
 
         Set<String> organizationUserIdSet = new HashSet<>();
         for (IamOrganizationTypeEnum type : IamOrganizationTypeEnum.values()) {
-            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
+            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE)) {
                 //未分配节点
                 List<String> userIdList = userClient.listNotBindOrganization(new IamDataUserNotBindOrganizationInputDto(type));
                 if (CollectionUtil.isNotEmpty(userIdList)) {
@@ -224,7 +224,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
                 }
             }
 
-            if (organizationIdSet.contains(ORGANIZATION_ROOT_PARENT_ID)) {
+            if (organizationIdSet.contains(DATA_ORGANIZATION_ROOT_PARENT_ID)) {
                 containRootId = true;
             }
 

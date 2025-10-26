@@ -14,4 +14,8 @@ public class DataAreaTreeRequestVo {
     @Schema(description = "国家编码，默认:CHINA")
     private String countryCode;
 
+    public DataAreaTreeRequestVo(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
 }

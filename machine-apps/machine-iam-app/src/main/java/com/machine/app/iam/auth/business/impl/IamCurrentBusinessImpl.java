@@ -22,7 +22,7 @@ import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.starter.redis.cache.RedisCacheIamFunctionPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamFunctionPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;

@@ -13,6 +13,7 @@
     <description>test 集合</description>
 
     <modules>
+        <module>machine-flink-test</module>
         <module>machine-temp-test</module>
     </modules>
 

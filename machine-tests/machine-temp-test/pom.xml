@@ -29,6 +29,12 @@
 
         <dependency>
             <groupId>com.machine</groupId>
+            <artifactId>machine-ai-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.machine</groupId>
             <artifactId>machine-redis-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -64,6 +70,12 @@
 
         <dependency>
             <groupId>com.machine</groupId>
+            <artifactId>machine-doc-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.machine</groupId>
             <artifactId>machine-plugin-client</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -73,6 +85,7 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
     </dependencies>
 
     <build>

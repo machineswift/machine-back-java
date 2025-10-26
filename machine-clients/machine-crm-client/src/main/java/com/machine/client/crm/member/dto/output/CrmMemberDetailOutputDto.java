@@ -1,6 +1,6 @@
 package com.machine.client.crm.member.dto.output;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class CrmMemberDetailOutputDto {
     private String name;
 
     @Schema(description = "性别（CrmGenderEnum）")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "生日年")
     private Integer birthYear;

@@ -25,7 +25,7 @@ import com.machine.service.iam.user.dao.IIamUserDao;
 import com.machine.service.iam.user.dao.IIamUserPermissionRelationDao;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserEntity;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserPermissionRelationEntity;
-import com.machine.starter.redis.cache.RedisCacheIamPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

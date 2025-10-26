@@ -1,13 +1,12 @@
 package com.machine.sdk.beisen.envm;
 
 import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.envm.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum BeiSenCertificateTypeEnum implements BaseEnum<StatusEnum, String> {
+public enum BeiSenCertificateTypeEnum implements BaseEnum<BeiSenCertificateTypeEnum, String> {
     ID_CARD("1", "身份证"),
     CHINESE_PASSPORT("2", "中国护照"),
     HK_MACAO_RESIDENTS_TRAVEL_PERMIT_TO_MAINLAND("3", "港澳居民来往内地通行证"),

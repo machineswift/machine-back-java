@@ -8,7 +8,7 @@ import com.machine.client.iam.user.dto.output.IamUserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.starter.redis.cache.RedisCacheIamFunctionPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamFunctionPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

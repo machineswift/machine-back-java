@@ -1,13 +1,13 @@
 package com.machine.client.data.config;
 
 import com.machine.client.data.config.dto.DataSystemConfigDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/config",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/config",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataSystemConfigClient {
 
     @PostMapping("create")
@@ -50,3 +50,6 @@ public interface IDataSystemConfigClient {
     String getStringOrElse(@Validated @RequestBody DataSystemConfigDto inputDto,
                            @RequestParam("defaultValue") String defaultValue);
 }
+
+
+

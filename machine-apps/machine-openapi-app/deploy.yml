@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-openapi-app
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-openapi-app_master:{{imageVersion}}
+          image: machine-openapi-app_master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

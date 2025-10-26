@@ -18,7 +18,7 @@ import com.machine.service.data.attachment.dao.IDataAttachmentCategoryDao;
 import com.machine.service.data.attachment.dao.IDataAttachmentCategoryRelationDao;
 import com.machine.service.data.attachment.dao.mapper.entity.DataAttachmentCategoryEntity;
 import com.machine.service.data.attachment.service.IDataAttachmentCategoryService;
-import com.machine.starter.redis.cache.RedisCacheDataAttachmentCategory;
+import com.machine.starter.redis.cache.data.RedisCacheDataAttachmentCategory;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

@@ -17,7 +17,7 @@ import com.machine.client.hrm.employee.dto.output.HrmEmployeeListOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheHrmDepartment;
+import com.machine.starter.redis.cache.hrm.RedisCacheHrmDepartment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

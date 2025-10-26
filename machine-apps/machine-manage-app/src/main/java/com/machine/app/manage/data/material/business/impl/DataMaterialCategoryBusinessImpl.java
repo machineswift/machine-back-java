@@ -14,7 +14,7 @@ import com.machine.client.data.material.dto.input.DataMaterialCategoryUpdatePare
 import com.machine.client.data.material.dto.output.DataMaterialCategoryDetailOutputDto;
 import com.machine.client.data.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.starter.redis.cache.RedisCacheDataMaterialCategory;
+import com.machine.starter.redis.cache.data.RedisCacheDataMaterialCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

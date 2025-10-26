@@ -33,7 +33,7 @@ public class RedisPrefix4IamConstant {
         public static final String IAM_AUTH_TOKEN_ID = "iam:auth:authTokenId:";
     }
 
-    public static class Organization{
+    public static class Organization {
 
         /**
          * 组织树 key
@@ -48,12 +48,12 @@ public class RedisPrefix4IamConstant {
 
     public static class Permission {
         /**
-         *  权限树 key
+         * 权限树 key
          */
         public static final String IAM_PERMISSION_TREE_KEY = "iam:permission:tree:key";
 
         /**
-         *  权限树 数据
+         * 权限树 数据
          */
         public static final String IAM_PERMISSION_TREE_DATA = "iam:permission:tree:data:";
     }

@@ -16,6 +16,7 @@
         <module>machine-common-boot-starter</module>
         <module>machine-nacos-boot-starter</module>
         <module>machine-security-boot-starter</module>
+        <module>machine-ai-boot-starter</module>
         <module>machine-redis-boot-starter</module>
         <module>machine-mq-boot-starter</module>
         <module>machine-obs-boot-starter</module>

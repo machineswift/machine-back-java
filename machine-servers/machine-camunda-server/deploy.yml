@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-camunda-server
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-camunda-server_master:{{imageVersion}}
+          image: machine-camunda-server_master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

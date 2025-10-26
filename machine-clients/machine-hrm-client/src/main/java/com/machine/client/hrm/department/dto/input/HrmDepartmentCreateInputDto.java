@@ -1,6 +1,6 @@
 package com.machine.client.hrm.department.dto.input;
 
-import com.machine.sdk.beisen.envm.BeiSenDepartmentStatusEnum;
+import com.machine.sdk.common.envm.StatusEnum;
 import lombok.Data;
 
 @Data
@@ -25,7 +25,7 @@ public class HrmDepartmentCreateInputDto {
     /**
      * 状态
      */
-    private BeiSenDepartmentStatusEnum status;
+    private StatusEnum status;
 
     /**
      * 描述

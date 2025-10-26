@@ -27,7 +27,6 @@ spring:
     import:
       - nacos:machine.yaml?refreshEnabled=true
       - nacos:${spring.application.name}.yaml?refreshEnabled=true
-
 machine:
   datasource:
     schema: machine_scm

@@ -1,7 +1,7 @@
 package com.machine.app.iam.user.controller.vo.request;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,7 +33,7 @@ public class IamUserQueryPageRequestVo extends PageRequest {
     private String phone;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "门店ID集合")
     private Set<String> shopIdSet;

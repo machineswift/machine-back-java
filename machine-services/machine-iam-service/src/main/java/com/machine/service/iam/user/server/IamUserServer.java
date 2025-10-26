@@ -9,6 +9,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
+import com.machine.sdk.common.annotation.SkipUserIdCheck;
 import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
@@ -86,22 +87,25 @@ public class IamUserServer implements IIamUserClient {
     }
 
     @Override
+    @SkipUserIdCheck
     @GetMapping("get_by_username")
     public IamUserDto getByUserName(@RequestParam("username") String username) {
         return userService.getByUsername(username);
     }
 
     @Override
+    @SkipUserIdCheck
+    @GetMapping("get_by_phone")
+    public IamUserDto getByPhone(@RequestParam("phone") String phone) {
+        return userService.getByPhone(phone);
+    }
+
+    @Override
+    @SkipUserIdCheck
     @GetMapping("get_by_thirdPartyUuid")
     public IamUserDto getByThirdPartyUuid(@RequestParam("source") IamAuth2SourceEnum source,
                                           @RequestParam("thirdPartyUuid") String thirdPartyUuid) {
         return userService.getByThirdPartyUuid(source,thirdPartyUuid);
-    }
-
-    @Override
-    @GetMapping("get_by_phone")
-    public IamUserDto getByPhone(@RequestParam("phone") String phone) {
-        return userService.getByPhone(phone);
     }
 
     @Override
@@ -111,6 +115,7 @@ public class IamUserServer implements IIamUserClient {
     }
 
     @Override
+    @SkipUserIdCheck
     @PostMapping("detail_auth")
     public IamUserAuthDetailOutputDto detailAuth(@RequestBody @Validated IdRequest request) {
         return userService.detailAuth(request);

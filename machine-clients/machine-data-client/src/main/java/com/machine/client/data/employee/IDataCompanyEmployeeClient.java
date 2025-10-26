@@ -6,7 +6,7 @@ import com.machine.client.data.employee.dto.input.DataCompanyEmployeeQueryListOf
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeUpdateInputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/company_employee",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/company_employee",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataCompanyEmployeeClient {
 
     @PostMapping("create")
@@ -44,3 +44,6 @@ public interface IDataCompanyEmployeeClient {
     Map<String, DataCompanyEmployeeDetailOutputDto> mapByUserIdSet(@RequestBody @Validated IdSetRequest request);
 
 }
+
+
+

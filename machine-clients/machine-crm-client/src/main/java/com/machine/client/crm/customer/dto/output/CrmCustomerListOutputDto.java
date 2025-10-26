@@ -1,6 +1,6 @@
 package com.machine.client.crm.customer.dto.output;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,9 @@ public class CrmCustomerListOutputDto {
     @Schema(description = "ID")
     private String id;
 
+    @Schema(description = "编码")
+    private String code;
+
     @Schema(description = "身份证号")
     private String identityCardNumber;
 
@@ -20,7 +23,7 @@ public class CrmCustomerListOutputDto {
     private String name;
 
     @Schema(description = "性别（CrmGenderEnum）")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "创建人ID")
     private String createBy;

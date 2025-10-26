@@ -6,15 +6,15 @@ import com.machine.client.data.area.dto.input.DataAreaUpdateInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateParentInputDto;
 import com.machine.client.data.area.dto.output.DataAreaDetailOutputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/area",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/area",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataAreaClient {
 
     @PostMapping("create")

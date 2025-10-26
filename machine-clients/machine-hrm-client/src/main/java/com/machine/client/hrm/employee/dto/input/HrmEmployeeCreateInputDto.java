@@ -1,7 +1,7 @@
 package com.machine.client.hrm.employee.dto.input;
 
-import com.machine.sdk.beisen.envm.BeiSenEmployeeStatusEnum;
-import com.machine.sdk.beisen.envm.BeiSenGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import lombok.Data;
 
 @Data
@@ -17,7 +17,7 @@ public class HrmEmployeeCreateInputDto {
     /**
      * 状态,（BeiSenEmployeeStatusEnum）
      */
-    private BeiSenEmployeeStatusEnum status;
+    private HrmEmployeeStatusEnum status;
 
     /**
      * 编码（工号）
@@ -37,7 +37,7 @@ public class HrmEmployeeCreateInputDto {
     /**
      * 性别
      */
-    private BeiSenGenderEnum gender;
+    private GenderEnum gender;
 
     /**
      * 邮箱

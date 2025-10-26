@@ -3,14 +3,14 @@ package com.machine.client.data.external;
 import com.machine.client.data.external.dto.input.DataExternalFieldDataCreateInputDto;
 import com.machine.client.data.external.dto.input.DataExternalFieldDataDeleteInputDto;
 import com.machine.client.data.external.dto.input.DataExternalFieldDataGetValueInputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/external_field_data",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/external_field_data",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataExternalFieldDataClient {
 
     @PostMapping("create")
@@ -22,3 +22,6 @@ public interface IDataExternalFieldDataClient {
     @PostMapping("get_value")
     String getValue(@RequestBody @Validated DataExternalFieldDataGetValueInputDto inputDto);
 }
+
+
+

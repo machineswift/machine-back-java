@@ -14,6 +14,7 @@ import com.machine.sdk.beisen.client.jobpost.dto.output.BeiSenJobPostOutputDto;
 import com.machine.sdk.beisen.domain.BeiSenBaseResponse;
 import com.machine.sdk.beisen.envm.BeiSenJobPostStatusEnum;
 import com.machine.sdk.common.envm.BaseEnum;
+import com.machine.sdk.common.envm.hrm.HrmJobPostStatusEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.service.hrm.jobpost.dao.IJobPostDao;
@@ -98,7 +99,7 @@ public class JobPostServiceImpl implements IJobPostService {
             inputDto.setId(outputDto.getOId());
             inputDto.setName(outputDto.getName());
             inputDto.setCode(outputDto.getCode());
-            inputDto.setStatus(BaseEnum.getInstance(BeiSenJobPostStatusEnum.class, outputDto.getStatus() + ""));
+            inputDto.setStatus(BaseEnum.getInstance(HrmJobPostStatusEnum.class, outputDto.getStatus() + ""));
             inputDto.setSort(0L);
             if (null != outputDto.getOrder()) {
                 inputDto.setSort(outputDto.getOrder().longValue());

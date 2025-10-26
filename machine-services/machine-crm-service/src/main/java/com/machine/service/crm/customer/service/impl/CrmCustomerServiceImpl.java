@@ -34,7 +34,7 @@ public class CrmCustomerServiceImpl implements ICrmCustomerService {
         //验证身份证号是否存在
         CrmCustomerEntity entityByPhone = customerDao.getByIdentityCardNumber(inputDto.getIdentityCardNumber());
         if (null != entityByPhone) {
-            throw new CrmBusinessException("crm.customer.service.create.identityCardNumberAlreadyExists", "会员身份证号已经存在");
+            throw new CrmBusinessException("crm.customer.service.create.identityCardNumberAlreadyExists", "客户身份证号已经存在");
         }
 
         CrmCustomerEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), CrmCustomerEntity.class, true);

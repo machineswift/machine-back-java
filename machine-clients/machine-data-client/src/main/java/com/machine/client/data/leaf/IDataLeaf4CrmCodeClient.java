@@ -1,11 +1,11 @@
 package com.machine.client.data.leaf;
 
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/leaf_4_crm",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/leaf_4_crm",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataLeaf4CrmCodeClient {
 
     /**
@@ -21,3 +21,6 @@ public interface IDataLeaf4CrmCodeClient {
     String memberCode();
 
 }
+
+
+

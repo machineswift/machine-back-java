@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-tpp-service
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-tpp-service_master:{{imageVersion}}
+          image: machine-tpp-service_master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

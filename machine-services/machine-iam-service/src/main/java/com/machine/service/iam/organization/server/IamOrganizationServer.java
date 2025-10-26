@@ -62,13 +62,13 @@ public class IamOrganizationServer implements IIamOrganizationClient {
 
     @Override
     @GetMapping("list_all_by_type")
-    public List<IamOrganizationListOutputDto> listAllByType(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType) {
-        return organizationService.listAllByType(organizationType);
+    public List<IamOrganizationListOutputDto> listAllByType(@RequestParam("type") IamOrganizationTypeEnum type) {
+        return organizationService.listAllByType(type);
     }
 
     @Override
     @GetMapping("tree_all_simple")
-    public IamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType) {
-        return organizationService.treeAllSimple(organizationType);
+    public IamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestParam("type") IamOrganizationTypeEnum type) {
+        return organizationService.treeAllSimple(type);
     }
 }

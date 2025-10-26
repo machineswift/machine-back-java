@@ -1,6 +1,6 @@
 package com.machine.sdk.common.model.dto.data.certificate;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +22,7 @@ public class IdentityCardDto {
     private String name;
 
     @Schema(description = "性别")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "生日-年")
     private Integer birthYear;

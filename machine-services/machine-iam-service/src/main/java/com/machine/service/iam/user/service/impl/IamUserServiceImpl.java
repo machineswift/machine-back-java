@@ -38,7 +38,7 @@ import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.service.iam.user.service.IIamUserService;
 import com.machine.service.iam.user.service.bo.IamShopUserExportBo;
 import com.machine.starter.obs.function.ObsFunction;
-import com.machine.starter.redis.cache.RedisCacheIamPermission;
+import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

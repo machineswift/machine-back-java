@@ -23,13 +23,13 @@
 
     <select id="pageSample" resultType="com.machine.service.data.supplier.dao.po.DataSupplierCompanySimpleListPo">
         select
-        `id`,
-        `name`,
-        `status`,
-        `business_category`,
-        `code`,
-        `contact_name`,
-        `contact_phone`
+        id,
+        name,
+        status,
+        business_category,
+        code,
+        contact_name,
+        contact_phone
         from t_data_supplier_company sc
         <where>
             <if test="inputDto.code != null and inputDto.code !='' ">

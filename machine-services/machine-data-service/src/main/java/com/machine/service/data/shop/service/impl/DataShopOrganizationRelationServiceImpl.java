@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 
 @Slf4j
 @Service
@@ -53,7 +53,7 @@ public class DataShopOrganizationRelationServiceImpl implements IDataShopOrganiz
 
         //查询出门店类型
         IamOrganizationTypeEnum type;
-        if (organizationId.endsWith(ORGANIZATION_VIRTUAL_NODE)) {
+        if (organizationId.endsWith(DATA_ORGANIZATION_VIRTUAL_NODE)) {
             String typeCode = organizationId.split(String.valueOf(SEPARATOR_COLON))[0];
             type = IamOrganizationTypeEnum.valueOf(typeCode);
         } else {
@@ -73,7 +73,7 @@ public class DataShopOrganizationRelationServiceImpl implements IDataShopOrganiz
                 continue;
             }
 
-            if (organizationId.endsWith(ORGANIZATION_VIRTUAL_NODE)) {
+            if (organizationId.endsWith(DATA_ORGANIZATION_VIRTUAL_NODE)) {
                 shopOrganizationRelationDao.deleteOneByUk(shopId, type);
             } else {
                 //查询门店是否绑定指定类型的组织

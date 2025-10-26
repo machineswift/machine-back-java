@@ -1,6 +1,6 @@
 package com.machine.app.manage.crm.customer.controller.vo.response;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class CrmCustomerExpandListResponseVo {
     private String name;
 
     @Schema(description = "性别（CrmGenderEnum）")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "创建人姓名")
     private String createName;

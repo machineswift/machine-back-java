@@ -16,7 +16,7 @@ import com.machine.sdk.common.tool.TreeUtil;
 import com.machine.service.data.area.dao.IDataAreaDao;
 import com.machine.service.data.area.dao.mapper.entity.DataAreaEntity;
 import com.machine.service.data.area.service.IDataAreaService;
-import com.machine.starter.redis.cache.RedisCacheDataArea;
+import com.machine.starter.redis.cache.data.RedisCacheDataArea;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

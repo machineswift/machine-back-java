@@ -4,7 +4,7 @@ import com.machine.client.data.message.dto.output.AppMessageGroupCountOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListSuperOutputDto;
 import com.machine.client.data.message.dto.input.*;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/app_message", configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/app_message",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataAppMessageClient {
 
     @PostMapping("manage_page")
@@ -40,3 +41,6 @@ public interface IDataAppMessageClient {
     @PostMapping("get_unread_count")
     Integer getUnreadCount(@RequestBody AppMessageUnreadCountInputDto inputDto);
 }
+
+
+

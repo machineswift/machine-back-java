@@ -1,6 +1,6 @@
 package com.machine.client.hrm.jobpost.dto.output;
 
-import com.machine.sdk.beisen.envm.BeiSenJobPostStatusEnum;
+import com.machine.sdk.common.envm.hrm.HrmJobPostStatusEnum;
 import lombok.Data;
 
 @Data
@@ -24,7 +24,7 @@ public class HrmJobPostDetailOutputDto {
     /**
      * 状态
      */
-    private BeiSenJobPostStatusEnum status;
+    private HrmJobPostStatusEnum status;
 
     /**
      * 描述

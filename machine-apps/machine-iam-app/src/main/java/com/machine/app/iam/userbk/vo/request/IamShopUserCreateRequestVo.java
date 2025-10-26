@@ -1,6 +1,6 @@
 package com.machine.app.iam.userbk.vo.request;
 
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +25,7 @@ public class IamShopUserCreateRequestVo {
     private String phone;
 
     @Schema(description = "性别(GenderEnum)")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     @Schema(description = "身份证")
     private IdentityCardDto identityCard;

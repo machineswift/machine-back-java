@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
 
 @Slf4j
 @Component
@@ -246,7 +246,7 @@ public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
                 }
             }
 
-            if (organizationIdSet.contains(ORGANIZATION_ROOT_PARENT_ID)) {
+            if (organizationIdSet.contains(DATA_ORGANIZATION_ROOT_PARENT_ID)) {
                 containRootId = true;
             }
 

@@ -12,7 +12,7 @@
     </select>
 
     <select id="countUserByRoleIdSet" resultType="com.machine.sdk.common.model.response.IdCountResponse">
-        SELECT urt.role_id as id, count(0) as `count`
+        SELECT urt.role_id as id, count(0) as count
         FROM t_iam_user_role_relation urt
         WHERE urt.role_id IN
         <foreach item="item" collection="roleIdSet" open="(" separator="," close=")">

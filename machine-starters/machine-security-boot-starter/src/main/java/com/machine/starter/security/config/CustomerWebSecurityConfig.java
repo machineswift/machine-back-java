@@ -102,6 +102,7 @@ public class CustomerWebSecurityConfig {
         commonHttpSecuritySetting(http);
         http
                 .securityMatcher(
+                        "/iam/auth/access_token",
                         "/iam/auth/picture_captcha",
                         "/iam/auth/sms_captcha_phone_login",
                         "/iam/auth/sms_captcha_forget_password",

@@ -6,7 +6,7 @@ import com.machine.client.data.supplier.dto.input.DataSupplierQueryListOffsetInp
 import com.machine.client.data.supplier.dto.input.DataSupplierUpdateInputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/supplier_user",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/supplier_user",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataSupplierUserClient {
 
     @PostMapping("create")
@@ -39,3 +39,6 @@ public interface IDataSupplierUserClient {
     List<DataSupplierListOutputDto> listByOffset(@RequestBody @Validated DataSupplierQueryListOffsetInputDto inputDto);
 
 }
+
+
+

@@ -21,9 +21,9 @@
     <description>machine</description>
 
     <properties>
+        <resource.encoding>UTF-8</resource.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <resource.encoding>UTF-8</resource.encoding>
     </properties>
 
     <dependencyManagement>
@@ -31,7 +31,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2025.0.0.0-preview</version>
+                <version>2025.0.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -48,6 +48,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>3.5.5</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>1.1.0-M2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>1.0.0.4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -134,6 +150,31 @@
             </dependency>
             <!-- mybatis-plus 结束-->
 
+            <!--  flink  开始 -->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-walkthrough-common</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-java</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-clients</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-connector-kafka</artifactId>
+                <version>4.0.1-2.0</version>
+            </dependency>
+            <!--  flink  结束 -->
+
             <!--http 开始-->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
@@ -180,12 +221,27 @@
             </dependency>
             <!-- obs 文件服务 结束-->
 
-            <!-- 线程本地变量 -->
+            <!-- 线程本地变量 开始-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>2.14.5</version>
             </dependency>
+            <!-- 线程本地变量 结束-->
+
+            <!-- 文档转换 开始-->
+            <dependency>
+                <groupId>org.jodconverter</groupId>
+                <artifactId>jodconverter-core</artifactId>
+                <version>4.4.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jodconverter</groupId>
+                <artifactId>jodconverter-local</artifactId>
+                <version>4.4.11</version>
+            </dependency>
+            <!-- 文档转换 结束-->
 
             <!-- 修改类的字节码  开始-->
             <dependency>
@@ -242,31 +298,31 @@
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-miniapp</artifactId>
-                <version>4.7.7.B</version>
+                <version>4.7.8.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-pay</artifactId>
-                <version>4.7.7.B</version>
+                <version>4.7.8.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-open</artifactId>
-                <version>4.7.7.B</version>
+                <version>4.7.8.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-mp</artifactId>
-                <version>4.7.7.B</version>
+                <version>4.7.8.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-cp</artifactId>
-                <version>4.7.7.B</version>
+                <version>4.7.8.B</version>
             </dependency>
             <!-- 微信 结束  -->
 
@@ -394,13 +450,13 @@
     </build>
 
     <distributionManagement>
-        <!--        <repository>
-                    <id>${deploy.release.repository.id}</id>
-                    <url>${deploy.release.repository.url}</url>
-                </repository>
-                <snapshotRepository>
-                    <id>${deploy.snapshot.repository.id}</id>
-                    <url>${deploy.snapshot.repository.url}</url>
-                </snapshotRepository>-->
+       <!-- <repository>
+            <id>maven-releases</id>
+            <url>http://localhost:18081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>http://localhost:18081/repository/maven-snapshots/</url>
+        </snapshotRepository>-->
     </distributionManagement>
 </project>

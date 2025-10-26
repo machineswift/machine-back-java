@@ -29,7 +29,7 @@ import com.machine.service.iam.user.dao.mapper.entity.IamUserOrganizationRelatio
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleBusinessRelationEntity;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.service.iam.user.service.IIamUserPermissionService;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

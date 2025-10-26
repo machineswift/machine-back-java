@@ -34,9 +34,11 @@
     <select id="selectByUserId" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity">
         SELECT r.*
         FROM t_iam_role r
-                 LEFT JOIN t_iam_user_role_relation urr ON urr.role_id = r.id
-        WHERE urr.user_id = #{userId}
-        GROUP BY r.id
+        WHERE EXISTS (
+            SELECT 1
+            FROM t_iam_user_role_relation urr
+            WHERE urr.role_id = r.id AND urr.user_id = #{userId}
+        )
     </select>
 
     <select id="selectPage" resultType="com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity">

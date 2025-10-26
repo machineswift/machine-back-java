@@ -6,7 +6,7 @@ import com.machine.client.data.material.dto.input.DataMaterialCategoryUpdatePare
 import com.machine.client.data.material.dto.output.DataMaterialCategoryDetailOutputDto;
 import com.machine.client.data.material.dto.output.DataMaterialCategoryListOutputDto;
 import com.machine.client.data.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/material_category",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/material_category",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataMaterialCategoryClient {
 
     @PostMapping("create")
@@ -35,10 +35,13 @@ public interface IDataMaterialCategoryClient {
     @PostMapping("detail")
     DataMaterialCategoryDetailOutputDto detail(@RequestBody @Validated IdRequest request);
 
-    @GetMapping("list_all_by_type")
+    @GetMapping("list_all")
     List<DataMaterialCategoryListOutputDto> listAll();
 
     @GetMapping("tree_all_simple")
     DataMaterialCategoryTreeSimpleOutputDto treeAllSimple();
 
 }
+
+
+

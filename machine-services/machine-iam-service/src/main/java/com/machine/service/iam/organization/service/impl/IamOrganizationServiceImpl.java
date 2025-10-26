@@ -20,7 +20,7 @@ import com.machine.service.iam.organization.dao.IIamOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.IamOrganizationEntity;
 import com.machine.service.iam.organization.service.IIamOrganizationService;
 import com.machine.service.iam.user.dao.IIamUserOrganizationRelationDao;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_ROOT_PARENT_ID;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_ORGANIZATION_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Organization.DATA_ORGANIZATION_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Organization.DATA_ORGANIZATION_TREE_KEY;
@@ -78,7 +78,7 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
         //验证名称在同一层级是否存在
         IamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(inputDto.getParentId(), inputDto.getName());
         if (null != entityByName) {
-            throw new IamBusinessException("iam.organization.service.create.nameAlreadyExists", "组织名称已经存在");
+            throw new IamBusinessException("iam.organization.service.create.nameAlreadyExists", "名称已经存在");
         }
 
         IamOrganizationEntity insertEntity = new IamOrganizationEntity();
@@ -101,26 +101,26 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
             return 0;
         }
 
-        if (ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
-                ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
-            throw new IamBusinessException("iam.organization.service.delete.rootOrganization", "根组织不能删除");
+        if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
+                DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
+            throw new IamBusinessException("iam.organization.service.delete.rootNode", "根组织不能删除");
         }
 
         //判断是否有子节点
         if (organizationCache.recursionListSubId(entity.getType(), entity.getId()).size() > 1) {
-            throw new IamBusinessException("iam.organization.service.delete.hasChildrenNode", "组织有子节点不能删除");
+            throw new IamBusinessException("iam.organization.service.delete.hasChildrenNode", "有子节点不能删除");
         }
 
         //获取组织是否关联门店信息
         Boolean isAssociationShop = shopOrganizationRelationClient.isAssociationShopByOrganizationId(new IdRequest(id));
         if (isAssociationShop) {
-            throw new IamBusinessException("iam.organization.service.delete.associationShop", "组织关联门店不能删除");
+            throw new IamBusinessException("iam.organization.service.delete.associationShop", "关联门店不能删除");
         }
 
         //获取组织是否关联用户
         boolean isAssociationRole = userOrganizationRelationDao.isAssociationUserByOrganizationId(id);
         if (isAssociationRole) {
-            throw new IamBusinessException("iam.organization.service.delete.associationRole", "组织关联用户不能删除");
+            throw new IamBusinessException("iam.organization.service.delete.associationRole", "关联用户不能删除");
         }
 
         return organizationDao.delete(id);
@@ -134,15 +134,15 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
             return 0;
         }
 
-        if (ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
-                ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
-            throw new IamBusinessException("iam.organization.service.update.rootOrganization", "根组织不能修改");
+        if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
+                DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
+            throw new IamBusinessException("iam.organization.service.update.rootNode", "根节点不能修改");
         }
 
         //验证名称在同一层级是否存在
         IamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(entity.getParentId(), inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
-            throw new IamBusinessException("iam.organization.service.update.nameAlreadyExists", "部门名称已经存在");
+            throw new IamBusinessException("iam.organization.service.update.nameAlreadyExists", "名称已经存在");
         }
 
         IamOrganizationEntity updateEntity = new IamOrganizationEntity();
@@ -156,7 +156,7 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateParent(IamOrganizationUpdateParentInputDto inputDto) {
-        if (inputDto.getParentId().endsWith(ORGANIZATION_VIRTUAL_NODE)) {
+        if (inputDto.getParentId().endsWith(DATA_ORGANIZATION_VIRTUAL_NODE)) {
             throw new IamBusinessException("iam.organization.service.updateParent.virtualNode", "不能选择未分配节点");
         }
 
@@ -170,21 +170,21 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
             return 0;
         }
 
-        if (ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getParentId()) ||
-                ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getId())) {
-            throw new IamBusinessException("iam.organization.service.updateParent.rootOrganization", "根组织不能修改");
+        if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getParentId()) ||
+                DATA_ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getId())) {
+            throw new IamBusinessException("iam.organization.service.updateParent.rootNode", "根节点不能修改");
         }
 
         //验证名称在同一层级是否存在
         IamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(inputDto.getParentId(), dbEntity.getName());
         if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
-            throw new IamBusinessException("iam.organization.service.updateParent.nameAlreadyExists", "部门名称已经存在");
+            throw new IamBusinessException("iam.organization.service.updateParent.nameAlreadyExists", "名称已经存在");
         }
 
         //验证父部门是否存在
         IamOrganizationEntity parentEntity = organizationDao.getById(inputDto.getParentId());
         if (null == parentEntity) {
-            throw new IamBusinessException("iam.organization.service.updateParent.parentNotExists", "父部门不存在");
+            throw new IamBusinessException("iam.organization.service.updateParent.parentNotExists", "父节点不存在");
         }
 
         //验证父Id是否在当前节点下面
@@ -205,8 +205,8 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
     }
 
     @Override
-    public List<IamOrganizationListOutputDto> listAllByType(IamOrganizationTypeEnum organizationType) {
-        List<IamOrganizationEntity> entityList = organizationDao.listAllByType(organizationType);
+    public List<IamOrganizationListOutputDto> listAllByType(IamOrganizationTypeEnum type) {
+        List<IamOrganizationEntity> entityList = organizationDao.listAllByType(type);
         if (CollectionUtil.isEmpty(entityList)) {
             return List.of();
         }
@@ -214,8 +214,8 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
     }
 
     @Override
-    public IamOrganizationTreeSimpleOutputDto treeAllSimple(IamOrganizationTypeEnum organizationType) {
-        String typeName = organizationType.getName();
+    public IamOrganizationTreeSimpleOutputDto treeAllSimple(IamOrganizationTypeEnum type) {
+        String typeName = type.getName();
         //获取树的动态key
         String keyCode = customerRedisCommands.get(DATA_ORGANIZATION_TREE_KEY + typeName);
 
@@ -241,11 +241,11 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
             }
 
             //重新生成树的动态key
-            keyCode = leaf4RedisClient.dataOrganizationTree(organizationType);
+            keyCode = leaf4RedisClient.dataOrganizationTree(type);
             customerRedisCommands.set(DATA_ORGANIZATION_TREE_KEY + typeName, keyCode, 24 * 60 * 60);
 
             //查询DB组装树
-            List<IamOrganizationEntity> entityList = organizationDao.listAllByType(organizationType);
+            List<IamOrganizationEntity> entityList = organizationDao.listAllByType(type);
             if (CollectionUtil.isEmpty(entityList)) {
                 return null;
             }

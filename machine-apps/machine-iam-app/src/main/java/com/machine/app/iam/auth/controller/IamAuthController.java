@@ -2,6 +2,7 @@ package com.machine.app.iam.auth.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.machine.app.iam.auth.business.IIamAuthBusiness;
+import com.machine.app.iam.auth.controller.vo.request.IamAuthAccessTokenRequestVo;
 import com.machine.app.iam.auth.controller.vo.request.IamAuthSmsCaptchaRequestVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCaptchaResponseVo;
 import com.machine.sdk.common.context.AppContext;
@@ -45,10 +46,10 @@ public class IamAuthController {
     }
 
     @PermitAll
-    @Operation(summary = "获取AccessToken（通过RefreshToken）")
-    @GetMapping("access_token")
-    public IamAuthLoginResponse accessToken(HttpServletRequest request) {
-        log.info("通过RefreshToken获取AccessToken，userId={}", AppContext.getContext().getUserId());
+    @Operation(summary = "获取accessToken")
+    @PostMapping("access_token")
+    public IamAuthLoginResponse accessToken(@RequestBody @Validated IamAuthAccessTokenRequestVo request) {
+        log.info("通过RefreshToken获取AccessToken");
         return authBusiness.accessToken(request);
     }
 }

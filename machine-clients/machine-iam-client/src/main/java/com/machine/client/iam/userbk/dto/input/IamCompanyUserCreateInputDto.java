@@ -1,7 +1,7 @@
 package com.machine.client.iam.userbk.dto.input;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.crm.customer.CrmGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ public class IamCompanyUserCreateInputDto {
     private String name;
 
     @NotNull(message = "用户性别不能为空")
-    private CrmGenderEnum gender;
+    private GenderEnum gender;
 
     /**
      * 描述信息

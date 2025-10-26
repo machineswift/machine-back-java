@@ -1,5 +1,5 @@
 # 基础镜像
-FROM swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine:20250121
+FROM machine_erp_base:2025
 
 # 设置工作目录
 WORKDIR /app

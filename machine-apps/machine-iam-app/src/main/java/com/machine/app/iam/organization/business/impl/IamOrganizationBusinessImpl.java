@@ -23,7 +23,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,8 +32,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE_NAME;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE_NAME;
 import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
 import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_NAME;
 
@@ -161,11 +161,11 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
 
         { //添加【未分配】
             IamOrganizationExpandTreeBo virtualExpandTreeBo = new IamOrganizationExpandTreeBo();
-            virtualExpandTreeBo.setId(typeName + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE);
+            virtualExpandTreeBo.setId(typeName + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE);
             virtualExpandTreeBo.setParentId(expandTreeBo.getId());
-            virtualExpandTreeBo.setName(ORGANIZATION_VIRTUAL_NODE_NAME);
+            virtualExpandTreeBo.setName(DATA_ORGANIZATION_VIRTUAL_NODE_NAME);
             virtualExpandTreeBo.setSort(Long.MAX_VALUE);
-            virtualExpandTreeBo.setCode(typeName + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE.toUpperCase());
+            virtualExpandTreeBo.setCode(typeName + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE.toUpperCase());
             virtualExpandTreeBo.setCreateName(SYSTEM_USER_NAME);
             virtualExpandTreeBo.setCreateBy(SYSTEM_USER_ID);
             virtualExpandTreeBo.setCreateTime(System.currentTimeMillis());
@@ -259,11 +259,11 @@ public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
 
         { //添加【未分配】
             IamOrganizationExpandTreeBo virtualExpandTreeBo = new IamOrganizationExpandTreeBo();
-            virtualExpandTreeBo.setId(typeName + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE);
+            virtualExpandTreeBo.setId(typeName + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE);
             virtualExpandTreeBo.setParentId(expandTreeBo.getId());
-            virtualExpandTreeBo.setName(ORGANIZATION_VIRTUAL_NODE_NAME);
+            virtualExpandTreeBo.setName(DATA_ORGANIZATION_VIRTUAL_NODE_NAME);
             virtualExpandTreeBo.setSort(Long.MAX_VALUE);
-            virtualExpandTreeBo.setCode(typeName + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE.toUpperCase());
+            virtualExpandTreeBo.setCode(typeName + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE.toUpperCase());
             virtualExpandTreeBo.setCreateName(SYSTEM_USER_NAME);
             virtualExpandTreeBo.setCreateBy(SYSTEM_USER_ID);
             virtualExpandTreeBo.setCreateTime(System.currentTimeMillis());

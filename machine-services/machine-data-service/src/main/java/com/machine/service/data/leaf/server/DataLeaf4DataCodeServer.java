@@ -40,6 +40,12 @@ public class DataLeaf4DataCodeServer implements IDataLeaf4DataCodeClient {
     }
 
     @Override
+    @GetMapping("tag_category_code")
+    public String tagCategoryCode() {
+        return generateCode(CodePrefix.DATA_TAG_CATEGORY);
+    }
+
+    @Override
     @GetMapping("shop_code")
     public String shopCode() {
         return generateCode(CodePrefix.DATA_BRAND);
@@ -57,6 +63,12 @@ public class DataLeaf4DataCodeServer implements IDataLeaf4DataCodeClient {
         return generateCode(CodePrefix.DATA_SUPPLIER_COMPANY);
     }
 
+    @Override
+    @GetMapping("tag_code")
+    public String tagCode() {
+        return generateCode(CodePrefix.DATA_TAG);
+    }
+
     private String generateCode(CodePrefix codePrefix) {
         return leafService.getKqBatchNo(
                 codePrefix.code,
@@ -71,6 +83,8 @@ public class DataLeaf4DataCodeServer implements IDataLeaf4DataCodeClient {
         DATA_BRAND("DATA_BRAND_CODE_", "B", "品牌编码"),
         DATA_MATERIAL_CATEGORY("DATA_MATERIAL_CATEGORY_CODE_", "MC", "素材分类编码"),
         DATA_ATTACHMENT_CATEGORY("DATA_ATTACHMENT_CATEGORY_CODE_", "AC", "附件分类编码"),
+        DATA_TAG_CATEGORY("DATA_TAG_CATEGORY_CODE_", "TC", "智能标签分类编码"),
+        DATA_TAG("DATA_TAG_CODE_", "T", "标签编码"),
         DATA_SHOP("DATA_SHOP_CODE_", "S", "门店编码"),
         DATA_LABEL("DATA_LABEL_CODE_", LABEL_PREFIX, "标签编码"),
         DATA_SUPPLIER_COMPANY("DATA_SUPPLIER_COMPANY_CODE_", "SC", "供应商公司编码");

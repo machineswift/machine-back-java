@@ -53,4 +53,13 @@ public class CommonDataConstant {
         public static final String DATA_ATTACHMENT_CATEGORY_VIRTUAL_NODE_NAME = "未分类";
     }
 
+    public static class TagCategory {
+
+        /**
+         * 根节点父Id
+         */
+        public static final String DATA_TAG_CATEGORY_ROOT_PARENT_ID = "root";
+
+    }
+
 }

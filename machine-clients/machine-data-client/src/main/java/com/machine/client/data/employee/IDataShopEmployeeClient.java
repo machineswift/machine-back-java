@@ -5,7 +5,7 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeListOutputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/shop_employee",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/shop_employee",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataShopEmployeeClient {
 
     @PostMapping("create")
@@ -44,3 +44,6 @@ public interface IDataShopEmployeeClient {
     List<DataShopEmployeeListOutputDto> listByOffset(@RequestBody @Validated DataShopEmployeeQueryListOffsetInputDto inputDto);
 
 }
+
+
+

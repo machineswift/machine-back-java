@@ -1,7 +1,6 @@
 package com.machine.service.data.leaf.server;
 
 import com.machine.client.data.leaf.IDataLeaf4CrmCodeClient;
-import com.machine.client.data.leaf.IDataLeaf4IamCodeClient;
 import com.machine.service.data.leaf.service.IDataLeafService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,25 @@ public class DataLeaf4CrmCodeServer implements IDataLeaf4CrmCodeClient {
     @Override
     @GetMapping("customer_code")
     public String customerCode() {
-        return generateCode(CodePrefix.CUSTOMER_CODE);
+        return leafService.getKqBatchNo(
+                CodePrefix.CUSTOMER_CODE.code,
+                CodePrefix.CUSTOMER_CODE.prefix,
+                6,
+                80,
+                CodePrefix.CUSTOMER_CODE.description
+        );
     }
 
     @Override
     @GetMapping("member_code")
     public String memberCode() {
-        return generateCode(CodePrefix.MEMBER_CODE);
+        return leafService.getKqBatchNo(
+                CodePrefix.MEMBER_CODE.code,
+                CodePrefix.MEMBER_CODE.prefix,
+                6,
+                80,
+                CodePrefix.MEMBER_CODE.description
+        );
     }
 
     private String generateCode(CodePrefix codePrefix) {

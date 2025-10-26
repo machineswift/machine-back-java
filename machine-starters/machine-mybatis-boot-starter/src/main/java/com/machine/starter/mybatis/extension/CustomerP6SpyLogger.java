@@ -9,18 +9,19 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 public class CustomerP6SpyLogger implements MessageFormattingStrategy {
 
     @Override
-    public String formatMessage(int connectionId, String now, long elapsed, String category,
-                                String prepared, String sql, String url) {
+    public String formatMessage(int connectionId,
+                                String now,
+                                long elapsed,
+                                String category,
+                                String prepared,
+                                String sql,
+                                String url) {
         if (StringUtils.isBlank(sql)) {
-            return "";
+            return String.format("Consume Time: %d ms | %s | category: %s",
+                    elapsed, now, category);
         } else {
-            return new StringBuilder(" Consume Time：")
-                    .append(elapsed)
-                    .append(" ms ")
-                    .append(now)
-                    .append("Execute SQL：").append(sql.replaceAll("[\\s]+", " "))
-                    .append(";")
-                    .toString();
+            return String.format("Consume Time: %d ms | %s | SQL: %s",
+                    elapsed, now, sql.replaceAll("\\s+", " ").trim());
         }
     }
 }

@@ -30,7 +30,7 @@ public class CrmMemberController {
     
     @Operation(summary = "创建会员")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:CREATE')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated CrmMemberCreateRequestVo request) {
         log.info("创建会员，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(crmMemberBusiness.create(request));
@@ -38,7 +38,7 @@ public class CrmMemberController {
 
     @Operation(summary = "删除会员")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:DELETE')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除会员，request={}", JSONUtil.toJsonStr(request));
         crmMemberBusiness.delete(request);
@@ -46,7 +46,7 @@ public class CrmMemberController {
 
     @Operation(summary = "修改会员")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:UPDATE')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:UPDATE')")
     public void update(@RequestBody @Validated CrmMemberUpdateRequestVo request) {
         log.info("修改会员，request={}", JSONUtil.toJsonStr(request));
         crmMemberBusiness.update(request);
@@ -54,21 +54,21 @@ public class CrmMemberController {
 
     @Operation(summary = "会员详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:DETAIL')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:DETAIL')")
     public CrmMemberDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return crmMemberBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询会员(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:PAGE_SIMPLE')")
     public PageResponse<CrmMemberListResponseVo> pageSimple(@RequestBody @Validated CrmMemberQueryPageRequestVo request) {
         return crmMemberBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询会员(应用于会员管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('CRM:SALES:MMEBER:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('CRM:CUSTOMER:MEMBER:PAGE_EXPAND')")
     public PageResponse<CrmMemberExpandListResponseVo> pageExpand(@RequestBody @Validated CrmMemberQueryPageRequestVo request) {
         return crmMemberBusiness.pageExpand(request);
     }

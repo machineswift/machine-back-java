@@ -22,7 +22,7 @@ import com.machine.service.data.attachment.dao.mapper.entity.DataAttachmentCateg
 import com.machine.service.data.attachment.dao.mapper.entity.DataAttachmentEntity;
 import com.machine.service.data.attachment.dao.mapper.entity.DataAttachmentTableRelationEntity;
 import com.machine.service.data.attachment.service.IDataAttachmentService;
-import com.machine.starter.redis.cache.RedisCacheDataAttachmentCategory;
+import com.machine.starter.redis.cache.data.RedisCacheDataAttachmentCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

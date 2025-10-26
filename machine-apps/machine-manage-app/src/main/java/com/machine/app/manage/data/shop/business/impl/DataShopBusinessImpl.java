@@ -29,8 +29,8 @@ import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;
 import com.machine.sdk.common.tool.TreeUtil;
-import com.machine.starter.redis.cache.RedisCacheDataArea;
-import com.machine.starter.redis.cache.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.data.RedisCacheDataArea;
+import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,8 +39,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_ROOT_PARENT_ID;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 
 @Slf4j
 @Component
@@ -431,7 +431,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
 
     private void extractedShopIdByOrganizationIdSet(IamOrganizationTypeEnum organizationType, Set<String> organizationIdSet, Set<String> finallyqueryShopIdSet) {
         for (IamOrganizationTypeEnum type : IamOrganizationTypeEnum.values()) {
-            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + ORGANIZATION_VIRTUAL_NODE)) {
+            if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE)) {
                 //未分配节点
                 List<String> shopIdList = shopClient.listNotBindOrganization(new DataShopNotBindOrganizationInputDto(type));
                 if (CollectionUtil.isNotEmpty(shopIdList)) {
@@ -466,7 +466,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
                 }
             }
 
-            if (organizationIdSet.contains(ORGANIZATION_ROOT_PARENT_ID)) {
+            if (organizationIdSet.contains(DATA_ORGANIZATION_ROOT_PARENT_ID)) {
                 containRootId = true;
             }
 

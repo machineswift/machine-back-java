@@ -1,6 +1,7 @@
 package com.machine.service.data.leaf.server;
 
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
+import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.service.data.leaf.service.IDataLeafService;
 import lombok.extern.slf4j.Slf4j;
@@ -74,10 +75,19 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
 
     @Override
     @GetMapping("data_organization_tree")
-    public String dataOrganizationTree(@RequestParam("organizationType") IamOrganizationTypeEnum organizationType) {
+    public String dataOrganizationTree(@RequestParam("type") IamOrganizationTypeEnum type) {
         return generateTreeKey(
-                REDIS_DATA_ORGANIZATION + organizationType.getName() + "_",
+                REDIS_IAM_ORGANIZATION + type.getName() + "_",
                 "组织树"
+        );
+    }
+
+    @Override
+    @GetMapping("data_tag_category_tree")
+    public String dataTagCategoryTree(@RequestParam("type") ProfileSubjectTypeEnum type) {
+        return generateTreeKey(
+                REDIS_DATA_TAG_CATEGORY + type.getName() + "_",
+                "智能标签分类树"
         );
     }
 
@@ -120,6 +130,11 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
     private static final String REDIS_IAM_PERMISSION = "REDIS_IAM_PERMISSION_";
 
     /**
+     * 组织
+     */
+    private static final String REDIS_IAM_ORGANIZATION = "REDIS_IAM_ORGANIZATION_";
+
+    /**
      * 区域
      */
     private static final String REDIS_DATA_AREA = "REDIS_DATA_AREA_";
@@ -127,20 +142,23 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
     /**
      * 素材分类
      */
-    private static final String REDIS_DATA_MATERIAL_CATEGORY= "REDIS_DATA_MATERIAL_CATEGORY_";
+    private static final String REDIS_DATA_MATERIAL_CATEGORY = "REDIS_DATA_MATERIAL_CATEGORY_";
 
     /**
      * 附件分类
      */
-    private static final String REDIS_DATA_ATTACHMENT_CATEGORY= "REDIS_DATA_ATTACHMENT_CATEGORY_";
+    private static final String REDIS_DATA_ATTACHMENT_CATEGORY = "REDIS_DATA_ATTACHMENT_CATEGORY_";
+
+    /**
+     * 智能标签分类
+     */
+    private static final String REDIS_DATA_TAG_CATEGORY = "REDIS_DATA_TAG_CATEGORY_";
 
     /**
      * 部门
      */
     private static final String REDIS_HRM_DEPARTMENT = "REDIS_DATA_DEPARTMENT_";
 
-    /**
-     * 组织
-     */
-    private static final String REDIS_DATA_ORGANIZATION = "REDIS_DATA_ORGANIZATION_";
+
+
 }

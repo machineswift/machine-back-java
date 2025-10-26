@@ -1,7 +1,7 @@
 package com.machine.client.iam.user;
 
 import com.machine.client.iam.user.dto.input.IamDataPermission4ManageInputDto;
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "xijie-iam-service/xijie-iam-service/server/iam/user_permission",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-iam-service", path = "machine-iam-service/server/iam/user_permission",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IIamUserPermissionClient {
 
     @GetMapping("data_permission_4_superApp")
@@ -20,3 +20,6 @@ public interface IIamUserPermissionClient {
     DataPermissionDto dataPermission4Manage(@RequestBody @Validated IamDataPermission4ManageInputDto inputDto);
 
 }
+
+
+

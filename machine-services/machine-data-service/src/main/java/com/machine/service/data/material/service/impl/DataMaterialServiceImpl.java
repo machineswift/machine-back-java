@@ -19,7 +19,7 @@ import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.service.data.material.dao.*;
 import com.machine.service.data.material.dao.mapper.entity.*;
 import com.machine.service.data.material.service.IDataMaterialService;
-import com.machine.starter.redis.cache.RedisCacheDataMaterialCategory;
+import com.machine.starter.redis.cache.data.RedisCacheDataMaterialCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

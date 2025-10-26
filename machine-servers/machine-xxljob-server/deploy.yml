@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: machine-xxljob-server
-          image: swr.cn-east-3.myhuaweicloud.com/cloud-machine/sjzx_machine-xxljob-server-master:{{imageVersion}}
+          image: machine-xxljob-server-master:{{imageVersion}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

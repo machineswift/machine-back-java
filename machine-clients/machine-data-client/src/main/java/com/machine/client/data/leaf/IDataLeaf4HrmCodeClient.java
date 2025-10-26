@@ -1,11 +1,11 @@
 package com.machine.client.data.leaf;
 
-import com.machine.sdk.common.config.OpenFeignDefaultConfig;
+import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "machine-data-service/machine-data-service/server/data/leaf_4_hrm",
-        configuration = OpenFeignDefaultConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/leaf_4_hrm",
+        configuration = OpenFeignMinTimeConfig.class)
 public interface IDataLeaf4HrmCodeClient {
 
     /**
@@ -14,3 +14,6 @@ public interface IDataLeaf4HrmCodeClient {
     @GetMapping("shop_employee_code")
     String shopEmployeeCode();
 }
+
+
+

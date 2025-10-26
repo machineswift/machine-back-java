@@ -3,9 +3,7 @@ package com.machine.starter.redis;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.machine.starter.redis.function.CustomerRedisCommands;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.StaticCredentialsProvider;
+import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 import org.redisson.Redisson;
@@ -14,8 +12,10 @@ import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -34,14 +34,29 @@ public class RedisAutoConfiguration {
     @Autowired
     private RedisProperties redisProperties;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Bean
     public StatefulRedisConnection<String, String> connection() {
-        RedisClient client = RedisClient.create(RedisURI.builder()
+        RedisURI redisUri = RedisURI.builder()
                 .withHost(redisProperties.getHost())
                 .withPort(redisProperties.getPort()).withAuthentication(
                         new StaticCredentialsProvider("", redisProperties.getPassword().toCharArray()))
                 .withDatabase(database)
                 .withTimeout(Duration.ofMillis(timeout))
+                .build();
+
+        RedisClient client = RedisClient.create(redisUri);
+        client.setOptions(ClientOptions.builder()
+                .socketOptions(SocketOptions.builder()
+                        .keepAlive(true)
+                        .tcpNoDelay(true)
+                        .build())
+                .autoReconnect(true)
+                .timeoutOptions(TimeoutOptions.builder()
+                        .fixedTimeout(Duration.ofMillis(timeout))
+                        .build())
                 .build());
         return client.connect();
     }
@@ -54,7 +69,6 @@ public class RedisAutoConfiguration {
         return connection.sync();
     }
 
-
     /**
      * redis操作，增加事务完成执行命令
      */
@@ -62,7 +76,6 @@ public class RedisAutoConfiguration {
     public CustomerRedisCommands customerStreamBridge(RedisCommands<String, String> redisCommands) {
         return new CustomerRedisCommands(redisCommands);
     }
-
 
     /**
      * 主要用于分布式锁（看门狗）
@@ -74,7 +87,9 @@ public class RedisAutoConfiguration {
                 .setAddress("redis://" + redisProperties.getHost() + SEPARATOR_COLON + redisProperties.getPort())
                 .setPassword(redisProperties.getPassword())
                 .setDatabase(database)
-                .setTimeout(timeout);
+                .setKeepAlive(true)
+                .setTimeout(timeout)
+                .setPingConnectionInterval(30000);
         config.setCodec(new JsonJacksonCodec());
         return Redisson.create(config);
     }
@@ -99,6 +114,15 @@ public class RedisAutoConfiguration {
                 .expireAfterWrite(8, TimeUnit.MINUTES)
                 .maximumSize(640)
                 .build();
+    }
+
+    /**
+     * 每隔 30 秒发送一次 PING 保持连接
+     */
+    @Scheduled(fixedRate = 30000)
+    public void keepRedisAlive() {
+        var redisCommands = applicationContext.getBean(RedisCommands.class);
+        redisCommands.ping();
     }
 }
 

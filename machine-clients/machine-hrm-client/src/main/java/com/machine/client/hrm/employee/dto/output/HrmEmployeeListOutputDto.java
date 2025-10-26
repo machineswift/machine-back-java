@@ -1,7 +1,7 @@
 package com.machine.client.hrm.employee.dto.output;
 
-import com.machine.sdk.beisen.envm.BeiSenEmployeeStatusEnum;
-import com.machine.sdk.beisen.envm.BeiSenGenderEnum;
+import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import lombok.Data;
 
 @Data
@@ -20,9 +20,9 @@ public class HrmEmployeeListOutputDto {
     private String username;
 
     /**
-     * 状态,（BeiSenEmployeeStatusEnum）
+     * 状态,（HrmEmployeeStatusEnum）
      */
-    private BeiSenEmployeeStatusEnum status;
+    private HrmEmployeeStatusEnum status;
 
     /**
      * 编码（工号）
@@ -42,7 +42,7 @@ public class HrmEmployeeListOutputDto {
     /**
      * 性别
      */
-    private BeiSenGenderEnum gender;
+    private GenderEnum gender;
 
     /**
      * 邮箱

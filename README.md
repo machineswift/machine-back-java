@@ -245,56 +245,30 @@ Machine微服务平台采用现代化的微服务架构设计，基于Spring Clo
 
 ### 🛠️ 开发规范
 
-- [🏗️ 架构规范文档](document/code/ARCHITECTURE.md) - 工程分层规范和设计原则
-- [⚠️ 异常规范文档](document/code/EXCEPTION.md) - HTTP状态码使用规范和异常处理机制
-- [🌿 Git规范文档](document/code/GIT_STANDARD.md) - 分支管理和提交规范
-- [🔗 Webhook对接规范](document/code/WEBHOOK_EVENT.md) - 事件推送接口规范
-- [🔐 OAuth2认证规范](document/code/OPENAPI_AUTH.md) - 开放平台认证流程
+- [🏗️ 架构规范文档](document/standards/ARCHITECTURE.md) - 工程分层规范和设计原则
+- [⚠️ 异常规范文档](document/standards/EXCEPTION.md) - HTTP状态码使用规范和异常处理机制
+- [🌿 Git规范文档](document/standards/GIT_STANDARD.md) - 分支管理和提交规范
+- [🔗 Webhook对接规范](document/standards/WEBHOOK_EVENT.md) - 事件推送接口规范
+- [🔐 OAuth2认证规范](document/standards/OPENAPI_AUTH.md) - 开放平台认证流程
 
 ### 🚀 部署指南
 
-- [🏗️ 基础设施部署指南](document/infra/infra.md) - **完整的基础设施部署说明，包含所有配置详情**
+- [🏗️ 基础设施部署指南](document/deploy/README) - **完整的基础设施部署说明，包含所有配置详情**
 
-> 💡 **提示**：所有详细的部署配置、Docker部署、Nacos配置管理、JVM参数配置等详细信息，请参考 [基础设施部署指南](document/infra/infra.md)
+> 💡 **提示**：所有详细的部署配置、Docker部署、Nacos配置管理、JVM参数配置等详细信息，请参考 [基础设施部署指南](document/deploy/README)
 
 ### 🗄️ 数据库设计
 
-#### MySQL数据库
-- [📊 Schema设计](document/db/mysql/table/schema.sql) - 数据库结构设计
-  - `machine_nacos` - Nacos配置中心数据库
-  - `machine_xxljob` - XXL-JOB任务调度数据库
-  - `machine_camunda` - Camunda工作流数据库
-- [🔧 machine-nacos表结构](document/db/mysql/table/machine-nacos-table.sql) - 服务注册与配置管理
-- [⏰ machine-xxljob表结构](document/db/mysql/table/machine-xxljob-table.sql) - 分布式任务调度
-- [📊 测试数据](document/db/mysql/data) - 测试环境初始化数据
+- [📊 完整数据库设计文档](document/database/README.md) - **完整的数据库设计说明，包含所有表结构和数据详情**
 
-#### PostgreSQL数据库
-- [📊 Schema设计](document/db/postgresql/table/schema.sql) - 业务数据库结构设计
-  - `machine_iam` - 身份认证与授权
-  - `machine_data` - 数据管理服务
-  - `machine_ai` - AI智能服务
-  - `machine_hrm` - 人力资源
-  - `machine_crm` - 客户关系管理
-  - `machine_scm` - 供应链管理
-  - `machine_tpp` - 第三方平台
-  - `machine_plugin` - 插件管理
-- [⚙️ Camunda工作流表](document/db/postgresql/table/machine-camunda-table.sql) - 业务流程管理
-- [🔐 machine-iam表结构](document/db/postgresql/table/machine-iam-table.sql) - 用户、角色、权限、组织管理
-- [📊 machine-data表结构](document/db/postgresql/table/machine-data-table.sql) - 门店、标签、素材、附件管理
-- [🤖 machine-ai表结构](document/db/postgresql/table/machine-ai-table.sql) - AI模型、对话、分析数据
-- [👥 machine-hrm表结构](document/db/postgresql/table/machine-hrm-table.sql) - 员工、部门、组织架构
-- [🤝 machine-crm表结构](document/db/postgresql/table/machine-crm-table.sql) - 客户、会员管理
-- [🔗 machine-scm表结构](document/db/postgresql/table/machine-scm-table.sql) - 供应商、采购管理
-- [🌐 machine-tpp表结构](document/db/postgresql/table/machine-tpp-table.sql) - 第三方平台集成
-- [🔌 machine-plugin表结构](document/db/postgresql/table/machine-plugin-table.sql) - 插件系统管理
-- [📊 测试数据](document/db/postgresql/data) - 测试环境初始化数据
+> 💡 **提示**：所有详细的数据库设计、表结构定义、初始化数据等详细信息，请参考 [数据库设计文档](document/database/README.md)
 
 ## 🤝 贡献指南
 
 ### 📝 代码规范
 
-- 遵循 [Java代码规范](document/code/ARCHITECTURE.md)
-- 使用 [Git提交规范](document/code/GIT_STANDARD.md)
+- 遵循 [Java代码规范](document/standards/ARCHITECTURE.md)
+- 使用 [Git提交规范](document/standards/GIT_STANDARD.md)
 - 确保代码通过所有测试
 - 添加必要的文档和注释
 

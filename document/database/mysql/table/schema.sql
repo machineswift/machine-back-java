@@ -1,0 +1,2 @@
+CREATE DATABASE machine_nacos CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE machine_xxljob CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;

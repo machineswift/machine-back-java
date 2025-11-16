@@ -2,7 +2,7 @@ package com.machine.service.iam.role.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.iam.IamPermissionTypeEnum;
+import com.machine.sdk.common.envm.iam.permission.IamPermissionTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

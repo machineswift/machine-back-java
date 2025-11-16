@@ -18,3 +18,4 @@ public class DataTagCategoryUpdateParentInputDto {
     @Schema(description = "父ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private String parentId;
 }
+

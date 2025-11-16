@@ -1,6 +1,6 @@
 package com.machine.client.iam.organization.dto.input;
 
-import com.machine.sdk.common.envm.iam.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

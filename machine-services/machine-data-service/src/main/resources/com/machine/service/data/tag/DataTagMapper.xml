@@ -18,6 +18,9 @@
             <if test="inputDto.code != null and inputDto.code != ''">
                 AND tdt.code LIKE CONCAT('%', #{inputDto.code}, '%')
             </if>
+            <if test="inputDto.status != null">
+                AND tdt.status = #{inputDto.status}
+            </if>
         </where>
         ORDER BY tdt.create_time DESC
     </select>

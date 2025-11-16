@@ -1,6 +1,6 @@
 package com.machine.client.iam.user.dto.input;
 
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,6 @@
 package com.machine.app.manage.data.tag.business;
 
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCreateRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagQueryPageRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagUpdateCategoryRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagUpdateRequestVo;
+import com.machine.app.manage.data.tag.controller.vo.request.*;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagDetailResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagExpandListResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagSimpleListResponseVo;
@@ -17,6 +14,12 @@ public interface IDataTagBusiness {
     void delete(IdRequest request);
 
     void update(DataTagUpdateRequestVo request);
+
+    void updateCode(DataTagUpdateCodeRequestVo request);
+
+    void updateStatus(DataTagUpdateStatusRequestVo request);
+
+    void updateSort(DataTagUpdateSortRequestVo request);
 
     void updateCategory(DataTagUpdateCategoryRequestVo request);
 

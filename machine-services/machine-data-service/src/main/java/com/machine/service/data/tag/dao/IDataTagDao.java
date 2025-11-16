@@ -16,10 +16,13 @@ public interface IDataTagDao {
 
     DataTagEntity getById(String id);
 
+    DataTagEntity getByCode(String code);
+
     DataTagEntity getByCategoryIdAndName(String categoryId,
                                          String name);
 
     List<DataTagEntity> selectByCategoryId(String categoryId);
 
     Page<DataTagEntity> selectPage(DataTagQueryPageInputDto inputDto);
+
 }

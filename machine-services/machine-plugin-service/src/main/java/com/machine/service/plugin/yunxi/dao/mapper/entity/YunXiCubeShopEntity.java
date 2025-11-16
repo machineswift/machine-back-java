@@ -215,7 +215,7 @@ public class YunXiCubeShopEntity {
      * 排序字段
      */
     @TableField(value = "sort_num")
-    private Integer sortNum;
+    private Long sortNum;
 
     /*
      * 书亦烧仙草小程序我的开票二维码url

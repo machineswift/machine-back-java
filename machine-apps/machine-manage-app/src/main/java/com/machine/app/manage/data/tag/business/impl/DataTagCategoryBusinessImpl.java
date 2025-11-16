@@ -2,15 +2,13 @@ package com.machine.app.manage.data.tag.business.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.machine.app.manage.data.tag.business.IDataTagCategoryBusiness;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryCreateRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryTreeRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryUpdateParentRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryUpdateRequestVo;
+import com.machine.app.manage.data.tag.controller.vo.request.*;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagCategoryDetailResponseVo;
 import com.machine.client.data.tag.IDataTagCategoryClient;
 import com.machine.client.data.tag.dto.input.DataTagCategoryCreateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateParentInputDto;
+import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateSortInputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
@@ -54,6 +52,12 @@ public class DataTagCategoryBusinessImpl implements IDataTagCategoryBusiness {
     public void update(DataTagCategoryUpdateRequestVo request) {
         DataTagCategoryUpdateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataTagCategoryUpdateInputDto.class);
         tagCategoryClient.update(inputDto);
+    }
+
+    @Override
+    public void updateSort(DataTagCategoryUpdateSortRequestVo request) {
+        DataTagCategoryUpdateSortInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataTagCategoryUpdateSortInputDto.class);
+        tagCategoryClient.updateSort(inputDto);
     }
 
     @Override

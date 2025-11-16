@@ -1,6 +1,6 @@
 package com.machine.client.iam.user.dto.output;
 
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

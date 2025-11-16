@@ -8,6 +8,7 @@ import com.machine.client.data.leaf.IDataLeaf4RedisClient;
 import com.machine.client.data.tag.dto.input.DataTagCategoryCreateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateParentInputDto;
+import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateSortInputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
@@ -89,8 +90,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int delete(IdRequest request) {
-        String id = request.getId();
-        DataTagCategoryEntity entity = tagCategoryDao.getById(id);
+        DataTagCategoryEntity entity = tagCategoryDao.getById(request.getId());
         if (null == entity) {
             return 0;
         }
@@ -110,7 +110,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
             throw new DataBusinessException("data.tagCategory.service.delete.associationTag", "关联标签不能删除");
         }
 
-        return tagCategoryDao.delete(id);
+        return tagCategoryDao.delete(entity.getId());
     }
 
     @Override
@@ -135,6 +135,25 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
         DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
         updateEntity.setId(inputDto.getId());
         updateEntity.setName(inputDto.getName());
+        updateEntity.setSort(inputDto.getSort());
+        return tagCategoryDao.update(updateEntity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateSort(DataTagCategoryUpdateSortInputDto inputDto) {
+        DataTagCategoryEntity dbEntity = tagCategoryDao.getById(inputDto.getId());
+        if (dbEntity == null) {
+            return 0;
+        }
+
+        if (dbEntity.getSort().equals(inputDto.getSort())) {
+            //相同直接返回
+            return 0;
+        }
+
+        DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
+        updateEntity.setId(inputDto.getId());
         updateEntity.setSort(inputDto.getSort());
         return tagCategoryDao.update(updateEntity);
     }
@@ -174,7 +193,11 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
         if (recursionIdSet.contains(inputDto.getParentId())) {
             throw new DataBusinessException("data.tagCategory.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
         }
-        return tagCategoryDao.updateParentId(inputDto.getId(), inputDto.getParentId());
+
+        DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
+        updateEntity.setId(inputDto.getId());
+        updateEntity.setParentId(inputDto.getParentId());
+        return tagCategoryDao.update(updateEntity);
     }
 
     @Override

@@ -3,10 +3,7 @@ package com.machine.service.data.tag.server;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.tag.IDataTagClient;
-import com.machine.client.data.tag.dto.input.DataTagCreateInputDto;
-import com.machine.client.data.tag.dto.input.DataTagQueryPageInputDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateCategoryDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateInputDto;
+import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagListOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -41,6 +38,27 @@ public class DataTagServer implements IDataTagClient {
     public int update(@RequestBody @Validated DataTagUpdateInputDto inputDto) {
         log.info("更新智能标签，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return tagService.update(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_code")
+    public int updateCode(@RequestBody @Validated DataTagUpdateCodeInputDto inputDto) {
+        log.info("更新智能标签编码，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return tagService.updateCode(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_status")
+    public int updateStatus(@RequestBody @Validated DataTagUpdateStatusInputDto inputDto) {
+        log.info("更新智能标签状态，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return tagService.updateStatus(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_sort")
+    public int updateSort(@RequestBody @Validated DataTagUpdateSortInputDto inputDto) {
+        log.info("更新智能标签排序，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return tagService.updateSort(inputDto);
     }
 
     @Override

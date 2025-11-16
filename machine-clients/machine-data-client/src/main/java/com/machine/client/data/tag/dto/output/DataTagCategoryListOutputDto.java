@@ -26,7 +26,7 @@ public class DataTagCategoryListOutputDto {
     private String name;
 
     @Schema(description = "排序，sort值大的排序靠前")
-    private Integer sort;
+    private Long sort;
 
     @Schema(description = "创建人ID")
     private String createBy;

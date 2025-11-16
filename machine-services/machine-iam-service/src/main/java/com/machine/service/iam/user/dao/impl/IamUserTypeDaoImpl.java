@@ -3,7 +3,7 @@ package com.machine.service.iam.user.dao.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.client.iam.user.dto.input.IamUserTypeExistsTypeInputDto;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import com.machine.service.iam.user.dao.IIamUserTypeDao;
 import com.machine.service.iam.user.dao.mapper.IamUserTypeMapper;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserTypeEntity;

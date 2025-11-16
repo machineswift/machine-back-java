@@ -35,7 +35,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;

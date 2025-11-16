@@ -22,7 +22,7 @@ import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.user.*;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.*;
-import com.machine.sdk.common.envm.iam.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;

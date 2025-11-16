@@ -29,5 +29,6 @@ public class DataTagCategoryUpdateInputDto {
 
     @NotNull(message = "排序不能为空")
     @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Integer sort;
+    private Long sort;
 }
+

@@ -1,6 +1,6 @@
 package com.machine.client.iam.permission.dto.output;
 
-import com.machine.sdk.common.envm.iam.IamPermissionResourceTypeEnum;
+import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
 import com.machine.sdk.common.model.dto.iam.DataPermissionMetaDto;
 import com.machine.sdk.common.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -13,9 +13,6 @@ public interface IDataTagCategoryDao {
 
     int update(DataTagCategoryEntity entity);
 
-    int updateParentId(String id,
-                       String parentId);
-
     DataTagCategoryEntity getById(String id);
 
     DataTagCategoryEntity getByParentIdAndName(String parentId,
@@ -23,3 +20,4 @@ public interface IDataTagCategoryDao {
 
     List<DataTagCategoryEntity> listAllByType(ProfileSubjectTypeEnum type);
 }
+

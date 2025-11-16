@@ -50,6 +50,30 @@ public class DataTagController {
         tagBusiness.update(request);
     }
 
+    @Operation(summary = "修改智能标签编码")
+    @PostMapping("update_code")
+    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG:UPDATE_CODE')")
+    public void updateCode(@RequestBody @Validated DataTagUpdateCodeRequestVo request) {
+        log.info("修改智能标签编码，request={}", JSONUtil.toJsonStr(request));
+        tagBusiness.updateCode(request);
+    }
+
+    @Operation(summary = "修改智能标签状态")
+    @PostMapping("update_status")
+    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG:UPDATE_STATUS')")
+    public void updateStatus(@RequestBody @Validated DataTagUpdateStatusRequestVo request) {
+        log.info("修改智能标签状态，request={}", JSONUtil.toJsonStr(request));
+        tagBusiness.updateStatus(request);
+    }
+
+    @Operation(summary = "修改智能标签排序")
+    @PostMapping("update_sort")
+    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG:UPDATE_SORT')")
+    public void updateSort(@RequestBody @Validated DataTagUpdateSortRequestVo request) {
+        log.info("修改智能标签排序，request={}", JSONUtil.toJsonStr(request));
+        tagBusiness.updateSort(request);
+    }
+
     @Operation(summary = "修改智能标签关联分类")
     @PostMapping("update_category")
     @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG:UPDATE_CATEGORY')")

@@ -1,10 +1,7 @@
 package com.machine.service.data.tag.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.tag.dto.input.DataTagCreateInputDto;
-import com.machine.client.data.tag.dto.input.DataTagQueryPageInputDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateCategoryDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateInputDto;
+import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagListOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -17,6 +14,12 @@ public interface IDataTagService {
     int delete(IdRequest request);
 
     int update(DataTagUpdateInputDto inputDto);
+
+    int updateCode(DataTagUpdateCodeInputDto inputDto);
+
+    int updateStatus(DataTagUpdateStatusInputDto inputDto);
+
+    int updateSort(DataTagUpdateSortInputDto inputDto);
 
     int updateCategory(DataTagUpdateCategoryDto inputDto);
 

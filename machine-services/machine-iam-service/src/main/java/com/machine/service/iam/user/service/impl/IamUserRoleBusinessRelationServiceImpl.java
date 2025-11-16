@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeBindShopInputDto;
 import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeUnBindShopInputDto;
 import com.machine.client.iam.user.dto.output.IamUserRoleBusinessRelationListOutputDto;
-import com.machine.sdk.common.envm.iam.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.role.IamShopDefaultRoleEnum;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.service.iam.user.dao.IIamUserRoleBusinessRelationDao;

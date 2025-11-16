@@ -21,7 +21,7 @@ import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import com.machine.sdk.common.envm.iam.role.IamShopDefaultRoleEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.tool.StringUtil;

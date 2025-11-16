@@ -25,3 +25,4 @@ public interface DataTagCategoryMapper extends BaseMapper<DataTagCategoryEntity>
      */
     List<DataTagCategoryEntity> selectAll();
 }
+

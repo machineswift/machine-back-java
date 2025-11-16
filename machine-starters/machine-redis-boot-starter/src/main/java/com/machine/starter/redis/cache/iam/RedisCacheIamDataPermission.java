@@ -9,7 +9,7 @@ import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
 import com.machine.client.iam.user.IIamUserPermissionClient;
 import com.machine.client.iam.user.dto.input.IamDataPermission4ManageInputDto;
 import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.iam.IamPermissionResourceTypeEnum;
+import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
 import com.machine.sdk.common.exception.iam.IamPermissionBusinessException;
 import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.model.request.IdRequest;

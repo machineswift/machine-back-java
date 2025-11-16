@@ -1,6 +1,6 @@
 package com.machine.service.iam.user.dao;
 
-import com.machine.sdk.common.envm.iam.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleBusinessRelationEntity;
 
 import java.util.List;

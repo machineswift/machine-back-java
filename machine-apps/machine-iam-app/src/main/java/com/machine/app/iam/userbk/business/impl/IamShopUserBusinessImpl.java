@@ -32,7 +32,7 @@ import com.machine.client.iam.user.dto.input.IamUserExportInputDto;
 import com.machine.client.iam.userbk.dto.input.IamShopUserQueryPageInputDto;
 import com.machine.client.iam.userbk.dto.input.IamShopUserUpdateInputDto;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;

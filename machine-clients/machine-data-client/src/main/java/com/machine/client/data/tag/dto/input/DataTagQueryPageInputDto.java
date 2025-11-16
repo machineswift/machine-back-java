@@ -1,5 +1,6 @@
 package com.machine.client.data.tag.dto.input;
 
+import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,5 +29,8 @@ public class DataTagQueryPageInputDto extends PageRequest {
 
     @Schema(description = "名称")
     private String name;
+
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
 
 }

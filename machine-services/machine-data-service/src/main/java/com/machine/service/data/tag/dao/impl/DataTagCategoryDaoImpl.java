@@ -50,32 +50,9 @@ public class DataTagCategoryDaoImpl implements IDataTagCategoryDao {
 
     @Override
     public int update(DataTagCategoryEntity entity) {
-        DataTagCategoryEntity dbEntity = tagCategoryMapper.selectById(entity.getId());
-        if (dbEntity == null) {
-            return 0;
-        }
-
         //缓存
-        customerRedisCommands.del(DATA_TAG_CATEGORY_TREE_KEY + dbEntity.getType().getName());
+        customerRedisCommands.del(DATA_TAG_CATEGORY_TREE_KEY + entity.getType().getName());
 
-        return tagCategoryMapper.updateById(entity);
-    }
-
-    @Override
-    public int updateParentId(String id,
-                              String parentId) {
-
-        DataTagCategoryEntity dbEntity = tagCategoryMapper.selectById(id);
-        if (dbEntity == null) {
-            return 0;
-        }
-
-        //缓存
-        customerRedisCommands.del(DATA_TAG_CATEGORY_TREE_KEY + dbEntity.getType().getName());
-
-        DataTagCategoryEntity entity = new DataTagCategoryEntity();
-        entity.setId(id);
-        entity.setParentId(parentId);
         return tagCategoryMapper.updateById(entity);
     }
 
@@ -86,7 +63,7 @@ public class DataTagCategoryDaoImpl implements IDataTagCategoryDao {
 
     @Override
     public DataTagCategoryEntity getByParentIdAndName(String parentId,
-                                         String name) {
+                                                      String name) {
         Wrapper<DataTagCategoryEntity> queryWrapper = new LambdaQueryWrapper<DataTagCategoryEntity>()
                 .eq(DataTagCategoryEntity::getParentId, parentId)
                 .eq(DataTagCategoryEntity::getName, name);
@@ -100,3 +77,4 @@ public class DataTagCategoryDaoImpl implements IDataTagCategoryDao {
         return tagCategoryMapper.selectList(queryWrapper);
     }
 }
+

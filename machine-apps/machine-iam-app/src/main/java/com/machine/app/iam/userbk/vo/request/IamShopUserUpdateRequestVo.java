@@ -1,5 +1,6 @@
 package com.machine.app.iam.userbk.vo.request;
 
+import com.machine.app.iam.user.controller.vo.request.IamUserRoleUpdateRequestVo;
 import com.machine.sdk.common.envm.common.GenderEnum;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;

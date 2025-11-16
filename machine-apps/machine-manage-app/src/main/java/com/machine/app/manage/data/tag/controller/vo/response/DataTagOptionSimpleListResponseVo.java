@@ -1,0 +1,30 @@
+package com.machine.app.manage.data.tag.controller.vo.response;
+
+import com.machine.sdk.common.envm.StatusEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Schema
+@NoArgsConstructor
+public class DataTagOptionSimpleListResponseVo {
+
+    @Schema(description = "ID")
+    private String id;
+
+    @Schema(description = "智能标签ID")
+    private String tagId;
+
+    @Schema(description = "编码")
+    private String code;
+
+    @Schema(description = "名称")
+    private String name;
+
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
+
+    @Schema(description = "排序，sort值大的排序靠前")
+    private Long sort;
+}

@@ -1,6 +1,6 @@
 package com.machine.sdk.common.model.dto.iam;
 
-import com.machine.sdk.common.envm.iam.IamDataPermissionResultTypeEnum;
+import com.machine.sdk.common.envm.iam.permission.IamDataPermissionResultTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

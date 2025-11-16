@@ -54,6 +54,10 @@ CREATE TABLE t_iam_user_type_relation
     CONSTRAINT uk_t_iam_user_type_relation_01 UNIQUE (user_id, user_type)
 );
 
+ALTER TABLE t_iam_user_type_relation
+ADD CONSTRAINT fk_t_iam_user_type_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
 COMMENT ON TABLE t_iam_user_type_relation IS '用户类型关系表';
 COMMENT ON COLUMN t_iam_user_type_relation.id IS 'ID';
 COMMENT ON COLUMN t_iam_user_type_relation.user_id IS '用户id';
@@ -188,6 +192,14 @@ CREATE TABLE t_iam_role_permission_relation
     CONSTRAINT uk_t_iam_role_permission_relation_01 UNIQUE (role_id, permission_id)
 );
 
+ALTER TABLE t_iam_role_permission_relation
+ADD CONSTRAINT fk_t_iam_role_permission_relation_01
+FOREIGN KEY (role_id) REFERENCES t_iam_role(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_role_permission_relation
+ADD CONSTRAINT fk_t_iam_role_permission_relation_02
+FOREIGN KEY (permission_id) REFERENCES t_iam_permission(id) ON DELETE CASCADE;
+
 COMMENT ON TABLE t_iam_role_permission_relation IS '角色权限关系表';
 COMMENT ON COLUMN t_iam_role_permission_relation.id IS 'ID';
 COMMENT ON COLUMN t_iam_role_permission_relation.role_id IS '角色ID';
@@ -216,6 +228,14 @@ CREATE TABLE t_iam_group_permission_relation
     CONSTRAINT uk_t_iam_group_permission_relation_01 UNIQUE (group_id, permission_id)
 );
 
+ALTER TABLE t_iam_group_permission_relation
+ADD CONSTRAINT fk_t_iam_group_permission_relation_01
+FOREIGN KEY (group_id) REFERENCES t_iam_group(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_group_permission_relation
+ADD CONSTRAINT fk_t_iam_group_permission_relation_02
+FOREIGN KEY (permission_id) REFERENCES t_iam_permission(id) ON DELETE CASCADE;
+
 COMMENT ON TABLE t_iam_group_permission_relation IS '分组权限关系表';
 COMMENT ON COLUMN t_iam_group_permission_relation.id IS 'ID';
 COMMENT ON COLUMN t_iam_group_permission_relation.group_id IS '分组ID';
@@ -242,6 +262,14 @@ CREATE TABLE t_iam_group_role_relation
     CONSTRAINT uk_t_iam_group_role_relation_01 UNIQUE (group_id, role_id)
 );
 
+ALTER TABLE t_iam_group_role_relation
+ADD CONSTRAINT fk_t_iam_group_role_relation_01
+FOREIGN KEY (group_id) REFERENCES t_iam_group(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_group_role_relation
+ADD CONSTRAINT fk_t_iam_group_role_relation_02
+FOREIGN KEY (role_id) REFERENCES t_iam_role(id) ON DELETE CASCADE;
+
 COMMENT ON TABLE t_iam_group_role_relation IS '分组角色关系表';
 COMMENT ON COLUMN t_iam_group_role_relation.id IS 'ID';
 COMMENT ON COLUMN t_iam_group_role_relation.group_id IS '分组ID';
@@ -266,6 +294,14 @@ CREATE TABLE t_iam_user_group_relation
     CONSTRAINT pk_t_iam_user_group_relation PRIMARY KEY (id),
     CONSTRAINT uk_t_iam_user_group_relation_01 UNIQUE (user_id, group_id)
 );
+
+ALTER TABLE t_iam_user_group_relation
+ADD CONSTRAINT fk_t_iam_user_group_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_user_group_relation
+ADD CONSTRAINT fk_t_iam_user_group_relation_02
+FOREIGN KEY (group_id) REFERENCES t_iam_group(id) ON DELETE CASCADE;
 
 COMMENT ON TABLE t_iam_user_group_relation IS '用户分组关系表';
 COMMENT ON COLUMN t_iam_user_group_relation.id IS 'ID';
@@ -293,6 +329,14 @@ CREATE TABLE t_iam_user_permission_relation
     CONSTRAINT uk_t_iam_user_permission_relation_01 UNIQUE (user_id, permission_id)
 );
 
+ALTER TABLE t_iam_user_permission_relation
+ADD CONSTRAINT fk_t_iam_user_permission_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_user_permission_relation
+ADD CONSTRAINT fk_t_iam_user_permission_relation_02
+FOREIGN KEY (permission_id) REFERENCES t_iam_permission(id) ON DELETE CASCADE;
+
 COMMENT ON TABLE t_iam_user_permission_relation IS '用户权限关系表';
 COMMENT ON COLUMN t_iam_user_permission_relation.id IS 'ID';
 COMMENT ON COLUMN t_iam_user_permission_relation.user_id IS '用户ID';
@@ -318,6 +362,14 @@ CREATE TABLE t_iam_user_role_relation
     CONSTRAINT pk_t_iam_user_role_relation PRIMARY KEY (id),
     CONSTRAINT uk_t_iam_user_role_relation_01 UNIQUE (user_id, role_id)
 );
+
+ALTER TABLE t_iam_user_role_relation
+ADD CONSTRAINT fk_t_iam_user_role_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_user_role_relation
+ADD CONSTRAINT fk_t_iam_user_role_relation_02
+FOREIGN KEY (role_id) REFERENCES t_iam_role(id) ON DELETE CASCADE;
 
 CREATE INDEX idx_t_iam_user_role_relation_01 ON t_iam_user_role_relation (role_id);
 
@@ -346,6 +398,10 @@ CREATE TABLE t_iam_user_role_business_relation
     CONSTRAINT pk_t_iam_user_role_business_relation PRIMARY KEY (id),
     CONSTRAINT uk_t_iam_user_role_business_relation_01 UNIQUE (user_role_relation_id, business_id, business_type)
 );
+
+ALTER TABLE t_iam_user_role_business_relation
+ADD CONSTRAINT fk_t_iam_user_role_business_relation_01
+FOREIGN KEY (user_role_relation_id) REFERENCES t_iam_user_role_relation(id) ON DELETE CASCADE;
 
 CREATE INDEX idx_t_iam_user_role_business_relation_01 ON t_iam_user_role_business_relation (business_id, business_type);
 
@@ -408,6 +464,14 @@ CREATE TABLE t_iam_user_organization_relation
     CONSTRAINT uk_t_iam_user_organization_relation_01 UNIQUE (organization_id, user_id)
 );
 
+ALTER TABLE t_iam_user_organization_relation
+ADD CONSTRAINT fk_t_iam_user_organization_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_user_organization_relation
+ADD CONSTRAINT fk_t_iam_user_organization_relation_02
+FOREIGN KEY (organization_id) REFERENCES t_iam_organization(id) ON DELETE CASCADE;
+
 CREATE INDEX idx_t_iam_user_organization_relation_01 ON t_iam_user_organization_relation (user_id, organization_type);
 
 COMMENT ON TABLE t_iam_user_organization_relation IS '用户组织关系表';
@@ -468,6 +532,14 @@ CREATE TABLE t_iam_user_third_party_user_relation
     CONSTRAINT pk_t_iam_user_third_party_user_relation PRIMARY KEY (id),
     CONSTRAINT uk_t_iam_user_third_party_user_relation_01 UNIQUE (third_party_user_id)
 );
+
+ALTER TABLE t_iam_user_third_party_user_relation
+ADD CONSTRAINT fk_t_iam_user_third_party_user_relation_01
+FOREIGN KEY (user_id) REFERENCES t_iam_user(id) ON DELETE CASCADE;
+
+ALTER TABLE t_iam_user_third_party_user_relation
+ADD CONSTRAINT fk_t_iam_user_third_party_user_relation_02
+FOREIGN KEY (third_party_user_id) REFERENCES t_iam_third_party_user(id) ON DELETE CASCADE;
 
 CREATE INDEX idx_t_iam_user_third_party_user_relation_01 ON t_iam_user_third_party_user_relation (third_party_user_id);
 

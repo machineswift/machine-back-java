@@ -15,11 +15,18 @@ public class DataTagCreateInputDto {
     @Schema(description = "分类ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private String categoryId;
 
-    @NotNull(message = "排序不能为空")
-    @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long sort;
+    @NotBlank(message = "编码不能为空")
+    @Schema(description = "编码", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String code;
 
     @NotBlank(message = "名称不能为空")
     @Schema(description = "名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
+
+    @NotNull(message = "排序不能为空")
+    @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Long sort;
+
+    @Schema(description = "描述")
+    private String description;
 }

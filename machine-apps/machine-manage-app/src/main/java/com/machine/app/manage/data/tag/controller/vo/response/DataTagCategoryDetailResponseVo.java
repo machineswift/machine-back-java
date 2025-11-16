@@ -22,7 +22,10 @@ public class DataTagCategoryDetailResponseVo {
     private String name;
 
     @Schema(description = "排序，sort值大的排序靠前")
-    private Integer sort;
+    private Long sort;
+
+    @Schema(description = "描述")
+    private String description;
 
     @Schema(description = "创建人姓名")
     private String createName;
@@ -42,3 +45,4 @@ public class DataTagCategoryDetailResponseVo {
     @Schema(description = "更新时间（Unix 时间戳）")
     private Long updateTime;
 }
+

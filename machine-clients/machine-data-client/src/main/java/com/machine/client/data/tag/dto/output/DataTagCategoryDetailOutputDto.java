@@ -26,7 +26,7 @@ public class DataTagCategoryDetailOutputDto {
     private String name;
 
     @Schema(description = "排序，sort值大的排序靠前")
-    private Integer sort;
+    private Long sort;
 
     @Schema(description = "创建人ID")
     private String createBy;
@@ -40,3 +40,4 @@ public class DataTagCategoryDetailOutputDto {
     @Schema(description = "更新时间（Unix 时间戳）")
     private Long updateTime;
 }
+

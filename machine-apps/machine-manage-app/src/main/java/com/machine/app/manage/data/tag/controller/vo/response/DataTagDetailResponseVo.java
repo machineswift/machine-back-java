@@ -1,5 +1,6 @@
 package com.machine.app.manage.data.tag.controller.vo.response;
 
+import com.machine.sdk.common.envm.StatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,20 @@ public class DataTagDetailResponseVo {
     @Schema(description = "分类ID")
     private String categoryId;
 
-    @Schema(description = "排序，sort值大的排序靠前")
-    private Long sort;
+    @Schema(description = "编码")
+    private String code;
 
     @Schema(description = "名称")
     private String name;
+
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
+
+    @Schema(description = "排序，sort值大的排序靠前")
+    private Long sort;
+
+    @Schema(description = "描述")
+    private String description;
 
     @Schema(description = "创建人ID")
     private String createBy;

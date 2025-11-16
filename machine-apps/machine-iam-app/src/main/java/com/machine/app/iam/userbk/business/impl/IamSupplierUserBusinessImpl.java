@@ -23,7 +23,7 @@ import com.machine.client.iam.userbk.IIamUserBkClient;
 import com.machine.client.iam.userbk.dto.input.IamSupplierUserCreateInputDto;
 import com.machine.client.iam.userbk.dto.input.IamSupplierUserQueryPageInputDto;
 import com.machine.client.iam.userbk.dto.input.IamSupplierUserUpdateInputDto;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
 import com.machine.sdk.common.model.response.PageResponse;

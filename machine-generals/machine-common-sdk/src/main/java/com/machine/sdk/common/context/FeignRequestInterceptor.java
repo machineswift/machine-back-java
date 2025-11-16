@@ -23,11 +23,10 @@ public class FeignRequestInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         String userId = AppContext.getContext().getUserId();
 
-        if (shouldSkipUserIdCheck(template)) {
-            return;
-        }
-
         if (null == userId || userId.trim().isEmpty()) {
+            if (shouldSkipUserIdCheck(template)) {
+                return;
+            }
             String feignMethod = template.feignTarget().name() + template.path();
             log.warn("用户Id丢失，feign method:{}", feignMethod);
             throw new AuthFeignUserIdException("用户Id丢失");

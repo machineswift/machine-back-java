@@ -5,6 +5,7 @@ import com.machine.client.data.tag.IDataTagCategoryClient;
 import com.machine.client.data.tag.dto.input.DataTagCategoryCreateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateParentInputDto;
+import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateSortInputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
@@ -46,6 +47,13 @@ public class DataTagCategoryServer implements IDataTagCategoryClient {
     public int update(@RequestBody @Validated DataTagCategoryUpdateInputDto inputDto) {
         log.info("更新智能标签分类，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return tagCategoryService.update(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_sort")
+    public int updateSort(@RequestBody @Validated DataTagCategoryUpdateSortInputDto inputDto) {
+        log.info("更新智能标签排序，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return tagCategoryService.updateSort(inputDto);
     }
 
     @Operation(summary = "更新智能标签分类父ID")

@@ -17,7 +17,7 @@ import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.data.attachment.DataAttachmentTypeEnum;
-import com.machine.sdk.common.envm.iam.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;

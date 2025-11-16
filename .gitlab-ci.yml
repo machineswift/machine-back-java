@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  tags:
+    - docker
+    - ubuntu
+    - build
+  script:
+    - echo "代码编译..."
+
+test:
+  stage: test
+  tags:
+    - docker
+    - ubuntu
+    - build
+  script:
+    - echo "测试代码..."
+
+deploy:
+  stage: deploy
+  tags:
+    - docker
+    - ubuntu
+    - build
+  script:
+    - echo "部署项目..."

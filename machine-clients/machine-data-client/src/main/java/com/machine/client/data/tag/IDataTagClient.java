@@ -1,9 +1,6 @@
 package com.machine.client.data.tag;
 
-import com.machine.client.data.tag.dto.input.DataTagCreateInputDto;
-import com.machine.client.data.tag.dto.input.DataTagQueryPageInputDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateCategoryDto;
-import com.machine.client.data.tag.dto.input.DataTagUpdateInputDto;
+import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagListOutputDto;
 import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
@@ -27,6 +24,15 @@ public interface IDataTagClient {
 
     @PostMapping("update")
     int update(@RequestBody @Valid DataTagUpdateInputDto inputDto);
+
+    @PostMapping("update_code")
+    int updateCode(@RequestBody @Valid DataTagUpdateCodeInputDto inputDto);
+
+    @PostMapping("update_status")
+    int updateStatus(@RequestBody @Valid DataTagUpdateStatusInputDto inputDto);
+
+    @PostMapping("update_sort")
+    int updateSort(@RequestBody @Valid DataTagUpdateSortInputDto inputDto);
 
     @PostMapping("update_category")
     int updateCategory(@RequestBody @Valid DataTagUpdateCategoryDto inputDto);

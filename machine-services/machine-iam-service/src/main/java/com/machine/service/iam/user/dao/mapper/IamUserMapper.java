@@ -24,7 +24,7 @@ public interface IamUserMapper extends BaseMapper<IamUserEntity> {
     IamUserEntity getByThirdPartyUuid(@Param("source") IamAuth2SourceEnum source,
                                       @Param("thirdPartyUuid") String thirdPartyUuid);
 
-    List<String> listIdByShopIdSet(@Param("inputDto") Set<String> shopIdSet);
+    List<String> listIdByShopIdSet(@Param("shopIdSet") Set<String> shopIdSet);
 
     List<String> listNotBindOrganization(@Param("inputDto") IamDataUserNotBindOrganizationInputDto inputDto);
 

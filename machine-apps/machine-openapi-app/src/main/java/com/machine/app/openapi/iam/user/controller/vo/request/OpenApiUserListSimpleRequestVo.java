@@ -1,7 +1,7 @@
 package com.machine.app.openapi.iam.user.controller.vo.request;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

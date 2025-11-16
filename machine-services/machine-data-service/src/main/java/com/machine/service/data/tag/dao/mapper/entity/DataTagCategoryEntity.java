@@ -42,5 +42,6 @@ public class DataTagCategoryEntity extends BaseEntity {
      * 排序，sort值大的排序靠前
      */
     @TableField("sort")
-    private Integer sort;
+    private Long sort;
 }
+

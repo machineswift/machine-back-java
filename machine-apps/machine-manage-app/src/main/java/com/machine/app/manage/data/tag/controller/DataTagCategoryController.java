@@ -2,10 +2,7 @@ package com.machine.app.manage.data.tag.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.machine.app.manage.data.tag.business.IDataTagCategoryBusiness;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryCreateRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryTreeRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryUpdateParentRequestVo;
-import com.machine.app.manage.data.tag.controller.vo.request.DataTagCategoryUpdateRequestVo;
+import com.machine.app.manage.data.tag.controller.vo.request.*;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagCategoryDetailResponseVo;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -54,6 +51,14 @@ public class DataTagCategoryController {
         tagCategoryBusiness.update(request);
     }
 
+    @Operation(summary = "修改智能标签分类排序")
+    @PostMapping("update_sort")
+    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_SORT')")
+    public void updateSort(@RequestBody @Validated DataTagCategoryUpdateSortRequestVo request) {
+        log.info("修改智能标签分类排序，request={}", JSONUtil.toJsonStr(request));
+        tagCategoryBusiness.updateSort(request);
+    }
+
     @Operation(summary = "修改智能标签分类父ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_PARENT')")
@@ -77,3 +82,4 @@ public class DataTagCategoryController {
     }
 
 }
+

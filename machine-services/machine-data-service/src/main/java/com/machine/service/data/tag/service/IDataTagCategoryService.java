@@ -3,6 +3,7 @@ package com.machine.service.data.tag.service;
 import com.machine.client.data.tag.dto.input.DataTagCategoryCreateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateInputDto;
 import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateParentInputDto;
+import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateSortInputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
@@ -19,6 +20,8 @@ public interface IDataTagCategoryService {
 
     int update(DataTagCategoryUpdateInputDto inputDto);
 
+    int updateSort(DataTagCategoryUpdateSortInputDto inputDto);
+
     int updateParent(DataTagCategoryUpdateParentInputDto inputDto);
 
     DataTagCategoryDetailOutputDto detail(IdRequest request);
@@ -26,4 +29,6 @@ public interface IDataTagCategoryService {
     List<DataTagCategoryListOutputDto> listAllByType(ProfileSubjectTypeEnum type);
 
     DataTagCategoryTreeSimpleOutputDto treeAllSimple(ProfileSubjectTypeEnum type);
+
 }
+

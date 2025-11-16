@@ -1,6 +1,5 @@
 package com.machine.app.iam.user.controller.vo.request;
 
-import com.machine.app.iam.userbk.vo.request.IamUserRoleUpdateRequestVo;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,5 +1,6 @@
 package com.machine.app.iam.userbk.vo.request;
 
+import com.machine.app.iam.user.controller.vo.request.IamUserRoleUpdateRequestVo;
 import com.machine.sdk.common.envm.common.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

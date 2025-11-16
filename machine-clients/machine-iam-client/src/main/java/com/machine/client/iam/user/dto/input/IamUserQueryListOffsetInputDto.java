@@ -1,7 +1,7 @@
 package com.machine.client.iam.user.dto.input;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.IamUserTypeEnum;
+import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

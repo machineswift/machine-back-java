@@ -37,15 +37,16 @@ spring:
 xxl:
   job:
     admin:
-      timeout: 3
+      timeout: 30
       addresses: ${XXL_JOB_ADMIN_ADDRESS}
-    accessToken: default_token
+      accessToken: default_token
     executor:
       appname: machine-xxljob-app
       # 宿主机的ip
       ip: ${XXL_JOB_EXECUTOR_HOST_IP}
-      port: 9999
+      port: ${XXL_JOB_EXECUTOR_HOST_PORT:9999}
       # 宿主机的端口
       address: http://${xxl.job.executor.ip}:${XXL_JOB_EXECUTOR_HOST_PORT}
       logpath: /Users/machine/data/applogs/xxl-job/jobhandler
       logretentiondays: 30
+      excludedpackage: org.springframework,spring

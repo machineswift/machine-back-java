@@ -52,5 +52,5 @@ public interface IIamUserBusiness {
 
     PageResponse<IamUserExpandListResponseVo> pageExpand(IamUserQueryPageRequestVo request);
 
-    void export(IamUserQueryPageRequestVo request);
+    void export(IamUserExportRequestVo request);
 }

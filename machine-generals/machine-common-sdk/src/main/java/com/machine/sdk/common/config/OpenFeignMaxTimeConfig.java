@@ -1,7 +1,7 @@
 package com.machine.sdk.common.config;
 
 import com.machine.sdk.common.context.FeignRequestInterceptor;
-import com.machine.sdk.common.envm.system.SystemEnvironmentEnum;
+import com.machine.sdk.common.envm.base.EnvironmentEnum;
 import feign.Logger;
 import feign.Request;
 import feign.RequestInterceptor;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class OpenFeignMaxTimeConfig {
 
     @Value("${spring.profiles.active}")
-    private SystemEnvironmentEnum environmentEnum;
+    private EnvironmentEnum environmentEnum;
 
     @Bean
     public Logger.Level feignLoggerLevel() {

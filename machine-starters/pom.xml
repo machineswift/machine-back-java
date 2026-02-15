@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine</artifactId>
-        <version>1.1.0-RELEASE</version>
+        <version>2.0.0-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <description>starter 集合</description>
 
     <modules>
-        <module>machine-common-boot-starter</module>
+        <module>machine-base-boot-starter</module>
         <module>machine-nacos-boot-starter</module>
         <module>machine-security-boot-starter</module>
         <module>machine-ai-boot-starter</module>

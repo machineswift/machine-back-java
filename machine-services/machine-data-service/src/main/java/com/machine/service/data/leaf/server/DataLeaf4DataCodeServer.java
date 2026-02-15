@@ -34,12 +34,6 @@ public class DataLeaf4DataCodeServer implements IDataLeaf4DataCodeClient {
     }
 
     @Override
-    @GetMapping("attachment_category_code")
-    public String attachmentCategoryCode() {
-        return generateCode(CodePrefix.DATA_ATTACHMENT_CATEGORY);
-    }
-
-    @Override
     @GetMapping("tag_category_code")
     public String tagCategoryCode() {
         return generateCode(CodePrefix.DATA_TAG_CATEGORY);
@@ -82,7 +76,6 @@ public class DataLeaf4DataCodeServer implements IDataLeaf4DataCodeClient {
     private enum CodePrefix {
         DATA_BRAND("DATA_BRAND_CODE_", "B", "品牌编码"),
         DATA_MATERIAL_CATEGORY("DATA_MATERIAL_CATEGORY_CODE_", "MC", "素材分类编码"),
-        DATA_ATTACHMENT_CATEGORY("DATA_ATTACHMENT_CATEGORY_CODE_", "AC", "附件分类编码"),
         DATA_TAG_CATEGORY("DATA_TAG_CATEGORY_CODE_", "TC", "智能标签分类编码"),
         DATA_TAG("DATA_TAG_CODE_", "T", "标签编码"),
         DATA_SHOP("DATA_SHOP_CODE_", "S", "门店编码"),

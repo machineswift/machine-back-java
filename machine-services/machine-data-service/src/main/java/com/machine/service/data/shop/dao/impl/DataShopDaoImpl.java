@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.external.dto.input.DataExternalFieldDataGetValueInputDto;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.DataShopListSimpleOutputDto;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.model.dto.IdDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
@@ -131,10 +131,10 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public int updateShopBusinessLicense(String id,
-                                         SystemStorageTypeEnum persistenceStatus,
+                                         StorageTypeEnum persistenceStatus,
                                          DataShopBusinessLicenseDto businessLicense) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == businessLicense) {
                 return 0;
             }
@@ -150,7 +150,7 @@ public class DataShopDaoImpl implements IDataShopDao {
         deleteEntity.setDataId(id);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -174,10 +174,10 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public int updateFoodBusinessLicense(String id,
-                                         SystemStorageTypeEnum persistenceStatus,
+                                         StorageTypeEnum persistenceStatus,
                                          DataShopFoodBusinessLicenseDto businessLicense) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == businessLicense) {
                 return 0;
             }
@@ -193,7 +193,7 @@ public class DataShopDaoImpl implements IDataShopDao {
         deleteEntity.setDataId(id);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -217,10 +217,10 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public int updateDisinfectingContract(String id,
-                                          SystemStorageTypeEnum persistenceStatus,
+                                          StorageTypeEnum persistenceStatus,
                                           DataShopDisinfectingContractDto contract) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == contract) {
                 return 0;
             }
@@ -236,7 +236,7 @@ public class DataShopDaoImpl implements IDataShopDao {
         deleteEntity.setDataId(id);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -260,10 +260,10 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public int updateShopFrontPhoto(String id,
-                                    SystemStorageTypeEnum persistenceStatus,
+                                    StorageTypeEnum persistenceStatus,
                                     DataShopFrontPhotoDto shopFrontPhoto) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == shopFrontPhoto) {
                 return 0;
             }
@@ -279,7 +279,7 @@ public class DataShopDaoImpl implements IDataShopDao {
         deleteEntity.setDataId(id);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -313,9 +313,9 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public DataShopBusinessLicenseDto shopBusinessLicense(String id,
-                                                          SystemStorageTypeEnum persistenceStatus) {
+                                                          StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = SHOP_BUSINESS_LICENSE_TEMPORARY_COLUMN;
         } else {
             fieldName = SHOP_BUSINESS_LICENSE_PERMANENT_COLUMN;
@@ -333,9 +333,9 @@ public class DataShopDaoImpl implements IDataShopDao {
     }
 
     @Override
-    public DataShopFoodBusinessLicenseDto foodBusinessLicense(String id, SystemStorageTypeEnum persistenceStatus) {
+    public DataShopFoodBusinessLicenseDto foodBusinessLicense(String id, StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = FOOD_BUSINESS_LICENSE_TEMPORARY_COLUMN;
         } else {
             fieldName = FOOD_BUSINESS_LICENSE_PERMANENT_COLUMN;
@@ -354,9 +354,9 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public DataShopDisinfectingContractDto disinfectingContract(String id,
-                                                                SystemStorageTypeEnum persistenceStatus) {
+                                                                StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = DISINFECTING_CONTRACT_TEMPORARY_COLUMN;
         } else {
             fieldName = DISINFECTING_CONTRACT_PERMANENT_COLUMN;
@@ -375,9 +375,9 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public DataShopFrontPhotoDto shopFrontPhoto(String id,
-                                                SystemStorageTypeEnum persistenceStatus) {
+                                                StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = SHOP_FRONT_PHOTO_TEMPORARY_COLUMN;
         } else {
             fieldName = SHOP_FRONT_PHOTO_PERMANENT_COLUMN;
@@ -475,6 +475,11 @@ public class DataShopDaoImpl implements IDataShopDao {
     public Page<DataShopEntity> pageCollectShop(DataSuperShopListCollectShopInputDto inputDto) {
         IPage<DataShopEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
         return shopMapper.pageCollectShop(inputDto, page);
+    }
+
+    @Override
+    public List<DataShopEntity> listForExport(DataShopExportInputDto inputDto) {
+        return shopMapper.listForExport(inputDto);
     }
 
 }

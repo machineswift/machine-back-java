@@ -3,7 +3,7 @@ package com.machine.starter.security.resource.open;
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.system.SystemEnvironmentEnum;
+import com.machine.sdk.common.envm.base.EnvironmentEnum;
 import com.machine.sdk.common.exception.iam.access.OpenApiResourceBlackException;
 import com.machine.sdk.common.exception.iam.access.OpenApiResourceClientException;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
@@ -53,7 +53,7 @@ public class OpenApiAuthenticationFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         AppContext.getContext().setUserId(SYSTEM_USER_ID);
 
-        if (SystemEnvironmentEnum.PROD.getName().equals(activeProfile)) {
+        if (EnvironmentEnum.PROD.getName().equals(activeProfile)) {
             //校验ip白名单
             Set<String> blankIpSet = localCacheSystemConfig.openApiBlankIp();
             if (!blankIpSet.contains(request.getRemoteAddr())) {

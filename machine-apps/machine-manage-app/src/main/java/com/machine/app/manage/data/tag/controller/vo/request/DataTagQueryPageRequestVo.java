@@ -1,5 +1,6 @@
 package com.machine.app.manage.data.tag.controller.vo.request;
 
+import com.machine.sdk.common.envm.StatusEnum;
 import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.common.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +21,9 @@ public class DataTagQueryPageRequestVo extends PageRequest {
     @Schema(description = "画像主体类型（ProfileSubjectTypeEnum）", requiredMode = Schema.RequiredMode.REQUIRED)
     private ProfileSubjectTypeEnum type;
 
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
+
     @Schema(description = "分类ID集合")
     private Set<String> categoryIdSet;
 
@@ -28,4 +32,10 @@ public class DataTagQueryPageRequestVo extends PageRequest {
 
     @Schema(description = "名称")
     private String name;
+
+    @Schema(description = "创建人ID集合")
+    private Set<String> createUserIdSet;
+
+    @Schema(description = "修改人ID集合")
+    private Set<String> updateUserIdSet;
 }

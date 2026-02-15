@@ -69,4 +69,6 @@ public interface IDataShopService {
 
     Page<DataShopListOutputDto> selectPage(DataShopQueryPageInputDto inputDto);
 
+    String exportShop(DataShopExportInputDto inputDto);
+
 }

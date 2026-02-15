@@ -16,6 +16,7 @@ import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.common.model.dto.iam.DataPermissionMetaDto;
 import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
 import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.common.tool.JsonUtil;
 import com.machine.service.iam.permission.dao.IIamPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.entity.IamPermissionEntity;
 import com.machine.service.iam.role.dao.IIamRoleDao;
@@ -155,7 +156,7 @@ public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
                 IamRoleEntity iamRoleEntity = roleDao.getById(relationEntity.getRoleId());
                 String dataPermissionRule = iamRoleEntity.getDataPermissionRule();
                 if (StrUtil.isNotBlank(dataPermissionRule)) {
-                    DataPermissionRuleDto dataPermissionRuleDto = JSONUtil.toBean(dataPermissionRule, DataPermissionRuleDto.class);
+                    DataPermissionRuleDto dataPermissionRuleDto = JsonUtil.safeToBean(dataPermissionRule, DataPermissionRuleDto.class);
                     IamDataPermissionScopeTypeEnum scopeType = IamDataPermissionScopeTypeEnum.valueOf(dataPermissionRuleDto.getScopeCode());
 
                     if (IamDataPermissionScopeTypeEnum.ALL == scopeType) {
@@ -332,13 +333,13 @@ public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
                         targetRuleDto.setScopeCode(IamDataPermissionScopeTypeEnum.ORG_AND_SUB.getName());
                         targetRuleDtoList.add(targetRuleDto);
                     } else {
-                        DataPermissionRuleDto targetRuleDto = JSONUtil.toBean(dataPermissionRule, DataPermissionRuleDto.class);
+                        DataPermissionRuleDto targetRuleDto = JsonUtil.safeToBean(dataPermissionRule, DataPermissionRuleDto.class);
                         targetRuleDto.setFunctionCode(functionCode);
                         targetRuleDtoList.add(targetRuleDto);
                     }
                 } else {
                     DataPermissionRuleDto targetRuleDto = null;
-                    List<DataPermissionRuleDto> dataPermissionRuleDtoList = JSONUtil.toList(dataPermissionRules, DataPermissionRuleDto.class);
+                    List<DataPermissionRuleDto> dataPermissionRuleDtoList = JsonUtil.safeToList(dataPermissionRules, DataPermissionRuleDto.class);
                     for (DataPermissionRuleDto dto : dataPermissionRuleDtoList) {
                         if (dto.getFunctionCode().equals(functionCode)) {
                             targetRuleDto = dto;
@@ -357,7 +358,7 @@ public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
                             targetRuleDto.setScopeCode(IamDataPermissionScopeTypeEnum.ORG_AND_SUB.getName());
                             targetRuleDtoList.add(targetRuleDto);
                         } else {
-                            targetRuleDto = JSONUtil.toBean(dataPermissionRule, DataPermissionRuleDto.class);
+                            targetRuleDto = JsonUtil.safeToBean(dataPermissionRule, DataPermissionRuleDto.class);
                             targetRuleDto.setFunctionCode(functionCode);
                             targetRuleDtoList.add(targetRuleDto);
                         }

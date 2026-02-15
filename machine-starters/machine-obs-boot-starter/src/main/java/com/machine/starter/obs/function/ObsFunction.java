@@ -25,8 +25,10 @@ public class ObsFunction {
     /**
      * 上传文件
      */
-    public FileInfo upload(MultipartFile file) {
+    public FileInfo upload(MultipartFile file,
+                           String path) {
         FileInfo fileInfo = fileStorageService.of(file)
+                .setPath(path)
                 .upload();
         if (null == fileInfo.getHashInfo() || fileInfo.getHashInfo().isEmpty()) {
             fileInfo.setHashInfo(null);
@@ -37,8 +39,11 @@ public class ObsFunction {
     /**
      * 上传文件
      */
-    public FileInfo upload(byte[] bytes, String originalFilename) {
+    public FileInfo upload(byte[] bytes,
+                           String originalFilename,
+                           String path) {
         FileInfo fileInfo = fileStorageService.of(bytes)
+                .setPath(path)
                 .setOriginalFilename(originalFilename)
                 .upload();
         if (null == fileInfo.getHashInfo() || fileInfo.getHashInfo().isEmpty()) {
@@ -50,8 +55,9 @@ public class ObsFunction {
     /**
      * 上传图片
      */
-    public FileInfo uploadImage(MultipartFile file) {
-        FileInfo fileInfo = uploadImage(file, 256, 256);
+    public FileInfo uploadImage(MultipartFile file,
+                                String path) {
+        FileInfo fileInfo = uploadImage(file, path, 256, 256);
         if (null == fileInfo.getHashInfo() || fileInfo.getHashInfo().isEmpty()) {
             fileInfo.setHashInfo(null);
         }
@@ -62,9 +68,11 @@ public class ObsFunction {
      * 上传图片
      */
     public FileInfo uploadImage(MultipartFile file,
+                                String path,
                                 int width,
                                 int height) {
         FileInfo fileInfo = fileStorageService.of(file)
+                .setPath(path)
                 .thumbnail(th -> th.size(width, height))  //生成一张的缩略图
                 .upload();
         if (null == fileInfo.getHashInfo() || fileInfo.getHashInfo().isEmpty()) {

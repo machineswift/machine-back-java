@@ -68,12 +68,6 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
     }
 
     @Override
-    @GetMapping("data_attachment_category_tree")
-    public String dataAttachmentCategoryTree() {
-        return generateTreeKey(REDIS_DATA_ATTACHMENT_CATEGORY, "附件分类树");
-    }
-
-    @Override
     @GetMapping("data_organization_tree")
     public String dataOrganizationTree(@RequestParam("type") IamOrganizationTypeEnum type) {
         return generateTreeKey(
@@ -143,11 +137,6 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
      * 素材分类
      */
     private static final String REDIS_DATA_MATERIAL_CATEGORY = "REDIS_DATA_MATERIAL_CATEGORY_";
-
-    /**
-     * 附件分类
-     */
-    private static final String REDIS_DATA_ATTACHMENT_CATEGORY = "REDIS_DATA_ATTACHMENT_CATEGORY_";
 
     /**
      * 智能标签分类

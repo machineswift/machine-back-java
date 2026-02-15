@@ -19,6 +19,7 @@ import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.common.tool.JsonUtil;
 import com.machine.service.iam.role.dao.IIamRoleDao;
 import com.machine.service.iam.role.dao.IIamRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity;
@@ -262,10 +263,10 @@ public class IamRoleServiceImpl implements IIamRoleService {
             return null;
         }
 
-        IamRoleDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), IamRoleDetailOutputDto.class,true);
+        IamRoleDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), IamRoleDetailOutputDto.class, true);
         String dataPermissionRule = entity.getDataPermissionRule();
         if (StrUtil.isNotBlank(dataPermissionRule)) {
-            outputDto.setDataPermissionRule(JSONUtil.toBean(JSONUtil.toJsonStr(dataPermissionRule), DataPermissionRuleDto.class));
+            outputDto.setDataPermissionRule(JsonUtil.safeToBean(dataPermissionRule, DataPermissionRuleDto.class));
         }
         return outputDto;
     }
@@ -301,8 +302,14 @@ public class IamRoleServiceImpl implements IIamRoleService {
     public Map<String, IamRoleDetailOutputDto> mapByIdSet(IdSetRequest request) {
         List<IamRoleEntity> userEntityList = roleDao.selectByIdSet(request.getIdSet());
         return userEntityList.stream()
-                .collect(Collectors.toMap(IamRoleEntity::getId, user ->
-                        JSONUtil.toBean(JSONUtil.toJsonStr(user), IamRoleDetailOutputDto.class)));
+                .collect(Collectors.toMap(IamRoleEntity::getId, entity -> {
+                    IamRoleDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), IamRoleDetailOutputDto.class, true);
+                    String dataPermissionRule = entity.getDataPermissionRule();
+                    if (StrUtil.isNotBlank(dataPermissionRule)) {
+                        outputDto.setDataPermissionRule(JsonUtil.safeToBean(dataPermissionRule, DataPermissionRuleDto.class));
+                    }
+                    return outputDto;
+                }));
     }
 
     private boolean isDefaultRole(String code) {

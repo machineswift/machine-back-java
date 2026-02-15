@@ -15,10 +15,6 @@ public class DataTagCategoryCreateInputDto {
     @Schema(description = "父ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private String parentId;
 
-    @NotBlank(message = "编码不能为空")
-    @Schema(description = "编码", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String code;
-
     @NotBlank(message = "名称不能为空")
     @Schema(description = "名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
@@ -26,5 +22,8 @@ public class DataTagCategoryCreateInputDto {
     @NotNull(message = "排序不能为空")
     @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long sort;
+
+    @Schema(description = "描述")
+    private String description;
 }
 

@@ -1,6 +1,6 @@
 package com.machine.client.hrm.employee.dto.input;
 
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import lombok.Data;
 

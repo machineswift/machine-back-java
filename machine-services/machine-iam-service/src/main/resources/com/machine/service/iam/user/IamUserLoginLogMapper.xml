@@ -9,6 +9,7 @@
           AND ull.auth_action in ('LOGIN', 'REFRESH_TOKEN')
           AND ull.auth_result = 'SUCCESS'
         ORDER BY ull.create_time DESC
+        LIMIT 1
     </select>
 
     <select id="getLoginSuccessByAccessTokenId" resultType="com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity">

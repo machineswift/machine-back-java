@@ -18,7 +18,7 @@ import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.client.iam.userbk.dto.input.*;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
 import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
 import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;

@@ -43,5 +43,12 @@ public class DataTagCategoryEntity extends BaseEntity {
      */
     @TableField("sort")
     private Long sort;
+
+
+    /**
+     * 描述
+     */
+    @TableField("description")
+    private String description;
 }
 

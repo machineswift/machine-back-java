@@ -36,7 +36,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
@@ -44,7 +43,6 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -148,29 +146,6 @@ public class CustomerWebSecurityConfig {
                 customerLoginFailureHandler);
         http.addFilterBefore(smsLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
-
-    /**
-     * Auth2.0 Server
-     */
-    @Bean
-    @Order(30)
-    public SecurityFilterChain authServer(HttpSecurity http) throws Exception {
-        commonHttpSecuritySetting(http);
-
-        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-                new OAuth2AuthorizationServerConfigurer();
-        RequestMatcher endpointsMatcher = authorizationServerConfigurer
-                .getEndpointsMatcher();
-        http
-                .securityMatcher(endpointsMatcher)
-                .authorizeHttpRequests((authorize) ->
-                        authorize.anyRequest().authenticated()
-                )
-                .with(authorizationServerConfigurer, (configurer) -> {
-
-                });
         return http.build();
     }
 

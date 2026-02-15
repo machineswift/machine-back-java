@@ -5,7 +5,7 @@
     <parent>
         <artifactId>machine-starters</artifactId>
         <groupId>com.machine</groupId>
-        <version>1.1.0-RELEASE</version>
+        <version>2.0.0-RELEASE</version>
     </parent>
     <artifactId>machine-obs-boot-starter</artifactId>
 
@@ -41,11 +41,20 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.machine</groupId>
             <artifactId>machine-common-sdk</artifactId>
             <version>${project.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.machine</groupId>

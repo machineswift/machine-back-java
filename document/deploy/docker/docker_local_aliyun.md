@@ -61,7 +61,7 @@ docker run -d --name redis \
 -v /srv/data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
 -v /srv/data/redis/logs:/logs \
 --cpus=0.2 \
---memory=0.2g --memory-swap=2g \
+--memory=0.5g --memory-swap=2g \
 --restart unless-stopped \
 redis:8.2 --requirepass "redis"
 ```
@@ -162,5 +162,5 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_PASSWORD=root \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
-nacos/nacos-server:v3.1.0
+nacos/nacos-server:v3.1.1
 ```

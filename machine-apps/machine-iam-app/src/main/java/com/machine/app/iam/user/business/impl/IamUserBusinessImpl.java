@@ -10,8 +10,8 @@ import com.machine.app.iam.user.controller.vo.response.IamUserDetailResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserExpandListResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.client.data.file.IDataDownloadClient;
-import com.machine.client.data.file.dto.input.DataDownloadContentDto;
+import com.machine.client.data.file.download.IDataDownloadClient;
+import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
 import com.machine.client.hrm.employee.IHrmEmployeeDefaultClient;
@@ -22,6 +22,8 @@ import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.user.*;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.*;
+import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.common.envm.base.ModuleEnum;
 import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuthActionEnum;
@@ -476,24 +478,43 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     }
 
     @Override
-    public void export(IamUserQueryPageRequestVo request) {
+    public void export(IamUserExportRequestVo request) {
         //组装UserId集合
         Set<String> finallyqueryUserIdSet = new HashSet<>();
         boolean compute = computeFinallyQueryUserIdSet(request.getShopIdSet(), request.getDepartmentIdSet(),
-                request.getOrganizationType(), request.getOrganizationIdSet(), request.getRoleIdSet(), finallyqueryUserIdSet);
+                request.getOrganizationType(), request.getOrganizationIdSet(), request.getRoleIdSet(),
+                finallyqueryUserIdSet);
+
+        if (CollectionUtil.isNotEmpty(request.getUserIdSet())) {
+            if (compute) {
+                if (CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
+                    finallyqueryUserIdSet.addAll(request.getUserIdSet());
+                } else {
+                    finallyqueryUserIdSet.retainAll(request.getUserIdSet());
+                }
+            } else {
+                finallyqueryUserIdSet = request.getUserIdSet();
+            }
+        }
 
         if (compute && CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
             throw new IamBusinessException("iam.user.business.export.emptyResult", "结果为空");
         }
 
-        IamUserQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamUserQueryPageInputDto.class);
+        IamUserExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamUserExportInputDto.class);
         inputDto.setUserIdSet(finallyqueryUserIdSet);
 
         //创建下载任务
+        String downloadId = UUID.randomUUID().toString().replace("-", "");
         DataDownloadContentDto downloadTask = new DataDownloadContentDto();
+        downloadTask.setId(downloadId);
+        downloadTask.setModule(ModuleEnum.IAM);
+        downloadTask.setEntity(ModuleEntityEnum.IAM_USER);
         downloadTask.setClassName(IIamUserClient.class.getName());
         downloadTask.setMethodName("exportUser");
         downloadTask.setParamsClassName(IamUserExportInputDto.class.getName());
+
+        inputDto.setDownloadId(downloadId);
         downloadTask.setJsonParams(JSONUtil.toJsonStr(inputDto));
         downloadClient.createTask(downloadTask);
 

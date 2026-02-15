@@ -58,6 +58,7 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
 
         SmsAuthenticationToken token = new SmsAuthenticationToken();
         token.setAuthenticated(true);
+        token.setUsername(iamUserDto.getUsername());
         return token;
     }
 

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+import java.util.Collections;
+
 /**
  * 传输登录认证的数据的载体
  */
@@ -11,11 +13,12 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 @Getter
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {
 
+    private String username;
     private String phone;
     private String captcha;
 
     public SmsAuthenticationToken() {
-        super(null);
+        super(Collections.emptyList());
     }
 
     @Override
@@ -30,7 +33,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
      */
     @Override
     public Object getPrincipal() {
-        return isAuthenticated() ? null : phone;
+        return isAuthenticated() ? username : phone;
     }
 
 }

@@ -12,6 +12,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class IamUserExportInputDto {
 
+    @Schema(description = "下载中心任务ID")
+    private String downloadId;
+
     @Schema(description = "用户ID集合")
     private Set<String> userIdSet;
 

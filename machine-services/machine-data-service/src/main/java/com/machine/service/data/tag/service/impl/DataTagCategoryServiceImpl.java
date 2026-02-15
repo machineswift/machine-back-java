@@ -84,6 +84,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
         //生成编码
         insertEntity.setCode(leafClient.tagCategoryCode());
         insertEntity.setSort(inputDto.getSort());
+        insertEntity.setDescription(inputDto.getDescription());
         return tagCategoryDao.insert(insertEntity);
     }
 
@@ -116,26 +117,27 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int update(DataTagCategoryUpdateInputDto inputDto) {
-        DataTagCategoryEntity entity = tagCategoryDao.getById(inputDto.getId());
-        if (null == entity) {
+        DataTagCategoryEntity dbEntity = tagCategoryDao.getById(inputDto.getId());
+        if (null == dbEntity) {
             return 0;
         }
 
-        if (DATA_TAG_CATEGORY_ROOT_PARENT_ID.equals(entity.getParentId()) ||
-                DATA_TAG_CATEGORY_ROOT_PARENT_ID.equals(entity.getId())) {
+        if (DATA_TAG_CATEGORY_ROOT_PARENT_ID.equals(dbEntity.getParentId()) ||
+                DATA_TAG_CATEGORY_ROOT_PARENT_ID.equals(dbEntity.getId())) {
             throw new DataBusinessException("data.tagCategory.service.update.rootNode", "根节点不能修改");
         }
 
         //验证名称在同一层级是否存在
-        DataTagCategoryEntity entityByName = tagCategoryDao.getByParentIdAndName(entity.getParentId(), inputDto.getName());
-        if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
+        DataTagCategoryEntity entityByName = tagCategoryDao.getByParentIdAndName(dbEntity.getParentId(), inputDto.getName());
+        if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
             throw new DataBusinessException("data.tagCategory.service.update.nameAlreadyExists", "名称已经存在");
         }
 
         DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
         updateEntity.setId(inputDto.getId());
+        updateEntity.setType(dbEntity.getType());
         updateEntity.setName(inputDto.getName());
-        updateEntity.setSort(inputDto.getSort());
+        updateEntity.setDescription(inputDto.getDescription());
         return tagCategoryDao.update(updateEntity);
     }
 
@@ -154,6 +156,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
 
         DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
         updateEntity.setId(inputDto.getId());
+        updateEntity.setType(dbEntity.getType());
         updateEntity.setSort(inputDto.getSort());
         return tagCategoryDao.update(updateEntity);
     }
@@ -196,6 +199,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
 
         DataTagCategoryEntity updateEntity = new DataTagCategoryEntity();
         updateEntity.setId(inputDto.getId());
+        updateEntity.setType(dbEntity.getType());
         updateEntity.setParentId(inputDto.getParentId());
         return tagCategoryDao.update(updateEntity);
     }

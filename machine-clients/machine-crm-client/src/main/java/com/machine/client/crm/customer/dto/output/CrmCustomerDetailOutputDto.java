@@ -1,6 +1,6 @@
 package com.machine.client.crm.customer.dto.output;
 
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

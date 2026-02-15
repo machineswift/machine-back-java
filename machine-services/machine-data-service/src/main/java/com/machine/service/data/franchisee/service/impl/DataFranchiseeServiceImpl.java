@@ -15,7 +15,7 @@ import com.machine.client.iam.userbk.dto.input.IamFranchiseeUserCreateInputDto;
 import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeBindShopInputDto;
 import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeUnBindShopInputDto;
 import com.machine.client.iam.user.dto.input.IamUserUpdatePhoneInputDto;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.service.data.franchisee.dao.IDataFranchiseeDao;
@@ -86,9 +86,9 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
         String franchiseeId = franchiseeDao.insert(insertEntity);
 
         //身份证信息
-        franchiseeDao.updateIdentityCard(franchiseeId, SystemStorageTypeEnum.TEMPORARY, inputDto.getIdentityCard());
+        franchiseeDao.updateIdentityCard(franchiseeId, StorageTypeEnum.TEMPORARY, inputDto.getIdentityCard());
         //健康证信息
-        franchiseeDao.updateHealthCertificate(franchiseeId, SystemStorageTypeEnum.TEMPORARY, inputDto.getHealthCertificate());
+        franchiseeDao.updateHealthCertificate(franchiseeId, StorageTypeEnum.TEMPORARY, inputDto.getHealthCertificate());
         return franchiseeId;
     }
 
@@ -169,9 +169,9 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
         DataFranchiseeEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataFranchiseeEntity.class);
 
         //身份证信息
-        franchiseeDao.updateIdentityCard(updateEntity.getId(), SystemStorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
+        franchiseeDao.updateIdentityCard(updateEntity.getId(), StorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
         //健康证信息
-        franchiseeDao.updateHealthCertificate(updateEntity.getId(), SystemStorageTypeEnum.TEMPORARY, inputDto.getHealthCertificate());
+        franchiseeDao.updateHealthCertificate(updateEntity.getId(), StorageTypeEnum.TEMPORARY, inputDto.getHealthCertificate());
         return franchiseeDao.update(updateEntity);
     }
 
@@ -206,16 +206,16 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
     @Override
     public OpenapiFranchiseeIdentityCardOutputDto identityCard(IdRequest request) {
         OpenapiFranchiseeIdentityCardOutputDto outputDto = new OpenapiFranchiseeIdentityCardOutputDto();
-        outputDto.setTemporaryIdentityCard(franchiseeDao.getIdentityCard(request.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentIdentityCard(franchiseeDao.getIdentityCard(request.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryIdentityCard(franchiseeDao.getIdentityCard(request.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentIdentityCard(franchiseeDao.getIdentityCard(request.getId(), StorageTypeEnum.PERMANENT));
         return outputDto;
     }
 
     @Override
     public OpenapiFranchiseeHealthCertificateOutputDto healthCertificate(IdRequest request) {
         OpenapiFranchiseeHealthCertificateOutputDto outputDto = new OpenapiFranchiseeHealthCertificateOutputDto();
-        outputDto.setTemporaryHealthCertificate(franchiseeDao.getHealthCertificated(request.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentHealthCertificate(franchiseeDao.getHealthCertificated(request.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryHealthCertificate(franchiseeDao.getHealthCertificated(request.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentHealthCertificate(franchiseeDao.getHealthCertificated(request.getId(), StorageTypeEnum.PERMANENT));
         return outputDto;
     }
 
@@ -243,8 +243,8 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
         }
 
         //身份证信息
-        outputDto.setIdentityCard(franchiseeDao.getIdentityCard(entity.getId(), SystemStorageTypeEnum.PERMANENT));
-        outputDto.setHealthCertificate(franchiseeDao.getHealthCertificated(entity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setIdentityCard(franchiseeDao.getIdentityCard(entity.getId(), StorageTypeEnum.PERMANENT));
+        outputDto.setHealthCertificate(franchiseeDao.getHealthCertificated(entity.getId(), StorageTypeEnum.PERMANENT));
         return outputDto;
     }
 }

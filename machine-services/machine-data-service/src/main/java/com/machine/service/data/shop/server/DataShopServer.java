@@ -217,4 +217,11 @@ public class DataShopServer implements IDataShopClient {
                 pageResult.getRecords());
     }
 
+    @Override
+    @PostMapping("export_shop")
+    public String exportShop(@RequestBody @Validated DataShopExportInputDto inputDto) {
+        log.info("导出门店，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return shopService.exportShop(inputDto);
+    }
+
 }

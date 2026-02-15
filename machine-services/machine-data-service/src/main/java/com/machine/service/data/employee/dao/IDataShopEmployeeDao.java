@@ -2,8 +2,8 @@ package com.machine.service.data.employee.dao;
 
 import com.machine.client.data.employee.dto.input.DataShopEmployeeListUserIdInputDto;
 import com.machine.client.data.employee.dto.input.DataShopEmployeeQueryListOffsetInputDto;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import com.machine.service.data.employee.dao.mapper.entity.DataShopEmployeeEntity;
@@ -21,11 +21,11 @@ public interface IDataShopEmployeeDao {
     int update(DataShopEmployeeEntity entity);
 
     int updateIdentityCard(String shopEmployeeId,
-                           SystemStorageTypeEnum persistenceStatus,
+                           StorageTypeEnum persistenceStatus,
                            IdentityCardDto identityCard);
 
     int updateHealthCertificate(String shopEmployeeId,
-                                SystemStorageTypeEnum persistenceStatus,
+                                StorageTypeEnum persistenceStatus,
                                 HealthCertificateDto healthCertificate);
 
     DataShopEmployeeEntity getById(String id);
@@ -33,10 +33,10 @@ public interface IDataShopEmployeeDao {
     DataShopEmployeeEntity getByUserId(String userId);
 
     IdentityCardDto getIdentityCard(String shopEmployeeId,
-                                    SystemStorageTypeEnum persistenceStatus);
+                                    StorageTypeEnum persistenceStatus);
 
     HealthCertificateDto getHealthCertificated(String shopEmployeeId,
-                                               SystemStorageTypeEnum persistenceStatus);
+                                               StorageTypeEnum persistenceStatus);
 
     Set<String> listUserIdByCondition(DataShopEmployeeListUserIdInputDto inputDto);
 

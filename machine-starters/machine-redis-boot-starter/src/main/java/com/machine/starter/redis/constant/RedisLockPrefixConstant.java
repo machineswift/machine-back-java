@@ -98,12 +98,6 @@ public class RedisLockPrefixConstant {
          */
         public static final String LOCK_DATA_ATTACHMENT_THUMBNAIL_URL =  "lock:data:attachment:thumbnailUrl:";
 
-
-        /**
-         * 附件分类
-         */
-        public static final String LOCK_DATA_ATTACHMENT_CATEGORY_TREE = "lock:data:attachmentCategory:tree";
-
         /**
          * 智能标签分类
          */

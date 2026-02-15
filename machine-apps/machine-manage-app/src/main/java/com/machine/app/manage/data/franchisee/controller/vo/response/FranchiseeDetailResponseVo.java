@@ -1,7 +1,7 @@
 package com.machine.app.manage.data.franchisee.controller.vo.response;
 
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import com.machine.sdk.common.envm.data.DataEducationalQualificationEnum;
 import com.machine.sdk.common.envm.data.DataFranchiseeEntityTypeEnum;
 import com.machine.sdk.common.envm.data.DataWorkExperienceTypeEnum;

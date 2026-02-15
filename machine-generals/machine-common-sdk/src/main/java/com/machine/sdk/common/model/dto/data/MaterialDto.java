@@ -1,6 +1,6 @@
 package com.machine.sdk.common.model.dto.data;
 
-import com.machine.sdk.common.envm.data.material.DataMaterIalTypeEnum;
+import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -11,9 +11,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class MaterialDto {
 
-    @NotNull(message = "素材类型不能为空")
-    @Schema(description = "素材类型（MaterIalTypeEnum）")
-    private DataMaterIalTypeEnum type;
+    @NotNull(message = "文件类型不能为空")
+    @Schema(description = "文件类型（DataFileTypeEnum）")
+    private DataFileTypeEnum fileType;
 
     @Schema(description = "大小（字节）")
     private Long size;

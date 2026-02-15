@@ -15,10 +15,6 @@ public class DataTagCategoryCreateRequestVo {
     @Schema(description = "父ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private String parentId;
 
-    @NotBlank(message = "编码不能为空")
-    @Schema(description = "编码", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String code;
-
     @NotBlank(message = "名称不能为空")
     @Schema(description = "名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;

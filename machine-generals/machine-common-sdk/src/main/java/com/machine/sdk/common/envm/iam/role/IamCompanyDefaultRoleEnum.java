@@ -23,7 +23,8 @@ public enum IamCompanyDefaultRoleEnum implements BaseEnum<IamCompanyDefaultRoleE
     INSPECTOR("INSPECTOR", "督导"),
     DESIGNER("DESIGNER", "设计师"),
     ENGINEER("ENGINEER", "工程师"),
-    SPECIALIST("SPECIALIST", "专员");
+    SPECIALIST("SPECIALIST", "专员"),
+    GUEST("GUEST", "访客");
 
     @Override
     public String getName() {

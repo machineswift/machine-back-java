@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
+import static com.machine.sdk.common.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.sdk.common.constant.CommonIamConstant.Area.ROOT_AREA_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_AREA_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_DATA;
@@ -182,6 +183,9 @@ public class DataAreaServiceImpl implements IDataAreaService {
         //如果存在则直接返回数据
         if (StrUtil.isNotEmpty(keyCode)) {
             String treeJson = customerRedisCommands.get(DATA_AREA_TREE_DATA + countryCode + keyCode);
+            if (EMPTY_OBJECT.equals(treeJson)) {
+                return null;
+            }
             if (StrUtil.isNotEmpty(treeJson)) {
                 return JSONUtil.toBean(treeJson, DataAreaTreeOutputDto.class);
             }
@@ -195,6 +199,9 @@ public class DataAreaServiceImpl implements IDataAreaService {
             keyCode = customerRedisCommands.get(DATA_AREA_TREE_KEY + countryCode);
             if (StrUtil.isNotEmpty(keyCode)) {
                 String treeJson = customerRedisCommands.get(DATA_AREA_TREE_DATA + countryCode + keyCode);
+                if (EMPTY_OBJECT.equals(treeJson)) {
+                    return null;
+                }
                 if (StrUtil.isNotEmpty(treeJson)) {
                     return JSONUtil.toBean(treeJson, DataAreaTreeOutputDto.class);
                 }
@@ -216,7 +223,7 @@ public class DataAreaServiceImpl implements IDataAreaService {
                 customerRedisCommands.set(DATA_AREA_TREE_DATA + countryCode + keyCode, JSONUtil.toJsonStr(treeOutputDto), 24 * 60 * 60 + 60);
             }else {
                 //Tree 数据缓存到redis
-                customerRedisCommands.set(DATA_AREA_TREE_DATA + countryCode + keyCode, "{}", 24 * 60 * 60 + 60);
+                customerRedisCommands.set(DATA_AREA_TREE_DATA + countryCode + keyCode, EMPTY_OBJECT, 24 * 60 * 60 + 60);
             }
             return treeOutputDto;
         } finally {

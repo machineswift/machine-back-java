@@ -105,4 +105,7 @@ public interface IDataShopClient {
     @PostMapping("select_page")
     PageResponse<DataShopListOutputDto> selectPage(@RequestBody @Validated DataShopQueryPageInputDto inputDto);
 
+    @PostMapping("export_shop")
+    String exportShop(@RequestBody @Validated DataShopExportInputDto inputDto);
+
 }

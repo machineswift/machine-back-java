@@ -9,6 +9,8 @@ import com.machine.app.manage.data.shop.controller.vo.response.*;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
 import com.machine.client.data.label.IDataLabelOptionClient;
 import com.machine.client.data.label.dto.output.DataLabelOptionListOutputDto;
+import com.machine.client.data.file.download.IDataDownloadClient;
+import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.IDataShopLabelOptionRelationClient;
@@ -17,9 +19,12 @@ import com.machine.client.data.shop.dto.output.*;
 import com.machine.client.iam.organization.dto.output.IamOrganizationSimpleOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.common.envm.base.ModuleEnum;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.DataCountryEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
+import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
@@ -66,6 +71,9 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
 
     @Autowired
     private IDataShopOrganizationRelationClient shopOrganizationRelationClient;
+
+    @Autowired
+    private IDataDownloadClient downloadClient;
 
     @Override
     public String create(DataShopCreateRequestVo request) {
@@ -115,7 +123,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         if (businessLicense != null) {
             DataShopUpdateShopBusinessLicenseInputDto businessLicenseInputDto = new DataShopUpdateShopBusinessLicenseInputDto();
             businessLicenseInputDto.setId(shopDetailOutputDto.getId());
-            businessLicenseInputDto.setPersistenceStatus(SystemStorageTypeEnum.PERMANENT);
+            businessLicenseInputDto.setPersistenceStatus(StorageTypeEnum.PERMANENT);
             businessLicenseInputDto.setBusinessLicense(businessLicense);
             shopClient.updateShopBusinessLicense(businessLicenseInputDto);
         }
@@ -125,7 +133,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         if (foodBusinessLicense != null) {
             DataShopUpdateFoodBusinessLicenseInputDto foodLicenseInputDto = new DataShopUpdateFoodBusinessLicenseInputDto();
             foodLicenseInputDto.setId(shopDetailOutputDto.getId());
-            foodLicenseInputDto.setPersistenceStatus(SystemStorageTypeEnum.PERMANENT);
+            foodLicenseInputDto.setPersistenceStatus(StorageTypeEnum.PERMANENT);
             foodLicenseInputDto.setFoodBusinessLicense(foodBusinessLicense);
             shopClient.updateFoodBusinessLicense(foodLicenseInputDto);
         }
@@ -135,7 +143,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         if (disinfectingContractDto != null) {
             DataShopUpdateDisinfectingContractInputDto disinfectingContractInputDto = new DataShopUpdateDisinfectingContractInputDto();
             disinfectingContractInputDto.setId(shopDetailOutputDto.getId());
-            disinfectingContractInputDto.setPersistenceStatus(SystemStorageTypeEnum.PERMANENT);
+            disinfectingContractInputDto.setPersistenceStatus(StorageTypeEnum.PERMANENT);
             disinfectingContractInputDto.setDisinfectingContractDto(disinfectingContractDto);
             shopClient.updateDisinfectingContract(disinfectingContractInputDto);
         }
@@ -145,7 +153,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         if (shopFrontPhoto != null) {
             DataShopUpdateShopFrontPhotoInputDto frontPhotoInputDto = new DataShopUpdateShopFrontPhotoInputDto();
             frontPhotoInputDto.setId(shopDetailOutputDto.getId());
-            frontPhotoInputDto.setPersistenceStatus(SystemStorageTypeEnum.PERMANENT);
+            frontPhotoInputDto.setPersistenceStatus(StorageTypeEnum.PERMANENT);
             frontPhotoInputDto.setShopFrontPhoto(shopFrontPhoto);
             shopClient.updateShopFrontPhoto(frontPhotoInputDto);
         }
@@ -493,6 +501,50 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
             }
         }
         return compute;
+    }
+
+    @Override
+    public void export(DataShopExportRequestVo request) {
+        Set<String> finallyQueryShopIdSet = new HashSet<>();
+        boolean compute = assembleFinallyQueryShopIdSet(finallyQueryShopIdSet, request.getOrganizationType(),
+                request.getOrganizationIdSet(), request.getLabelOptionIdSet());
+
+        if (CollectionUtil.isNotEmpty(request.getShopIdSet())) {
+            if (compute) {
+                if (CollectionUtil.isEmpty(finallyQueryShopIdSet)) {
+                    finallyQueryShopIdSet.addAll(request.getShopIdSet());
+                } else {
+                    finallyQueryShopIdSet.retainAll(request.getShopIdSet());
+                }
+            } else {
+                finallyQueryShopIdSet = request.getShopIdSet();
+            }
+        }
+
+        if (compute && CollectionUtil.isEmpty(finallyQueryShopIdSet)) {
+            throw new IamBusinessException("data.shop.business.export.emptyResult", "结果为空");
+        }
+
+        DataShopExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataShopExportInputDto.class);
+        if (StrUtil.isNotBlank(request.getCountryCode()) && CollectionUtil.isNotEmpty(request.getAreaCodeSet())) {
+            DataAreaTreeOutputDto allAreaTree = areaCache.tree(request.getCountryCode());
+            Set<String> recursionIdSet = areaCache.recursionListSubId(request.getAreaCodeSet(), allAreaTree);
+            inputDto.setAreaCodeSet(recursionIdSet);
+        }
+        inputDto.setShopIdSet(finallyQueryShopIdSet);
+
+        String downloadId = UUID.randomUUID().toString().replace("-", "");
+        DataDownloadContentDto downloadTask = new DataDownloadContentDto();
+        downloadTask.setId(downloadId);
+        downloadTask.setModule(ModuleEnum.DATA);
+        downloadTask.setEntity(ModuleEntityEnum.DATA_SHOP);
+        downloadTask.setClassName(IDataShopClient.class.getName());
+        downloadTask.setMethodName("exportShop");
+        downloadTask.setParamsClassName(DataShopExportInputDto.class.getName());
+
+        inputDto.setDownloadId(downloadId);
+        downloadTask.setJsonParams(JSONUtil.toJsonStr(inputDto));
+        downloadClient.createTask(downloadTask);
     }
 
 }

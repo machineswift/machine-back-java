@@ -32,7 +32,7 @@ public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusi
 
     @Override
     public String rootId(OpenApiOrganizationRootIdRequestVo request) {
-        return request.getType().getCode().toLowerCase();
+        return request.getType().getName().toLowerCase();
     }
 
     @Override

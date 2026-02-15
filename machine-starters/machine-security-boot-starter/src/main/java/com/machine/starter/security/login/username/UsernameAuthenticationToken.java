@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+import java.util.Collections;
+
 /**
  * 传输登录认证的数据的载体
  */
@@ -17,7 +19,7 @@ public class UsernameAuthenticationToken extends AbstractAuthenticationToken {
     private String userKey;
 
     public UsernameAuthenticationToken() {
-        super(null);
+        super(Collections.emptyList());
     }
 
     /**
@@ -36,7 +38,7 @@ public class UsernameAuthenticationToken extends AbstractAuthenticationToken {
      */
     @Override
     public Object getPrincipal() {
-        return isAuthenticated() ? null : username;
+        return username;
     }
 
 }

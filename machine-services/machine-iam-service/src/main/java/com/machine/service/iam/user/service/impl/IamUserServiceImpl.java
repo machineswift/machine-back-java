@@ -5,8 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.idev.excel.FastExcel;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.attachment.IDataAttachmentClient;
-import com.machine.client.data.attachment.dto.input.DataAttachmentCreateTemporaryInputDto;
+import com.machine.client.data.file.attachment.IDataAttachmentClient;
+import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
+import com.machine.client.data.file.download.IDataDownloadClient;
+import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4IamCodeClient;
 import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserExportInputDto;
@@ -15,8 +17,10 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
+import com.machine.sdk.common.context.AppContext;
 import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.data.attachment.DataAttachmentTypeEnum;
+import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
 import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
 import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
@@ -38,6 +42,8 @@ import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.service.iam.user.service.IIamUserService;
 import com.machine.service.iam.user.service.bo.IamShopUserExportBo;
 import com.machine.starter.obs.function.ObsFunction;
+import com.machine.starter.obs.tool.AttachmentExpireTimeUtil;
+import com.machine.starter.obs.tool.ObsDownloadPathBuilder;
 import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,10 +86,14 @@ public class IamUserServiceImpl implements IIamUserService {
     private IIamUserRoleBusinessRelationDao userRoleBusinessRelationDao;
 
     @Autowired
+    private IDataDownloadClient dataDownloadClient;
+
+    @Autowired
     private IDataLeaf4IamCodeClient leaf4IamCodeClient;
 
     @Autowired
-    private IDataAttachmentClient attachmentClient;
+    private IDataAttachmentClient dataAttachmentClient;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -426,10 +436,9 @@ public class IamUserServiceImpl implements IIamUserService {
 
     @Override
     public String exportUser(IamUserExportInputDto inputDto) {
+        DataDownloadDetailOutputDto downloadDetail = dataDownloadClient.getById(inputDto.getDownloadId());
+
         List<IamUserEntity> entityList = userDao.listShopUser4Export(inputDto);
-        if (CollectionUtil.isEmpty(entityList)) {
-            return null;
-        }
 
         List<IamShopUserExportBo> exportBoList = new ArrayList<>();
         for (IamUserEntity entity : entityList) {
@@ -447,17 +456,23 @@ public class IamUserServiceImpl implements IIamUserService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FastExcel.write(outputStream, IamShopUserExportBo.class).sheet("用户").doWrite(exportBoList);
         byte[] bytes = outputStream.toByteArray();
-        String originalFilename = UUID.randomUUID().toString().replaceAll("-", "")
-                + "-" + DateUtil.getCurrentDate() + "-用户.xlsx";
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String originalFilename = "用户-" + DateUtil.getCurrentDate() + "-" + uuid + ".xlsx";
 
-        DataAttachmentCreateTemporaryInputDto createInputDto = new DataAttachmentCreateTemporaryInputDto();
-        createInputDto.setType(DataAttachmentTypeEnum.FILE);
+        DataAttachmentCreateInputDto createInputDto = new DataAttachmentCreateInputDto();
+        createInputDto.setEntity(ModuleEntityEnum.DATA_DOWNLOAD);
+        createInputDto.setEntityId(inputDto.getDownloadId());
+        createInputDto.setFileType(DataFileTypeEnum.SPREADSHEET);
+        createInputDto.setOriginalName(originalFilename);
+        createInputDto.setStorageName(originalFilename);
+        createInputDto.setMd5Hash(uuid);
+        String path = new ObsDownloadPathBuilder().forIamUserExport(downloadDetail.getCreateBy());
+        createInputDto.setFileInfo(JSONUtil.toJsonStr(obsFunction.upload(bytes, originalFilename, path)));
         createInputDto.setSize((long) bytes.length);
-        createInputDto.setName(originalFilename);
-        createInputDto.setFileInfo(JSONUtil.toJsonStr(obsFunction.upload(bytes, originalFilename)));
-
-        return attachmentClient.createTemporary(createInputDto);
+        createInputDto.setExpireTime(AttachmentExpireTimeUtil.dataDownload());
+        return dataAttachmentClient.create(createInputDto);
     }
+
 
     private IamUserDto getUserDto(IamUserEntity entity) {
         IamUserDto dto = new IamUserDto();

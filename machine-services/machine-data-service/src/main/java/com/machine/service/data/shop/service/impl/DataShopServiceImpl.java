@@ -1,14 +1,17 @@
 package com.machine.service.data.shop.service.impl;
 
+import cn.idev.excel.FastExcel;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
+import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4DataCodeClient;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.DataCertificateStatusEnum;
 import com.machine.sdk.common.envm.data.shop.*;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.exception.iam.IamBusinessException;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
@@ -17,17 +20,27 @@ import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopBusinessLi
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFrontPhotoDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
 import com.machine.sdk.common.model.response.IdCodeResponse;
+import com.machine.sdk.common.tool.DateUtil;
+import com.machine.service.data.file.attachment.service.IDataAttachmentService;
+import com.machine.service.data.file.download.service.IDataDownloadService;
 import com.machine.service.data.shop.dao.IDataShopDao;
 import com.machine.service.data.shop.dao.IDataShopLabelOptionRelationDao;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopEntity;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopLabelOptionRelationEntity;
 import com.machine.service.data.shop.service.IDataShopService;
+import com.machine.service.data.shop.service.bo.DataShopExportBo;
+import com.machine.starter.obs.function.ObsFunction;
+import com.machine.starter.obs.tool.AttachmentExpireTimeUtil;
+import com.machine.starter.obs.tool.ObsDownloadPathBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +56,15 @@ public class DataShopServiceImpl implements IDataShopService {
 
     @Autowired
     private IDataShopLabelOptionRelationDao shopLabelOptionRelationDao;
+
+    @Autowired
+    private IDataDownloadService downloadService;
+
+    @Autowired
+    private IDataAttachmentService attachmentService;
+
+    @Autowired
+    private ObsFunction obsFunction;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -245,8 +267,8 @@ public class DataShopServiceImpl implements IDataShopService {
         }
 
         DataShopBusinessLicenseOutputDto outputDto = new DataShopBusinessLicenseOutputDto();
-        outputDto.setTemporaryBusinessLicense(shopDao.shopBusinessLicense(dbEntity.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentBusinessLicense(shopDao.shopBusinessLicense(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryBusinessLicense(shopDao.shopBusinessLicense(dbEntity.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentBusinessLicense(shopDao.shopBusinessLicense(dbEntity.getId(), StorageTypeEnum.PERMANENT));
         { //证件状态
             DataShopBusinessLicenseDto permanent = outputDto.getPermanentBusinessLicense();
             if (null == permanent) {
@@ -274,8 +296,8 @@ public class DataShopServiceImpl implements IDataShopService {
         }
 
         DataFoodBusinessLicenseOutputDto outputDto = new DataFoodBusinessLicenseOutputDto();
-        outputDto.setTemporaryFoodBusinessLicense(shopDao.foodBusinessLicense(dbEntity.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentFoodBusinessLicense(shopDao.foodBusinessLicense(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryFoodBusinessLicense(shopDao.foodBusinessLicense(dbEntity.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentFoodBusinessLicense(shopDao.foodBusinessLicense(dbEntity.getId(), StorageTypeEnum.PERMANENT));
         { //证件状态
             DataShopFoodBusinessLicenseDto permanent = outputDto.getPermanentFoodBusinessLicense();
             if (null == permanent) {
@@ -303,8 +325,8 @@ public class DataShopServiceImpl implements IDataShopService {
         }
 
         DataOpenApiDisinfectingContractOutputDto outputDto = new DataOpenApiDisinfectingContractOutputDto();
-        outputDto.setTemporaryDisinfectingContract(shopDao.disinfectingContract(dbEntity.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentDisinfectingContract(shopDao.disinfectingContract(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryDisinfectingContract(shopDao.disinfectingContract(dbEntity.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentDisinfectingContract(shopDao.disinfectingContract(dbEntity.getId(), StorageTypeEnum.PERMANENT));
 
         { //证件状态
             DataShopDisinfectingContractDto permanent = outputDto.getPermanentDisinfectingContract();
@@ -333,8 +355,8 @@ public class DataShopServiceImpl implements IDataShopService {
         }
 
         DataOpenApiShopFrontPhotoOutputDto outputDto = new DataOpenApiShopFrontPhotoOutputDto();
-        outputDto.setTemporaryShopFrontPhoto(shopDao.shopFrontPhoto(dbEntity.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentShopFrontPhoto(shopDao.shopFrontPhoto(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryShopFrontPhoto(shopDao.shopFrontPhoto(dbEntity.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentShopFrontPhoto(shopDao.shopFrontPhoto(dbEntity.getId(), StorageTypeEnum.PERMANENT));
 
         { //证件状态
             DataShopFrontPhotoDto permanent = outputDto.getPermanentShopFrontPhoto();
@@ -428,5 +450,45 @@ public class DataShopServiceImpl implements IDataShopService {
         Page<DataShopListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), DataShopListOutputDto.class));
         return pageResult;
+    }
+
+    @Override
+    public String exportShop(DataShopExportInputDto inputDto) {
+        DataDownloadDetailOutputDto downloadDetail = downloadService.getById(inputDto.getDownloadId());
+
+        List<DataShopEntity> entityList = shopDao.listForExport(inputDto);
+
+        List<DataShopExportBo> exportBoList = new ArrayList<>();
+        for (DataShopEntity entity : entityList) {
+            DataShopExportBo exportBo = new DataShopExportBo();
+            exportBo.setId(entity.getId());
+            exportBo.setCode(entity.getCode());
+            exportBo.setName(entity.getName());
+            exportBo.setBusinessStatus(entity.getBusinessStatus() != null ? entity.getBusinessStatus().getMessage() : null);
+            exportBo.setOperationStatus(entity.getOperationStatus() != null ? entity.getOperationStatus().getMessage() : null);
+            exportBo.setPhysicalStatus(entity.getPhysicalStatus() != null ? entity.getPhysicalStatus().getMessage() : null);
+            exportBo.setAreaCode(entity.getAreaCode());
+            exportBo.setAddress(entity.getAddress());
+            exportBoList.add(exportBo);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FastExcel.write(outputStream, DataShopExportBo.class).sheet("门店").doWrite(exportBoList);
+        byte[] bytes = outputStream.toByteArray();
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String originalFilename = "门店-" + DateUtil.getCurrentDate() + "-" + uuid + ".xlsx";
+
+        DataAttachmentCreateInputDto createInputDto = new DataAttachmentCreateInputDto();
+        createInputDto.setEntity(ModuleEntityEnum.DATA_DOWNLOAD);
+        createInputDto.setEntityId(inputDto.getDownloadId());
+        createInputDto.setFileType(DataFileTypeEnum.SPREADSHEET);
+        createInputDto.setOriginalName(originalFilename);
+        createInputDto.setStorageName(originalFilename);
+        createInputDto.setMd5Hash(uuid);
+        String path = new ObsDownloadPathBuilder().forDataShopExport(downloadDetail.getCreateBy());
+        createInputDto.setFileInfo(JSONUtil.toJsonStr(obsFunction.upload(bytes, originalFilename, path)));
+        createInputDto.setSize((long) bytes.length);
+        createInputDto.setExpireTime(AttachmentExpireTimeUtil.dataDownload());
+        return attachmentService.create(createInputDto);
     }
 }

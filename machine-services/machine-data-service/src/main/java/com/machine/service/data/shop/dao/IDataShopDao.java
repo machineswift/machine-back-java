@@ -4,10 +4,10 @@ package com.machine.service.data.shop.dao;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.DataShopListSimpleOutputDto;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.common.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
 import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
@@ -34,19 +34,19 @@ public interface IDataShopDao {
                              DataShopPhysicalStatusEnum physicalStatus);
 
     int updateShopBusinessLicense(String id,
-                                  SystemStorageTypeEnum persistenceStatus,
+                                  StorageTypeEnum persistenceStatus,
                                   DataShopBusinessLicenseDto businessLicense);
 
     int updateFoodBusinessLicense(String id,
-                                  SystemStorageTypeEnum persistenceStatus,
+                                  StorageTypeEnum persistenceStatus,
                                   DataShopFoodBusinessLicenseDto businessLicense);
 
     int updateDisinfectingContract(String id,
-                                   SystemStorageTypeEnum persistenceStatus,
+                                   StorageTypeEnum persistenceStatus,
                                    DataShopDisinfectingContractDto contract);
 
     int updateShopFrontPhoto(String id,
-                             SystemStorageTypeEnum persistenceStatus,
+                             StorageTypeEnum persistenceStatus,
                              DataShopFrontPhotoDto shopFrontPhoto);
 
     int countNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
@@ -54,16 +54,16 @@ public interface IDataShopDao {
     List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
 
     DataShopBusinessLicenseDto shopBusinessLicense(String id,
-                                                   SystemStorageTypeEnum persistenceStatus);
+                                                   StorageTypeEnum persistenceStatus);
 
     DataShopFoodBusinessLicenseDto foodBusinessLicense(String id,
-                                                       SystemStorageTypeEnum persistenceStatus);
+                                                       StorageTypeEnum persistenceStatus);
 
     DataShopDisinfectingContractDto disinfectingContract(String id,
-                                                         SystemStorageTypeEnum persistenceStatus);
+                                                         StorageTypeEnum persistenceStatus);
 
     DataShopFrontPhotoDto shopFrontPhoto(String id,
-                                         SystemStorageTypeEnum persistenceStatus);
+                                         StorageTypeEnum persistenceStatus);
 
     String getIdByCode(String code);
 
@@ -92,5 +92,7 @@ public interface IDataShopDao {
     Page<DataShopEntity> selectPage(DataShopQueryPageInputDto inputDto);
 
     Page<DataShopEntity> pageCollectShop(DataSuperShopListCollectShopInputDto inputDto);
+
+    List<DataShopEntity> listForExport(DataShopExportInputDto inputDto);
 
 }

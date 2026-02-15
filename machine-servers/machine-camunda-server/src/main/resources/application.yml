@@ -32,12 +32,17 @@ spring:
       - nacos:machine.yaml?refreshEnabled=true
       - nacos:${spring.application.name}.yaml?refreshEnabled=true
 
-
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${machine.datasource.host}:3306/machine_camunda?useUnicode=true&autoReconnect=true&allowMultiQueries=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${machine.datasource.host}:5432/machine_camunda?tcpKeepAlive=true
     username: ${machine.datasource.username}
     password: ${machine.datasource.password}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # 最小空闲连接数
+      minimum-idle: 2
+      # 最大连接数
+      maximum-pool-size: 8
 
 camunda:
   bpm:

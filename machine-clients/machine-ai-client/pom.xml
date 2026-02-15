@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-clients</artifactId>
-        <version>1.1.0-RELEASE</version>
+        <version>2.0.0-RELEASE</version>
     </parent>
     <artifactId>machine-ai-client</artifactId>
 

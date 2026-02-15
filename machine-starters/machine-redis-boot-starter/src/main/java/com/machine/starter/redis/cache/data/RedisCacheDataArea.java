@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.machine.sdk.common.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_KEY;
 
@@ -36,6 +37,9 @@ public class RedisCacheDataArea {
         //如果存在则直接返回数据
         if (StrUtil.isNotEmpty(keyCode)) {
             String treeJson = customerRedisCommands.get(DATA_AREA_TREE_DATA + countryCode + keyCode);
+            if (EMPTY_OBJECT.equals(treeJson)) {
+                return null;
+            }
             if (StrUtil.isNotEmpty(treeJson)) {
                 return JSONUtil.toBean(treeJson, DataAreaTreeOutputDto.class);
             }

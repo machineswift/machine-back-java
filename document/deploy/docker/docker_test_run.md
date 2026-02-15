@@ -2,8 +2,6 @@
 ### machine-gateway-server
 -it -d -p 19090:8080  --name machine-gateway-server-dev --cpus=1 -e JAVA_OPTS="-Xms256m -Xmx4096m -XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=DEV -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dreactor.netty.ioSelectCount=1 -Dreactor.netty.pool.maxConnections=96 -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=nacos"  -e SKY_AGENT="-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-gateway-server -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800" /machine_gateway_server_dev:default
 
-### machine-xxljob-server
--it -d -p 19098:8080  --name machine-xxljob-server-dev --cpus=0.4  -e JAVA_OPTS="-Xms256m -Xmx2048m -XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=DEV -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=nacos"  -e SKY_AGENT="-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-xxljob-server -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800" /machine-xxljob-server-dev:default
 
 ### machine-camunda-server
 -it -d -p 19099:8080  --name machine-camunda-server-dev --cpus=0.4  -e JAVA_OPTS="-Xms256m -Xmx2048m -XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=DEV -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=nacos"  -e SKY_AGENT="-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-camunda-server -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800" /machine-camunda-server-dev:default
@@ -24,10 +22,6 @@
 
 ### machine-mq-app
 -it -d -p 19084:8080 --name machine-mq-app-dev --cpus=0.4  -e JAVA_OPTS="-Xms256m -Xmx2048m -XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=DEV -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -Dmachine.nacos.password=nacos"  -e SKY_AGENT="-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-mq-app -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800" /machine-mq-app-dev:default
-
-### machine-xxljob-app
--it -d -p 19088:8080 -p 9999:9999 --name machine-xxljob-app-dev --cpus=0.2   -e JAVA_OPTS="-Xms256m -Xmx2048m -XX:MaxGCPauseMillis=256 -Dserver.port=8080 -Dspring.profiles.active=DEV -Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL -Dmachine.nacos.server-addr=XXX.XXX.XXX.XXX:8848 -Dmachine.nacos.username=nacos -DXXL_JOB_EXECUTOR_HOST_IP=XXX.XXX.XXX.XXX -DXXL_JOB_EXECUTOR_HOST_PORT=9999 -DXXL_JOB_ADMIN_ADDRESS=http://XXX.XXX.XXX.XXX:19098/machine-xxljob-server -Dmachine.nacos.password=nacos"  -e SKY_AGENT="-javaagent:/opt/skywalking-agent/skywalking-agent.jar -Dskywalking.logging.dir=/opt/skywalking-agent/logs/ -Dskywalking.agent.service_name=machine-xxljob-app -Dskywalking.collector.backend_service=XXX.XXX.XXX.XXX:11800"  /machine-xxljob-app-dev:default
-
 
 ## service
 ### machine-iam-service

@@ -21,12 +21,6 @@ public interface IDataLeaf4DataCodeClient {
     String materialCategoryCode();
 
     /**
-     * 附件分类编码
-     */
-    @GetMapping("attachment_category_code")
-    String attachmentCategoryCode();
-
-    /**
      * 智能标签分类编码
      */
     @GetMapping("tag_category_code")

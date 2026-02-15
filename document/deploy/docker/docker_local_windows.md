@@ -162,7 +162,7 @@ docker run --name skywalking-server  -d \
 -p 12800:12800 \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
-apache/skywalking-oap-server:10.2.0
+apache/skywalking-oap-server:10.3.0
 ```
 
 ### ui
@@ -175,7 +175,7 @@ docker run --name skywalking-ui  -d \
 -p 9088:8080 \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
-apache/skywalking-ui:10.2.0
+apache/skywalking-ui:10.3.0
 ```
 
 ### 10. Apache Flink 流处理
@@ -249,20 +249,37 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_PASSWORD=root \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
-nacos/nacos-server:v3.1.0
+nacos/nacos-server:v3.1.1
 ```
+
+### 12. XXL-JOB 任务调度中心
+```bash
+docker run -d \
+--name xxl-job-admin \
+-p 8083:8080 \
+--hostname xxl-job-admin \
+--network machine \
+-e PARAMS="--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/machine_xxljob?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai \
+--spring.datasource.username=root \
+--spring.datasource.password=root" \
+--cpus=1 \
+--memory=2g --memory-swap=2g \
+xuxueli/xxl-job-admin:3.3.2
+```
+
 
 ## 🌐 服务访问地址
 
-| 服务            | 访问地址                        | 用户名           | 密码         | 说明     |
-|---------------|-----------------------------|---------------|------------|--------|
-| MySQL         | localhost:3306              | root          | root       | 数据库连接  |
-| Redis         | localhost:6379              | -             | redis      | 缓存连接   |
-| RabbitMQ      | http://localhost:15672      | root          | root       | 管理界面   |
-| MinIO         | http://localhost:9001       | root          | root1234   | 控制台    |
-| ClickHouse    | http://localhost:8123       | clickhouse    | clickhouse | 查询界面   |
-| Elasticsearch | http://localhost:9200       | elastic       | elastic@2  | API接口  |
-| Kibana        | http://localhost:5601       | kibana_system | kibana@2   | 日志分析   |
-| SkyWalking    | http://localhost:9088       | -             | -          | 链路追踪   |
-| Flink         | http://localhost:8081       | -             | -          | 流处理管理  |
-| Nacos         | http://localhost:8848/nacos | nacos         | nacos      | 服务注册中心 |
+| 服务            | 访问地址                                | 用户名           | 密码         | 说明     |
+|---------------|-------------------------------------|---------------|------------|--------|
+| MySQL         | localhost:3306                      | root          | root       | 数据库连接  |
+| Redis         | localhost:6379                      | -             | redis      | 缓存连接   |
+| RabbitMQ      | http://localhost:15672              | root          | root       | 管理界面   |
+| MinIO         | http://localhost:9001               | root          | root1234   | 控制台    |
+| ClickHouse    | http://localhost:8123               | clickhouse    | clickhouse | 查询界面   |
+| Elasticsearch | http://localhost:9200               | elastic       | elastic@2  | API接口  |
+| Kibana        | http://localhost:5601               | kibana_system | kibana@2   | 日志分析   |
+| SkyWalking    | http://localhost:9088               | -             | -          | 链路追踪   |
+| Flink         | http://localhost:8081               | -             | -          | 流处理管理  |
+| Nacos         | http://localhost:8848/nacos         | nacos         | nacos      | 服务注册中心 |
+| XXL_JOB       | http://127.0.0.1:8083/xxl-job-admin | admin         | 123456     | 任务调度中心 |

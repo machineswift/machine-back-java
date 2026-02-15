@@ -1,6 +1,16 @@
 # 基础设施配置文档
 
-本文档描述了 Machine 微服务架构的完整基础设施配置，包括 Docker 部署、Nacos 配置管理、JVM 参数配置等。
+本文档描述 Machine 微服务架构的完整基础设施配置，包括 Docker 部署、Nacos 配置管理、JVM 参数配置等。
+
+📌 [返回项目首页](../../README.md)
+
+---
+
+## 📑 目录概览
+
+- [Docker 部署配置](#-docker-部署配置) · [Nacos 配置管理](#️-nacos-配置管理) · [JVM 参数配置](#-jvm-参数配置) · [Dockerfile 配置](#-dockerfile-配置) · [使用说明](#-使用说明)
+
+---
 
 ## 🐳 Docker 部署配置
 
@@ -12,47 +22,34 @@ Docker 部署相关的配置文档和脚本，支持多种环境部署。
 - [🐳 本地环境Docker部署(阿里云)](docker/docker_local_aliyun.md) - 阿里云环境部署指南
 
 ### 测试环境部署
-- [🐳 测试环境Docker部署](docker/docker_test_linux.md) - Linux 测试环境部署指南
+- [🐳 测试环境 Docker 部署](docker/docker_test_linux.md) - Linux 测试环境部署指南
 - [🐳 测试环境运行配置](docker/docker_test_run.md) - 测试环境运行说明
+
+### 其他
+- [🐳 其他 Linux 部署说明](docker/docker_zzz_linux.md) - 补充 Linux 部署说明
 
 ---
 
 ## ⚙️ Nacos 配置管理
 
-基于 Nacos 的配置中心管理，支持服务注册发现和动态配置管理。
+基于 Nacos 的配置中心管理，支持服务注册发现和动态配置管理。配置目录与工程模块对应：Servers / Apps / Services 与 `machine-servers`、`machine-apps`、`machine-services` 一致。
 
-### 🏗️ 主配置
-- [machine.yaml](nacos/yml/machine.yaml) - 全局配置文件，包含公共配置项
+### 🏗️ 主配置（已提供）
+- [machine.yaml](nacos/yml/machine.yaml) - 全局配置，公共配置项
 
-### 🖥️ 服务器配置 (Servers)
-基础设施服务器组件的配置管理：
-- [machine-gateway-server.yaml](nacos/yml/servers/machine-gateway-server.yaml) - 网关服务器配置
-- [machine-xxljob-server.yaml](nacos/yml/servers/machine-xxljob-server.yaml) - 定时任务服务器配置
-- [machine-camunda-server.yaml](nacos/yml/servers/machine-camunda-server.yaml) - 工作流服务器配置
+### 📱 应用配置 (Apps) — 仓库内已提供示例
+- [machine-iam-app.yaml](nacos/yml/apps/machine-iam-app.yaml) - 身份认证应用
 
-### 📱 应用配置 (Apps)
-业务应用模块的配置管理：
-- [machine-iam-app.yaml](nacos/yml/apps/machine-iam-app.yaml) - 身份认证应用配置
-- [machine-manage-app.yaml](nacos/yml/apps/machine-manage-app.yaml) - 管理应用配置
-- [machine-super-app.yaml](nacos/yml/apps/machine-super-app.yaml) - 超级管理员应用配置
-- [machine-openapi-app.yaml](nacos/yml/apps/machine-openapi-app.yaml) - 开放API应用配置
-- [machine-mq-app.yaml](nacos/yml/apps/machine-mq-app.yaml) - 消息队列应用配置
-- [machine-xxljob-app.yaml](nacos/yml/apps/machine-xxljob-app.yaml) - 定时任务应用配置
+其余应用（manage、super、openapi、mq、xxljob）可在 Nacos 控制台按相同 Data ID 规范新建：`nacos/yml/apps/machine-{module}-app.yaml`。
 
-### ⚙️ 服务配置 (Services)
-微服务业务组件的配置管理：
-- [machine-iam-service.yaml](nacos/yml/services/machine-iam-service.yaml) - 身份认证服务配置
-- [machine-data-service.yaml](nacos/yml/services/machine-data-service.yaml) - 数据服务配置
-- [machine-ai-service.yaml](nacos/yml/services/machine-ai-service.yaml) - AI服务配置
-- [machine-hrm-service.yaml](nacos/yml/services/machine-hrm-service.yaml) - 人力资源服务配置
-- [machine-crm-service.yaml](nacos/yml/services/machine-crm-service.yaml) - 客户关系管理服务配置
-- [machine-scm-service.yaml](nacos/yml/services/machine-scm-service.yaml) - 供应链管理服务配置
-- [machine-tpp-service.yaml](nacos/yml/services/machine-tpp-service.yaml) - 第三方平台服务配置
-- [machine-doc-service.yaml](nacos/yml/services/machine-doc-service.yaml) - 文档服务配置
-- [machine-plugin-service.yaml](nacos/yml/services/machine-plugin-service.yaml) - 插件服务配置
+### ⚙️ 服务配置 (Services) — 仓库内已提供示例
+- [machine-plugin-service.yaml](nacos/yml/services/machine-plugin-service.yaml) - 插件服务
 
-### 🧪 测试配置
-- [machine-temp-test.yaml](nacos/yml/test/machine-temp-test.yaml) - 临时测试配置
+其余服务（iam、data、ai、hrm、crm、scm、tpp、doc）可在 Nacos 控制台按 `nacos/yml/services/machine-{module}-service.yaml` 新建。
+
+### 🖥️ 服务器配置 (Servers)、🧪 测试配置 (Tests)
+- Servers：`nacos/yml/servers/machine-gateway-server.yaml`、`machine-camunda-server.yaml` 需在 Nacos 中按需新建。
+- Tests：`nacos/yml/test/machine-temp-test.yaml`、`machine-flink-test.yaml` 按需新建。
 
 ---
 
@@ -65,7 +62,6 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 #### 🖥️ 服务器 JVM 配置
 基础设施服务器的JVM参数优化：
 - [machine-gateway-server.properties](vm_options/local/servers/machine-gateway-server.properties) - 网关服务器JVM参数
-- [machine-xxljob-server.properties](vm_options/local/servers/machine-xxljob-server.properties) - 定时任务服务器JVM参数
 - [machine-camunda-server.properties](vm_options/local/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
 
 #### 📱 应用 JVM 配置
@@ -90,14 +86,14 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 - [machine-plugin-service.properties](vm_options/local/services/machine-plugin-service.properties) - 插件服务JVM参数
 
 #### 🧪 测试 JVM 配置
-- [machine-temp-test.properties](vm_options/local/tests/machine-temp-test.properties) - 临时测试JVM参数
+- [machine-temp-test.properties](vm_options/local/tests/machine-temp-test.properties) - 临时测试 JVM 参数
+- [machine-flink-test.properties](vm_options/local/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
 
 ### 🧪 测试环境 (Test)
 
 #### 🖥️ 服务器 JVM 配置
 测试环境基础设施服务器的JVM参数：
 - [machine-gateway-server.properties](vm_options/test/servers/machine-gateway-server.properties) - 网关服务器JVM参数
-- [machine-xxljob-server.properties](vm_options/test/servers/machine-xxljob-server.properties) - 定时任务服务器JVM参数
 - [machine-camunda-server.properties](vm_options/test/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
 
 #### 📱 应用 JVM 配置
@@ -122,7 +118,8 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 - [machine-plugin-service.properties](vm_options/test/services/machine-plugin-service.properties) - 插件服务JVM参数
 
 #### 🧪 测试 JVM 配置
-- [machine-temp-test.properties](vm_options/test/tests/machine-temp-test.properties) - 临时测试JVM参数
+- [machine-temp-test.properties](vm_options/test/tests/machine-temp-test.properties) - 临时测试 JVM 参数
+- [machine-flink-test.properties](vm_options/test/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
 
 ---
 
@@ -133,7 +130,6 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 ### 🖥️ 服务器 Dockerfile
 基础设施服务器的镜像构建配置：
 - [machine-gateway-server.Dockerfile](../../machine-servers/machine-gateway-server/Dockerfile) - 网关服务器镜像构建
-- [machine-xxljob-server.Dockerfile](../../machine-servers/machine-xxljob-server/Dockerfile) - 定时任务服务器镜像构建
 - [machine-camunda-server.Dockerfile](../../machine-servers/machine-camunda-server/Dockerfile) - 工作流服务器镜像构建
 
 ### 📱 应用 Dockerfile
@@ -158,7 +154,8 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 - [machine-plugin-service.Dockerfile](../../machine-services/machine-plugin-service/Dockerfile) - 插件服务镜像构建
 
 ### 🧪 测试 Dockerfile
-- [machine-temp-test.Dockerfile](../../machine-tests/machine-temp-test/Dockerfile) - 临时测试镜像构建
+- [machine-temp-test/Dockerfile](../../machine-tests/machine-temp-test/Dockerfile) - 临时测试镜像构建
+- [machine-flink-test/Dockerfile](../../machine-tests/machine-flink-test/Dockerfile) - Flink 测试镜像构建
 
 ---
 
@@ -166,13 +163,20 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 
 ### 🚀 快速开始
 
-1. **环境准备**：确保已安装 Docker 和 Docker Compose
-2. **配置检查**：根据部署环境选择合适的配置文件
-3. **服务启动**：按照部署文档逐步启动各个服务
+1. **环境准备**：确保已安装 [Docker](https://www.docker.com/) 和 Docker Compose
+2. **配置检查**：根据部署环境选择对应配置（本地 / 测试）
+3. **服务启动**：按部署文档顺序启动依赖（如 Nacos、数据库）再启动应用
+
+**首次部署建议**：从 [本地环境 Docker 部署 (Linux)](docker/docker_local_linux.md) 或 [Windows](docker/docker_local_windows.md) 开始；云环境可参考 [阿里云部署](docker/docker_local_aliyun.md)。
 
 ### 🔧 配置管理
 
-1. **Docker 部署**：根据环境选择对应的部署文档，按照步骤进行容器化部署
-2. **Nacos 配置**：通过 Nacos 控制台管理各服务的配置，支持动态更新
-3. **JVM 调优**：根据服务特点和环境选择合适的 JVM 参数配置
-4. **镜像构建**：使用对应的 Dockerfile 构建各服务的 Docker 镜像
+| 环节 | 说明 |
+|------|------|
+| **Docker 部署** | 按环境选择上述部署文档，完成容器化部署 |
+| **Nacos 配置** | 使用 Nacos 控制台管理各服务配置，支持动态更新 |
+| **JVM 调优** | 按服务与环境选用 `vm_options/local/` 或 `vm_options/test/` 下对应 `.properties` |
+| **镜像构建** | 使用各模块目录下的 Dockerfile 构建镜像 |
+
+---
+📌 [返回项目首页](../../README.md)

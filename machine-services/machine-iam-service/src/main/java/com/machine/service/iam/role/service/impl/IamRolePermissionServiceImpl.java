@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.role.dto.output.IamRolePermissionListOutputDto;
 import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
 import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.common.tool.JsonUtil;
 import com.machine.service.iam.role.dao.IIamRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.entity.IamRolePermissionRelationEntity;
 import com.machine.service.iam.role.service.IIamRolePermissionService;
@@ -36,7 +37,7 @@ public class IamRolePermissionServiceImpl implements IIamRolePermissionService {
             IamRolePermissionListOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), IamRolePermissionListOutputDto.class, true);
             String dataPermissionRules = entity.getDataPermissionRules();
             if (StrUtil.isNotBlank(dataPermissionRules) && !EMPTY_LIST_STR.equals(dataPermissionRules)) {
-                outputDto.setDataPermissionRuleList(JSONUtil.toList(dataPermissionRules, DataPermissionRuleDto.class));
+                outputDto.setDataPermissionRuleList(JsonUtil.safeToList(dataPermissionRules, DataPermissionRuleDto.class));
             }
             outputDtoList.add(outputDto);
         }

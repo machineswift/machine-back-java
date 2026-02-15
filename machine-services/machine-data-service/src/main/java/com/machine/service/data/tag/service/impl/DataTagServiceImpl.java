@@ -71,17 +71,17 @@ public class DataTagServiceImpl implements IDataTagService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int delete(IdRequest request) {
-        DataTagCategoryEntity entity = tagCategoryDao.getById(request.getId());
-        if (null == entity) {
+        DataTagEntity dbEntity = tagDao.getById(request.getId());
+        if (null == dbEntity) {
             return 0;
         }
 
         //判断智能标签分类是否关联标签选项
-        if (CollectionUtil.isNotEmpty(dataTagOptionDao.selectByTagId(entity.getId()))) {
+        if (CollectionUtil.isNotEmpty(dataTagOptionDao.selectByTagId(dbEntity.getId()))) {
             throw new DataBusinessException("data.tagCategory.service.delete.associationTagOption", "关联标签选项不能删除");
         }
 
-        return tagDao.delete(request.getId());
+        return tagDao.delete(dbEntity.getId());
     }
 
     @Override

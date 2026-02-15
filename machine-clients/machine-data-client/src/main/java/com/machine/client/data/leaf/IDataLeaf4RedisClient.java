@@ -50,12 +50,6 @@ public interface IDataLeaf4RedisClient {
     String dataMaterialCategoryTree();
 
     /**
-     * 附件分类树数据的redis动态key
-     */
-    @GetMapping("data_attachment_category_tree")
-    String dataAttachmentCategoryTree();
-
-    /**
      * 组织树数据的redis动态key
      */
     @GetMapping("data_organization_tree")

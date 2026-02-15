@@ -17,6 +17,20 @@ public class RedisPrefix4DataConstant {
         public static final String DATA_AREA_TREE_DATA = "data:area:tree:data:";
     }
 
+    public static class File {
+
+        /**
+         *  文件地址
+         */
+        public static final String DATA_DOCUMENT_FILE_URL_KEY = "data:document:file:url:key:";
+
+        /**
+         * 文件缩略图地址（图片）
+         */
+        public static final String DATA_DOCUMENT_FILE_THUMBNAIL_URL_KEY = "data:document:file:thumbnailUrl:key:";
+    }
+
+
     public static class Material {
 
         /**
@@ -55,20 +69,6 @@ public class RedisPrefix4DataConstant {
          * 附件缩略图地址
          */
         public static final String DATA_ATTACHMENT_THUMBNAIL_URL_KEY = "data:attachment:thumbnailUrl:key:";
-    }
-
-
-    public static class AttachmentCategory {
-
-        /**
-         * 附件分类 key
-         */
-        public static final String DATA_ATTACHMENT_CATEGORY_TREE_KEY = "data:attachmentCategory:tree:key";
-
-        /**
-         * 附件分类 数据
-         */
-        public static final String DATA_ATTACHMENT_CATEGORY_TREE_DATA = "data:attachmentCategory:tree:data:";
     }
 
 

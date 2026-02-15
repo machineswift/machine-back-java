@@ -12,5 +12,6 @@ public class ObsAutoConfiguration {
         this.obsProperties = obsProperties;
     }
 
+
 }
 

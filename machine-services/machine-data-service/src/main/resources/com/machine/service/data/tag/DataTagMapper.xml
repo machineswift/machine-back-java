@@ -6,9 +6,9 @@
         SELECT tdt.*
         FROM t_data_tag tdt
         <where>
-            <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
+            <if test="inputDto.categoryIdSet != null  and inputDto.categoryIdSet.size > 0">
                 AND tdt.category_id IN
-                <foreach item="item" collection="inputDto.shopIdSet" open="(" separator="," close=")">
+                <foreach item="item" collection="inputDto.categoryIdSet" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
@@ -21,8 +21,20 @@
             <if test="inputDto.status != null">
                 AND tdt.status = #{inputDto.status}
             </if>
+            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
+                AND tdt.create_by IN
+                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
+                AND tdt.update_by IN
+                <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
-        ORDER BY tdt.create_time DESC
+        ORDER BY tdt.category_id ,tdt.sort DESC
     </select>
 
 </mapper>

@@ -33,4 +33,10 @@ public class DataTagQueryPageInputDto extends PageRequest {
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
 
+    @Schema(description = "创建人ID集合")
+    private Set<String> createUserIdSet;
+
+    @Schema(description = "修改人ID集合")
+    private Set<String> updateUserIdSet;
+
 }

@@ -151,6 +151,61 @@
         ORDER BY s.create_time DESC
     </select>
 
+    <select id="listForExport" resultType="com.machine.service.data.shop.dao.mapper.entity.DataShopEntity">
+        SELECT s.* FROM t_data_shop s
+        <where>
+            <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
+                AND s.id IN
+                <foreach item="item" collection="inputDto.shopIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND LOWER(s.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.businessStatusSet != null and inputDto.businessStatusSet.size > 0">
+                AND s.business_status IN
+                <foreach item="item" collection="inputDto.businessStatusSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.operationStatusSet != null and inputDto.operationStatusSet.size > 0">
+                AND s.operation_status IN
+                <foreach item="item" collection="inputDto.operationStatusSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.physicalStatusSet != null and inputDto.physicalStatusSet.size > 0">
+                AND s.physical_status IN
+                <foreach item="item" collection="inputDto.physicalStatusSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.areaCodeSet != null  and inputDto.areaCodeSet.size > 0">
+                AND s.area_code IN
+                <foreach item="item" collection="inputDto.areaCodeSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND s.update_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND s.update_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND s.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND s.update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        ORDER BY s.create_time DESC
+    </select>
+
     <select id="pageCollectShop" resultType="com.machine.service.data.shop.dao.mapper.entity.DataShopEntity">
         SELECT s.* FROM t_data_shop s
         LEFT JOIN t_user_collect_shop ucs ON ucs.shop_id = s.id

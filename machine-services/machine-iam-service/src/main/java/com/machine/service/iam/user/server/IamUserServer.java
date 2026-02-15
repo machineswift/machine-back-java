@@ -71,7 +71,7 @@ public class IamUserServer implements IIamUserClient {
     @PostMapping("update_permission")
     public void updatePermission(IamUserUpdatePermissionInputDto inputDto) {
         log.info("修改用户权限，inputDto={}", JSONUtil.toJsonStr(inputDto));
-         userService.updatePermission(inputDto);
+        userService.updatePermission(inputDto);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class IamUserServer implements IIamUserClient {
     @GetMapping("get_by_thirdPartyUuid")
     public IamUserDto getByThirdPartyUuid(@RequestParam("source") IamAuth2SourceEnum source,
                                           @RequestParam("thirdPartyUuid") String thirdPartyUuid) {
-        return userService.getByThirdPartyUuid(source,thirdPartyUuid);
+        return userService.getByThirdPartyUuid(source, thirdPartyUuid);
     }
 
     @Override

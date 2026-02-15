@@ -36,4 +36,6 @@ public interface IDataShopBusiness {
 
     PageResponse<DataShopExpandListResponseVo> pageExpand(DataShopQueryPageRequestVo request);
 
+    void export(DataShopExportRequestVo request);
+
 }

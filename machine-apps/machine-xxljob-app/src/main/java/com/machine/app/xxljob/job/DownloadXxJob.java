@@ -3,16 +3,13 @@ package com.machine.app.xxljob.job;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
-import com.machine.client.data.attachment.IDataAttachmentClient;
-import com.machine.client.data.attachment.dto.input.DataAttachmentBindTableNameInputDto;
-import com.machine.client.data.file.IDataDownloadClient;
-import com.machine.client.data.file.dto.input.DataDownloadContentDto;
-import com.machine.client.data.file.dto.input.DataDownloadUpdateInputDto;
-import com.machine.client.data.file.dto.input.DataDownloadQueryInputDto;
-import com.machine.client.data.file.dto.output.DataDownloadDetailOutputDto;
+import com.machine.client.data.file.download.IDataDownloadClient;
+import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
+import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
+import com.machine.client.data.file.download.dto.input.DataDownloadQueryInputDto;
+import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.data.download.DataDownloadStatusEnum;
-import com.machine.sdk.common.envm.system.SystemTableNameEnum;
+import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +43,6 @@ public class DownloadXxJob {
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    private IDataAttachmentClient attachmentClient;
 
     @Autowired
     private IDataDownloadClient downloadClient;
@@ -163,13 +157,6 @@ public class DownloadXxJob {
             Class<?> paramsClass = Class.forName(contentDto.getParamsClassName());
             Method method = bean.getClass().getMethod(contentDto.getMethodName(), paramsClass);
             String attachmentId = (String) method.invoke(bean, JSONUtil.toBean(contentDto.getJsonParams(), paramsClass));
-
-            // 附件绑定业务
-            DataAttachmentBindTableNameInputDto bindInputDto = new DataAttachmentBindTableNameInputDto();
-            bindInputDto.setId(attachmentId);
-            bindInputDto.setTableName(SystemTableNameEnum.T_DATA_DOWNLOAD);
-            bindInputDto.setDataId(id);
-            attachmentClient.bindTableName(bindInputDto);
 
             // 完成
             DataDownloadUpdateInputDto finish = new DataDownloadUpdateInputDto();

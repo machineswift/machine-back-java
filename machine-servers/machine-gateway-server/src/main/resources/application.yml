@@ -74,11 +74,6 @@ spring:
               predicates:
                 - Path=/machine-manage-app/v3/api-docs/**
 
-            - id: machine-xxljob-server
-              uri: lb://machine-xxljob-server
-              predicates:
-                - Path=/machine-xxljob-server/**
-
             - id: machine-camunda-server
               uri: lb://machine-camunda-server
               predicates:

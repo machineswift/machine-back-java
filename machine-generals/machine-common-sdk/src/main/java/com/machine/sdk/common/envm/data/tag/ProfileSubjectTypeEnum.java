@@ -8,7 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ProfileSubjectTypeEnum implements BaseEnum<ProfileSubjectTypeEnum, String> {
     CUSTOMER("CUSTOMER", "客户"),
-    MEMBER("MEMBER", "会员"),
     SHOP("SHOP", "门店"),
     ITEM("ITEM", "商品");
 

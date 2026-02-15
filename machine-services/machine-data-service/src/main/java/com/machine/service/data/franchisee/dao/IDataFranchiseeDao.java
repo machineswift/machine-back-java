@@ -3,7 +3,7 @@ package com.machine.service.data.franchisee.dao;
 import com.machine.client.data.franchisee.dto.input.DataFranchiseeQueryListOffsetInputDto;
 import com.machine.client.data.supplier.dto.input.DataFranchiseeListUserIdInputDto;
 import com.machine.sdk.common.envm.DataCertificateTypeEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import com.machine.service.data.franchisee.dao.mapper.entity.DataFranchiseeEntity;
@@ -18,11 +18,11 @@ public interface IDataFranchiseeDao {
     int update(DataFranchiseeEntity entity);
 
     int updateIdentityCard(String franchiseeId,
-                           SystemStorageTypeEnum persistenceStatus,
+                           StorageTypeEnum persistenceStatus,
                            IdentityCardDto identityCard);
 
     int updateHealthCertificate(String franchiseeId,
-                                SystemStorageTypeEnum persistenceStatus,
+                                StorageTypeEnum persistenceStatus,
                                 HealthCertificateDto healthCertificate);
 
     DataFranchiseeEntity getById(String id);
@@ -35,10 +35,10 @@ public interface IDataFranchiseeDao {
                                           String certificateNumber);
 
     IdentityCardDto getIdentityCard(String franchiseeId,
-                                    SystemStorageTypeEnum persistenceStatus);
+                                    StorageTypeEnum persistenceStatus);
 
     HealthCertificateDto getHealthCertificated(String franchiseeId,
-                                               SystemStorageTypeEnum persistenceStatus);
+                                               StorageTypeEnum persistenceStatus);
 
     Set<String> listUserIdByCondition(DataFranchiseeListUserIdInputDto inputDto);
 

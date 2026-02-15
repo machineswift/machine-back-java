@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.client.data.employee.dto.input.DataShopEmployeeListUserIdInputDto;
 import com.machine.client.data.employee.dto.input.DataShopEmployeeQueryListOffsetInputDto;
 import com.machine.client.data.external.dto.input.DataExternalFieldDataGetValueInputDto;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.model.dto.IdDto;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
@@ -88,10 +88,10 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
 
     @Override
     public int updateIdentityCard(String shopEmployeeId,
-                                  SystemStorageTypeEnum persistenceStatus,
+                                  StorageTypeEnum persistenceStatus,
                                   IdentityCardDto identityCard) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == identityCard) {
                 return 0;
             }
@@ -107,7 +107,7 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
         deleteEntity.setDataId(shopEmployeeId);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -132,10 +132,10 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
 
     @Override
     public int updateHealthCertificate(String shopEmployeeId,
-                                       SystemStorageTypeEnum persistenceStatus,
+                                       StorageTypeEnum persistenceStatus,
                                        HealthCertificateDto healthCertificate) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             if (null == healthCertificate) {
                 return 0;
             }
@@ -151,7 +151,7 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
         deleteEntity.setDataId(shopEmployeeId);
         externalFieldDataDao.delete(deleteEntity);
 
-        if (SystemStorageTypeEnum.PERMANENT == persistenceStatus) {
+        if (StorageTypeEnum.PERMANENT == persistenceStatus) {
             //审核通过删除临时数据
             DataExternalFieldDataEntity deleteTemporaryEntity = new DataExternalFieldDataEntity();
             deleteTemporaryEntity.setTableName(TABLE_NAME);
@@ -188,9 +188,9 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
 
     @Override
     public IdentityCardDto getIdentityCard(String shopEmployeeId,
-                                           SystemStorageTypeEnum persistenceStatus) {
+                                           StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = IDENTITY_CARD_TEMPORARY_COLUMN;
         } else {
             fieldName = IDENTITY_CARD_PERMANENT_COLUMN;
@@ -209,9 +209,9 @@ public class DataShopEmployeeDaoImpl implements IDataShopEmployeeDao {
 
     @Override
     public HealthCertificateDto getHealthCertificated(String shopEmployeeId,
-                                                      SystemStorageTypeEnum persistenceStatus) {
+                                                      StorageTypeEnum persistenceStatus) {
         String fieldName;
-        if (SystemStorageTypeEnum.TEMPORARY == persistenceStatus) {
+        if (StorageTypeEnum.TEMPORARY == persistenceStatus) {
             fieldName = HEALTH_CERTIFICATE_TEMPORARY_COLUMN;
         } else {
             fieldName = HEALTH_CERTIFICATE_PERMANENT_COLUMN;

@@ -20,7 +20,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/com/machine/service/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.machine.service.*.*.dao.mapper.entity
+  type-aliases-package: com.machine.service.**.dao.mapper.entity
   type-handlers-package: com.machine.starter.mybatis.handler
   global-config:
     # 关闭MP3.0自带的banner

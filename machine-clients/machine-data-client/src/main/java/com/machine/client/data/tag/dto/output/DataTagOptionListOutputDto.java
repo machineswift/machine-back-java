@@ -22,6 +22,9 @@ public class DataTagOptionListOutputDto {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
+
     @Schema(description = "排序，sort值大的排序靠前")
     private Long sort;
 

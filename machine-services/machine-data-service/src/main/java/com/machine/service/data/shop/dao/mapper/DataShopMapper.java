@@ -40,4 +40,6 @@ public interface DataShopMapper extends BaseMapper<DataShopEntity> {
     Page<DataShopEntity> pageCollectShop(@Param("inputDto") DataSuperShopListCollectShopInputDto inputDto,
                                          IPage<DataShopEntity> page);
 
+    List<DataShopEntity> listForExport(@Param("inputDto") DataShopExportInputDto inputDto);
+
 }

@@ -1,5 +1,6 @@
 package com.machine.app.manage.data.tag.business.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.machine.app.manage.data.tag.business.IDataTagOptionBusiness;
@@ -15,6 +16,7 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.common.model.request.IdRequest;
 import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.common.model.response.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -105,6 +107,9 @@ public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
         List<DataTagOptionListOutputDto> outputDtoList = tagOptionClient.selectList(inputDto);
 
         List<DataTagOptionExpandListResponseVo> responseVoList = JSONUtil.toList(JSONUtil.toJsonStr(outputDtoList), DataTagOptionExpandListResponseVo.class);
+        if (CollectionUtil.isEmpty(responseVoList)) {
+            return List.of();
+        }
 
         {// 填充创建人和修改人信息
             Set<String> userIdSet = responseVoList.stream()
@@ -121,7 +126,7 @@ public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
             }
         }
 
-        return List.of();
+        return responseVoList;
     }
 
 

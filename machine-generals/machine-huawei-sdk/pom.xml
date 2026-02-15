@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-generals</artifactId>
-        <version>1.1.0-RELEASE</version>
+        <version>2.0.0-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>

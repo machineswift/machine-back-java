@@ -128,4 +128,12 @@ public class DataShopController {
         return shopBusiness.pageExpand(request);
     }
 
+    @Operation(summary = "导出")
+    @PostMapping("export")
+    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:SHOP:EXPORT')")
+    public void export(@RequestBody @Validated DataShopExportRequestVo request) {
+        log.info("导出门店，request={}", JSONUtil.toJsonStr(request));
+        shopBusiness.export(request);
+    }
+
 }

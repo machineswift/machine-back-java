@@ -28,6 +28,9 @@ public class DataTagCategoryDetailOutputDto {
     @Schema(description = "排序，sort值大的排序靠前")
     private Long sort;
 
+    @Schema(description = "描述")
+    private String description;
+
     @Schema(description = "创建人ID")
     private String createBy;
 

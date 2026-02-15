@@ -1,26 +1,40 @@
 # 🏗️ 架构规范文档
 
+本文档描述 Machine 微服务后端工程的架构与分层规范，**技术栈版本以根 [pom.xml](../../pom.xml)（当前 2.0.0-RELEASE）为准**。
+
 ## 📋 架构概览
 
-Machine微服务平台采用分层微服务架构设计，基于Spring Cloud Alibaba生态构建，支持高并发、高可用、可扩展的企业级应用场景。
+Machine 微服务平台采用分层微服务架构设计，基于 Spring Cloud Alibaba 生态构建，支持高并发、高可用、可扩展的企业级应用场景。
 
 ### 架构设计原则
 
-- **🔧 微服务治理**: Nacos 3.1.0 服务注册发现与配置中心 + Spring Cloud Gateway 4.3.0 统一网关 + OpenFeign 4.3.0 服务调用 + 链路追踪
-- **🏗️ 分层架构**: APP应用层 + CLIENT客户端层 + SERVICE服务层，职责清晰，易于维护
-- **⚡ 高性能数据架构**: MyBatis-Plus 3.5.14 + 多数据源动态切换，支持事务管理和读写分离
-- **📊 多数据源架构**: MySQL(配置中心/Nacos/XXL-JOB/Camunda) + PostgreSQL(业务数据，支持JSON字段和复杂查询) + Redis(分布式缓存/会话存储/分布式锁) + ClickHouse(分析型数据库/OLAP查询) + Elasticsearch(全文搜索/日志分析)
+- **🔧 微服务治理**: Nacos 服务注册发现与配置中心 + Spring Cloud Gateway 统一网关 + OpenFeign 服务调用 + 链路追踪
+- **🏗️ 分层架构**: **Generals**（SDK） + **Starters**（启动器） + **Servers**（网关/工作流） + **Apps**（应用入口） + **Clients**（Feign 客户端） + **Services**（业务服务） + **Tests**（测试/示例），职责清晰，易于维护
+- **⚡ 高性能数据架构**: MyBatis-Plus + 多数据源动态切换（dynamic-datasource-spring-boot4），支持事务管理和读写分离
+- **📊 多数据源架构**: MySQL（Nacos/XXL-JOB/Camunda） + PostgreSQL（业务数据） + Redis（缓存/会话/分布式锁） + ClickHouse/Elasticsearch 等
 
 ---
 
 ## 📋 工程分层规范
 
+根 [pom.xml](../../pom.xml) 包含 7 个一级模块：**machine-generals**、**machine-starters**、**machine-apps**、**machine-servers**、**machine-clients**、**machine-services**、**machine-tests**。以下按对外暴露与业务分层展开。
+
+### 📦 Generals / Starters（补充说明）
+
+- **machine-generals**：通用 SDK，如 `machine-self-sdk`（含 AppContext 等）、`machine-common-sdk`、`machine-feishu-sdk`、`machine-huawei-sdk`、`machine-beisen-sdk`，被 Apps/Services/Starters 依赖。
+- **machine-starters**：各类 Boot Starter（base、nacos、security、mybatis、redis、ai、mq、wechat、obs 等），为 Apps/Services 提供可插拔能力。
+- **machine-tests**：测试与示例模块，如 `machine-flink-test`、`machine-temp-test`，用于集成与演示。
+
+---
+
 ### 🚀 APP 应用层规范
 
+对应工程目录：`machine-apps/`（machine-iam-app、machine-manage-app、machine-super-app、machine-openapi-app、machine-mq-app、machine-xxljob-app）。
+
 #### 技术栈
-- **Spring Boot**: 3.5.7
-- **Spring MVC**: Web框架
-- **Spring Security**: 6.5.3
+- **Spring Boot**: 4.0（与根 pom 一致）
+- **Spring MVC**: Web 框架
+- **Spring Security**: 认证授权
 
 #### 职责说明
 对外提供HTTP接口，处理请求参数验证、权限控制、业务逻辑编排
@@ -37,36 +51,35 @@ Machine微服务平台采用分层微服务架构设计，基于Spring Cloud Ali
 
 #### 目录结构
 
-APP层负责对外提供HTTP接口，处理请求参数验证、权限控制、业务逻辑编排等。
+APP 层负责对外提供 HTTP 接口，处理请求参数验证、权限控制、业务逻辑编排等。**包名**：`com.machine.app.{module}.{business}`（如 `com.machine.app.iam.user`、`com.machine.app.data.tag`）。
 
 ```
 machine-apps/machine-{module}-app/
 ├── src/main/java/com/machine/app/{module}/
-│   ├── {business}/
-│   │   ├── controller/                    # 控制器层
-│   │   │   ├── {Business}Controller.java  # 控制器实现
-│   │   │   └── vo/                       # 视图对象
-│   │   │       ├── request/              # 请求VO
-│   │   │       │   └── {Business}CreateRequestVo.java
-│   │   │       │   └── {Business}UpdateRequestVo.java
-│   │   │       │   └── {Business}QueryPageRequestVo.java
-│   │   │       └── response/             # 响应VO
-│   │   │           └── {Business}DetailResponseVo.java
-│   │   │           └── {Business}ListResponseVo.java
-│   │   └── business/                     # 业务逻辑层
-│   │       ├── I{Business}Business.java  # 业务接口
-│   │       └── impl/
-│   │           └── I{Business}BusinessImpl.java  # 业务实现
+│   └── {business}/                          # 业务域（如 user、tag、organization）
+│       ├── {Business}Controller.java        # 或 controller/{Business}Controller.java
+│       ├── controller/vo/                   # 或 vo/（与业务平级）
+│       │   ├── request/                     # 请求 VO
+│       │   │   ├── {Business}CreateRequestVo.java
+│       │   │   ├── {Business}UpdateRequestVo.java
+│       │   │   └── {Business}QueryPageRequestVo.java
+│       │   └── response/                    # 响应 VO
+│       │       ├── {Business}DetailResponseVo.java
+│       │       └── {Business}ListResponseVo.java
+│       └── business/                        # 业务编排层
+│           ├── I{Business}Business.java
+│           └── impl/
+│               └── I{Business}BusinessImpl.java
 ```
 
 #### 代码示例
 
-**`DataTagController`** - 智能标签控制器
+参考现有实现（如 `machine-iam-app` 中 `IamUserController`、`IamSupplierUserController`，`machine-super-app` 中 `SuperOrganizationController`，`machine-openapi-app` 中 `OpenApiShopController` 等）：
 
-- 使用 `@RestController` 和 `@RequestMapping` 注解
+- 使用 `@RestController`、`@RequestMapping`
 - 使用 `@PreAuthorize` 进行权限控制
 - 使用 `@Validated` 进行参数验证
-- 通过 `Business` 层调用服务
+- 通过 Business 层调用下游 Service（经 Feign Client 或直连）
 
 #### 服务模块
 
@@ -83,12 +96,14 @@ machine-apps/machine-{module}-app/
 
 ### 🔗 CLIENT 客户端层规范
 
+对应工程目录：`machine-clients/`（machine-iam-client、machine-data-client、machine-ai-client、machine-hrm-client、machine-crm-client、machine-scm-client、machine-tpp-client、machine-doc-client、machine-plugin-client）。
+
 #### 技术栈
-- **OpenFeign**: 4.3.0
-- **Spring Cloud LoadBalancer**: 负载均衡
+- **OpenFeign**（随 Spring Cloud 版本）
+- **Spring Cloud LoadBalancer**：负载均衡
 
 #### 职责说明
-服务间调用，实现微服务间的通信和数据传输
+服务间调用，实现 Apps 与 Services 之间的通信和数据传输
 
 #### 设计模式
 - 统一服务调用接口
@@ -101,20 +116,20 @@ machine-apps/machine-{module}-app/
 
 #### 目录结构
 
-CLIENT层负责服务间调用，使用OpenFeign实现微服务间的通信。
+CLIENT 层使用 OpenFeign 实现微服务间调用。**包名**：`com.machine.client.{module}.{business}`。
 
 ```
 machine-clients/machine-{module}-client/
 ├── src/main/java/com/machine/client/{module}/
-│   ├── {business}/
-│   │   ├── I{Business}Client.java        # Feign客户端接口
-│   │   └── dto/                         # 数据传输对象
-│   │       ├── input/                   # 输入DTO
-│   │       │   └── {Business}CreateInputDto.java
-│   │       │   └── {Business}UpdateInputDto.java
-│   │       └── output/                  # 输出DTO
-│   │           └── {Business}DetailOutputDto.java
-│   │           └── {Business}ListOutputDto.java
+│   └── {business}/
+│       ├── I{Business}Client.java          # Feign 客户端接口（@FeignClient）
+│       └── dto/
+│           ├── input/                      # 输入 DTO
+│           │   ├── {Business}CreateInputDto.java
+│           │   └── {Business}UpdateInputDto.java 等
+│           └── output/                     # 输出 DTO
+│               ├── {Business}DetailOutputDto.java
+│               └── {Business}ListOutputDto.java 等
 ```
 
 #### 代码示例
@@ -143,10 +158,12 @@ machine-clients/machine-{module}-client/
 
 ### ⚙️ SERVICE 服务层规范
 
+对应工程目录：`machine-services/`（machine-iam-service、machine-data-service、machine-ai-service、machine-hrm-service、machine-crm-service、machine-scm-service、machine-tpp-service、machine-doc-service、machine-plugin-service）。
+
 #### 技术栈
-- **Spring Boot**: 应用框架
-- **MyBatis-Plus**: 3.5.14
-- **多数据源动态切换**: 支持事务管理和读写分离
+- **Spring Boot**: 4.0
+- **MyBatis-Plus**: 3.5.15（根 pom 统一管理）
+- **多数据源**: dynamic-datasource-spring-boot4，支持事务与读写分离
 
 #### 职责说明
 核心业务逻辑实现，包含服务接口、数据访问层、事务管理
@@ -160,26 +177,26 @@ DAO层 + Mapper层 + Entity层，支持复杂查询和批量操作
 
 #### 目录结构
 
-SERVICE层负责核心业务逻辑实现，包含服务接口、数据访问层等。
+SERVICE 层负责核心业务逻辑与数据访问。**包名**：`com.machine.service.{module}.{business}`（如 `com.machine.service.data.tag`）。
 
 ```
 machine-services/machine-{module}-service/
 ├── src/main/java/com/machine/service/{module}/
-│   ├── {business}/
-│   │   ├── service/                     # 服务层
-│   │   │   ├── I{Business}Service.java  # 服务接口
-│   │   │   └── impl/
-│   │   │       └── {Business}ServiceImpl.java  # 服务实现
-│   │   ├── dao/                         # 数据访问层
-│   │   │   ├── I{Business}Dao.java      # DAO接口
-│   │   │   ├── impl/
-│   │   │   │   └── {Business}DaoImpl.java  # DAO实现
-│   │   │   └── mapper/                  # MyBatis映射
-│   │   │       ├── entity/
-│   │   │       │   └── {Business}Entity.java  # 实体类
-│   │   │       └── I{Business}Mapper.java  # Mapper接口
-│   │   └── server/                      # 服务端接口（可选）
-│   │       └── {Business}Server.java    # 服务端控制器
+│   └── {business}/
+│       ├── service/                       # 服务层
+│       │   ├── I{Business}Service.java
+│       │   └── impl/
+│       │       └── {Business}ServiceImpl.java
+│       ├── dao/                           # 数据访问层
+│       │   ├── I{Business}Dao.java
+│       │   ├── impl/
+│       │   │   └── {Business}DaoImpl.java
+│       │   └── mapper/
+│       │       ├── entity/
+│       │       │   └── {Business}Entity.java
+│       │       └── {Business}Mapper.java   # Mapper 接口
+│       └── server/                        # 对内 HTTP 接口（供 Feign 调用）
+│           └── {Business}Server.java
 ```
 
 #### 服务模块
@@ -200,16 +217,17 @@ machine-services/machine-{module}-service/
 
 ### 🖥️ SERVER 服务器层规范
 
+对应工程目录：`machine-servers/`。
+
 #### 职责说明
-提供基础设施服务和管理控制台，支持系统运维和监控
+提供基础设施服务和管理控制台，支持系统运维和监控。
 
 #### 服务模块
 
-| 模块名称                       | 说明                                               |
-|----------------------------|--------------------------------------------------|
-| **machine-gateway-server** | API网关服务器，基于Spring Cloud Gateway，提供统一入口、路由转发、限流熔断 |
-| **machine-xxljob-server**  | 任务调度服务器，XXL-JOB管理控制台，提供任务管理、执行监控、调度配置            |
-| **machine-camunda-server** | 工作流服务器，Camunda BPM管理控制台，提供流程设计、流程监控、流程管理         |
+| 模块名称                       | 说明                                                           |
+|----------------------------|----------------------------------------------------------------|
+| **machine-gateway-server** | API 网关，基于 Spring Cloud Gateway，统一入口、路由、限流熔断   |
+| **machine-camunda-server** | 工作流服务器，Camunda BPM 控制台，流程设计、监控与管理          |
 
 ---
 
@@ -217,40 +235,42 @@ machine-services/machine-{module}-service/
 
 #### 架构说明
 
-多数据源架构设计，支持不同业务场景的数据存储需求。
+多数据源架构设计，支持不同业务场景的数据存储需求。表结构与建库脚本见 [数据库设计文档](../database/README.md)。
 
 #### 数据库选型
 
-| 数据库               | 版本        | 用途说明                                   |
-|-------------------|-----------|----------------------------------------|
-| **MySQL**         | 9.4.0     | 配置中心(Nacos)、任务调度(XXL-JOB)、工作流(Camunda) |
-| **PostgreSQL**    | 18.0      | 业务数据存储，支持JSON字段和复杂查询                   |
-| **Redis**         | 8.2       | 分布式缓存，会话存储，分布式锁(Redisson)              |
-| **ClickHouse**    | 25.9.3.48 | 分析型数据库，支持大数据量OLAP查询                    |
-| **Elasticsearch** | 8.19.0    | 全文搜索引擎，日志分析和数据检索                       |
+| 数据库               | 版本（参考） | 用途说明                                           |
+|-------------------|--------------|----------------------------------------------------|
+| **MySQL**         | 以运行环境为准 | 配置中心(Nacos)、任务调度(XXL-JOB)、工作流(Camunda)  |
+| **PostgreSQL**    | 以运行环境为准 | 业务数据存储，支持 JSON 与复杂查询                   |
+| **Redis**         | 以运行环境为准 | 分布式缓存、会话存储、分布式锁(Redisson)             |
+| **ClickHouse**    | -            | 分析型数据库、OLAP 查询（可选）                      |
+| **Elasticsearch** | -            | 全文搜索、日志分析（可选）                          |
 
 ---
 
 ## 🛠️ 技术栈选型
 
+以下版本与根 [pom.xml](../../pom.xml) 中 `dependencyManagement` 一致，构建时以实际 pom 为准。
+
 ### 🚀 核心技术栈
 
-| 分类            | 技术组件                 | 版本            | 说明            |
-|---------------|----------------------|---------------|---------------|
-| **🏗️ 微服务框架** | Spring Cloud         | 2025.0.0      | 微服务基础框架       |
-|               | Spring Cloud Alibaba | 2025.0.0.0    | 阿里云微服务生态      |
-| **🌐 Web框架**  | Spring Boot          | 3.5.7         | Web应用框架       |
-| **🤖 AI框架**   | Spring AI            | 1.1.0-M4      | Spring AI集成框架 |
-|               | Spring Alibaba AI    | 1.0.0.4       | 阿里云AI服务集成     |
-| **🔧 服务治理**   | Nacos                | 3.1.0         | 服务注册发现与配置中心   |
-|               | Spring Cloud Gateway | 4.3.0         | API网关         |
-|               | OpenFeign            | 4.3.0         | 服务间调用         |
-| **🔐 安全认证**   | Spring Security      | 6.5.3         | 认证授权框架        |
-| **⏰ 任务调度**    | XXL-JOB              | 3.2.0         | 分布式任务调度       |
-| **💾 数据访问**   | MyBatis-Plus         | 3.5.14        | ORM框架         |
-| **⚙️ 工作流引擎**  | Camunda              | 7.24.0-alpha2 | 业务流程管理        |
-| **🔍 链路追踪**   | SkyWalking           | 10.2.0        | 分布式链路追踪       |
-| **📚 API文档**  | Swagger              | 2.2.36        | API文档生成工具     |
+| 分类            | 技术组件                 | 版本（根 pom）   | 说明                |
+|---------------|----------------------|------------------|---------------------|
+| **🏗️ 微服务框架** | Spring Cloud         | 2025.1.0         | 微服务基础框架       |
+|               | Spring Cloud Alibaba | 2025.1.0.0       | 阿里云微服务生态     |
+| **🌐 Web 框架**  | Spring Boot          | 4.0.0            | Web 应用框架        |
+| **🤖 AI 框架**   | Spring AI            | 2.0.0-M2         | Spring AI 集成      |
+|               | Spring Alibaba AI   | 1.1.2.0          | 阿里云 AI 集成       |
+| **🔧 服务治理**   | Nacos                | 随 Spring Cloud Alibaba | 服务注册与配置中心 |
+|               | Spring Cloud Gateway | 随 Spring Cloud  | API 网关            |
+|               | OpenFeign            | 随 Spring Cloud  | 服务间调用          |
+| **🔐 安全认证**   | Spring Security      | 随 Spring Boot 4.0 | 认证授权（OAuth2、JWT） |
+| **⏰ 任务调度**   | XXL-JOB              | 3.3.2（xxl-job-core） | 分布式任务调度       |
+| **💾 数据访问**   | MyBatis-Plus         | 3.5.15           | ORM（mybatis-plus-spring-boot4-starter） |
+| **⚙️ 工作流引擎**  | Camunda              | 7.24.0           | 业务流程管理（camunda-bom）         |
+| **🔍 链路追踪**   | SkyWalking           | 9.5.0（apm-toolkit） | 分布式链路追踪       |
+| **📚 API 文档**  | springdoc-openapi   | 3.0.1             | OpenAPI 文档；swagger-annotations 2.2.42 |
 
 ---
 
@@ -339,16 +359,16 @@ machine-services/machine-{module}-service/
 ### 🌐 上下文管理
 
 #### 用户上下文
-- **获取方式**: 通过 `AppContext.getContext().getUserId()` 获取当前用户ID
+- **获取方式**: 通过 `AppContext.getContext().getUserId()` 获取当前用户 ID（`AppContext` 来自 `machine-self-sdk` 的 `com.machine.sdk.common.context.AppContext`，在 security-boot-starter 中注入）
 
 #### 请求追踪
 - **链路追踪**: 使用 `traceId` 进行请求链路追踪
 
-#### Feign调用
-- **自动传递**: 自动传递用户ID和traceId到下游服务
+#### Feign 调用
+- **自动传递**: 自动传递用户 ID 和 traceId 到下游服务
 
 #### 跳过检查
-- **注解使用**: 使用 `@SkipUserIdCheck` 注解跳过用户ID验证
+- **注解使用**: 使用 `@SkipUserIdCheck` 注解跳过用户 ID 验证（Feign 调用链中可选）
 
 ---
 

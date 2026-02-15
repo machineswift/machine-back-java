@@ -74,6 +74,8 @@ VALUES ('machine', 'root', 'APP', 'MACHINE', 'machine', 'machine', 800, 'system'
         1729736640000, 'system', 1729736640000),
        ('bi', 'manage_app', 'MODULE', 'BI', '商业智能', '商业智能', 2000, 'root',
         1729736640000, 'system', 1729736640000),
+       ('process_center', 'manage_app', 'MODULE', 'PCE', '流程中心', '流程中心', 2000, 'root',
+        1729736640000, 'system', 1729736640000),
 
        ('system:basic_data', 'system', 'DIRECTORY', 'SYSTEM:BASIC_DATA', '基础数据管理', '基础数据管理',
         8000, 'system',

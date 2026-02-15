@@ -1,6 +1,6 @@
 package com.machine.sdk.common.model.dto.data.certificate;
 
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import com.machine.sdk.common.model.dto.data.AddressInfoDto;
 import com.machine.sdk.common.model.dto.data.MaterialDto;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -7,8 +7,8 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeListOutputDto;
+import com.machine.sdk.common.envm.base.StorageTypeEnum;
 import com.machine.sdk.common.envm.data.DataCertificateStatusEnum;
-import com.machine.sdk.common.envm.system.SystemStorageTypeEnum;
 import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
 import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
 import com.machine.sdk.common.model.request.IdRequest;
@@ -36,9 +36,9 @@ public class DataShopEmployeeServiceImpl implements IDataShopEmployeeService {
         DataShopEmployeeEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEmployeeEntity.class);
         String shopEmployeeId = shopEmployeeDao.insert(insertEntity);
         //身份证
-        shopEmployeeDao.updateIdentityCard(shopEmployeeId, SystemStorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
+        shopEmployeeDao.updateIdentityCard(shopEmployeeId, StorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
         //健康证
-        shopEmployeeDao.updateHealthCertificate(shopEmployeeId, SystemStorageTypeEnum.PERMANENT, inputDto.getHealthCertificate());
+        shopEmployeeDao.updateHealthCertificate(shopEmployeeId, StorageTypeEnum.PERMANENT, inputDto.getHealthCertificate());
         return shopEmployeeId;
     }
 
@@ -50,9 +50,9 @@ public class DataShopEmployeeServiceImpl implements IDataShopEmployeeService {
             return 0;
         }
         //身份证
-        shopEmployeeDao.updateIdentityCard(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
+        shopEmployeeDao.updateIdentityCard(dbEntity.getId(), StorageTypeEnum.PERMANENT, inputDto.getIdentityCard());
         //健康证
-        shopEmployeeDao.updateHealthCertificate(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT, inputDto.getHealthCertificate());
+        shopEmployeeDao.updateHealthCertificate(dbEntity.getId(), StorageTypeEnum.PERMANENT, inputDto.getHealthCertificate());
         return 1;
     }
 
@@ -65,9 +65,9 @@ public class DataShopEmployeeServiceImpl implements IDataShopEmployeeService {
 
         DataShopEmployeeDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(dbEntity), DataShopEmployeeDetailOutputDto.class);
         //身份证
-        outputDto.setIdentityCard(shopEmployeeDao.getIdentityCard(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setIdentityCard(shopEmployeeDao.getIdentityCard(dbEntity.getId(), StorageTypeEnum.PERMANENT));
         //健康证
-        outputDto.setHealthCertificate(shopEmployeeDao.getHealthCertificated(dbEntity.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setHealthCertificate(shopEmployeeDao.getHealthCertificated(dbEntity.getId(), StorageTypeEnum.PERMANENT));
         return outputDto;
     }
 
@@ -83,8 +83,8 @@ public class DataShopEmployeeServiceImpl implements IDataShopEmployeeService {
     @Override
     public OpenapiShopEmployeeIdentityCardOutputDto identityCard(IdRequest request) {
         OpenapiShopEmployeeIdentityCardOutputDto outputDto = new OpenapiShopEmployeeIdentityCardOutputDto();
-        outputDto.setTemporaryIdentityCard(shopEmployeeDao.getIdentityCard(request.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentIdentityCard(shopEmployeeDao.getIdentityCard(request.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryIdentityCard(shopEmployeeDao.getIdentityCard(request.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentIdentityCard(shopEmployeeDao.getIdentityCard(request.getId(), StorageTypeEnum.PERMANENT));
 
         { //证件状态
             IdentityCardDto permanent = outputDto.getPermanentIdentityCard();
@@ -100,8 +100,8 @@ public class DataShopEmployeeServiceImpl implements IDataShopEmployeeService {
     @Override
     public OpenapiShopEmployeeHealthCertificateOutputDto healthCertificate(IdRequest request) {
         OpenapiShopEmployeeHealthCertificateOutputDto outputDto = new OpenapiShopEmployeeHealthCertificateOutputDto();
-        outputDto.setTemporaryHealthCertificate(shopEmployeeDao.getHealthCertificated(request.getId(), SystemStorageTypeEnum.TEMPORARY));
-        outputDto.setPermanentHealthCertificate(shopEmployeeDao.getHealthCertificated(request.getId(), SystemStorageTypeEnum.PERMANENT));
+        outputDto.setTemporaryHealthCertificate(shopEmployeeDao.getHealthCertificated(request.getId(), StorageTypeEnum.TEMPORARY));
+        outputDto.setPermanentHealthCertificate(shopEmployeeDao.getHealthCertificated(request.getId(), StorageTypeEnum.PERMANENT));
 
         { //证件状态
             HealthCertificateDto permanent = outputDto.getPermanentHealthCertificate();

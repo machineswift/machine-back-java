@@ -101,7 +101,8 @@ public class IamUserController {
 
     @Operation(summary = "导出")
     @PostMapping("export")
-    public void export(@RequestBody @Validated IamUserQueryPageRequestVo request) {
+    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:EXPORT')")
+    public void export(@RequestBody @Validated IamUserExportRequestVo request) {
         log.info("导出用户，request={}", JSONUtil.toJsonStr(request));
         userBusiness.export(request);
     }

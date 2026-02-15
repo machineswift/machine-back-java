@@ -1,7 +1,7 @@
 package com.machine.client.iam.userbk.dto.input;
 
 import com.machine.client.iam.user.dto.input.IamUserRoleInfoUpdateInputDto;
-import com.machine.sdk.common.envm.common.GenderEnum;
+import com.machine.sdk.common.envm.base.GenderEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

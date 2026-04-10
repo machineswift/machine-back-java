@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.permission.IIamPermissionClient;
 import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

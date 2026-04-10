@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.role.controller.vo.request;
 
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

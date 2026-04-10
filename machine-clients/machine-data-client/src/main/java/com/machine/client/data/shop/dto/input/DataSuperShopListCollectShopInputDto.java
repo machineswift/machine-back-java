@@ -1,6 +1,6 @@
 package com.machine.client.data.shop.dto.input;
 
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

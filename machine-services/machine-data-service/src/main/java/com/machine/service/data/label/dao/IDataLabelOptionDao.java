@@ -1,6 +1,6 @@
 package com.machine.service.data.label.dao;
 
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.service.data.label.dao.mapper.entity.DataLabelOptionEntity;
 
 import java.util.List;

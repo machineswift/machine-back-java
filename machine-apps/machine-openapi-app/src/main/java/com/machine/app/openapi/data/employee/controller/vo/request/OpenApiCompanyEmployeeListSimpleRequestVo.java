@@ -1,7 +1,7 @@
 
 package com.machine.app.openapi.data.employee.controller.vo.request;
 
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

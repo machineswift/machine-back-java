@@ -1,7 +1,7 @@
 package com.machine.starter.sdk.config;
 
 import com.machine.sdk.beisen.interceptor.BeiSenTokenInterceptor;
-import com.machine.sdk.common.tool.OkHttp3Util;
+import com.machine.sdk.base.tool.OkHttp3Util;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

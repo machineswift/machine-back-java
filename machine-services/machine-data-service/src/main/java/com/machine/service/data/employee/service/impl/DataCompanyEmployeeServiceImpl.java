@@ -8,8 +8,8 @@ import com.machine.client.data.employee.dto.input.DataCompanyEmployeeQueryListOf
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeUpdateInputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.employee.dao.IDataCompanyEmployeeDao;
 import com.machine.service.data.employee.dao.mapper.entity.DataCompanyEmployeeEntity;
 import com.machine.service.data.employee.service.IDataCompanyEmployeeService;

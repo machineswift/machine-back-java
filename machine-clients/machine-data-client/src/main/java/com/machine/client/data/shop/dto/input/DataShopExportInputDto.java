@@ -1,7 +1,8 @@
 package com.machine.client.data.shop.dto.input;
 
-import com.machine.sdk.common.envm.data.shop.*;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

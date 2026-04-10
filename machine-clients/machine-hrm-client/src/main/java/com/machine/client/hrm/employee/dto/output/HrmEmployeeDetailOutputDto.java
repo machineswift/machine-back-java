@@ -1,7 +1,7 @@
 package com.machine.client.hrm.employee.dto.output;
 
-import com.machine.sdk.common.envm.base.GenderEnum;
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.base.GenderEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
 import lombok.Data;
 
 @Data

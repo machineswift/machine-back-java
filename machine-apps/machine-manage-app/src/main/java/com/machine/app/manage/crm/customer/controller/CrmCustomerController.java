@@ -8,14 +8,9 @@ import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerLis
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerCreateRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerQueryPageRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerUpdateRequestVo;
-import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberDetailResponseVo;
-import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberExpandListResponseVo;
-import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberListResponseVo;
-import com.machine.app.manage.crm.member.controller.vo.resquest.CrmMemberCreateRequestVo;
-import com.machine.app.manage.crm.member.controller.vo.resquest.CrmMemberUpdateRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.IdResponse;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

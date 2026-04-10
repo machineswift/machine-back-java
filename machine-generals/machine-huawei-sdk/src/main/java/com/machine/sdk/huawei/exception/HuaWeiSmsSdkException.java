@@ -1,13 +1,13 @@
 package com.machine.sdk.huawei.exception;
 
-import com.machine.sdk.common.exception.sdk.SdkBusinessException;
+import com.machine.sdk.base.exception.sdk.SdkBusinessException;
 import com.machine.sdk.huawei.envm.HuaWeiSmsCodeEnum;
 import com.machine.sdk.huawei.envm.HuaWeiSmsStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
+import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
 
 @Data
 @NoArgsConstructor

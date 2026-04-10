@@ -6,8 +6,8 @@ import com.machine.app.iam.userbk.vo.request.IamShopUserUpdateRequestVo;
 import com.machine.app.iam.userbk.vo.response.IamShopUserDetailResponseVo;
 import com.machine.app.iam.userbk.vo.response.IamShopUserExpandListResponseVo;
 import com.machine.app.iam.userbk.vo.response.IamShopUserExportRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IIamShopUserBusiness {
 

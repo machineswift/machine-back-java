@@ -5,7 +5,7 @@ import com.machine.client.data.message.IDataAppMessageTemplateClient;
 import com.machine.client.data.message.dto.input.*;
 import com.machine.client.data.message.dto.output.AppMessageTemplateDetailOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageTemplateListOutPutDto;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.service.data.mesage.service.IDataAppMessageTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

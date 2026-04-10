@@ -73,13 +73,6 @@ public class AiDeepseekController {
             DeepSeekAssistantMessage message = (DeepSeekAssistantMessage) chatResponse.getResult().getOutput();
             System.out.println(message.getReasoningContent());
         });
-
-        System.out.println("---------------------------------");
-
-        stream.toIterable().forEach(chatResponse -> {
-            DeepSeekAssistantMessage message = (DeepSeekAssistantMessage) chatResponse.getResult().getOutput();
-            System.out.println(message.getText());
-        });
     }
 
 }

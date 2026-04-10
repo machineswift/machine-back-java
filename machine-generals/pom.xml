@@ -13,7 +13,7 @@
     <description>通用集合</description>
 
     <modules>
-        <module>machine-common-sdk</module>
+        <module>machine-base-sdk</module>
         <module>machine-beisen-sdk</module>
         <module>machine-huawei-sdk</module>
         <module>machine-self-sdk</module>

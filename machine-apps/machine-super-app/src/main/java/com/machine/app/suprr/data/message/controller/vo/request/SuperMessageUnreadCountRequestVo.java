@@ -1,7 +1,7 @@
 package com.machine.app.suprr.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateCategoryEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateCategoryEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

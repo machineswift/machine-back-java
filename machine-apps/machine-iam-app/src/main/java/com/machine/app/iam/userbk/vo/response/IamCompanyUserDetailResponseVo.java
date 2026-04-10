@@ -1,9 +1,9 @@
 package com.machine.app.iam.userbk.vo.response;
 
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
-import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

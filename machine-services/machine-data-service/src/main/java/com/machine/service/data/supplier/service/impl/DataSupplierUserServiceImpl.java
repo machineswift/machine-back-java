@@ -8,8 +8,8 @@ import com.machine.client.data.supplier.dto.input.DataSupplierQueryListOffsetInp
 import com.machine.client.data.supplier.dto.input.DataSupplierUpdateInputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierListOutputDto;
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.supplier.dao.IDataSupplierCompanyDao;
 import com.machine.service.data.supplier.dao.IDataSupplierCompanyRelationDao;
 import com.machine.service.data.supplier.dao.IDataSupplierUserDao;

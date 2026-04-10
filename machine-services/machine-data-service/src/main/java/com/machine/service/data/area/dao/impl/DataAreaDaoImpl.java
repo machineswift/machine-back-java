@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-import static com.machine.sdk.common.constant.CommonIamConstant.Area.ROOT_AREA_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonIamConstant.Area.ROOT_AREA_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_KEY;
 
 @Repository

@@ -1,0 +1,21 @@
+package com.machine.sdk.base.envm.iam.role;
+
+import com.machine.sdk.base.envm.BaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum IamRoleTypeEnum implements BaseEnum<IamRoleTypeEnum, String> {
+    COMPANY("COMPANY", "公司角色"),
+    SHOP("SHOP", "门店角色"),
+    SUPPLIER("SUPPLIER", "供应商角色");
+
+    private final String code;
+    private final String message;
+
+    @Override
+    public String getName() {
+        return this.name();
+    }
+}

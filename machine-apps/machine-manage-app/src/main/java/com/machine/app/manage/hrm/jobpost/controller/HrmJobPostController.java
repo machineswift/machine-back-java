@@ -3,7 +3,7 @@ package com.machine.app.manage.hrm.jobpost.controller;
 import com.machine.app.manage.hrm.jobpost.business.IHrmJobPostBusiness;
 import com.machine.app.manage.hrm.jobpost.controller.vo.request.HrmJobPostListSimpleRequestVo;
 import com.machine.app.manage.hrm.jobpost.controller.vo.response.HrmJobPostListSimpleResponseVo;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

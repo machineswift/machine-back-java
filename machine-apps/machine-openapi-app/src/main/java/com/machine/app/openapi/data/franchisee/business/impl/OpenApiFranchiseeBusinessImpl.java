@@ -14,7 +14,7 @@ import com.machine.client.data.franchisee.dto.output.DataFranchiseeDetailOutputD
 import com.machine.client.data.franchisee.dto.output.DataFranchiseeListOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeIdentityCardOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -6,8 +6,8 @@ import cn.hutool.core.lang.ClassScanner;
 import com.machine.app.iam.dictionary.business.IIamEnumBusiness;
 import com.machine.app.iam.dictionary.controller.request.IamDictionaryEnumRequestVo;
 import com.machine.app.iam.dictionary.controller.response.IamDictionaryEnumInfoResponse;
-import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.exception.BusinessException;
+import com.machine.sdk.base.envm.BaseEnum;
+import com.machine.sdk.base.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -59,7 +59,7 @@ public class IamEnumBusinessImpl implements IIamEnumBusiness {
     }
 
     private static final String[] ENUM_BASE_PACKAGES = {
-            "com.machine.sdk.common.envm",
+            "com.machine.sdk.base.envm",
             "com.machine.sdk.beisen.envm"
     };
 

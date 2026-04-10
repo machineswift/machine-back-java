@@ -1,6 +1,6 @@
 package com.machine.sdk.self.domain.data.employee;
 
-import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
+import com.machine.sdk.base.envm.data.DataShopEmployeeStatusEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

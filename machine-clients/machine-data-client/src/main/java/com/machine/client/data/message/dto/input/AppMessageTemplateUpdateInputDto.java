@@ -1,7 +1,7 @@
 package com.machine.client.data.message.dto.input;
 
 import com.machine.client.data.message.dto.output.AppMessageTemplateInfoDto;
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateTypeEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

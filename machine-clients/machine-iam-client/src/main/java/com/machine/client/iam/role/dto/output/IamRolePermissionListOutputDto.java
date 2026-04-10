@@ -1,6 +1,6 @@
 package com.machine.client.iam.role.dto.output;
 
-import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

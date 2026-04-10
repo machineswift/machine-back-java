@@ -1,6 +1,6 @@
 package com.machine.client.data.supplier.dto.input;
 
-import com.machine.sdk.common.envm.data.DataSupplierBusinessCategoryEnum;
+import com.machine.sdk.base.envm.data.DataSupplierBusinessCategoryEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

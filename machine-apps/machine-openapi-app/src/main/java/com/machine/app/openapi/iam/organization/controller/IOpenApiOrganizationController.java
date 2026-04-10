@@ -5,7 +5,7 @@ import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrg
 import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrganizationRootIdRequestVo;
 import com.machine.app.openapi.iam.organization.controller.vo.response.OpenApiOrganizationDetailResponseVo;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.model.response.IdResponse;
+import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

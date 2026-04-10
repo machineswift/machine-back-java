@@ -1,6 +1,6 @@
 package com.machine.app.manage.config;
 
-import com.machine.sdk.common.model.AppResult;
+import com.machine.sdk.base.model.AppResult;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;

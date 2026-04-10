@@ -1,6 +1,6 @@
 package com.machine.starter.ai;
 
-import com.machine.sdk.common.config.YamlPropertySourceFactory;
+import com.machine.sdk.base.config.YamlPropertySourceFactory;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

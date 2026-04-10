@@ -7,7 +7,7 @@ import com.machine.app.iam.auth.controller.vo.request.IamAuthChangePasswordReque
 import com.machine.app.iam.auth.controller.vo.request.IamAuthSmsCaptchaChangePasswordRequestVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCurrentUserFunctionPermissionResponseVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCurrentUserResponseVo;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;

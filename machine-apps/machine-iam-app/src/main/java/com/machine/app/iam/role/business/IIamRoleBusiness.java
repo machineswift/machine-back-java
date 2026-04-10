@@ -4,8 +4,8 @@ import com.machine.app.iam.role.controller.vo.request.*;
 import com.machine.app.iam.role.controller.vo.response.IamRoleDetailResponseVo;
 import com.machine.app.iam.role.controller.vo.response.IamRoleExpandListResponseVo;
 import com.machine.app.iam.role.controller.vo.response.IamRoleSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IIamRoleBusiness {
 

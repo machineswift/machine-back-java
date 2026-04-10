@@ -1,6 +1,6 @@
 package com.machine.client.data.file.download.dto.input;
 
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

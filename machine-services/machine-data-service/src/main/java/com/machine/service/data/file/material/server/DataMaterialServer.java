@@ -3,14 +3,15 @@ package com.machine.service.data.file.material.server;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.file.material.IDataMaterialClient;
-import com.machine.client.data.file.material.dto.input.DataMaterialCreatePermanentInputDto;
+import com.machine.client.data.file.material.dto.input.DataMaterialCreateInputDto;
 import com.machine.client.data.file.material.dto.input.DataMaterialQueryPageInputDto;
+import com.machine.client.data.file.material.dto.input.DataMaterialUpdateCategoryInputDto;
 import com.machine.client.data.file.material.dto.input.DataMaterialUpdateInputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialDetailOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.service.data.file.material.service.IDataMaterialService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,24 @@ public class DataMaterialServer implements IDataMaterialClient {
     private IDataMaterialService materialService;
 
     @Override
-    @PostMapping("create_permanent")
-    public void createPermanent(@RequestBody @Validated DataMaterialCreatePermanentInputDto inputDto) {
-        log.info("创建永久素材，inputDto={}", JSONUtil.toJsonStr(inputDto));
-         materialService.createPermanent(inputDto);
+    @PostMapping("create")
+    public String create(@RequestBody @Validated DataMaterialCreateInputDto inputDto) {
+        log.info("创建素材，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return materialService.create(inputDto);
     }
 
     @Override
-    @PostMapping("update_permanent")
-    public void updatePermanent(@RequestBody @Validated DataMaterialUpdateInputDto inputDto) {
-        log.info("修改永久素材，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        materialService.updatePermanent(inputDto);
+    @PostMapping("update")
+    public void update(@RequestBody @Validated DataMaterialUpdateInputDto inputDto) {
+        log.info("修改素材，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        materialService.update(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_category")
+    public void updateCategory(@RequestBody @Validated DataMaterialUpdateCategoryInputDto inputDto) {
+        log.info("修改素材分类，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        materialService.updateCategory(inputDto);
     }
 
     @Override

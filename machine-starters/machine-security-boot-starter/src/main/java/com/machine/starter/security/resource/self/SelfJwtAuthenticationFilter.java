@@ -2,12 +2,12 @@ package com.machine.starter.security.resource.self;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.exception.iam.authentication.UserStatusDisableException;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.exception.iam.authentication.UserStatusDisableException;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.SecurityConstant;
-import com.machine.sdk.common.exception.iam.authentication.JwtTokenBlackException;
+import com.machine.sdk.base.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.starter.security.util.MachineJwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -22,8 +22,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.machine.sdk.common.constant.ContextConstant.PERMISSION_CODE;
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.PERMISSION_CODE;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_TOKEN_ID;
 import static com.machine.starter.security.SecurityConstant.*;
 

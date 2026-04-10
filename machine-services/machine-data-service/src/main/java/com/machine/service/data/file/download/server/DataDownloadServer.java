@@ -9,8 +9,8 @@ import com.machine.client.data.file.download.dto.input.DataDownloadQueryPageInpu
 import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadListOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.service.data.file.download.service.IDataDownloadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

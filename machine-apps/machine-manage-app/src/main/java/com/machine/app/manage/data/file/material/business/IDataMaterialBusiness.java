@@ -4,25 +4,18 @@ import com.machine.app.manage.data.file.material.controller.vo.response.DataMate
 import com.machine.app.manage.data.file.material.controller.vo.response.DataMaterialExpandListResponseVo;
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialCreateRequestVo;
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialQueryPageRequestVo;
+import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialUpdateCategoryRequestVo;
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialUpdateRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IDataMaterialBusiness {
 
-    void create(DataMaterialCreateRequestVo request);
+    String create(DataMaterialCreateRequestVo request);
 
     void update(DataMaterialUpdateRequestVo request);
 
-    String getPresignedUrl(String materialId);
-
-    String getPresignedUrl(String materialId,
-                           int expireSecond);
-
-    String getThumbnailUrl(String materialId);
-
-    String getThumbnailUrl(String materialId,
-                           int expireSecond);
+    void updateCategory(DataMaterialUpdateCategoryRequestVo request);
 
     DataMaterialDetailResponseVo detail(IdRequest request);
 

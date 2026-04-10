@@ -1,7 +1,7 @@
 package com.machine.app.openapi.data.franchisee.controller.vo.response;
 
-import com.machine.sdk.common.envm.DataCertificateTypeEnum;
-import com.machine.sdk.common.envm.data.DataFranchiseeEntityTypeEnum;
+import com.machine.sdk.base.envm.DataCertificateTypeEnum;
+import com.machine.sdk.base.envm.data.DataFranchiseeEntityTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

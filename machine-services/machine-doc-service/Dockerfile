@@ -1,4 +1,4 @@
-FROM linuxserver/libreoffice:25.2.5
+FROM linuxserver/libreoffice:25.8.1
 
 # 设置非交互模式和时区
 ENV DEBIAN_FRONTEND=noninteractive
@@ -8,10 +8,10 @@ RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
 # ---------------------------------------------------------
-# 安装 Java 21 和 curl（最小安装）
+# 安装 Java 25 和 curl（最小安装）
 # ---------------------------------------------------------
 RUN apk update && apk add --no-cache \
-    openjdk21-jre-headless \
+    openjdk25-jre-headless \
     curl \
     fontconfig \
     ttf-dejavu \

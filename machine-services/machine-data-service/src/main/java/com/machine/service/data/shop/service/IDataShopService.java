@@ -3,8 +3,8 @@ package com.machine.service.data.shop.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

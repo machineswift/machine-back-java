@@ -2,7 +2,7 @@ package com.machine.service.data.employee.dao;
 
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeListUserIdInputDto;
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeQueryListOffsetInputDto;
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
 import com.machine.service.data.employee.dao.mapper.entity.DataCompanyEmployeeEntity;
 
 import java.util.List;

@@ -6,8 +6,8 @@ import com.machine.client.iam.userbk.dto.input.IamCompanyUserQueryPageInputDto;
 import com.machine.client.iam.user.dto.input.IamUserExportInputDto;
 import com.machine.client.iam.userbk.dto.input.IamShopUserQueryPageInputDto;
 import com.machine.client.iam.userbk.dto.input.IamSupplierUserQueryPageInputDto;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserEntity;
 
 import java.util.List;

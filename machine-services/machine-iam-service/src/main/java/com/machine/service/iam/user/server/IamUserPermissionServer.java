@@ -2,7 +2,7 @@ package com.machine.service.iam.user.server;
 
 import com.machine.client.iam.user.IIamUserPermissionClient;
 import com.machine.client.iam.user.dto.input.IamDataPermission4ManageInputDto;
-import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
+import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
 import com.machine.service.iam.user.service.IIamUserPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

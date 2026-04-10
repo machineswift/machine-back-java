@@ -2,8 +2,8 @@ package com.machine.client.iam.userbk;
 
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.client.iam.userbk.dto.input.*;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

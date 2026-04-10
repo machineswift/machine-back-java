@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.user.controller.vo.response;
 
-import com.machine.sdk.common.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

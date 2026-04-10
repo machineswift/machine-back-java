@@ -2,9 +2,9 @@ package com.machine.starter.security.login.sms;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;
-import com.machine.sdk.common.exception.iam.authentication.UserStatusDisableException;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
+import com.machine.sdk.base.exception.iam.authentication.UserStatusDisableException;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.exception.CaptchaWrongAuthenticationException;

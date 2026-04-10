@@ -2,8 +2,8 @@ package com.machine.service.iam.role.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

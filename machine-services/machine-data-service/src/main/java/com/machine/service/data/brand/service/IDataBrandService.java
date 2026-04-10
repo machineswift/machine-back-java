@@ -7,8 +7,8 @@ import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateStatusInputDto;
 import com.machine.client.data.brand.dto.output.DataBrandDetailOutputDto;
 import com.machine.client.data.brand.dto.output.DataBrandListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.Map;
 

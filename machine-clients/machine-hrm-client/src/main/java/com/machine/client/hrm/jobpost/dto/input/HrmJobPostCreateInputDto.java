@@ -1,6 +1,6 @@
 package com.machine.client.hrm.jobpost.dto.input;
 
-import com.machine.sdk.common.envm.hrm.HrmJobPostStatusEnum;
+import com.machine.sdk.base.envm.hrm.HrmJobPostStatusEnum;
 import lombok.Data;
 
 @Data

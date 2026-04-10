@@ -1,7 +1,7 @@
 package com.machine.client.data.config;
 
 import com.machine.client.data.config.dto.DataSystemConfigDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

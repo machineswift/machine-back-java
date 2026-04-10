@@ -6,8 +6,8 @@ import com.machine.client.data.file.download.dto.input.DataDownloadQueryPageInpu
 import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadListOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package com.machine.app.manage.data.shop.controller.vo.response;
 
-import com.machine.sdk.common.envm.data.DataCertificateStatusEnum;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
+import com.machine.sdk.base.envm.data.DataCertificateStatusEnum;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

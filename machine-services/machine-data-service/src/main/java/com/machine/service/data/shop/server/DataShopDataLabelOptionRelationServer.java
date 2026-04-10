@@ -1,8 +1,8 @@
 package com.machine.service.data.shop.server;
 
 import com.machine.client.data.shop.IDataShopLabelOptionRelationClient;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.shop.service.IDataShopLabelOptionRelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,7 +23,7 @@ docker run -p 3306:3306 \
 --cpus=1 \
 --memory=1g --memory-swap=2g \
 --restart unless-stopped \
--d mysql:9.4.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+-d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
 
 ## PostgreSQL
@@ -44,7 +44,7 @@ docker run -d \
 --cpus=1 \
 --memory=1g --memory-swap=2g \
 --restart unless-stopped \
-postgres:18.0
+postgres:18.3
 ```
 
 ## Redis
@@ -63,7 +63,7 @@ docker run -d --name redis \
 --cpus=0.2 \
 --memory=0.5g --memory-swap=2g \
 --restart unless-stopped \
-redis:8.2 --requirepass "redis"
+redis:8.6.2 --requirepass "redis"
 ```
 
 ## RabbitMQ
@@ -83,7 +83,7 @@ docker run -d \
 --cpus=0.2 \
 --memory=0.2g --memory-swap=2g \
 --restart unless-stopped \
-rabbitmq:4.1.0-management
+rabbitmq:4.2.5-management
 ```
 
 ## ScyllaDB
@@ -162,5 +162,5 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_PASSWORD=root \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
-nacos/nacos-server:v3.1.1
+nacos/nacos-server:v3.2.0
 ```

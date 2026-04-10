@@ -2,7 +2,7 @@ package com.machine.service.data.supplier.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.model.dto.IdDto;
+import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.service.data.supplier.dao.IDataSupplierCompanyRelationDao;
 import com.machine.service.data.supplier.dao.mapper.DataSupplierCompanyRelationMapper;

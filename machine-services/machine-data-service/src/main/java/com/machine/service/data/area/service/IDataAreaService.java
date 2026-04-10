@@ -7,7 +7,7 @@ import com.machine.client.data.area.dto.input.DataAreaUpdateInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateParentInputDto;
 import com.machine.client.data.area.dto.output.DataAreaDetailOutputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 public interface IDataAreaService {
 

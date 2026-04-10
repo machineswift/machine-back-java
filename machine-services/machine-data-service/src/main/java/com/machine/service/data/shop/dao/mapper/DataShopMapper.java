@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.DataShopListSimpleOutputDto;
-import com.machine.sdk.common.model.response.IdCodeResponse;
+import com.machine.sdk.base.model.response.IdCodeResponse;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

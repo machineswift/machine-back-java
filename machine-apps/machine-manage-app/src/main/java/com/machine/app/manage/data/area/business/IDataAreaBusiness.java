@@ -7,7 +7,7 @@ import com.machine.app.manage.data.area.controller.vo.request.DataAreaUpdateRequ
 import com.machine.app.manage.data.area.controller.vo.response.DataAreaTreeExpandResponseVo;
 import com.machine.app.manage.data.area.controller.vo.response.DataAreaTreeSimpleResponseVo;
 import com.machine.app.manage.data.area.controller.vo.response.DataAreaDetailResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 public interface IDataAreaBusiness {
 

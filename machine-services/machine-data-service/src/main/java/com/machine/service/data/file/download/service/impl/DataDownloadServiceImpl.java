@@ -11,8 +11,8 @@ import com.machine.client.data.file.download.dto.input.DataDownloadQueryPageInpu
 import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadListOutputDto;
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.service.data.file.download.dao.IDataDownloadDao;
 import com.machine.service.data.file.download.dao.mapper.entity.DataDownloadEntity;
 import com.machine.service.data.file.download.service.IDataDownloadService;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_STR;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_STR;
 
 @Slf4j
 @Service

@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
 
 public interface IDataTagService {
 

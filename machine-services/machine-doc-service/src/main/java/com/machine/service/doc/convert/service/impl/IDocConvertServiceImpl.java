@@ -1,6 +1,6 @@
 package com.machine.service.doc.convert.service.impl;
 
-import com.machine.sdk.common.exception.data.DataBusinessException;
+import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.service.doc.convert.service.IDocConvertService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

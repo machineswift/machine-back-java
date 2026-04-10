@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
 import com.machine.client.data.file.attachment.dto.output.DataAttachmentDetailOutputDto;
-import com.machine.sdk.common.envm.data.file.DataAttachmentStatusEnum;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.envm.data.file.DataAttachmentStatusEnum;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.file.attachment.dao.IDataAttachmentDao;
 import com.machine.service.data.file.attachment.dao.mapper.entity.DataAttachmentEntity;
 import com.machine.service.data.file.attachment.service.IDataAttachmentService;
@@ -43,7 +43,7 @@ public class DataAttachmentServiceImpl implements IDataAttachmentService {
         String fileId = fileDao.insert(fileEntity);
 
         DataAttachmentEntity attachmentEntity = new DataAttachmentEntity();
-        attachmentEntity.setStatus(DataAttachmentStatusEnum.PUBLISHED);
+        attachmentEntity.setStatus(DataAttachmentStatusEnum.ENABLED);
         attachmentEntity.setEntity(inputDto.getEntity());
         attachmentEntity.setEntityId(inputDto.getEntityId());
         attachmentEntity.setFileId(fileId);

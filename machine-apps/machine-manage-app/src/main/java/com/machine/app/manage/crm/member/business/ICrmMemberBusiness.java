@@ -6,8 +6,8 @@ import com.machine.app.manage.crm.member.controller.vo.response.CrmMemberListRes
 import com.machine.app.manage.crm.member.controller.vo.resquest.CrmMemberCreateRequestVo;
 import com.machine.app.manage.crm.member.controller.vo.resquest.CrmMemberQueryPageRequestVo;
 import com.machine.app.manage.crm.member.controller.vo.resquest.CrmMemberUpdateRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface ICrmMemberBusiness {
     String create(CrmMemberCreateRequestVo request);

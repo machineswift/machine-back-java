@@ -2,8 +2,8 @@ package com.machine.service.data.file.attachment.service;
 
 import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
 import com.machine.client.data.file.attachment.dto.output.DataAttachmentDetailOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 

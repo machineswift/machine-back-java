@@ -1,7 +1,7 @@
 package com.machine.app.iam.permission.controller.vo.request;
 
-import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
-import com.machine.sdk.common.model.dto.iam.DataPermissionMetaDto;
+import com.machine.sdk.base.envm.iam.permission.IamPermissionResourceTypeEnum;
+import com.machine.sdk.base.model.dto.iam.DataPermissionMetaDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

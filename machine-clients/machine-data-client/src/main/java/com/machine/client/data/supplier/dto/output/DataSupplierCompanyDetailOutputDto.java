@@ -2,9 +2,9 @@ package com.machine.client.data.supplier.dto.output;
 
 import com.machine.client.data.supplier.dto.DataSupplierCompanyContractInformationDto;
 import com.machine.client.data.supplier.dto.DataSupplierCompanyFinancialInformationDto;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.data.DataSupplierBusinessCategoryEnum;
-import com.machine.sdk.common.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.data.DataSupplierBusinessCategoryEnum;
+import com.machine.sdk.base.model.dto.data.AddressInfoDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

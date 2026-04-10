@@ -1,6 +1,6 @@
 package com.machine.service.data.tag.dao;
 
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagCategoryEntity;
 
 import java.util.List;

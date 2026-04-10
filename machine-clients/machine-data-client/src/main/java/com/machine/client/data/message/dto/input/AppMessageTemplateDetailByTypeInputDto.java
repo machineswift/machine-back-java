@@ -1,6 +1,6 @@
 package com.machine.client.data.message.dto.input;
 
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateTypeEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;

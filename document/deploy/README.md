@@ -23,7 +23,6 @@ Docker 部署相关的配置文档和脚本，支持多种环境部署。
 
 ### 测试环境部署
 - [🐳 测试环境 Docker 部署](docker/docker_test_linux.md) - Linux 测试环境部署指南
-- [🐳 测试环境运行配置](docker/docker_test_run.md) - 测试环境运行说明
 
 ### 其他
 - [🐳 其他 Linux 部署说明](docker/docker_zzz_linux.md) - 补充 Linux 部署说明

@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.*;
 
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_TOKEN_ID;
 
 public class LoginLogUtil {

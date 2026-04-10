@@ -1,10 +1,9 @@
 package com.machine.app.iam.auth.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.app.iam.auth.business.IIamAuth2Business;
 import com.machine.app.iam.auth.business.IIamAuthServerBusiness;
 import com.machine.app.iam.auth.controller.vo.request.IamAuthCreateClientRequestVo;
-import com.machine.sdk.common.model.response.IdResponse;
+import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

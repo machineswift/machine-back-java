@@ -5,8 +5,8 @@ import com.machine.client.hrm.jobpost.dto.input.HrmJobPosBatchInsertInputDto;
 import com.machine.client.hrm.jobpost.dto.input.HrmJobPostListSimpleInputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostDetailOutputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostListSimpleOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

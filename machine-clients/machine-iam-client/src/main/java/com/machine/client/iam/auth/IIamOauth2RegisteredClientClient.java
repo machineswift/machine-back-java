@@ -3,7 +3,7 @@ package com.machine.client.iam.auth;
 import com.machine.client.iam.auth.dto.IamAuthTokenAddDto;
 import com.machine.client.iam.auth.dto.IamOAuth2RegisteredClientDto;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

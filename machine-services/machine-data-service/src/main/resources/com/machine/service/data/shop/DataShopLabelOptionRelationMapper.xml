@@ -23,7 +23,7 @@
         </foreach>
     </select>
 
-    <select id="countShopByLabelOptionIds" resultType="com.machine.sdk.common.model.dto.IdCountDto">
+    <select id="countShopByLabelOptionIds" resultType="com.machine.sdk.base.model.dto.IdCountDto">
         SELECT count(0) AS count, t.label_option_id as id
         FROM
             ( SELECT slor.label_option_id, slor.shop_id

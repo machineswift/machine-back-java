@@ -3,14 +3,22 @@ package com.machine.service.data.file.material.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.file.material.dto.input.DataMaterialCreatePermanentInputDto;
+import com.machine.client.data.file.material.dto.input.DataMaterialCreateInputDto;
 import com.machine.client.data.file.material.dto.input.DataMaterialQueryPageInputDto;
+import com.machine.client.data.file.material.dto.input.DataMaterialUpdateCategoryInputDto;
 import com.machine.client.data.file.material.dto.input.DataMaterialUpdateInputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialDetailOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialListOutputDto;
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialAuditStatusEnum;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialBusinessStatusEnum;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialProcessStatusEnum;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.service.data.file.attachment.dao.IDataAttachmentDao;
+import com.machine.service.data.file.attachment.dao.IDataFileDao;
+import com.machine.service.data.file.attachment.dao.mapper.entity.DataAttachmentEntity;
+import com.machine.service.data.file.attachment.dao.mapper.entity.DataFileEntity;
 import com.machine.service.data.file.material.dao.*;
 import com.machine.service.data.file.material.dao.mapper.entity.*;
 import com.machine.service.data.file.material.service.IDataMaterialService;
@@ -22,77 +30,84 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.machine.sdk.common.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
 
 @Slf4j
 @Service
 public class DataMaterialServiceImpl implements IDataMaterialService {
 
-    /**
-     * 30年
-     */
-    private static final long PERMANENT_EXPIRY_MILLISECONDS = 30 * 365 * 24 * 60 * 60 * 1000L;
-
-    /**
-     * 30天
-     */
-    private static final long TEMPORARY_EXPIRY_MILLISECONDS = 30 * 24 * 60 * 60 * 1000L;
-
     @Autowired
     private RedisCacheDataMaterialCategory materialCategoryCache;
 
     @Autowired
+    private IDataFileDao fileDao;
+
+    @Autowired
     private IDataMaterialDao materialDao;
+
+    @Autowired
+    private IDataAttachmentDao attachmentDao;
 
     @Autowired
     private IDataMaterialCategoryRelationDao materialCategoryRelationDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createPermanent(DataMaterialCreatePermanentInputDto inputDto) {
-        String materialId = inputDto.getMaterialId();
-        DataMaterialEntity dbEntity = materialDao.getById(materialId);
-        if (dbEntity == null) {
-            throw new DataBusinessException("data.material.service.createPermanent.materialNotExists", "素材不存在");
-        }
-
-
-        DataMaterialEntity updateEntity = new DataMaterialEntity();
-        updateEntity.setId(materialId);
-        updateEntity.setTitle(inputDto.getTitle());
-        if (null == inputDto.getExpireTime()) {
-            updateEntity.setExpireTime(System.currentTimeMillis() + TEMPORARY_EXPIRY_MILLISECONDS);
-        } else {
-            inputDto.setExpireTime(System.currentTimeMillis() + PERMANENT_EXPIRY_MILLISECONDS);
-        }
-        materialDao.update(updateEntity);
+    public String create(DataMaterialCreateInputDto inputDto) {
+        DataMaterialEntity entity = new DataMaterialEntity();
+        entity.setFileType(inputDto.getFileType());
+        entity.setTitle(inputDto.getTitle());
+        entity.setProcessStatus(DataMaterialProcessStatusEnum.NOT_STARTED);
+        entity.setBusinessStatus(DataMaterialBusinessStatusEnum.DRAFT);
+        entity.setAuditStatus(DataMaterialAuditStatusEnum.NOT_SUBMITTED);
+        String materialId = materialDao.insert(entity);
 
         //素材与分类的关系
         insertMaterialCategoryRelation(materialId, inputDto.getCategoryIdSet());
+        return materialId;
     }
 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updatePermanent(DataMaterialUpdateInputDto inputDto) {
+    public void update(DataMaterialUpdateInputDto inputDto) {
         String materialId = inputDto.getId();
         DataMaterialEntity dbEntity = materialDao.getById(materialId);
         if (dbEntity == null) {
             throw new DataBusinessException("data.material.service.updatePermanent.materialNotExists", "素材不存在");
         }
 
+        String attachmentId = inputDto.getAttachmentId();
+        DataAttachmentEntity attachmentEntity = attachmentDao.getById(attachmentId);
+        if (attachmentEntity == null) {
+            throw new DataBusinessException("data.material.service.updatePermanent.attachmentNotExists", "附件不存在");
+        }
+
+        String fileId = attachmentEntity.getFileId();
+        DataFileEntity fileEntity = fileDao.getById(fileId);
+        if (dbEntity.getFileType() != fileEntity.getFileType()) {
+            throw new DataBusinessException("data.material.service.updatePermanent.wrongFileType", "附件类型错误");
+        }
+
         DataMaterialEntity updateEntity = new DataMaterialEntity();
         updateEntity.setId(materialId);
+        updateEntity.setAttachmentId(inputDto.getAttachmentId());
         updateEntity.setTitle(inputDto.getTitle());
-        if (null == inputDto.getExpireTime()) {
-            updateEntity.setExpireTime(System.currentTimeMillis() + TEMPORARY_EXPIRY_MILLISECONDS);
-        } else {
-            inputDto.setExpireTime(System.currentTimeMillis() + PERMANENT_EXPIRY_MILLISECONDS);
-        }
         materialDao.update(updateEntity);
 
-
         //素材与分类的关系
+        materialCategoryRelationDao.deleteByMaterialId(materialId);
+        insertMaterialCategoryRelation(materialId, inputDto.getCategoryIdSet());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateCategory(DataMaterialUpdateCategoryInputDto inputDto) {
+        String materialId = inputDto.getId();
+        DataMaterialEntity dbEntity = materialDao.getById(materialId);
+        if (dbEntity == null) {
+            throw new DataBusinessException("data.material.service.updateCategory.materialNotExists", "素材不存在");
+        }
         materialCategoryRelationDao.deleteByMaterialId(materialId);
         insertMaterialCategoryRelation(materialId, inputDto.getCategoryIdSet());
     }
@@ -104,8 +119,7 @@ public class DataMaterialServiceImpl implements IDataMaterialService {
             return null;
         }
 
-        DataMaterialDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(dbEntity), DataMaterialDetailOutputDto.class);
-        return outputDto;
+        return JSONUtil.toBean(JSONUtil.toJsonStr(dbEntity), DataMaterialDetailOutputDto.class);
     }
 
     @Override
@@ -120,8 +134,7 @@ public class DataMaterialServiceImpl implements IDataMaterialService {
             return List.of();
         }
 
-        List<DataMaterialDetailOutputDto> outputDtoList = JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataMaterialDetailOutputDto.class);
-        return outputDtoList;
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataMaterialDetailOutputDto.class);
     }
 
     @Override

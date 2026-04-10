@@ -2,8 +2,8 @@ package com.machine.service.data.supplier.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.data.DataSupplierBusinessCategoryEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.data.DataSupplierBusinessCategoryEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

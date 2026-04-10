@@ -3,8 +3,8 @@ package com.machine.service.hrm.employee.service;
 import com.machine.client.hrm.employee.dto.input.HrmEmployeeQueryIListInputDto;
 import com.machine.client.hrm.employee.dto.output.HrmEmployeeDetailOutputDto;
 import com.machine.client.hrm.employee.dto.output.HrmEmployeeListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

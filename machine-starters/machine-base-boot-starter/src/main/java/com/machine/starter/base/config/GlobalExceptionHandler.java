@@ -1,10 +1,10 @@
 package com.machine.starter.base.config;
 
-import com.machine.sdk.common.exception.BusinessException;
-import com.machine.sdk.common.exception.iam.access.OpenApiResourceBlackException;
-import com.machine.sdk.common.exception.iam.access.OpenApiResourceClientException;
-import com.machine.sdk.common.exception.iam.authentication.*;
-import com.machine.sdk.common.model.AppResult;
+import com.machine.sdk.base.exception.BusinessException;
+import com.machine.sdk.base.exception.iam.access.OpenApiResourceBlackException;
+import com.machine.sdk.base.exception.iam.access.OpenApiResourceClientException;
+import com.machine.sdk.base.exception.iam.authentication.*;
+import com.machine.sdk.base.model.AppResult;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -9,9 +9,9 @@ import com.machine.app.manage.data.brand.controller.vo.request.DataBrandUpdateSt
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandDetailResponseVo;
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandExpandListResponseVo;
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.IdResponse;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

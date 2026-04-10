@@ -1,6 +1,6 @@
 package com.machine.client.iam.role.dto.input;
 
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

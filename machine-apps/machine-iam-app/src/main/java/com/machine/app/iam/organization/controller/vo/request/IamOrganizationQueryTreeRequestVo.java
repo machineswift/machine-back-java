@@ -1,6 +1,6 @@
 package com.machine.app.iam.organization.controller.vo.request;
 
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

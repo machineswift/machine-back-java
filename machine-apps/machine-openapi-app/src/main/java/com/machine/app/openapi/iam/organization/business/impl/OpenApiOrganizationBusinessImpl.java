@@ -9,9 +9,9 @@ import com.machine.app.openapi.iam.organization.controller.vo.response.OpenApiOr
 import com.machine.client.iam.organization.IIamOrganizationClient;
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.tree.TreeNode;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.tree.TreeNode;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

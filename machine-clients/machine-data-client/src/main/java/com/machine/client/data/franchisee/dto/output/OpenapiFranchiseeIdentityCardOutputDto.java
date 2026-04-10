@@ -1,6 +1,6 @@
 package com.machine.client.data.franchisee.dto.output;
 
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
+import com.machine.sdk.base.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

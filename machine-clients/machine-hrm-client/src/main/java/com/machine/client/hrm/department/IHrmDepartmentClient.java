@@ -4,9 +4,9 @@ import com.machine.client.hrm.department.dto.output.HrmDepartmentDetailOutputDto
 import com.machine.client.hrm.department.dto.output.HrmDepartmentExpansionListOutputDto;
 import com.machine.client.hrm.department.dto.output.HrmDepartmentListOutputDto;
 import com.machine.client.hrm.department.dto.output.HrmDepartmentTreeOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

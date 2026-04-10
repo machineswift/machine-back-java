@@ -1,7 +1,7 @@
 package com.machine.service.iam.auth.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.service.iam.auth.dao.mapper.entity.IamOauth2RegisteredClientEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

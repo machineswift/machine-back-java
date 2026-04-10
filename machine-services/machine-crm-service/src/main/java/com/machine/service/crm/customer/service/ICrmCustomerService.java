@@ -6,7 +6,7 @@ import com.machine.client.crm.customer.dto.input.CrmCustomerQueryPageInputDto;
 import com.machine.client.crm.customer.dto.input.CrmCustomerUpdateInputDto;
 import com.machine.client.crm.customer.dto.output.CrmCustomerDetailOutputDto;
 import com.machine.client.crm.customer.dto.output.CrmCustomerListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 public interface ICrmCustomerService {
 

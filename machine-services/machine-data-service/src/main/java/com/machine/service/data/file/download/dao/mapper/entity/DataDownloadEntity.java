@@ -2,9 +2,9 @@ package com.machine.service.data.file.download.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

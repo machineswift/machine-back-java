@@ -1,6 +1,6 @@
 package com.machine.app.openapi.data.employee.controller.vo.response;
 
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

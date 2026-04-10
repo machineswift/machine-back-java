@@ -3,7 +3,7 @@ package com.machine.service.iam.auth.dao.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.client.iam.auth.dto.IamAuthTokenAddDto;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.service.iam.auth.dao.IIamOauth2RegisteredClientDao;
 import com.machine.service.iam.auth.dao.mapper.IamOauth2RegisteredClientMapper;
 import com.machine.service.iam.auth.dao.mapper.entity.IamOauth2RegisteredClientEntity;

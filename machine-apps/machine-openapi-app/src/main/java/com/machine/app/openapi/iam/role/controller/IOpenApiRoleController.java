@@ -6,7 +6,7 @@ import com.machine.app.openapi.iam.role.controller.vo.request.OpenApiRoleListSub
 import com.machine.app.openapi.iam.role.controller.vo.request.OpenApiRoleRootRequestVo;
 import com.machine.app.openapi.iam.role.controller.vo.response.OpenApiRoleDetailResponseVo;
 import com.machine.app.openapi.iam.role.controller.vo.response.OpenApiRolePermissionResponseVo;
-import com.machine.sdk.common.model.response.IdResponse;
+import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

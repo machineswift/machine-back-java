@@ -6,8 +6,8 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.starter.redis.cache.iam.RedisCacheIamFunctionPermission;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_OBJECT;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.User.IAM_USER_BASE_KEY;
 
 @Service

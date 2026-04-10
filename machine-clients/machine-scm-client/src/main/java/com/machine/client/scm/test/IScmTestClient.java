@@ -1,6 +1,6 @@
 package com.machine.client.scm.test;
 
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(name = "machine-scm-service", path = "machine-scm-service/server/scm/test",

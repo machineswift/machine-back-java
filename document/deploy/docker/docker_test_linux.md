@@ -40,7 +40,7 @@ docker run -p 3306:3306 \
 --cpus=4 \
 --memory=8g --memory-swap=8g \
 --restart unless-stopped \
--d mysql:9.4.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+-d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
 
 ### 3. Redis 缓存
@@ -58,7 +58,7 @@ docker run -d --name redis \
 --cpus=4 \
 --memory=8g --memory-swap=8g \
 --restart unless-stopped \
-redis:8.2 --requirepass "redis"
+redis:8.6.2 --requirepass "redis"
 ```
 
 ### 4. RabbitMQ 消息队列
@@ -77,7 +77,7 @@ docker run -d \
 --cpus=2 \
 --memory=4g --memory-swap=4g \
 --restart unless-stopped \
-rabbitmq:4.1.0-management
+rabbitmq:4.2.5-management
 ```
 
 ### 5. MinIO 对象存储
@@ -149,7 +149,7 @@ docker run -p 9200:9200 -d --name elasticsearch \
 --cpus=4 \
 --memory=8g --memory-swap=8g \
 --restart unless-stopped \
-elasticsearch:8.19.0
+elasticsearch:8.19.12
 ```
 
 ### 8. Kibana 日志分析
@@ -170,7 +170,7 @@ docker run -p 5601:5601 -d --name kibana \
 --cpus=1 \
 --memory=2g --memory-swap=2g \
 --restart unless-stopped \
-kibana:8.19.0
+kibana:8.19.12
 ```
 
 ### 9. SkyWalking 链路追踪
@@ -273,7 +273,7 @@ docker run -d --name nacos \
 --cpus=2 \
 --memory=4g --memory-swap=4g \
 --restart unless-stopped \
-nacos/nacos-server:v3.1.1
+nacos/nacos-server:v3.2.0
 ```
 
 ### 12. XXL-JOB 任务调度中心

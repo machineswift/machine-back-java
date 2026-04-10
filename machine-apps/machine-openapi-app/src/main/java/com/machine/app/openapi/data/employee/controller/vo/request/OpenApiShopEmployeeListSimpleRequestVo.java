@@ -1,7 +1,7 @@
 
 package com.machine.app.openapi.data.employee.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
+import com.machine.sdk.base.envm.data.DataShopEmployeeStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

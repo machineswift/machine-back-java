@@ -1,6 +1,6 @@
 package com.machine.client.data.shop.dto.input;
 
-import com.machine.sdk.common.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.data.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

@@ -6,8 +6,8 @@ import com.machine.app.manage.crm.customer.controller.vo.response.CrmCustomerLis
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerCreateRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerQueryPageRequestVo;
 import com.machine.app.manage.crm.customer.controller.vo.resquest.CrmCustomerUpdateRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface ICrmCustomerBusiness {
     String create(CrmCustomerCreateRequestVo request);

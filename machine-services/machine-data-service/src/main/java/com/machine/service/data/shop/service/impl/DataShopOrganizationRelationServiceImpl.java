@@ -9,10 +9,10 @@ import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListO
 import com.machine.client.iam.organization.IIamOrganizationClient;
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.shop.dao.IDataShopOrganizationRelationDao;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity;
 import com.machine.service.data.shop.service.IDataShopOrganizationRelationService;
@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 
 @Slf4j
 @Service

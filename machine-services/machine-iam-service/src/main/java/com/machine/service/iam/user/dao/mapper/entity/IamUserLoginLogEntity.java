@@ -2,9 +2,9 @@ package com.machine.service.iam.user.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.iam.auth.IamAuthActionEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuthResultEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

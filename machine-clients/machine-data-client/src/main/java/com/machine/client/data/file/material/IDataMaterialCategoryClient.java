@@ -6,8 +6,8 @@ import com.machine.client.data.file.material.dto.input.DataMaterialCategoryUpdat
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryDetailOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryListOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

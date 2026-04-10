@@ -60,7 +60,7 @@ public class DataMaterialCategoryRelationDaoImpl implements IDataMaterialCategor
             return List.of();
         }
         Wrapper<DataMaterialCategoryRelationEntity> queryWrapper = new LambdaQueryWrapper<DataMaterialCategoryRelationEntity>()
-                .eq(DataMaterialCategoryRelationEntity::getCategoryId, materialId);
+                .eq(DataMaterialCategoryRelationEntity::getMaterialId, materialId);
         return materialCategoryRelationMapper.selectList(queryWrapper);
     }
 

@@ -6,9 +6,9 @@ import com.machine.app.iam.user.controller.vo.response.IamUserDetailResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserExpandListResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 import java.util.List;
 import java.util.Map;

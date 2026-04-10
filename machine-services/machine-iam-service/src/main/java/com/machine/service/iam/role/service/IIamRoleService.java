@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.iam.role.dto.input.*;
 import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.role.dto.output.IamRoleListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

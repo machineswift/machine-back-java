@@ -4,7 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.app.suprr.data.shop.business.IUserCollectShopBusiness;
 import com.machine.app.suprr.data.shop.controller.vo.request.*;
 import com.machine.app.suprr.data.shop.controller.vo.response.SuperShopListSimpleResponseVo;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

@@ -1,9 +1,11 @@
 package com.machine.client.data.file.material.dto.input;
 
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialAuditStatusEnum;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialBusinessStatusEnum;
+import com.machine.sdk.base.envm.data.file.material.DataMaterialProcessStatusEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,15 +18,23 @@ import java.util.Set;
 @NoArgsConstructor
 public class DataMaterialQueryPageInputDto extends PageRequest {
 
-    @NotNull(message = "文件类型不能为空")
-    @Schema(description = "文件类型（DataFileTypeEnum）")
-    private DataFileTypeEnum fileType;
+    @Schema(description = "文件类型集合，多选；为空则不按文件类型过滤")
+    private Set<DataFileTypeEnum> fileTypeSet;
 
     @Schema(description = "素材标题")
     private String title;
 
     @Schema(description = "名称")
     private String name;
+
+    @Schema(description = "系统处理状态")
+    private DataMaterialProcessStatusEnum processStatus;
+
+    @Schema(description = "业务状态")
+    private DataMaterialBusinessStatusEnum businessStatus;
+
+    @Schema(description = "审核状态")
+    private DataMaterialAuditStatusEnum auditStatus;
 
     @Schema(description = "是否包含【未分类】节点，默认：false")
     private Boolean containVirtualNode = false;

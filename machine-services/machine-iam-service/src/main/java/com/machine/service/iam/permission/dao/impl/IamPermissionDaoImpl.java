@@ -3,7 +3,7 @@ package com.machine.service.iam.permission.dao.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.model.dto.IdDto;
+import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.service.iam.permission.dao.IIamPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.IamPermissionMapper;

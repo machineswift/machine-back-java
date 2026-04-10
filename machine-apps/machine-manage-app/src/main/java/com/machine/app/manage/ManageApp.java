@@ -10,16 +10,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableFileStorage
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {
-        "com.machine.client",
-})
+@EnableFeignClients(
+        basePackages = "com.machine.client"
+)
 @SpringBootApplication(scanBasePackages = {
         "com.machine.starter",
         "com.machine.app.manage"
 })
 public class ManageApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(ManageApp.class, args);
     }
 

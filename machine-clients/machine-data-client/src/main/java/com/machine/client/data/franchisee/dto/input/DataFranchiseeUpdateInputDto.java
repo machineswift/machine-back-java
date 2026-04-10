@@ -1,9 +1,9 @@
 package com.machine.client.data.franchisee.dto.input;
 
-import com.machine.sdk.common.envm.data.DataEducationalQualificationEnum;
-import com.machine.sdk.common.envm.data.DataWorkExperienceTypeEnum;
-import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
+import com.machine.sdk.base.envm.data.DataEducationalQualificationEnum;
+import com.machine.sdk.base.envm.data.DataWorkExperienceTypeEnum;
+import com.machine.sdk.base.model.dto.data.certificate.HealthCertificateDto;
+import com.machine.sdk.base.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

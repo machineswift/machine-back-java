@@ -1,8 +1,7 @@
 package com.machine.client.hrm.jobpost.dto.input;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.request.PageRequest;
-import jakarta.validation.constraints.NotBlank;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

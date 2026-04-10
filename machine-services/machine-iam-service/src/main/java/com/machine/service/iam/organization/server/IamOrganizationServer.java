@@ -8,8 +8,8 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationUpdateParent
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.iam.organization.service.IIamOrganizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

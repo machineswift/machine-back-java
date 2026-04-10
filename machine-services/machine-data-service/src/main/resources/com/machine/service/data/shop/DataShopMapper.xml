@@ -55,7 +55,7 @@
         </foreach>
     </select>
 
-    <select id="selectSimpleByCodeSet" resultType="com.machine.sdk.common.model.response.IdCodeResponse">
+    <select id="selectSimpleByCodeSet" resultType="com.machine.sdk.base.model.response.IdCodeResponse">
         select s.id,s.code
         from t_data_shop s
         where s.code in

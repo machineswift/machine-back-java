@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.file.material.IDataMaterialCategoryClient;
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
-import static com.machine.sdk.common.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE_NAME;
+import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE_NAME;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_TREE_KEY;
 

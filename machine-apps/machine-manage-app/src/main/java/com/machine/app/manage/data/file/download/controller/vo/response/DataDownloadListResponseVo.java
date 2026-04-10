@@ -1,9 +1,9 @@
 package com.machine.app.manage.data.file.download.controller.vo.response;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -36,6 +36,9 @@ public class DataDownloadListResponseVo {
 
     @Schema(description = "大小（字节）")
     private Long attachmentSize;
+
+    @Schema(description = "过期时间")
+    private Long expireTime;
 
 
 

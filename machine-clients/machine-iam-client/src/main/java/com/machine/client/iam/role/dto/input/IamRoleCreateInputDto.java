@@ -1,7 +1,7 @@
 package com.machine.client.iam.role.dto.input;
 
-import com.machine.sdk.common.envm.iam.role.IamRoleTypeEnum;
-import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

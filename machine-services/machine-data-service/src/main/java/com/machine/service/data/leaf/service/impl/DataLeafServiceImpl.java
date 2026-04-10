@@ -1,7 +1,7 @@
 package com.machine.service.data.leaf.service.impl;
 
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.exception.data.DataLeafBusinessException;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.exception.data.DataLeafBusinessException;
 import com.machine.service.data.leaf.dao.IDataLeafDao;
 import com.machine.service.data.leaf.dao.mapper.entity.DataLeafEntity;
 import com.machine.service.data.leaf.service.IDataLeafService;

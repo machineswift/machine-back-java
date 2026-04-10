@@ -1,6 +1,6 @@
 package com.machine.app.iam.role.controller.vo.request;
 
-import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

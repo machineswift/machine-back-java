@@ -1,8 +1,7 @@
 package com.machine.app.iam.organization.business.bo;
 
-import com.machine.client.data.shop.dto.output.DataShopListOutputDto;
 import com.machine.client.data.shop.dto.output.DataShopListSimpleOutputDto;
-import com.machine.sdk.common.model.tree.TreeNode;
+import com.machine.sdk.base.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

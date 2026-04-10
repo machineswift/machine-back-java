@@ -7,8 +7,8 @@ import com.machine.client.data.tag.dto.input.DataTagCategoryUpdateSortInputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.model.request.IdRequest;
 
 import java.util.List;
 

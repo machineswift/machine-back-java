@@ -2,10 +2,10 @@ package com.machine.starter.security.resource.open;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.base.EnvironmentEnum;
-import com.machine.sdk.common.exception.iam.access.OpenApiResourceBlackException;
-import com.machine.sdk.common.exception.iam.access.OpenApiResourceClientException;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.base.EnvironmentEnum;
+import com.machine.sdk.base.exception.iam.access.OpenApiResourceBlackException;
+import com.machine.sdk.base.exception.iam.access.OpenApiResourceClientException;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
 import com.machine.starter.redis.cache.LocalCacheSystemConfig;
 import jakarta.servlet.FilterChain;
@@ -23,8 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.*;
 
-import static com.machine.sdk.common.constant.ContextConstant.CLIENT_ID_KEY;
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.CLIENT_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 @Slf4j
 public class OpenApiAuthenticationFilter extends OncePerRequestFilter {

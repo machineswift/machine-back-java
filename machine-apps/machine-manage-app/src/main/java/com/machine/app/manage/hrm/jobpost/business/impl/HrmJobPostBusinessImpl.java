@@ -7,7 +7,7 @@ import com.machine.app.manage.hrm.jobpost.controller.vo.response.HrmJobPostListS
 import com.machine.client.hrm.jobpost.IHrmJobPostClient;
 import com.machine.client.hrm.jobpost.dto.input.HrmJobPostListSimpleInputDto;
 import com.machine.client.hrm.jobpost.dto.output.HrmJobPostListSimpleOutputDto;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

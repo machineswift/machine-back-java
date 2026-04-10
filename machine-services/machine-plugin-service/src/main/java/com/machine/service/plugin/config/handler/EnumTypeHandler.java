@@ -1,6 +1,6 @@
 package com.machine.service.plugin.config.handler;
 
-import com.machine.sdk.common.envm.BaseEnum;
+import com.machine.sdk.base.envm.BaseEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;

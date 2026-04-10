@@ -9,17 +9,17 @@ import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
 import com.machine.client.iam.role.dto.input.*;
 import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
 import com.machine.client.iam.role.dto.output.IamRoleListOutputDto;
-import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.permission.IamDataPermissionScopeTypeEnum;
-import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
-import com.machine.sdk.common.envm.iam.permission.IamPermissionTypeEnum;
-import com.machine.sdk.common.envm.iam.role.IamCompanyDefaultRoleEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.tool.JsonUtil;
+import com.machine.sdk.base.envm.BaseEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.iam.permission.IamDataPermissionScopeTypeEnum;
+import com.machine.sdk.base.envm.iam.permission.IamPermissionResourceTypeEnum;
+import com.machine.sdk.base.envm.iam.permission.IamPermissionTypeEnum;
+import com.machine.sdk.base.envm.iam.role.IamCompanyDefaultRoleEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.JsonUtil;
 import com.machine.service.iam.role.dao.IIamRoleDao;
 import com.machine.service.iam.role.dao.IIamRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity;
@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_LIST_STR;
-import static com.machine.sdk.common.constant.CommonIamConstant.DATA_PERMISSION_DEFAULT_FUNCTION_CODE;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
+import static com.machine.sdk.base.constant.CommonIamConstant.DATA_PERMISSION_DEFAULT_FUNCTION_CODE;
 
 @Slf4j
 @Service

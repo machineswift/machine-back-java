@@ -31,12 +31,12 @@ import com.machine.client.iam.userbk.dto.input.IamShopUserCreateInputDto;
 import com.machine.client.iam.user.dto.input.IamUserExportInputDto;
 import com.machine.client.iam.userbk.dto.input.IamShopUserQueryPageInputDto;
 import com.machine.client.iam.userbk.dto.input.IamShopUserUpdateInputDto;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.envm.iam.user.IamUserTypeEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
 
 @Slf4j
 @Component

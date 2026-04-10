@@ -1,6 +1,6 @@
 package com.machine.starter.sdk.config;
 
-import com.machine.sdk.common.tool.OkHttp3Util;
+import com.machine.sdk.base.tool.OkHttp3Util;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

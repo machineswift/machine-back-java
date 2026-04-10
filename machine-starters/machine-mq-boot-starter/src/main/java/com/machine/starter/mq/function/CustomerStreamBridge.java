@@ -3,8 +3,8 @@ package com.machine.starter.mq.function;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.starter.mq.constant.MqConstant;
@@ -18,7 +18,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.util.List;
 import java.util.UUID;
 
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
 @Slf4j
 public class CustomerStreamBridge {

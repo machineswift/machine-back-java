@@ -1,6 +1,6 @@
 package com.machine.service.plugin;
 
-import com.machine.sdk.common.config.CustomerWebMvcConfigurer;
+import com.machine.sdk.base.config.CustomerWebMvcConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

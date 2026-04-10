@@ -1,8 +1,8 @@
 package com.machine.app.manage.data.supplier.controller.vo.response;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.data.DataSupplierBusinessCategoryEnum;
-import com.machine.sdk.common.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.data.DataSupplierBusinessCategoryEnum;
+import com.machine.sdk.base.model.dto.data.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

@@ -7,9 +7,9 @@ import com.machine.app.manage.data.shop.controller.vo.response.DataShopCertifica
 import com.machine.app.manage.data.shop.controller.vo.response.DataShopDetailResponseVo;
 import com.machine.app.manage.data.shop.controller.vo.response.DataShopExpandListResponseVo;
 import com.machine.app.manage.data.shop.controller.vo.response.DataShopSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.IdResponse;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -1,6 +1,6 @@
 package com.machine.sdk.self.exception;
 
-import com.machine.sdk.common.exception.BusinessException;
+import com.machine.sdk.base.exception.BusinessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

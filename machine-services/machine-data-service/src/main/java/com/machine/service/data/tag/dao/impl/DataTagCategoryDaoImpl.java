@@ -2,7 +2,7 @@ package com.machine.service.data.tag.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.service.data.tag.dao.IDataTagCategoryDao;
 import com.machine.service.data.tag.dao.mapper.DataTagCategoryMapper;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagCategoryEntity;

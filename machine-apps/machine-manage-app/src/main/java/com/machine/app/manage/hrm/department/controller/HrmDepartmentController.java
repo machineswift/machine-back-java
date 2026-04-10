@@ -3,7 +3,7 @@ package com.machine.app.manage.hrm.department.controller;
 import com.machine.app.manage.hrm.department.business.IHrmDepartmentBusiness;
 import com.machine.app.manage.hrm.department.controller.vo.response.*;
 import com.machine.client.hrm.department.dto.output.HrmDepartmentTreeOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

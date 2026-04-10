@@ -2,7 +2,7 @@ package com.machine.app.iam.auth.business.impl;
 
 import com.machine.app.iam.auth.business.IIamAuthServerBusiness;
 import com.machine.app.iam.auth.controller.vo.request.IamAuthCreateClientRequestVo;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.starter.security.config.db.CustomerRegisteredClientRepository;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.machine.client.data.shop.dto.input;
 
-import com.machine.sdk.common.envm.base.StorageTypeEnum;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
+import com.machine.sdk.base.envm.base.StorageTypeEnum;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

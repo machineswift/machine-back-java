@@ -1,6 +1,6 @@
 package com.machine.sdk.huawei.envm;
 
-import com.machine.sdk.common.envm.BaseEnum;
+import com.machine.sdk.base.envm.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

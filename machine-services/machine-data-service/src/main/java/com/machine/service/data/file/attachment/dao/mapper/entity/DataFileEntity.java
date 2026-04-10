@@ -2,7 +2,7 @@ package com.machine.service.data.file.attachment.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

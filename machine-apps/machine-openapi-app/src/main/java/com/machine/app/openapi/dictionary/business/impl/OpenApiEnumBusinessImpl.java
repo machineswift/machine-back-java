@@ -6,8 +6,8 @@ import cn.hutool.core.lang.ClassScanner;
 import com.machine.app.openapi.dictionary.business.IOpenApiEnumBusiness;
 import com.machine.app.openapi.dictionary.controller.request.OpenApiEnumQueryEnumInfoRequestVo;
 import com.machine.app.openapi.dictionary.controller.response.OpenApiEnumInfoResponse;
-import com.machine.sdk.common.envm.BaseEnum;
-import com.machine.sdk.common.exception.BusinessException;
+import com.machine.sdk.base.envm.BaseEnum;
+import com.machine.sdk.base.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -57,7 +57,7 @@ public class OpenApiEnumBusinessImpl implements IOpenApiEnumBusiness {
     }
 
     private static final String[] ENUM_BASE_PACKAGES = {
-            "com.xijie.sdk.common.envm",
+            "com.xijie.sdk.base.envm",
             "com.xijie.sdk.beisen.envm"
     };
 

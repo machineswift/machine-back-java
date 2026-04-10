@@ -1,8 +1,8 @@
 package com.machine.service.data.file.attachment.service;
 
 import com.machine.client.data.file.attachment.dto.output.DataFileDetailOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 

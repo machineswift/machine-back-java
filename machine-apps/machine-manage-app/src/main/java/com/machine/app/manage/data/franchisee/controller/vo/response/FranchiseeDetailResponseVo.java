@@ -1,11 +1,11 @@
 package com.machine.app.manage.data.franchisee.controller.vo.response;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.base.GenderEnum;
-import com.machine.sdk.common.envm.data.DataEducationalQualificationEnum;
-import com.machine.sdk.common.envm.data.DataFranchiseeEntityTypeEnum;
-import com.machine.sdk.common.envm.data.DataWorkExperienceTypeEnum;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.base.GenderEnum;
+import com.machine.sdk.base.envm.data.DataEducationalQualificationEnum;
+import com.machine.sdk.base.envm.data.DataFranchiseeEntityTypeEnum;
+import com.machine.sdk.base.envm.data.DataWorkExperienceTypeEnum;
+import com.machine.sdk.base.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

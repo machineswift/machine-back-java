@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.data.area.IDataAreaClient;
 import com.machine.client.data.area.dto.input.DataAreaTreeInputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_OBJECT;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.DATA_AREA_TREE_KEY;
 

@@ -1,7 +1,7 @@
 package com.machine.service.data.shop.dao;
 
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity;
 
 import java.util.List;

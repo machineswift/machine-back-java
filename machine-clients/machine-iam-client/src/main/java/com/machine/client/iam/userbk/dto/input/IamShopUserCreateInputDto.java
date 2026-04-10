@@ -1,9 +1,9 @@
 package com.machine.client.iam.userbk.dto.input;
 
 import com.machine.client.iam.user.dto.input.IamUserRoleInfoUpdateInputDto;
-import com.machine.sdk.common.envm.base.GenderEnum;
-import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
+import com.machine.sdk.base.envm.base.GenderEnum;
+import com.machine.sdk.base.model.dto.data.certificate.HealthCertificateDto;
+import com.machine.sdk.base.model.dto.data.certificate.IdentityCardDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

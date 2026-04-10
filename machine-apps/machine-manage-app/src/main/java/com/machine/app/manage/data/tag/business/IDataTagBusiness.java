@@ -4,8 +4,8 @@ import com.machine.app.manage.data.tag.controller.vo.request.*;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagDetailResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagExpandListResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IDataTagBusiness {
 

@@ -1,8 +1,8 @@
 package com.machine.client.data.leaf;
 
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

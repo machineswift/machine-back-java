@@ -1,7 +1,7 @@
 package com.machine.starter.security.handler;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.sdk.common.model.AppResult;
+import com.machine.sdk.base.model.AppResult;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

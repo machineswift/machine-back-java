@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
 import com.machine.client.iam.userbk.IIamUserBkClient;
 import com.machine.client.iam.userbk.dto.input.*;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.service.iam.userbk.service.IUserBkService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

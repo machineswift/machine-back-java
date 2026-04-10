@@ -2,7 +2,9 @@ package com.machine.service.data.shop.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.data.shop.*;
+import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

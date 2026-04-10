@@ -5,8 +5,8 @@ import com.machine.app.iam.userbk.vo.request.IamSupplierUserQueryPageExpandReque
 import com.machine.app.iam.userbk.vo.request.IamSupplierUserUpdateRequestVo;
 import com.machine.app.iam.userbk.vo.response.IamSupplierUserDetailResponseVo;
 import com.machine.app.iam.userbk.vo.response.IamSupplierUserExpandListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IIamSupplierUserBusiness {
 

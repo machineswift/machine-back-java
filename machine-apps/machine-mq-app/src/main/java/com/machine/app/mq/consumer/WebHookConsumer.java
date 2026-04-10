@@ -4,9 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.dto.data.WebHookInfoDto;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.dto.data.WebHookInfoDto;
 import com.machine.sdk.self.client.WebhookClient;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
 
 @Slf4j

@@ -1,7 +1,7 @@
 package com.machine.client.data.file.attachment.dto.output;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.data.file.DataAttachmentStatusEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.data.file.DataAttachmentStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -8,13 +8,14 @@ import com.machine.client.data.file.attachment.IDataFileClient;
 import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
 import com.machine.client.data.file.attachment.dto.output.DataAttachmentDetailOutputDto;
 import com.machine.client.data.file.attachment.dto.output.DataFileDetailOutputDto;
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.starter.obs.function.ObsFunction;
 import com.machine.starter.obs.tool.ObsAttachmentPathBuilder;
 import com.machine.starter.obs.tool.TikaFileTypeDetector;
+import com.machine.starter.obs.validate.ModuleEntityValidateFactory;
 import com.machine.starter.redis.function.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.x.file.storage.core.FileInfo;
@@ -26,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_STR;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_STR;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_ATTACHMENT_THUMBNAIL_URL;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_ATTACHMENT_URL;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Attachment.DATA_ATTACHMENT_THUMBNAIL_URL_KEY;
@@ -46,6 +47,9 @@ public class DataAttachmentBusinessImpl implements IDataAttachmentBusiness {
     private ObsFunction obsFunction;
 
     @Autowired
+    private ModuleEntityValidateFactory validateFactory;
+
+    @Autowired
     private IDataFileClient dataFileClient;
 
     @Autowired
@@ -60,6 +64,9 @@ public class DataAttachmentBusinessImpl implements IDataAttachmentBusiness {
         if (file == null || file.isEmpty()) {
             throw new DataBusinessException("data.attachment.business.upload.empty", "上传文件不能为空");
         }
+
+        // 校验实体
+        validateFactory.validate(entity,entityId);
 
         // 获取文件类型
         DataFileTypeEnum fileType = TikaFileTypeDetector.getInstance().getFileType(file);

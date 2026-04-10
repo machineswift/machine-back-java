@@ -1,12 +1,10 @@
 package com.machine.app.manage.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.StatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;

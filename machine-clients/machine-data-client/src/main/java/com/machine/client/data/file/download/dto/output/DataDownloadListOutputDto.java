@@ -1,8 +1,8 @@
 package com.machine.client.data.file.download.dto.output;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

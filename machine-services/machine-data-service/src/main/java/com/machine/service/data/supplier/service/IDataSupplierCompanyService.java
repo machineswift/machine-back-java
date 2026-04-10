@@ -5,8 +5,8 @@ import com.machine.client.data.supplier.dto.input.*;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyListOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package com.machine.client.data.employee.dto.output;
 
-import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
+import com.machine.sdk.base.envm.data.DataShopEmployeeStatusEnum;
 import lombok.Data;
 
 @Data

@@ -3,7 +3,7 @@ package com.machine.app.mq.consumer;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.message.IDataAppMessageClient;
 import com.machine.client.data.message.dto.input.AppMessageSendInputDto;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.ConsumerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
 
 @Slf4j

@@ -5,7 +5,7 @@ import com.machine.app.manage.data.message.controller.vo.request.ManageAppMessag
 import com.machine.app.manage.data.message.controller.vo.request.ManageAppMessageTemplateUpdateReqVo;
 import com.machine.app.manage.data.message.controller.vo.request.ManageAppMessageTemplateUpdateStatusReqVo;
 import com.machine.app.manage.data.message.controller.vo.response.ManageAppMessageTemplateListResVo;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IManageAppMessageTemplateBusiness {
 

@@ -17,19 +17,18 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.input.*;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
-import com.machine.sdk.common.envm.iam.role.IamUserRoleBusinessTypeEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuth2SourceEnum;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.tool.DateUtil;
-import com.machine.sdk.common.tool.StringUtil;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.iam.role.IamUserRoleBusinessTypeEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuth2SourceEnum;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.DateUtil;
+import com.machine.sdk.base.tool.StringUtil;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.service.iam.permission.dao.IIamPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.entity.IamPermissionEntity;
 import com.machine.service.iam.role.dao.IIamRoleDao;
@@ -55,7 +54,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonIamConstant.User.ROOT_USER_ID;
+import static com.machine.sdk.base.constant.CommonIamConstant.User.ROOT_USER_ID;
 
 @Slf4j
 @Service

@@ -5,14 +5,14 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationConsentClient;
 import com.machine.client.iam.auth.dto.input.IamOauth2AuthorizationConsentInputDto;
 import com.machine.client.iam.auth.dto.output.IamOauth2AuthorizationConsentOutputDto;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.util.Assert;
 
 import java.util.Objects;
 
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 public class CustomerOAuth2AuthorizationConsentService implements OAuth2AuthorizationConsentService {
 

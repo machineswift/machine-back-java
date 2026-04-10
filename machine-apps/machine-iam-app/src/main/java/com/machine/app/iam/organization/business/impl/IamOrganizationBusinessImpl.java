@@ -20,9 +20,9 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.input.IamDataUserNotBindOrganizationInputDto;
 import com.machine.client.iam.user.dto.output.IamUserOrganizationRelationOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,11 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE_NAME;
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_NAME;
+import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE_NAME;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_NAME;
 
 @Slf4j
 @Component

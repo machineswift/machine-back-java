@@ -9,7 +9,7 @@ import com.machine.client.iam.user.dto.input.IamUserLoginLogQueryPageInputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogAvailableOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogDetailOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.iam.user.dao.IIamUserLoginLogDao;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserLoginLogEntity;
 import com.machine.service.iam.user.service.IIamUserLoginLogService;

@@ -1,7 +1,7 @@
 package com.machine.client.iam.auth.dto.output;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.dto.data.WebHookInfoDto;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.dto.data.WebHookInfoDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;

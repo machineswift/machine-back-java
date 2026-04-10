@@ -1,0 +1,21 @@
+package com.machine.sdk.base.envm.data.tag;
+
+import com.machine.sdk.base.envm.BaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ProfileSubjectTypeEnum implements BaseEnum<ProfileSubjectTypeEnum, String> {
+    CUSTOMER("CUSTOMER", "客户"),
+    SHOP("SHOP", "门店"),
+    ITEM("ITEM", "商品");
+
+    private final String code;
+    private final String message;
+
+    @Override
+    public String getName() {
+        return this.name();
+    }
+}

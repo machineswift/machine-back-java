@@ -1,7 +1,7 @@
 package com.machine.starter.obs.tool;
 
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.starter.obs.path.IObsPathStrategy;
 import com.machine.starter.obs.path.impl.ObsPathStrategyImpl;
 

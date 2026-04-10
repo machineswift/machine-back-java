@@ -3,11 +3,20 @@
 <mapper namespace="com.machine.service.data.file.material.dao.mapper.DataMaterialMapper">
 
     <sql id="selectPageCommonConditions">
-        <if test="inputDto.type != null">
-            AND m.type = #{inputDto.type}
+        <if test="inputDto.fileTypeSet != null and inputDto.fileTypeSet.size > 0">
+            AND m.file_type IN
+            <foreach item="item" collection="inputDto.fileTypeSet" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
-        <if test="inputDto.status != null">
-            AND m.status = #{inputDto.status}
+        <if test="inputDto.processStatus != null">
+            AND m.process_status = #{inputDto.processStatus}
+        </if>
+        <if test="inputDto.businessStatus != null">
+            AND m.business_status = #{inputDto.businessStatus}
+        </if>
+        <if test="inputDto.auditStatus != null">
+            AND m.audit_status = #{inputDto.auditStatus}
         </if>
         <if test="inputDto.title != null and inputDto.title !=''">
             AND m.title LIKE CONCAT('%', #{inputDto.title}, '%')
@@ -47,7 +56,7 @@
         SELECT m.*
         FROM t_data_material m
         <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
-            INNER JOIN t_material_category_relation mcr ON mcr.material_id = m.id
+            INNER JOIN t_data_material_category_relation mcr ON mcr.material_id = m.id
         </if>
         <where>
             <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
@@ -68,7 +77,7 @@
             SELECT m.*
             FROM t_data_material m
             WHERE NOT EXISTS (
-            SELECT 1 FROM t_material_category_relation mcr
+            SELECT 1 FROM t_data_material_category_relation mcr
             WHERE mcr.material_id = m.id
             )
             <include refid="selectPageCommonConditions"/>

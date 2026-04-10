@@ -5,8 +5,8 @@ import com.machine.app.manage.data.file.download.business.IDownLoadCenterBusines
 import com.machine.app.manage.data.file.download.controller.vo.request.DataDownloadPageRequestVo;
 import com.machine.app.manage.data.file.download.controller.vo.response.DataDownloadDetailResponseVo;
 import com.machine.app.manage.data.file.download.controller.vo.response.DataDownloadListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

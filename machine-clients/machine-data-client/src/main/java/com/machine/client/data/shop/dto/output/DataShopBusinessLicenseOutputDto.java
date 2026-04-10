@@ -1,7 +1,7 @@
 package com.machine.client.data.shop.dto.output;
 
-import com.machine.sdk.common.envm.data.DataCertificateStatusEnum;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
+import com.machine.sdk.base.envm.data.DataCertificateStatusEnum;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

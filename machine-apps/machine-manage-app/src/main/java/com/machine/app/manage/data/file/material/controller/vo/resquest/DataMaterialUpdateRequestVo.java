@@ -8,25 +8,22 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Data
-@Schema
 @NoArgsConstructor
 public class DataMaterialUpdateRequestVo {
 
-    @NotBlank(message = "Id不能为空")
-    @Schema(description = "Id")
+    @NotBlank(message = "素材ID不能为空")
+    @Schema(description = "素材ID", requiredMode = Schema.RequiredMode.REQUIRED)
     private String id;
 
     @NotBlank(message = "素材标题不能为空")
-    @Schema(description = "素材标题")
+    @Schema(description = "素材标题", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
 
-    @Schema(description = "素材分类集合")
+    @Schema(description = "所属分类ID集合，可多选")
     private Set<String> categoryIdSet;
 
-    @Schema(description = "过期时间")
-    private Long expireTime;
-
-    @Schema(description = "描述")
-    private String description;
+    @NotBlank(message = "附件ID不能为空")
+    @Schema(description = "附件ID", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String attachmentId;
 
 }

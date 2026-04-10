@@ -1,8 +1,8 @@
 package com.machine.app.suprr.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.message.DataMessageChannelEnum;
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateRiskCategoryEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.data.message.DataMessageChannelEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateRiskCategoryEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

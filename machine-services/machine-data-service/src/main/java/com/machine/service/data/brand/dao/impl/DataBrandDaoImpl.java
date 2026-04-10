@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.service.data.brand.dao.IDataBrandDao;
 import com.machine.service.data.brand.dao.mapper.DataBrandMapper;
 import com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity;

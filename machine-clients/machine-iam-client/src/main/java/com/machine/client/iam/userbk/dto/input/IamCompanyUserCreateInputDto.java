@@ -1,8 +1,8 @@
 package com.machine.client.iam.userbk.dto.input;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.base.GenderEnum;
-import com.machine.sdk.common.envm.hrm.HrmEmployeeStatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.base.GenderEnum;
+import com.machine.sdk.base.envm.hrm.HrmEmployeeStatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

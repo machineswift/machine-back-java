@@ -1,7 +1,7 @@
 package com.machine.starter.obs.function;
 
 import cn.hutool.core.date.DateUtil;
-import com.machine.sdk.common.exception.data.DataBusinessException;
+import com.machine.sdk.base.exception.data.DataBusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;

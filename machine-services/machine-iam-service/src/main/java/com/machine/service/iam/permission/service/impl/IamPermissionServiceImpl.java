@@ -8,12 +8,12 @@ import com.machine.client.iam.permission.dto.input.*;
 import com.machine.client.iam.permission.dto.output.IamPermissionDetailOutputDto;
 import com.machine.client.iam.permission.dto.output.IamPermissionListOutputDto;
 import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
-import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.dto.iam.DataPermissionMetaDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.tree.TreeNode;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.envm.iam.permission.IamPermissionResourceTypeEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.dto.iam.DataPermissionMetaDto;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.tree.TreeNode;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.service.iam.permission.dao.IIamPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.entity.IamPermissionEntity;
 import com.machine.service.iam.permission.service.IIamPermissionService;
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_LIST_STR;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Iam.LOCK_IAM_PERMISSION_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Permission.*;
 

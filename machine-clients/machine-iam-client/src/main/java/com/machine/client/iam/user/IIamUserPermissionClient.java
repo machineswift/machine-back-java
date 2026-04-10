@@ -1,8 +1,8 @@
 package com.machine.client.iam.user;
 
 import com.machine.client.iam.user.dto.input.IamDataPermission4ManageInputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

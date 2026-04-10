@@ -2,8 +2,8 @@ package com.machine.service.iam.user.server;
 
 import com.machine.client.iam.user.IIamUserRoleRelationClient;
 import com.machine.client.iam.user.dto.output.IamUserRoleRelationListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.iam.user.service.IIamUserRoleRelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

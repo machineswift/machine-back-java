@@ -1,7 +1,7 @@
 
 package com.machine.starter.security.filter;
 
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

@@ -2,7 +2,7 @@ package com.machine.starter.security;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.machine.client.iam.user.dto.output.IamUserAuthDetailOutputDto;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

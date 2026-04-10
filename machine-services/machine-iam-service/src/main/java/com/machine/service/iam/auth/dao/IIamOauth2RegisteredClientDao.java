@@ -1,7 +1,7 @@
 package com.machine.service.iam.auth.dao;
 
 import com.machine.client.iam.auth.dto.IamAuthTokenAddDto;
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.service.iam.auth.dao.mapper.entity.IamOauth2RegisteredClientEntity;
 
 import java.util.List;

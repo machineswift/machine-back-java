@@ -5,11 +5,11 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.IIamUserLoginLogClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.iam.auth.IamAuthActionEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuthResultEnum;
-import com.machine.sdk.common.model.AppResult;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
+import com.machine.sdk.base.model.AppResult;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.MachineJwtUtil;
 import com.machine.starter.security.util.LoginLogUtil;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.machine.sdk.common.constant.ContextConstant.USER_ID_KEY;
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.security.SecurityConstant.*;
 
 @Slf4j

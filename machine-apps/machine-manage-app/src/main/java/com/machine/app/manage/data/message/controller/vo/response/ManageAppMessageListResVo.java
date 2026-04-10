@@ -1,9 +1,9 @@
 package com.machine.app.manage.data.message.controller.vo.response;
 
 import com.machine.client.data.message.dto.output.AppMessageContentDto;
-import com.machine.sdk.common.envm.data.message.DataMessageChannelEnum;
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateCategoryEnum;
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateTypeEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageChannelEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateCategoryEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

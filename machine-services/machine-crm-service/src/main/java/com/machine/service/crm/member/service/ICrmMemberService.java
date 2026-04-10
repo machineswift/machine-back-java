@@ -6,7 +6,7 @@ import com.machine.client.crm.member.dto.input.CrmMemberQueryPageInputDto;
 import com.machine.client.crm.member.dto.input.CrmMemberUpdateInputDto;
 import com.machine.client.crm.member.dto.output.CrmMemberDetailOutputDto;
 import com.machine.client.crm.member.dto.output.CrmMemberListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 public interface ICrmMemberService {
 

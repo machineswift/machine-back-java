@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationClient;
 import com.machine.client.iam.auth.dto.input.IamOAuth2AuthorizationDto;
 import com.machine.client.iam.auth.dto.output.IamOAuth2AuthorizationOutputDto;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 
 import java.util.Objects;
 
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 public class CustomerOAuth2AuthorizationService implements OAuth2AuthorizationService {
 

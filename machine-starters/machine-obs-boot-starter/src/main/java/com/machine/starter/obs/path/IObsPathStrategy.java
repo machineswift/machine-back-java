@@ -1,8 +1,8 @@
 package com.machine.starter.obs.path;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
 
 /**
  * OBS路径生成策略接口

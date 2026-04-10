@@ -20,7 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static com.machine.sdk.common.constant.CommonConstant.SEPARATOR_COLON;
+import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
 
 @Configuration(proxyBeanMethods = false)
 public class RedisAutoConfiguration {

@@ -1,7 +1,7 @@
 package com.machine.client.data.tag.dto.output;
 
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.common.model.tree.TreeNode;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

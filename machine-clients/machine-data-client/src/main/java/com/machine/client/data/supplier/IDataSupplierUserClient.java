@@ -6,8 +6,8 @@ import com.machine.client.data.supplier.dto.input.DataSupplierQueryListOffsetInp
 import com.machine.client.data.supplier.dto.input.DataSupplierUpdateInputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierListOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.IamOAuth2RegisteredClientDto;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -17,7 +17,7 @@ import org.springframework.util.Assert;
 import java.time.Duration;
 import java.util.*;
 
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 public class CustomerRegisteredClientRepository implements RegisteredClientRepository {
 

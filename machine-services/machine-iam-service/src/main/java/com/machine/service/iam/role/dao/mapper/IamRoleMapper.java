@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.iam.role.dto.input.IamRoleListSubInputDto;
 import com.machine.client.iam.role.dto.input.IamRoleQueryPageInputDto;
-import com.machine.sdk.common.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
 import com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

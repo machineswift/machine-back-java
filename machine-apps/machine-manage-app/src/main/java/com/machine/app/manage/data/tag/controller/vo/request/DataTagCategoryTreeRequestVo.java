@@ -1,6 +1,6 @@
 package com.machine.app.manage.data.tag.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

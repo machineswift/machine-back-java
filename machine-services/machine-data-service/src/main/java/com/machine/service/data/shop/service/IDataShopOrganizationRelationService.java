@@ -4,8 +4,8 @@ import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
 import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 
 import java.util.List;
 import java.util.Map;

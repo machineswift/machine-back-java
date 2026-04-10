@@ -1,6 +1,6 @@
 package com.machine.client.data.message.dto.input;
 
-import com.machine.sdk.common.envm.data.message.DataContentTypeEnum;
+import com.machine.sdk.base.envm.data.message.DataContentTypeEnum;
 import lombok.Data;
 
 import java.io.Serializable;

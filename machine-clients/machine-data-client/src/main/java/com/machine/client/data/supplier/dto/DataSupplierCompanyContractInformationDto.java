@@ -1,6 +1,6 @@
 package com.machine.client.data.supplier.dto;
 
-import com.machine.sdk.common.model.dto.data.MaterialDto;
+import com.machine.sdk.base.model.dto.data.MaterialDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

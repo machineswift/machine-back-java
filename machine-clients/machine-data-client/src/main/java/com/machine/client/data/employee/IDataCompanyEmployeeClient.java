@@ -6,9 +6,9 @@ import com.machine.client.data.employee.dto.input.DataCompanyEmployeeQueryListOf
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeUpdateInputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeListOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

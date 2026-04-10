@@ -1,9 +1,9 @@
 package com.machine.app.manage.data.shop.controller.vo.request;
 
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
-import com.machine.sdk.common.model.dto.data.certificate.shop.DataShopFrontPhotoDto;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
+import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFrontPhotoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

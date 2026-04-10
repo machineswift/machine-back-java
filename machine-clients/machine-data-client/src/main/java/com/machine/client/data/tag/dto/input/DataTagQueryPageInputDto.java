@@ -1,8 +1,8 @@
 package com.machine.client.data.tag.dto.input;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

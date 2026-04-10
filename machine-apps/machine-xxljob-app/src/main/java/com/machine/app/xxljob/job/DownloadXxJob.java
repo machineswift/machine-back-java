@@ -8,8 +8,8 @@ import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
 import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
 import com.machine.client.data.file.download.dto.input.DataDownloadQueryInputDto;
 import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 
 @Component

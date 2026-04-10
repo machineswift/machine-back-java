@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_TREE_KEY;
 
@@ -67,11 +66,6 @@ public class DataMaterialCategoryDaoImpl implements IDataMaterialCategoryDao {
                 .eq(DataMaterialCategoryEntity::getParentId, parentId)
                 .eq(DataMaterialCategoryEntity::getName, name);
         return materialCategoryMapper.selectOne(queryWrapper);
-    }
-
-    @Override
-    public List<DataMaterialCategoryEntity> selectByIdSet(Set<String> idSet) {
-        return materialCategoryMapper.selectByIds(idSet);
     }
 
     @Override

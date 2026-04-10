@@ -1,6 +1,6 @@
 package com.machine.app.openapi.data.employee.controller.vo.response;
 
-import com.machine.sdk.common.envm.data.DataShopEmployeeStatusEnum;
+import com.machine.sdk.base.envm.data.DataShopEmployeeStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

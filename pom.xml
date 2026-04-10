@@ -39,23 +39,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2025.1.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>2.0.0-M2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-bom</artifactId>
-                <version>1.1.2.0</version>
+                <version>2025.1.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -64,7 +48,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -72,27 +56,57 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webmvc</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.5</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-tomcat</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.5</version>
             </dependency>
             <!-- spring boot 结束-->
+
+            <!-- SPRING AI 开始-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>2.0.0-M4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        <!--    <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>1.1.2.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-agent-framework</artifactId>
+                <version>1.1.2.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+                <version>1.1.2.2</version>
+            </dependency>-->
+            <!-- SPRING AI 结束-->
 
             <!-- sky walking 开始-->
             <dependency>
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-trace</artifactId>
-                <version>9.5.0</version>
+                <version>9.6.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-logback-1.x</artifactId>
-                <version>9.5.0</version>
+                <version>9.6.0</version>
             </dependency>
             <!-- sky walking 结束-->
 
@@ -116,13 +130,13 @@
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-annotations-jakarta</artifactId>
-                <version>2.2.42</version>
+                <version>2.2.46</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2</version>
             </dependency>
             <!-- swagger 结束 -->
 
@@ -130,19 +144,19 @@
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>4.2.0</version>
+                <version>4.3.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
-                <version>4.2.0</version>
+                <version>4.3.0</version>
             </dependency>
 
             <dependency>
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
-                <version>7.2.1</version>
+                <version>7.4.1</version>
             </dependency>
 
             <dependency>
@@ -156,25 +170,25 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
-                <version>3.5.15</version>
+                <version>3.5.16</version>
             </dependency>
 
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
-                <version>3.5.15</version>
+                <version>3.5.16</version>
             </dependency>
 
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-jsqlparser</artifactId>
-                <version>3.5.15</version>
+                <version>3.5.16</version>
             </dependency>
 
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-core</artifactId>
-                <version>3.5.15</version>
+                <version>3.5.16</version>
             </dependency>
 
             <dependency>
@@ -287,12 +301,12 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.17.7</version>
+                <version>1.18.7</version>
             </dependency>
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy-agent</artifactId>
-                <version>1.17.7</version>
+                <version>1.18.7</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
@@ -318,31 +332,31 @@
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-miniapp</artifactId>
-                <version>4.8.1-20260209.141916</version>
+                <version>4.8.2.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-pay</artifactId>
-                <version>4.8.1-20260209.141916</version>
+                <version>4.8.2.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-open</artifactId>
-                <version>4.8.1-20260209.141916</version>
+                <version>4.8.2.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-mp</artifactId>
-                <version>4.8.1-20260209.141916</version>
+                <version>4.8.2.B</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-cp</artifactId>
-                <version>4.8.1-20260209.141916</version>
+                <version>4.8.2.B</version>
             </dependency>
             <!-- 微信 结束  -->
 
@@ -362,11 +376,19 @@
             <dependency>
                 <groupId>com.xuxueli</groupId>
                 <artifactId>xxl-job-core</artifactId>
-                <version>3.3.2</version>
+                <version>3.4.0</version>
             </dependency>
             <!-- 第三方平台 结束-->
 
             <!-- 工具  开始-->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-bom</artifactId>
+                <version>5.3.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
@@ -374,15 +396,15 @@
             </dependency>
 
             <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>5.0.0-alpha.14</version>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.6</version>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.httpcomponents.client5</groupId>
-                <artifactId>httpclient5</artifactId>
-                <version>5.5</version>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>5.4.2</version>
             </dependency>
 
             <dependency>
@@ -394,7 +416,7 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.8.43</version>
+                <version>5.8.44</version>
             </dependency>
 
             <dependency>
@@ -438,7 +460,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.42</version>
+                <version>1.18.44</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

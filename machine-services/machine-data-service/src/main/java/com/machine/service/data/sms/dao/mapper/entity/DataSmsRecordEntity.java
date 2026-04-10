@@ -2,8 +2,8 @@ package com.machine.service.data.sms.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.data.sms.DataSmsCategoryEnum;
-import com.machine.sdk.common.envm.data.sms.DataSmsSendResultEnum;
+import com.machine.sdk.base.envm.data.sms.DataSmsCategoryEnum;
+import com.machine.sdk.base.envm.data.sms.DataSmsSendResultEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

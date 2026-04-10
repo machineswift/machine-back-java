@@ -1,7 +1,7 @@
 package com.machine.app.iam.permission.controller.vo.response;
 
-import com.machine.sdk.common.envm.iam.permission.IamPermissionResourceTypeEnum;
-import com.machine.sdk.common.model.tree.TreeNode;
+import com.machine.sdk.base.envm.iam.permission.IamPermissionResourceTypeEnum;
+import com.machine.sdk.base.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

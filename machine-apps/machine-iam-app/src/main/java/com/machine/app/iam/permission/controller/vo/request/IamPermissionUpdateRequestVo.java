@@ -1,6 +1,6 @@
 package com.machine.app.iam.permission.controller.vo.request;
 
-import com.machine.sdk.common.model.dto.iam.DataPermissionMetaDto;
+import com.machine.sdk.base.model.dto.iam.DataPermissionMetaDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

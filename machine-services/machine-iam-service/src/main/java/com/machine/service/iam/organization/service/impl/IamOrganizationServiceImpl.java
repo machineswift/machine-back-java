@@ -12,10 +12,10 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationUpdateParent
 import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationListOutputDto;
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.service.iam.organization.dao.IIamOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.IamOrganizationEntity;
 import com.machine.service.iam.organization.service.IIamOrganizationService;
@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
-import static com.machine.sdk.common.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_ORGANIZATION_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Organization.DATA_ORGANIZATION_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Organization.DATA_ORGANIZATION_TREE_KEY;

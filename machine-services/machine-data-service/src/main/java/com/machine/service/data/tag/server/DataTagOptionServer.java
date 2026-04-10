@@ -1,13 +1,11 @@
 package com.machine.service.data.tag.server;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.tag.IDataTagOptionClient;
 import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagOptionDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagOptionListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.tag.service.IDataTagOptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;

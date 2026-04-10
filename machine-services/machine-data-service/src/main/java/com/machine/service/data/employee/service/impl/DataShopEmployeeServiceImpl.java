@@ -7,11 +7,11 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeListOutputDto;
-import com.machine.sdk.common.envm.base.StorageTypeEnum;
-import com.machine.sdk.common.envm.data.DataCertificateStatusEnum;
-import com.machine.sdk.common.model.dto.data.certificate.HealthCertificateDto;
-import com.machine.sdk.common.model.dto.data.certificate.IdentityCardDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.envm.base.StorageTypeEnum;
+import com.machine.sdk.base.envm.data.DataCertificateStatusEnum;
+import com.machine.sdk.base.model.dto.data.certificate.HealthCertificateDto;
+import com.machine.sdk.base.model.dto.data.certificate.IdentityCardDto;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.employee.dao.IDataShopEmployeeDao;
 import com.machine.service.data.employee.dao.mapper.entity.DataShopEmployeeEntity;
 import com.machine.service.data.employee.service.IDataShopEmployeeService;

@@ -5,8 +5,8 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeListOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

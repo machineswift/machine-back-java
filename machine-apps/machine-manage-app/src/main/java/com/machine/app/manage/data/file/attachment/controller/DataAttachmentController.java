@@ -2,8 +2,8 @@ package com.machine.app.manage.data.file.attachment.controller;
 
 import com.machine.app.manage.data.file.attachment.business.IDataAttachmentBusiness;
 import com.machine.app.manage.data.file.attachment.controller.vo.response.DataAttachmentUrlResponseVo;
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.model.response.IdResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

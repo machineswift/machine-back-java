@@ -18,9 +18,10 @@ import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutput
 import com.machine.client.data.file.download.dto.output.DataDownloadListOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -115,6 +116,9 @@ public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
                     responseVo.setFileType(fileDetailOutputDto.getFileType());
                     responseVo.setAttachmentOriginalName(fileDetailOutputDto.getOriginalName());
                     responseVo.setAttachmentSize(fileDetailOutputDto.getSize());
+                    if(DataDownloadStatusEnum.FINISH == responseVo.getStatus()){
+                        responseVo.setExpireTime(attachmentOutputDto.getExpireTime());
+                    }
                 }
             }
             responseVoList.add(responseVo);

@@ -11,7 +11,7 @@ import com.machine.client.data.employee.IDataCompanyEmployeeClient;
 import com.machine.client.data.employee.dto.input.DataCompanyEmployeeQueryListOffsetInputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataCompanyEmployeeListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

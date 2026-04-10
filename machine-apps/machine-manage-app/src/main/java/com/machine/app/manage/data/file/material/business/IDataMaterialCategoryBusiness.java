@@ -5,7 +5,7 @@ import com.machine.app.manage.data.file.material.controller.vo.response.DataMate
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialCategoryCreateRequestVo;
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialCategoryUpdateParentRequestVo;
 import com.machine.app.manage.data.file.material.controller.vo.resquest.DataMaterialCategoryUpdateRequestVo;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 
 public interface IDataMaterialCategoryBusiness {

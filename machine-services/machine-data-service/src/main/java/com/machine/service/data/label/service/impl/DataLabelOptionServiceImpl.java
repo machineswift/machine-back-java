@@ -6,10 +6,10 @@ import com.machine.client.data.label.dto.input.*;
 import com.machine.client.data.label.dto.output.DataLabelOptionDetailOutputDto;
 import com.machine.client.data.label.dto.output.DataLabelOptionListOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4DataCodeClient;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.request.IdSetRequest;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.label.dao.IDataLabelOptionDao;
 import com.machine.service.data.label.dao.mapper.entity.DataLabelOptionEntity;
 import com.machine.service.data.label.service.IDataLabelOptionService;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.machine.sdk.common.constant.CommonDataConstant.Label.LABEL_PREFIX;
+import static com.machine.sdk.base.constant.CommonDataConstant.Label.LABEL_PREFIX;
 
 @Slf4j
 @Service

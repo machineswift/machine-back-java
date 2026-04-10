@@ -1,6 +1,6 @@
 package com.machine.client.data.config.dto;
 
-import com.machine.sdk.common.envm.data.message.DataMessageTemplateTypeEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageTemplateTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

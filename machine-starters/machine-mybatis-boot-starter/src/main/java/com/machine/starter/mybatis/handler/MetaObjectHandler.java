@@ -1,6 +1,6 @@
 package com.machine.starter.mybatis.handler;
 
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 

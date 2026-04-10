@@ -10,9 +10,9 @@ import com.machine.app.suprr.data.area.controller.vo.response.SupperAreaTreeSimp
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
-import com.machine.sdk.common.model.dto.iam.DataPermissionDto;
-import com.machine.sdk.common.model.request.IdSetRequest;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.cache.data.RedisCacheDataArea;
 import com.machine.starter.redis.cache.iam.RedisCacheIamDataPermission;
 import lombok.extern.slf4j.Slf4j;

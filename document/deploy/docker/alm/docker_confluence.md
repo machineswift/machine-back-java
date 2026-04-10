@@ -67,7 +67,7 @@ docker run -d \
 --cpus=0.5 \
 --memory=1g --memory-swap=2g \
 --restart unless-stopped \
-nginx:1.29.3
+nginx:1.29.8
 ```
 
 

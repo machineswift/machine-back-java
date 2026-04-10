@@ -3,8 +3,8 @@ package com.machine.app.iam.userbk.business;
 import com.machine.app.iam.userbk.vo.request.IamCompanyUserQueryPageExpandRequestVo;
 import com.machine.app.iam.userbk.vo.response.IamCompanyUserDetailResponseVo;
 import com.machine.app.iam.userbk.vo.response.IamCompanyUserExpandListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IIamCompanyUserBusiness {
 

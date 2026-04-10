@@ -11,9 +11,9 @@ import com.machine.client.data.file.material.dto.input.DataMaterialCategoryUpdat
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryDetailOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryListOutputDto;
 import com.machine.client.data.file.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
-import com.machine.sdk.common.exception.data.DataBusinessException;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.tool.TreeUtil;
+import com.machine.sdk.base.exception.data.DataBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.service.data.file.material.dao.IDataMaterialCategoryDao;
 import com.machine.service.data.file.material.dao.IDataMaterialCategoryRelationDao;
 import com.machine.service.data.file.material.dao.mapper.entity.DataMaterialCategoryEntity;
@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.machine.sdk.common.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
-import static com.machine.sdk.common.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_ROOT_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Data.LOCK_DATA_MATERIAL_CATEGORY_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_TREE_KEY;
@@ -269,4 +269,5 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             lock.unlock();
         }
     }
+
 }

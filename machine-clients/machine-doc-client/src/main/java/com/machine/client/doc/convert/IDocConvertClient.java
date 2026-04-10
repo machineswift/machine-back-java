@@ -1,6 +1,6 @@
 package com.machine.client.doc.convert;
 
-import com.machine.sdk.common.config.OpenFeignMaxTimeConfig;
+import com.machine.sdk.base.config.OpenFeignMaxTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

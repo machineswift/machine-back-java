@@ -7,9 +7,9 @@ import com.machine.app.iam.userbk.vo.request.IamSupplierUserQueryPageExpandReque
 import com.machine.app.iam.userbk.vo.request.IamSupplierUserUpdateRequestVo;
 import com.machine.app.iam.userbk.vo.response.IamSupplierUserDetailResponseVo;
 import com.machine.app.iam.userbk.vo.response.IamSupplierUserExpandListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.IdResponse;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.model.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

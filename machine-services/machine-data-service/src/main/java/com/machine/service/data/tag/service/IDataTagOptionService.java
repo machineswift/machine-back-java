@@ -3,7 +3,7 @@ package com.machine.service.data.tag.service;
 import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagOptionDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagOptionListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 import java.util.List;
 

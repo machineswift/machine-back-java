@@ -8,7 +8,7 @@ import com.machine.client.data.supplier.dto.input.DataSupplierQueryListOffsetInp
 import com.machine.client.data.supplier.dto.input.DataSupplierUpdateInputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.supplier.service.IDataSupplierUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

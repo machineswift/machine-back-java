@@ -2,9 +2,9 @@ package com.machine.service.data.label.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.dto.IdDto;
-import com.machine.sdk.common.model.dto.IdStatusDto;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.dto.IdDto;
+import com.machine.sdk.base.model.dto.IdStatusDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.service.data.label.dao.IDataLabelOptionDao;
 import com.machine.service.data.label.dao.mapper.DataLabelOptionMapper;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
-import static com.machine.sdk.common.constant.CommonDataConstant.Shop.SHOP_LABEL_ID;
+import static com.machine.sdk.base.constant.CommonDataConstant.Shop.SHOP_LABEL_ID;
 
 @Repository
 public class DataLabelOptionDaoImpl implements IDataLabelOptionDao {

@@ -1,7 +1,7 @@
 package com.machine.client.data.sms.dto.input;
 
-import com.machine.sdk.common.envm.data.sms.DataSmsCategoryEnum;
-import com.machine.sdk.common.envm.data.sms.DataSmsSendResultEnum;
+import com.machine.sdk.base.envm.data.sms.DataSmsCategoryEnum;
+import com.machine.sdk.base.envm.data.sms.DataSmsSendResultEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

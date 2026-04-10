@@ -1,8 +1,8 @@
 package com.machine.app.iam.user.controller.vo.request;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.base.GenderEnum;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.base.GenderEnum;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

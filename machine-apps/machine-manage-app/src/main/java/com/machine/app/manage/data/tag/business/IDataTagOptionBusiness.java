@@ -4,7 +4,7 @@ import com.machine.app.manage.data.tag.controller.vo.request.*;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagOptionDetailResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagOptionExpandListResponseVo;
 import com.machine.app.manage.data.tag.controller.vo.response.DataTagOptionSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 import java.util.List;
 

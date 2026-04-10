@@ -1,6 +1,6 @@
 package com.machine.client.iam.user.dto.output;
 
-import com.machine.sdk.common.envm.StatusEnum;
+import com.machine.sdk.base.envm.StatusEnum;
 import lombok.Data;
 
 import java.util.ArrayList;

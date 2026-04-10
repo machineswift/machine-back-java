@@ -1,8 +1,8 @@
 package com.machine.test.temp.doc;
 
 import com.machine.client.doc.convert.IDocConvertClient;
-import com.machine.sdk.common.constant.CommonIamConstant;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.constant.CommonIamConstant;
+import com.machine.sdk.base.context.AppContext;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

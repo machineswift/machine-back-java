@@ -1,6 +1,6 @@
 package com.machine.app.manage.data.message.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.message.DataMessageChannelEnum;
+import com.machine.sdk.base.envm.data.message.DataMessageChannelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

@@ -2,7 +2,7 @@ package com.machine.service.iam.role.server;
 
 import com.machine.client.iam.role.IIamRolePermissionClient;
 import com.machine.client.iam.role.dto.output.IamRolePermissionListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.iam.role.service.IIamRolePermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

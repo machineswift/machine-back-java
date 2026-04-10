@@ -2,8 +2,8 @@ package com.machine.service.iam.organization.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.sdk.common.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.common.model.dto.IdDto;
+import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.service.iam.organization.dao.IIamOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.IamOrganizationMapper;

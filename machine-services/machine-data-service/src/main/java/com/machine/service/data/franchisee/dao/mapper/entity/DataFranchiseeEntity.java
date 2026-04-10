@@ -2,10 +2,10 @@ package com.machine.service.data.franchisee.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.common.envm.DataCertificateTypeEnum;
-import com.machine.sdk.common.envm.data.DataEducationalQualificationEnum;
-import com.machine.sdk.common.envm.data.DataFranchiseeEntityTypeEnum;
-import com.machine.sdk.common.envm.data.DataWorkExperienceTypeEnum;
+import com.machine.sdk.base.envm.DataCertificateTypeEnum;
+import com.machine.sdk.base.envm.data.DataEducationalQualificationEnum;
+import com.machine.sdk.base.envm.data.DataFranchiseeEntityTypeEnum;
+import com.machine.sdk.base.envm.data.DataWorkExperienceTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

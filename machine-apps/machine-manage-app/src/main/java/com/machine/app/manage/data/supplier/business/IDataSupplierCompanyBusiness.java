@@ -4,8 +4,8 @@ import com.machine.app.manage.data.supplier.controller.vo.request.*;
 import com.machine.app.manage.data.supplier.controller.vo.response.DataSupplierCompanyDetailResponseVo;
 import com.machine.app.manage.data.supplier.controller.vo.response.DataSupplierCompanyExpandListResponseVo;
 import com.machine.app.manage.data.supplier.controller.vo.response.DataSupplierCompanySimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IDataSupplierCompanyBusiness {
 

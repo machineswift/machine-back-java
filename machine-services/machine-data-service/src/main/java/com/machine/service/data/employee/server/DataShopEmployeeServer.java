@@ -7,7 +7,7 @@ import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeHealthCert
 import com.machine.client.data.employee.dto.output.OpenapiShopEmployeeIdentityCardOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeDetailOutputDto;
 import com.machine.client.data.employee.dto.output.DataShopEmployeeListOutputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.employee.service.IDataShopEmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

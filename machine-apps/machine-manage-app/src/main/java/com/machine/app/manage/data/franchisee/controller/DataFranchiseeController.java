@@ -2,7 +2,7 @@ package com.machine.app.manage.data.franchisee.controller;
 
 import com.machine.app.manage.data.franchisee.business.IDataFranchiseeBusiness;
 import com.machine.app.manage.data.franchisee.controller.vo.response.FranchiseeDetailResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

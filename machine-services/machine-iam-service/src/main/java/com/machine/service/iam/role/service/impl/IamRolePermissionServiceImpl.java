@@ -3,9 +3,9 @@ package com.machine.service.iam.role.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.role.dto.output.IamRolePermissionListOutputDto;
-import com.machine.sdk.common.model.dto.iam.DataPermissionRuleDto;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.tool.JsonUtil;
+import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.JsonUtil;
 import com.machine.service.iam.role.dao.IIamRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.entity.IamRolePermissionRelationEntity;
 import com.machine.service.iam.role.service.IIamRolePermissionService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.machine.sdk.common.constant.CommonConstant.EMPTY_LIST_STR;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
 
 @Slf4j
 @Service

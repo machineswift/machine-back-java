@@ -1,7 +1,7 @@
 package com.machine.client.iam.role.dto.output;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

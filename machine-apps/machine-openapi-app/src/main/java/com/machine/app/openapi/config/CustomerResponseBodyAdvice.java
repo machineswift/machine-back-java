@@ -1,6 +1,6 @@
 package com.machine.app.openapi.config;
 
-import com.machine.sdk.common.model.AppResult;
+import com.machine.sdk.base.model.AppResult;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import org.springframework.core.MethodParameter;
@@ -11,17 +11,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.machine.sdk.common.model.AppResult;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.core.MethodParameter;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @RestControllerAdvice
 public class  CustomerResponseBodyAdvice implements ResponseBodyAdvice<Object> {

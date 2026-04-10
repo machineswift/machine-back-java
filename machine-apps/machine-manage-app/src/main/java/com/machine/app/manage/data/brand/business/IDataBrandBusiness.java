@@ -7,8 +7,8 @@ import com.machine.app.manage.data.brand.controller.vo.request.DataBrandUpdateSt
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandDetailResponseVo;
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandExpandListResponseVo;
 import com.machine.app.manage.data.brand.controller.vo.response.DataBrandSimpleListResponseVo;
-import com.machine.sdk.common.model.request.IdRequest;
-import com.machine.sdk.common.model.response.PageResponse;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IDataBrandBusiness {
 

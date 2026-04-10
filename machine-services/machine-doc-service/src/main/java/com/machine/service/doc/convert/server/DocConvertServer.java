@@ -1,7 +1,7 @@
 package com.machine.service.doc.convert.server;
 
 import com.machine.client.doc.convert.IDocConvertClient;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import com.machine.service.doc.convert.service.IDocConvertService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.machine.app.manage.data.brand.controller.vo.request;
 
-import com.machine.sdk.common.envm.StatusEnum;
-import com.machine.sdk.common.model.request.PageRequest;
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

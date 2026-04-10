@@ -47,7 +47,7 @@ CREATE TABLE t_data_attachment
     CONSTRAINT pk_t_data_attachment PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_t_data_attachment_01 ON t_data_attachment (entity_id);
+CREATE INDEX idx_t_data_attachment_01 ON t_data_attachment (entity_id,entity);
 CREATE INDEX idx_t_data_attachment_02 ON t_data_attachment (file_id);
 CREATE INDEX idx_t_data_attachment_03 ON t_data_attachment (expire_time);
 CREATE INDEX idx_t_data_attachment_04 ON t_data_attachment (create_by);
@@ -63,6 +63,130 @@ COMMENT ON COLUMN t_data_attachment.create_by IS '创建人';
 COMMENT ON COLUMN t_data_attachment.create_time IS '创建时间(时间戳)';
 COMMENT ON COLUMN t_data_attachment.update_by IS '更新人';
 COMMENT ON COLUMN t_data_attachment.update_time IS '更新时间(时间戳)';
+
+
+DROP TABLE IF EXISTS t_data_material_category;
+CREATE TABLE t_data_material_category
+(
+    id          VARCHAR(32) NOT NULL,
+    parent_id   VARCHAR(32) NOT NULL,
+    code        VARCHAR(32) NOT NULL,
+    name        VARCHAR(32) NOT NULL,
+    sort        BIGINT NOT NULL DEFAULT 0,
+    create_by   VARCHAR(32) NOT NULL,
+    create_time BIGINT NOT NULL,
+    update_by   VARCHAR(32) NOT NULL,
+    update_time BIGINT NOT NULL,
+    CONSTRAINT pk_t_data_material_category PRIMARY KEY (id),
+    CONSTRAINT uk_t_data_material_category_01 UNIQUE (code),
+    CONSTRAINT uk_t_data_material_category_02 UNIQUE (parent_id, name)
+);
+
+CREATE INDEX idx_t_data_material_category_01 ON t_data_material_category (update_time);
+
+COMMENT ON TABLE t_data_material_category IS '素材分类表';
+COMMENT ON COLUMN t_data_material_category.id IS 'ID';
+COMMENT ON COLUMN t_data_material_category.parent_id IS '父ID';
+COMMENT ON COLUMN t_data_material_category.code IS '编码';
+COMMENT ON COLUMN t_data_material_category.name IS '名称';
+COMMENT ON COLUMN t_data_material_category.sort IS '排序，sort值大的排序靠前';
+COMMENT ON COLUMN t_data_material_category.create_by IS '创建人';
+COMMENT ON COLUMN t_data_material_category.create_time IS '创建时间';
+COMMENT ON COLUMN t_data_material_category.update_by IS '修改人';
+COMMENT ON COLUMN t_data_material_category.update_time IS '更新时间';
+
+DROP TABLE IF EXISTS t_data_material_category_relation;
+CREATE TABLE t_data_material_category_relation
+(
+    id          VARCHAR(32) NOT NULL,
+    category_id VARCHAR(32) NOT NULL,
+    material_id VARCHAR(32) NOT NULL,
+    sort        BIGINT NOT NULL DEFAULT 0,
+    create_by   VARCHAR(32) NOT NULL,
+    create_time BIGINT NOT NULL,
+    update_by   VARCHAR(32) NOT NULL,
+    update_time BIGINT NOT NULL,
+    CONSTRAINT pk_t_data_material_category_relation PRIMARY KEY (id),
+    CONSTRAINT uk_t_data_material_category_relation_01 UNIQUE (category_id, material_id)
+);
+
+CREATE INDEX idx_t_data_material_category_relation_01 ON t_data_material_category_relation (material_id);
+
+COMMENT ON TABLE t_data_material_category_relation IS '素材与分类的关系表';
+COMMENT ON COLUMN t_data_material_category_relation.id IS 'ID';
+COMMENT ON COLUMN t_data_material_category_relation.category_id IS '分类id';
+COMMENT ON COLUMN t_data_material_category_relation.material_id IS '素材ID';
+COMMENT ON COLUMN t_data_material_category_relation.sort IS '排序';
+COMMENT ON COLUMN t_data_material_category_relation.create_by IS '创建人';
+COMMENT ON COLUMN t_data_material_category_relation.create_time IS '创建时间';
+COMMENT ON COLUMN t_data_material_category_relation.update_by IS '修改人';
+COMMENT ON COLUMN t_data_material_category_relation.update_time IS '更新时间';
+
+DROP TABLE IF EXISTS t_data_material;
+CREATE TABLE t_data_material
+(
+    id               VARCHAR(32) NOT NULL,
+    file_type        VARCHAR(16) NOT NULL,
+    attachment_id    VARCHAR(32) NOT NULL DEFAULT '',
+    process_status   VARCHAR(32) NOT NULL,
+    business_status  VARCHAR(32) NOT NULL,
+    audit_status     VARCHAR(32) NOT NULL,
+    title            VARCHAR(64) NOT NULL,
+    create_by        VARCHAR(32) NOT NULL,
+    create_time      BIGINT      NOT NULL,
+    update_by        VARCHAR(32) NOT NULL,
+    update_time      BIGINT      NOT NULL,
+    CONSTRAINT pk_t_data_material PRIMARY KEY (id)
+);
+
+CREATE INDEX idx_t_data_material_01 ON t_data_material (attachment_id);
+CREATE INDEX idx_t_data_material_02 ON t_data_material (create_by);
+CREATE INDEX idx_t_data_material_03 ON t_data_material (update_by);
+CREATE INDEX idx_t_data_material_04 ON t_data_material (update_time);
+
+COMMENT ON TABLE t_data_material IS '素材表';
+COMMENT ON COLUMN t_data_material.id IS 'ID';
+COMMENT ON COLUMN t_data_material.file_type IS '文件类型';
+COMMENT ON COLUMN t_data_material.attachment_id IS '附件ID';
+COMMENT ON COLUMN t_data_material.process_status IS '系统处理状态';
+COMMENT ON COLUMN t_data_material.business_status IS '业务状态';
+COMMENT ON COLUMN t_data_material.audit_status IS '审核状态';
+COMMENT ON COLUMN t_data_material.title IS '标题';
+COMMENT ON COLUMN t_data_material.create_by IS '创建人';
+COMMENT ON COLUMN t_data_material.create_time IS '创建时间';
+COMMENT ON COLUMN t_data_material.update_by IS '修改人';
+COMMENT ON COLUMN t_data_material.update_time IS '更新时间';
+
+
+DROP TABLE IF EXISTS t_data_material_reference;
+CREATE TABLE t_data_material_reference
+(
+    id            VARCHAR(32) NOT NULL,
+    material_id   VARCHAR(32) NOT NULL,
+    attachment_id VARCHAR(32) NOT NULL,
+    entity        VARCHAR(32) NOT NULL,
+    entity_id     VARCHAR(32) NOT NULL,
+    create_by     VARCHAR(32) NOT NULL,
+    create_time   BIGINT      NOT NULL,
+    update_by     VARCHAR(32) NOT NULL,
+    update_time   BIGINT      NOT NULL,
+    CONSTRAINT pk_t_data_material_reference PRIMARY KEY (id),
+    CONSTRAINT uk_t_data_material_reference_01 UNIQUE (material_id, entity_id, entity)
+);
+
+
+CREATE INDEX idx_t_data_material_reference_01 ON t_data_material_reference (attachment_id);
+CREATE INDEX idx_t_data_material_reference_02 ON t_data_material_reference (entity_id,entity);
+
+COMMENT ON TABLE t_data_material_reference IS '素材引用表';
+COMMENT ON COLUMN t_data_material_reference.id IS 'ID';
+COMMENT ON COLUMN t_data_material_reference.material_id IS '素材ID';
+COMMENT ON COLUMN t_data_material_reference.entity IS '实体';
+COMMENT ON COLUMN t_data_material_reference.entity_id IS '实体Id';
+COMMENT ON COLUMN t_data_material_reference.create_by IS '创建人';
+COMMENT ON COLUMN t_data_material_reference.create_time IS '创建时间(时间戳)';
+COMMENT ON COLUMN t_data_material_reference.update_by IS '更新人';
+COMMENT ON COLUMN t_data_material_reference.update_time IS '更新时间(时间戳)';
 
 
 DROP TABLE IF EXISTS t_data_download;
@@ -132,99 +256,3 @@ COMMENT ON COLUMN t_data_attachment_operation_log.create_by IS '创建人';
 COMMENT ON COLUMN t_data_attachment_operation_log.create_time IS '创建时间(时间戳)';
 COMMENT ON COLUMN t_data_attachment_operation_log.update_by IS '更新人';
 COMMENT ON COLUMN t_data_attachment_operation_log.update_time IS '更新时间(时间戳)';
-
-
-
-DROP TABLE IF EXISTS t_data_material_category;
-CREATE TABLE t_data_material_category
-(
-    id          VARCHAR(32) NOT NULL,
-    parent_id   VARCHAR(32) NOT NULL,
-    code        VARCHAR(32) NOT NULL,
-    name        VARCHAR(32) NOT NULL,
-    sort        BIGINT NOT NULL DEFAULT 0,
-    create_by   VARCHAR(32) NOT NULL,
-    create_time BIGINT NOT NULL,
-    update_by   VARCHAR(32) NOT NULL,
-    update_time BIGINT NOT NULL,
-    CONSTRAINT pk_t_data_material_category PRIMARY KEY (id),
-    CONSTRAINT uk_t_data_material_category_01 UNIQUE (code),
-    CONSTRAINT uk_t_data_material_category_02 UNIQUE (parent_id, name)
-);
-
-CREATE INDEX idx_t_data_material_category_01 ON t_data_material_category (update_time);
-
-COMMENT ON TABLE t_data_material_category IS '素材分类表';
-COMMENT ON COLUMN t_data_material_category.id IS 'ID';
-COMMENT ON COLUMN t_data_material_category.parent_id IS '父ID';
-COMMENT ON COLUMN t_data_material_category.code IS '编码';
-COMMENT ON COLUMN t_data_material_category.name IS '名称';
-COMMENT ON COLUMN t_data_material_category.sort IS '排序，sort值大的排序靠前';
-COMMENT ON COLUMN t_data_material_category.create_by IS '创建人';
-COMMENT ON COLUMN t_data_material_category.create_time IS '创建时间';
-COMMENT ON COLUMN t_data_material_category.update_by IS '修改人';
-COMMENT ON COLUMN t_data_material_category.update_time IS '更新时间';
-
-DROP TABLE IF EXISTS t_data_material_category_relation;
-CREATE TABLE t_data_material_category_relation
-(
-    id          VARCHAR(32) NOT NULL,
-    category_id VARCHAR(32) NOT NULL,
-    material_id VARCHAR(32) NOT NULL,
-    sort        BIGINT NOT NULL DEFAULT 0,
-    create_by   VARCHAR(32) NOT NULL,
-    create_time BIGINT NOT NULL,
-    update_by   VARCHAR(32) NOT NULL,
-    update_time BIGINT NOT NULL,
-    CONSTRAINT pk_t_data_material_category_relation PRIMARY KEY (id),
-    CONSTRAINT uk_t_data_material_category_relation_01 UNIQUE (category_id, material_id)
-);
-
-CREATE INDEX idx_t_data_material_category_relation_01 ON t_data_material_category_relation (material_id);
-
-COMMENT ON TABLE t_data_material_category_relation IS '素材与分类的关系表';
-COMMENT ON COLUMN t_data_material_category_relation.id IS 'ID';
-COMMENT ON COLUMN t_data_material_category_relation.category_id IS '分类id';
-COMMENT ON COLUMN t_data_material_category_relation.material_id IS '素材ID';
-COMMENT ON COLUMN t_data_material_category_relation.sort IS '排序';
-COMMENT ON COLUMN t_data_material_category_relation.create_by IS '创建人';
-COMMENT ON COLUMN t_data_material_category_relation.create_time IS '创建时间';
-COMMENT ON COLUMN t_data_material_category_relation.update_by IS '修改人';
-COMMENT ON COLUMN t_data_material_category_relation.update_time IS '更新时间';
-
-DROP TABLE IF EXISTS t_data_material;
-CREATE TABLE t_data_material
-(
-    id           VARCHAR(32) NOT NULL,
-    file_id      VARCHAR(32) NOT NULL,
-    status       VARCHAR(16) NOT NULL,
-    type         VARCHAR(8) NOT NULL,
-    title        VARCHAR(64) NOT NULL,
-    name         VARCHAR(64) NOT NULL,
-    expire_time  BIGINT NOT NULL,
-    reference_count INT DEFAULT 0,
-    create_by    VARCHAR(32) NOT NULL,
-    create_time  BIGINT NOT NULL,
-    update_by    VARCHAR(32) NOT NULL,
-    update_time  BIGINT NOT NULL,
-    CONSTRAINT pk_t_data_material PRIMARY KEY (id)
-);
-
-CREATE INDEX idx_t_data_material_01 ON t_data_material (file_id);
-CREATE INDEX idx_t_data_material_02 ON t_data_material (expire_time);
-CREATE INDEX idx_t_data_material_03 ON t_data_material (update_by);
-CREATE INDEX idx_t_data_material_04 ON t_data_material (update_time);
-
-COMMENT ON TABLE t_data_material IS '素材表';
-COMMENT ON COLUMN t_data_material.id IS 'ID';
-COMMENT ON COLUMN t_data_material.file_id IS '文件ID';
-COMMENT ON COLUMN t_data_material.status IS '状态';
-COMMENT ON COLUMN t_data_material.type IS '类型';
-COMMENT ON COLUMN t_data_material.title IS '标题';
-COMMENT ON COLUMN t_data_material.name IS '名称';
-COMMENT ON COLUMN t_data_material.expire_time IS '过期时间';
-COMMENT ON COLUMN t_data_material.reference_count IS '引用计数';
-COMMENT ON COLUMN t_data_material.create_by IS '创建人';
-COMMENT ON COLUMN t_data_material.create_time IS '创建时间';
-COMMENT ON COLUMN t_data_material.update_by IS '修改人';
-COMMENT ON COLUMN t_data_material.update_time IS '更新时间';

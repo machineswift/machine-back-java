@@ -1,8 +1,8 @@
 package com.machine.sdk.self.client;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.sdk.common.model.dto.data.WebHookInfoDto;
-import com.machine.sdk.common.tool.AESUtil;
+import com.machine.sdk.base.model.dto.data.WebHookInfoDto;
+import com.machine.sdk.base.tool.AESUtil;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.sdk.self.domain.WebHookResponseBody;
 import com.machine.sdk.self.util.SelfOkHttpUtil;

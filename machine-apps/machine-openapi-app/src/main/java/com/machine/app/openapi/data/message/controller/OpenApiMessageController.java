@@ -5,7 +5,7 @@ import com.machine.app.openapi.data.message.business.IOpenApiMessageBusiness;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiMessageSaveRequestVo;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiReadMessageRequestVo;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiSendMessageRequestVo;
-import com.machine.sdk.common.context.AppContext;
+import com.machine.sdk.base.context.AppContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

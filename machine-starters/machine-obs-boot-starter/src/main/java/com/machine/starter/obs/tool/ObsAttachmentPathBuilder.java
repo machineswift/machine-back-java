@@ -1,11 +1,10 @@
 package com.machine.starter.obs.tool;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
-import com.machine.sdk.common.envm.base.ModuleEnum;
-import com.machine.sdk.common.exception.data.DataBusinessException;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.starter.obs.path.IObsPathStrategy;
 import com.machine.starter.obs.path.impl.ObsPathStrategyImpl;
-import org.springframework.web.bind.annotation.RequestParam;
 
 public class ObsAttachmentPathBuilder {
 

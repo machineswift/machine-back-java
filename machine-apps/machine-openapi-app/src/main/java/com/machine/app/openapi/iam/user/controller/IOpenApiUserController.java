@@ -6,7 +6,7 @@ import com.machine.app.openapi.iam.user.controller.vo.request.OpenApiUserListSim
 import com.machine.app.openapi.iam.user.controller.vo.request.OpenApiUserPhoneRequestVo;
 import com.machine.app.openapi.iam.user.controller.vo.response.OpenApiUserListSimpleResponseVo;
 import com.machine.app.openapi.iam.user.controller.vo.response.OpenapiUserDetailResponseVo;
-import com.machine.sdk.common.model.response.IdResponse;
+import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -1,6 +1,6 @@
 package com.machine.app.manage.data.file.attachment.business;
 
-import com.machine.sdk.common.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IDataAttachmentBusiness {

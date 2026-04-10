@@ -2,7 +2,7 @@ package com.machine.client.iam.auth;
 
 import com.machine.client.iam.auth.dto.input.IamOauth2AuthorizationConsentInputDto;
 import com.machine.client.iam.auth.dto.output.IamOauth2AuthorizationConsentOutputDto;
-import com.machine.sdk.common.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

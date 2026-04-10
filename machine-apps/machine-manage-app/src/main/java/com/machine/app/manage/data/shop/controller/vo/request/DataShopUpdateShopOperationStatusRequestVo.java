@@ -1,6 +1,6 @@
 package com.machine.app.manage.data.shop.controller.vo.request;
 
-import com.machine.sdk.common.envm.data.shop.DataShopOperationStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

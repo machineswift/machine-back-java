@@ -10,7 +10,7 @@ import com.machine.client.data.message.dto.input.AppMessageUnreadCountInputDto;
 import com.machine.client.data.message.dto.output.AppMessageGroupCountOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListSuperOutputDto;
-import com.machine.sdk.common.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.service.data.mesage.dao.IDataAppMessageDao;
 import com.machine.service.data.mesage.dao.mapper.DataAppMessageMapper;
 import com.machine.service.data.mesage.dao.mapper.entity.DataAppMessageEntity;

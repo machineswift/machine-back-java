@@ -1,7 +1,7 @@
 package com.machine.service.iam.user.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.machine.sdk.common.model.response.IdCountResponse;
+import com.machine.sdk.base.model.response.IdCountResponse;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

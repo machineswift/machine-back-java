@@ -1,7 +1,7 @@
 
 package com.machine.service.data.shop.dao;
 
-import com.machine.sdk.common.model.dto.IdCountDto;
+import com.machine.sdk.base.model.dto.IdCountDto;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopLabelOptionRelationEntity;
 
 import java.util.List;

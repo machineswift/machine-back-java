@@ -1,8 +1,8 @@
 package com.machine.client.iam.user.dto.output;
 
-import com.machine.sdk.common.envm.iam.auth.IamAuthActionEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuthMethodEnum;
-import com.machine.sdk.common.envm.iam.auth.IamAuthResultEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
+import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.machine.starter.security.util;
 
-import com.machine.sdk.common.exception.iam.authentication.AuthTokenExpireException;
-import com.machine.sdk.common.exception.iam.authentication.AuthTokenParsingException;
+import com.machine.sdk.base.exception.iam.authentication.AuthTokenExpireException;
+import com.machine.sdk.base.exception.iam.authentication.AuthTokenParsingException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;

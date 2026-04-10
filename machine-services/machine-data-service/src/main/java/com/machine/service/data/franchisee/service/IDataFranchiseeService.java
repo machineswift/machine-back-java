@@ -6,7 +6,7 @@ import com.machine.client.data.franchisee.dto.output.DataFranchiseeListOutputDto
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeIdentityCardOutputDto;
 import com.machine.client.data.supplier.dto.input.DataFranchiseeListUserIdInputDto;
-import com.machine.sdk.common.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdRequest;
 
 import java.util.List;
 import java.util.Set;

@@ -1,9 +1,9 @@
 package com.machine.app.iam.organization.controller.vo.response;
 
-import com.machine.sdk.common.envm.data.shop.DataShopBusinessStatusEnum;
-import com.machine.sdk.common.envm.data.shop.DataShopOperationStatusEnum;
-import com.machine.sdk.common.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.common.model.tree.TreeNode;
+import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
+import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
+import com.machine.sdk.base.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

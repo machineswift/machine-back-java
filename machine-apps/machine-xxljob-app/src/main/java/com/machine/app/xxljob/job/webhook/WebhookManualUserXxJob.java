@@ -5,8 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.input.IamUserQueryListOffsetInputDto;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
-import com.machine.sdk.common.context.AppContext;
-import com.machine.sdk.common.model.dto.IdDto;
+import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.starter.mq.function.CustomerStreamBridge;
 import com.xxl.job.core.context.XxlJobHelper;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.machine.sdk.common.constant.ContextConstant.SYSTEM_USER_ID;
+import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 @Slf4j
 @Component

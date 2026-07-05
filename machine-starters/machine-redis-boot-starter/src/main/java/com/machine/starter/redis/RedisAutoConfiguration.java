@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import io.lettuce.core.*;
-import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -52,7 +51,7 @@ public class RedisAutoConfiguration {
     }
 
     @Bean
-    public RedisClient lettuceRedisClient() {
+    public io.lettuce.core.RedisClient lettuceRedisClient() {
         RedisURI redisUri = RedisURI.builder()
                 .withHost(redisProperties.getHost())
                 .withPort(redisProperties.getPort()).withAuthentication(
@@ -61,11 +60,11 @@ public class RedisAutoConfiguration {
                 .withTimeout(Duration.ofMillis(3000))
                 .build();
 
-        return RedisClient.create(redisUri);
+        return io.lettuce.core.RedisClient.create(redisUri);
     }
 
     @Bean
-    public StatefulRedisConnection<String, String> connection(RedisClient redisClient) {
+    public StatefulRedisConnection<String, String> connection(io.lettuce.core.RedisClient redisClient) {
         redisClient.setOptions(ClientOptions.builder()
                 .socketOptions(SocketOptions.builder()
                         .keepAlive(true)
@@ -167,4 +166,3 @@ public class RedisAutoConfiguration {
         redisCommands.ping();
     }
 }
-

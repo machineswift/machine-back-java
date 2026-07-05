@@ -27,3 +27,12 @@ spring:
     import:
       - nacos:machine.yaml?refreshEnabled=true
       - nacos:${spring.application.name}.yaml?refreshEnabled=true
+
+logging:
+  level:
+    org:
+      springframework:
+        ai:
+          chat:
+            client:
+              advisor: DEBUG

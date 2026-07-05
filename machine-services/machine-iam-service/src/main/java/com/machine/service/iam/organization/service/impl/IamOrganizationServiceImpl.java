@@ -20,8 +20,8 @@ import com.machine.service.iam.organization.dao.IIamOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.entity.IamOrganizationEntity;
 import com.machine.service.iam.organization.service.IIamOrganizationService;
 import com.machine.service.iam.user.dao.IIamUserOrganizationRelationDao;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -49,7 +49,7 @@ public class IamOrganizationServiceImpl implements IIamOrganizationService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IIamOrganizationDao organizationDao;

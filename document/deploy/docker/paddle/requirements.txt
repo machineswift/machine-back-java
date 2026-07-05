@@ -1,0 +1,7 @@
+paddleocr[all]
+fastapi
+uvicorn[standard]
+python-multipart
+aiofiles
+Pillow
+pdf2image

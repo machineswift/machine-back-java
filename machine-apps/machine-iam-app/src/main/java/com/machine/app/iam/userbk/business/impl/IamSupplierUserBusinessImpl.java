@@ -27,7 +27,7 @@ import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public class IamSupplierUserBusinessImpl implements IIamSupplierUserBusiness {
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IamUserBusinessImpl userBusiness;

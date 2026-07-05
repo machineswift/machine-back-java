@@ -25,8 +25,8 @@ import com.machine.service.iam.user.dao.IIamUserDao;
 import com.machine.service.iam.user.dao.IIamUserPermissionRelationDao;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserEntity;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserPermissionRelationEntity;
-import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.iam.RedisIamPermissionCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -55,7 +55,7 @@ public class IamPermissionServiceImpl implements IIamPermissionService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheIamPermission redisCacheIamPermission;
+    private RedisIamPermissionCache redisIamPermissionCache;
 
     @Autowired
     private IIamRoleDao roleDao;
@@ -417,7 +417,7 @@ public class IamPermissionServiceImpl implements IIamPermissionService {
     }
 
     private void throwCodeAlreadyExists(String permissionId) {
-        IamPermissionTreeOutputDto treeAllOutputDto = redisCacheIamPermission.treeAll();
+        IamPermissionTreeOutputDto treeAllOutputDto = redisIamPermissionCache.treeAll();
         //找到指定的节点
         IamPermissionTreeOutputDto treeNode = TreeUtil.findNode(treeAllOutputDto, permissionId);
 

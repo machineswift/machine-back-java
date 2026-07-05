@@ -73,30 +73,9 @@ public class RedisLockPrefixConstant {
         public static final String LOCK_DATA_ORGANIZATION_TREE = "lock:data:organization:tree:";
 
         /**
-         * 素材地址
-         */
-        public static final String LOCK_DATA_MATERIAL_URL =  "lock:data:material:url:";
-
-        /**
-         * 素材缩略图地址
-         */
-        public static final String LOCK_DATA_MATERIAL_THUMBNAIL_URL =  "lock:data:material:thumbnailUrl:";
-
-        /**
          * 素材分类
          */
         public static final String LOCK_DATA_MATERIAL_CATEGORY_TREE = "lock:data:materialCategory:tree";
-
-
-        /**
-         * 附件地址
-         */
-        public static final String LOCK_DATA_ATTACHMENT_URL =  "lock:data:attachment:url:";
-
-        /**
-         * 附件缩略图地址
-         */
-        public static final String LOCK_DATA_ATTACHMENT_THUMBNAIL_URL =  "lock:data:attachment:thumbnailUrl:";
 
         /**
          * 智能标签分类
@@ -111,5 +90,18 @@ public class RedisLockPrefixConstant {
          */
         public static final String LOCK_HRM_DEPARTMENT_TREE = "lock:hrm:department:tree:";
     }
+
+    public static class Scm {
+        /**
+         * 后台分类树
+         */
+        public static final String LOCK_SCM_BACK_CATEGORY_TREE = "lock:scm:backCategory:tree";
+
+        /**
+         * 前台分类树
+         */
+        public static final String LOCK_SCM_FRONT_CATEGORY_TREE = "lock:scm:frontCategory:tree";
+    }
+
 
 }

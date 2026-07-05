@@ -15,7 +15,7 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
-import com.machine.starter.redis.cache.data.RedisCacheDataTagCategory;
+import com.machine.starter.redis.cache.data.RedisDataTagCategoryCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import java.util.Set;
 public class DataTagCategoryBusinessImpl implements IDataTagCategoryBusiness {
 
     @Autowired
-    private RedisCacheDataTagCategory dataTagCategoryCache;
+    private RedisDataTagCategoryCache dataTagCategoryCache;
 
     @Autowired
     private IIamUserClient userClient;

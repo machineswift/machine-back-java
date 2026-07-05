@@ -51,7 +51,7 @@ PostgreSQL 由 [schema.sql](postgresql/table/schema.sql) 建库，当前定义�
 | 服务 | 脚本位置 | 说明 |
 |------|----------|------|
 | 建库 | [schema.sql](postgresql/table/schema.sql) | 创建上述所有 PostgreSQL 数据库 |
-| IAM | [machine-iam-table.sql](postgresql/table/machine-iam-table.sql) | 用户、角色、权限、组织 |
+| IAM | [machine-iam-base-table.sql](postgresql/table/iam/machine-iam-base-table.sql) | 用户、角色、权限、组织 |
 | HRM | [machine-hrm-table.sql](postgresql/table/machine-hrm-table.sql) | 员工、部门、组织架构 |
 | Data | [table/data/](postgresql/table/data/) | 门店、标签、素材、附件：`machine-data-base-table.sql`、`machine-data-tag-table.sql`、`machine-data-file-table.sql`、`machine-scm-product-table.sql` |
 | CRM | [table/crm/](postgresql/table/crm/) | [身份标识](postgresql/table/crm/machine-crm-identity-table.sql)、[业务数据](postgresql/table/crm/machine-crm-business-table.sql) |
@@ -90,7 +90,7 @@ document/database/
 └── postgresql/                                  # PostgreSQL（业务数据）
     ├── table/                                   # 表结构定义
     │   ├── schema.sql                           # 建库脚本（各业务库）
-    │   ├── machine-iam-table.sql                # IAM 用户、角色、权限、组织
+    │   ├── machine-iam-base-table.sql                # IAM 用户、角色、权限、组织
     │   ├── machine-hrm-table.sql                # HRM 员工、部门、组织架构
     │   ├── data/                                # 数据管理服务（门店/标签/素材/附件）
     │   │   ├── machine-data-base-table.sql           # 主表

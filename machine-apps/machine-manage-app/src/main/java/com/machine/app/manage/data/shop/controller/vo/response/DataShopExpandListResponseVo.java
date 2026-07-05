@@ -3,7 +3,7 @@ package com.machine.app.manage.data.shop.controller.vo.response;
 import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

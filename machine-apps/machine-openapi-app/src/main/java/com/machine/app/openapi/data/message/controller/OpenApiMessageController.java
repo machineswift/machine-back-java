@@ -5,7 +5,7 @@ import com.machine.app.openapi.data.message.business.IOpenApiMessageBusiness;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiMessageSaveRequestVo;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiReadMessageRequestVo;
 import com.machine.app.openapi.data.message.controller.vo.request.OpenApiSendMessageRequestVo;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class OpenApiMessageController {
     @PostMapping("save")
     @PreAuthorize("hasAnyAuthority('data','data_message')")
     Boolean saveMessageRecord(@RequestBody @Validated OpenApiMessageSaveRequestVo request) {
-        log.info("新增消息，clientId={} request={}", AppContext.getContext().getClientId(), JSONUtil.toJsonStr(request));
+        log.info("新增消息，clientId={} request={}", AppContextHolder.getContext().getClientId(), JSONUtil.toJsonStr(request));
         return messageBusiness.save(request);
     }
 
@@ -38,7 +38,7 @@ public class OpenApiMessageController {
     @PostMapping("send")
     @PreAuthorize("hasAnyAuthority('data','data_message')")
     Boolean sendMessage(@RequestBody @Validated OpenApiSendMessageRequestVo request) {
-        log.info("发送消息，clientId={} request={}", AppContext.getContext().getClientId(), JSONUtil.toJsonStr(request));
+        log.info("发送消息，clientId={} request={}", AppContextHolder.getContext().getClientId(), JSONUtil.toJsonStr(request));
         return messageBusiness.send(request);
     }
 
@@ -47,7 +47,7 @@ public class OpenApiMessageController {
     @PostMapping("read")
     @PreAuthorize("hasAnyAuthority('data','data_message')")
     Boolean readMessage(@RequestBody @Validated OpenApiReadMessageRequestVo request) {
-        log.info("消息改成已读，clientId={} request={}", AppContext.getContext().getClientId(), JSONUtil.toJsonStr(request));
+        log.info("消息改成已读，clientId={} request={}", AppContextHolder.getContext().getClientId(), JSONUtil.toJsonStr(request));
         return messageBusiness.read(request);
     }
 
@@ -55,7 +55,7 @@ public class OpenApiMessageController {
     @PostMapping("dispose")
     @PreAuthorize("hasAnyAuthority('data','data_message')")
     Boolean disposeMessage(@RequestBody @Validated OpenApiReadMessageRequestVo request) {
-        log.info("消息改成已处理，clientId={} request={}", AppContext.getContext().getClientId(), JSONUtil.toJsonStr(request));
+        log.info("消息改成已处理，clientId={} request={}", AppContextHolder.getContext().getClientId(), JSONUtil.toJsonStr(request));
         return messageBusiness.dispose(request);
     }
 

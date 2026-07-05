@@ -5,7 +5,7 @@ package com.machine.starter.redis.constant;
  */
 public class RedisPrefix4DataConstant {
 
-    public static class Area{
+    public static class Area {
         /**
          * 区域树 key
          */
@@ -20,7 +20,7 @@ public class RedisPrefix4DataConstant {
     public static class File {
 
         /**
-         *  文件地址
+         * 文件地址
          */
         public static final String DATA_DOCUMENT_FILE_URL_KEY = "data:document:file:url:key:";
 
@@ -28,20 +28,6 @@ public class RedisPrefix4DataConstant {
          * 文件缩略图地址（图片）
          */
         public static final String DATA_DOCUMENT_FILE_THUMBNAIL_URL_KEY = "data:document:file:thumbnailUrl:key:";
-    }
-
-
-    public static class Material {
-
-        /**
-         * 素材地址
-         */
-        public static final String DATA_MATERIAL_URL_KEY = "data:material:url:key:";
-
-        /**
-         * 素材缩略图地址
-         */
-        public static final String DATA_MATERIAL_THUMBNAIL_URL_KEY = "data:material:thumbnailUrl:key:";
     }
 
     public static class MaterialCategory {
@@ -55,20 +41,6 @@ public class RedisPrefix4DataConstant {
          * 素材分类 数据
          */
         public static final String DATA_MATERIAL_CATEGORY_TREE_DATA = "data:materialCategory:tree:data:";
-    }
-
-
-    public static class Attachment {
-
-        /**
-         * 附件地址
-         */
-        public static final String DATA_ATTACHMENT_URL_KEY = "data:attachment:url:key:";
-
-        /**
-         * 附件缩略图地址
-         */
-        public static final String DATA_ATTACHMENT_THUMBNAIL_URL_KEY = "data:attachment:thumbnailUrl:key:";
     }
 
 

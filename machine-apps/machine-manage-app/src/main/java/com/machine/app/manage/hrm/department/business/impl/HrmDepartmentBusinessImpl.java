@@ -17,7 +17,7 @@ import com.machine.client.hrm.employee.dto.output.HrmEmployeeListOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.hrm.RedisCacheHrmDepartment;
+import com.machine.starter.redis.cache.hrm.RedisHrmDepartmentCache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class HrmDepartmentBusinessImpl implements IHrmDepartmentBusiness {
 
     @Autowired
-    private RedisCacheHrmDepartment departmentCache;
+    private RedisHrmDepartmentCache departmentCache;
 
     @Autowired
     private IHrmDepartmentClient departmentClient;

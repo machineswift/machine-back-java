@@ -406,16 +406,16 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public DataShopEntity getByCode(String code) {
-        Wrapper<DataShopEntity> queryWrapper = new LambdaQueryWrapper<DataShopEntity>()
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
                 .eq(DataShopEntity::getCode, code);
-        return shopMapper.selectOne(queryWrapper);
+        return shopMapper.selectOne(wrapper);
     }
 
     @Override
     public DataShopEntity getByName(String name) {
-        Wrapper<DataShopEntity> queryWrapper = new LambdaQueryWrapper<DataShopEntity>()
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
                 .eq(DataShopEntity::getName, name);
-        return shopMapper.selectOne(queryWrapper);
+        return shopMapper.selectOne(wrapper);
     }
 
     @Override
@@ -438,16 +438,16 @@ public class DataShopDaoImpl implements IDataShopDao {
 
     @Override
     public List<DataShopEntity> selectByIdSet(Set<String> idSet) {
-        Wrapper<DataShopEntity> queryWrapper = new LambdaQueryWrapper<DataShopEntity>()
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
                 .in(DataShopEntity::getId, idSet);
-        return shopMapper.selectList(queryWrapper);
+        return shopMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataShopEntity> selectByCodeSet(Set<String> codeSet) {
-        Wrapper<DataShopEntity> queryWrapper = new LambdaQueryWrapper<DataShopEntity>()
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
                 .in(DataShopEntity::getCode, codeSet);
-        return shopMapper.selectList(queryWrapper);
+        return shopMapper.selectList(wrapper);
     }
 
     @Override

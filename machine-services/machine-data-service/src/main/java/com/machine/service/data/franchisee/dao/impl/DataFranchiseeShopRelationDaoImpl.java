@@ -49,15 +49,15 @@ public class DataFranchiseeShopRelationDaoImpl implements IDataFranchiseeShopRel
 
     @Override
     public DataFranchiseeShopRelationEntity getByShopId(String shopId) {
-        Wrapper<DataFranchiseeShopRelationEntity> queryWrapper = new LambdaQueryWrapper<DataFranchiseeShopRelationEntity>()
+        Wrapper<DataFranchiseeShopRelationEntity> wrapper = new LambdaQueryWrapper<DataFranchiseeShopRelationEntity>()
                 .eq(DataFranchiseeShopRelationEntity::getShopId, shopId);
-        return franchiseeShopRelationMapper.selectOne(queryWrapper);
+        return franchiseeShopRelationMapper.selectOne(wrapper);
     }
 
     @Override
     public List<DataFranchiseeShopRelationEntity> getByFranchiseeId(String franchiseeId) {
-        Wrapper<DataFranchiseeShopRelationEntity> queryWrapper = new LambdaQueryWrapper<DataFranchiseeShopRelationEntity>()
+        Wrapper<DataFranchiseeShopRelationEntity> wrapper = new LambdaQueryWrapper<DataFranchiseeShopRelationEntity>()
                 .eq(DataFranchiseeShopRelationEntity::getFranchiseeId, franchiseeId);
-        return franchiseeShopRelationMapper.selectList(queryWrapper);
+        return franchiseeShopRelationMapper.selectList(wrapper);
     }
 }

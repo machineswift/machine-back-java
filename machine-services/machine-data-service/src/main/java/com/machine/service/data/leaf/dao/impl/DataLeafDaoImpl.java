@@ -25,10 +25,10 @@ public class DataLeafDaoImpl implements IDataLeafDao {
             return null;
         }
 
-        Wrapper<DataLeafEntity> queryWrapper = new LambdaQueryWrapper<DataLeafEntity>()
+        Wrapper<DataLeafEntity> wrapper = new LambdaQueryWrapper<DataLeafEntity>()
                 .eq(DataLeafEntity::getBizTag, entity.getBizTag());
 
-        DataLeafEntity leafAlloc = dataLeafMapper.selectOne(queryWrapper);
+        DataLeafEntity leafAlloc = dataLeafMapper.selectOne(wrapper);
         if (null == leafAlloc) {
             if (null == entity.getStep() || entity.getStep() < 1) {
                 return null;
@@ -36,13 +36,13 @@ public class DataLeafDaoImpl implements IDataLeafDao {
             leafAlloc = JSONUtil.toBean(JSONUtil.toJsonStr(entity), DataLeafEntity.class);
             dataLeafTransactional.insert(leafAlloc);
             if (null != leafAlloc.getId()) {
-                leafAlloc = dataLeafMapper.selectOne(queryWrapper);
+                leafAlloc = dataLeafMapper.selectOne(wrapper);
             }
         }
 
         Integer result = dataLeafTransactional.updateMaxId(leafAlloc);
         while (null == result || result < 1) {
-            leafAlloc = dataLeafMapper.selectOne(queryWrapper);
+            leafAlloc = dataLeafMapper.selectOne(wrapper);
             result = dataLeafTransactional.updateMaxId(leafAlloc);
         }
         return leafAlloc;

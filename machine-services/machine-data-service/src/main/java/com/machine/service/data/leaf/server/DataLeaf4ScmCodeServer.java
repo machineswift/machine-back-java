@@ -20,6 +20,18 @@ public class DataLeaf4ScmCodeServer implements IDataLeaf4ScmCodeClient {
     private IDataLeafService leafService;
 
     @Override
+    @GetMapping("back_category_code")
+    public String backCategoryCode() {
+        return generateCode(CodePrefix.BACK_CATEGORY_CODE);
+    }
+
+    @Override
+    @GetMapping("front_category_code")
+    public String frontCategoryCode() {
+        return generateCode(CodePrefix.FRONT_CATEGORY_CODE);
+    }
+
+    @Override
     @GetMapping("supplier_code")
     public String supplierCode() {
         return generateCode(CodePrefix.SUPPLIER_CODE);
@@ -42,6 +54,8 @@ public class DataLeaf4ScmCodeServer implements IDataLeaf4ScmCodeClient {
     }
 
     private enum CodePrefix {
+        BACK_CATEGORY_CODE("BACK_CATEGORY_CODE_", "BC", "后台分类编码"),
+        FRONT_CATEGORY_CODE("FRONT_CATEGORY_CODE_", "FC", "前台分类编码"),
         SUPPLIER_CODE("SCM_SUPPLIER_CODE_", "GYS", "供应商编码"),
         FRANCHISEE_CODE("SCM_FRANCHISEE_CODE_", "JMS", "加盟商编码");
 

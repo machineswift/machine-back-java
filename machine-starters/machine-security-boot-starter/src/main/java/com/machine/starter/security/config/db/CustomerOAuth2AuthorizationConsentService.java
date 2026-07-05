@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationConsentClient;
 import com.machine.client.iam.auth.dto.input.IamOauth2AuthorizationConsentInputDto;
 import com.machine.client.iam.auth.dto.output.IamOauth2AuthorizationConsentOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.util.Assert;
@@ -24,7 +24,7 @@ public class CustomerOAuth2AuthorizationConsentService implements OAuth2Authoriz
 
     @Override
     public void save(OAuth2AuthorizationConsent authorizationConsent) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         Assert.notNull(authorizationConsent, "authorizationConsent cannot be null");
         OAuth2AuthorizationConsent existingAuthorizationConsent = findById(authorizationConsent.getRegisteredClientId(),
                 authorizationConsent.getPrincipalName());
@@ -37,7 +37,7 @@ public class CustomerOAuth2AuthorizationConsentService implements OAuth2Authoriz
 
     @Override
     public void remove(OAuth2AuthorizationConsent authorizationConsent) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOauth2AuthorizationConsentInputDto dto = new IamOauth2AuthorizationConsentInputDto();
         BeanUtil.copyProperties(authorizationConsent, dto);
         authorizationConsentClient.remove(dto);
@@ -45,7 +45,7 @@ public class CustomerOAuth2AuthorizationConsentService implements OAuth2Authoriz
 
     @Override
     public OAuth2AuthorizationConsent findById(String registeredClientId, String principalName) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOauth2AuthorizationConsentInputDto dto = new IamOauth2AuthorizationConsentInputDto();
         dto.setRegisteredClientId(registeredClientId);
         dto.setPrincipalName(principalName);

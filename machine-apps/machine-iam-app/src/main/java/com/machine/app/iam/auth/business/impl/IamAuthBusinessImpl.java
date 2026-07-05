@@ -21,7 +21,7 @@ import com.machine.client.iam.user.IIamUserLoginLogClient;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.data.sms.DataSmsCategoryEnum;
 import com.machine.sdk.base.envm.data.sms.DataSmsIamAuthActionEnum;
 import com.machine.sdk.base.envm.data.sms.DataSmsSendResultEnum;
@@ -33,11 +33,12 @@ import com.machine.sdk.base.exception.iam.authentication.AuthTokenUseException;
 import com.machine.sdk.base.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.tool.StringUtil;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.sdk.base.tool.UUIDv7;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.MachineJwtUtil;
+import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
 import com.machine.starter.security.util.LoginLogUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
@@ -55,7 +56,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Iam.LOCK_IAM_AUTH_SMS_CAPTCHA_FORGET_PASSWORD_GET_CAPTCHA;
@@ -109,7 +109,7 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
         ImageIO.write(image, "png", bos);
         byte[] imageBytes = bos.toByteArray();
 
-        String userKey = IAM_AUTH_PIC_CAPTCHA + UUID.randomUUID().toString().replace("-", "");
+        String userKey = IAM_AUTH_PIC_CAPTCHA + UUIDv7.generateWithoutDashes();
         customerRedisCommands.set(userKey, captchaCode, CAPTCHA_EXPIRATION_TIME);
         log.info("获取验证码,userKey:{} captcha:{}", userKey, captchaCode);
         return new IamAuthCaptchaResponseVo(userKey, "data:image/png;base64," + Base64Encoder.encode(imageBytes));
@@ -147,7 +147,7 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
             lock.unlock();
         }
 
-        AppContext.getContext().setUserId(iamUserDto.getUserId());
+        AppContextHolder.getContext().setUserId(iamUserDto.getUserId());
 
         //验证发送次数
         DataSmsCountRecordInputDto captchaRecordInputDto = new DataSmsCountRecordInputDto();
@@ -209,7 +209,7 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
             lock.unlock();
         }
 
-        AppContext.getContext().setUserId(iamUserDto.getUserId());
+        AppContextHolder.getContext().setUserId(iamUserDto.getUserId());
 
         //验证发送次数
         DataSmsCountRecordInputDto captchaRecordInputDto = new DataSmsCountRecordInputDto();
@@ -242,22 +242,22 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
     @Override
     public IamAuthLoginResponse accessToken(IamAuthAccessTokenRequestVo request) {
         String refreshToken = request.getRefreshToken();
-        Claims claims = machineJwtUtil.getClaimsByToken(refreshToken);
+        JwtClaims claims = machineJwtUtil.getClaimsByToken(refreshToken);
         if (null == claims.get(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
             throw new AuthTokenUseException("AccessToken不能用于换取Token");
         }
 
-        AppContext.getContext().setUserId(claims.get(USER_ID_KEY, String.class));
+        AppContextHolder.getContext().setUserId(claims.getStr(USER_ID_KEY));
         //验证是否为黑名单
         if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claims.getId())) {
             throw new JwtTokenBlackException("refreshToken失效，请重新登录");
         }
 
-        String accessTokenId = UUID.randomUUID().toString().replaceAll("-", "");
+        String accessTokenId = UUIDv7.generateWithoutDashes();
         long accessTokenExpire = System.currentTimeMillis() + AUTH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4AuthToken = new HashMap<>();
         claimMap4AuthToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, accessTokenId);
-        claimMap4AuthToken.put(USER_ID_KEY, claims.get(USER_ID_KEY, String.class));
+        claimMap4AuthToken.put(USER_ID_KEY, claims.getStr(USER_ID_KEY));
 
         //生成 jwt token
         String accessToken = machineJwtUtil.generateToken(
@@ -266,7 +266,7 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
                 accessTokenExpire);
 
         //新增登录成功日志
-        IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContext.getContext().getUserId()));
+        IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContextHolder.getContext().getUserId()));
         IamUserLoginLogCreateInputDto inputDto = LoginLogUtil.getUserLoginLogCreateInputDto(userSimple);
         inputDto.setAuthAction(IamAuthActionEnum.REFRESH_TOKEN);
         inputDto.setAuthMethod(IamAuthMethodEnum.REFRESH_TOKEN);

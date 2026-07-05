@@ -1,0 +1,25 @@
+package com.machine.client.scm.property.dto.input;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Schema
+@NoArgsConstructor
+public class ScmPropertyGroupCreateInputDto {
+
+    @NotBlank(message = "后台分类ID不能为空")
+    @Schema(description = "后台分类ID", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String backCategoryId;
+
+    @NotBlank(message = "分组名称不能为空")
+    @Schema(description = "分组名称", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String name;
+
+    @NotNull(message = "排序不能为空")
+    @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Long sort;
+}

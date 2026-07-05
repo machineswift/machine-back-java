@@ -3,13 +3,13 @@ package com.machine.app.xxljob.job;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.json.JSONUtil;
-import com.machine.client.data.file.download.IDataDownloadClient;
-import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
-import com.machine.client.data.file.download.dto.input.DataDownloadUpdateInputDto;
-import com.machine.client.data.file.download.dto.input.DataDownloadQueryInputDto;
-import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
-import com.machine.sdk.base.envm.data.file.DataDownloadStatusEnum;
+import com.machine.client.data.filecenter.download.IDataDownloadClient;
+import com.machine.client.data.filecenter.download.dto.input.DataDownloadContentDto;
+import com.machine.client.data.filecenter.download.dto.input.DataDownloadUpdateInputDto;
+import com.machine.client.data.filecenter.download.dto.input.DataDownloadQueryInputDto;
+import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
+import com.machine.sdk.base.context.AppContextHolder;
+import com.machine.sdk.base.envm.data.filecenter.DataDownloadStatusEnum;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class DownloadXxJob {
         XxlJobHelper.log("XXL-JOB,下载中心调度任务 start .....");
 
         try {
-            AppContext.getContext().setUserId(SYSTEM_USER_ID);
+            AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
 
             DataDownloadQueryInputDto queryRunningInputDto = new DataDownloadQueryInputDto();
             queryRunningInputDto.setStatus(DataDownloadStatusEnum.RUNNING);
@@ -129,7 +129,7 @@ public class DownloadXxJob {
             XxlJobHelper.handleFail("XXL-JOB,下载中心调度任务 fail:" + e.getMessage());
         } finally {
             XxlJobHelper.log("XXL-JOB,下载中心调度任务 end .....");
-            AppContext.getContext().clear();
+            AppContextHolder.getContext().clear();
         }
     }
 
@@ -137,7 +137,7 @@ public class DownloadXxJob {
      * 执行任务
      */
     private void executeTask(DataDownloadDetailOutputDto outputDto) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
 
         //内容
         String id = outputDto.getId();
@@ -163,22 +163,22 @@ public class DownloadXxJob {
             finish.setId(id);
             finish.setStatus(DataDownloadStatusEnum.FINISH);
             finish.setAttachmentId(attachmentId);
+            finish.setFailCause("");
             downloadClient.update(finish);
         } catch (Exception e) {
             //异常处理
             DataDownloadUpdateInputDto fail = new DataDownloadUpdateInputDto();
             fail.setId(id);
-            fail.setFailCause(e.getMessage());
             fail.setStatus(DataDownloadStatusEnum.FAIL);
             //重试机制
             if (contentDto.getUsageCount() >= contentDto.getFailRetryNumber()) {
                 //关闭
                 fail.setStatus(DataDownloadStatusEnum.DEAD);
             }
-            fail.setFailCause(ExceptionUtil.stacktraceToString(e));
+            fail.setFailCause(ExceptionUtil.stacktraceToString(e, -1));
             downloadClient.update(fail);
         } finally {
-            AppContext.getContext().clear();
+            AppContextHolder.getContext().clear();
         }
     }
 }

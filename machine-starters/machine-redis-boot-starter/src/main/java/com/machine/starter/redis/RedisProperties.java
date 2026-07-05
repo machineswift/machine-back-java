@@ -13,5 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 public class RedisProperties {
     private String host;
     private Integer port;
+    private int database;
     private String password;
 }

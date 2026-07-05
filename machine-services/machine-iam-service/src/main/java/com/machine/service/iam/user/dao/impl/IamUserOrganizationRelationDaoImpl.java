@@ -11,7 +11,7 @@ import com.machine.service.iam.user.dao.IIamUserOrganizationRelationDao;
 import com.machine.service.iam.user.dao.mapper.IamUserOrganizationRelationMapper;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserOrganizationRelationEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -104,16 +104,16 @@ public class IamUserOrganizationRelationDaoImpl implements IIamUserOrganizationR
 
     @Override
     public List<IamUserOrganizationRelationEntity> listByUserId(String userId) {
-        Wrapper<IamUserOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserOrganizationRelationEntity>()
+        Wrapper<IamUserOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<IamUserOrganizationRelationEntity>()
                 .eq(IamUserOrganizationRelationEntity::getUserId, userId);
-        return userOrganizationRelationMapper.selectList(queryWrapper);
+        return userOrganizationRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<IamUserOrganizationRelationEntity> listByOrganizationIdSet(Set<String> organizationIdIdSet) {
-        Wrapper<IamUserOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserOrganizationRelationEntity>()
+        Wrapper<IamUserOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<IamUserOrganizationRelationEntity>()
                 .in(IamUserOrganizationRelationEntity::getOrganizationId, organizationIdIdSet);
-        return userOrganizationRelationMapper.selectList(queryWrapper);
+        return userOrganizationRelationMapper.selectList(wrapper);
     }
 
 

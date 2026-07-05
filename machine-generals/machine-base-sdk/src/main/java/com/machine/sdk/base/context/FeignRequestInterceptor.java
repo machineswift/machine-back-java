@@ -1,6 +1,7 @@
 package com.machine.sdk.base.context;
 
 import com.machine.sdk.base.annotation.SkipUserIdCheck;
+import com.machine.sdk.base.envm.ai.AiModelNameTypeEnum;
 import com.machine.sdk.base.exception.iam.authentication.AuthFeignUserIdException;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -11,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.machine.sdk.base.constant.ContextConstant.AI_MODEL_CODE;
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
 @Slf4j
@@ -21,17 +23,25 @@ public class FeignRequestInterceptor implements RequestInterceptor {
     @Override
     @SneakyThrows
     public void apply(RequestTemplate template) {
-        String userId = AppContext.getContext().getUserId();
-
-        if (null == userId || userId.trim().isEmpty()) {
-            if (shouldSkipUserIdCheck(template)) {
-                return;
+        {
+            String userId = AppContextHolder.getContext().getUserId();
+            if (null == userId || userId.trim().isEmpty()) {
+                if (shouldSkipUserIdCheck(template)) {
+                    return;
+                }
+                String feignMethod = template.feignTarget().name() + template.path();
+                log.warn("用户Id丢失，feign method:{}", feignMethod);
+                throw new AuthFeignUserIdException("用户Id丢失");
             }
-            String feignMethod = template.feignTarget().name() + template.path();
-            log.warn("用户Id丢失，feign method:{}", feignMethod);
-            throw new AuthFeignUserIdException("用户Id丢失");
+            template.header(USER_ID_KEY, userId);
         }
-        template.header(USER_ID_KEY, userId);
+
+        {
+            AiModelNameTypeEnum modelType = AppAiContextHolder.getContext().getModelType();
+            if (null != modelType) {
+                template.header(AI_MODEL_CODE, modelType.getName());
+            }
+        }
     }
 
     private boolean shouldSkipUserIdCheck(RequestTemplate template) {

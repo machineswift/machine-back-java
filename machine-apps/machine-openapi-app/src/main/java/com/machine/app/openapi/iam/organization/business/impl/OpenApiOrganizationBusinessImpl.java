@@ -12,7 +12,7 @@ import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleO
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.tree.TreeNode;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.List;
 public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusiness {
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IIamOrganizationClient organizationClient;

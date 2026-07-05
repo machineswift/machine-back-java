@@ -9,7 +9,7 @@ import com.machine.service.iam.organization.dao.IIamOrganizationDao;
 import com.machine.service.iam.organization.dao.mapper.IamOrganizationMapper;
 import com.machine.service.iam.organization.dao.mapper.entity.IamOrganizationEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -111,16 +111,16 @@ public class IamOrganizationDaoImpl implements IIamOrganizationDao {
     @Override
     public IamOrganizationEntity getByParentIdAndName(String parentId,
                                                       String name) {
-        Wrapper<IamOrganizationEntity> queryWrapper = new LambdaQueryWrapper<IamOrganizationEntity>()
+        Wrapper<IamOrganizationEntity> wrapper = new LambdaQueryWrapper<IamOrganizationEntity>()
                 .eq(IamOrganizationEntity::getParentId, parentId)
                 .eq(IamOrganizationEntity::getName, name);
-        return organizationMapper.selectOne(queryWrapper);
+        return organizationMapper.selectOne(wrapper);
     }
 
     @Override
     public List<IamOrganizationEntity> listAllByType(IamOrganizationTypeEnum organizationType) {
-        Wrapper<IamOrganizationEntity> queryWrapper = new LambdaQueryWrapper<IamOrganizationEntity>()
+        Wrapper<IamOrganizationEntity> wrapper = new LambdaQueryWrapper<IamOrganizationEntity>()
                 .eq(IamOrganizationEntity::getType, organizationType);
-        return organizationMapper.selectList(queryWrapper);
+        return organizationMapper.selectList(wrapper);
     }
 }

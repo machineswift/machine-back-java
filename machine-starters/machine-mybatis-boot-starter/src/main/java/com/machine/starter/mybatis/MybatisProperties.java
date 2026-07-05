@@ -11,5 +11,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:machine-mybatis.yml", factory = YamlPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "machine.mybatis")
 public class MybatisProperties {
-    private String example;
+    private String secret;
 }

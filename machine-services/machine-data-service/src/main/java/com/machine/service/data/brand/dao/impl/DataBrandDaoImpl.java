@@ -53,9 +53,9 @@ public class DataBrandDaoImpl implements IDataBrandDao {
 
     @Override
     public DataBrandEntity getByName(String name) {
-        Wrapper<DataBrandEntity> queryWrapper = new LambdaQueryWrapper<DataBrandEntity>()
+        Wrapper<DataBrandEntity> wrapper = new LambdaQueryWrapper<DataBrandEntity>()
                 .eq(DataBrandEntity::getName, name);
-        return brandMapper.selectOne(queryWrapper);
+        return brandMapper.selectOne(wrapper);
     }
 
     @Override

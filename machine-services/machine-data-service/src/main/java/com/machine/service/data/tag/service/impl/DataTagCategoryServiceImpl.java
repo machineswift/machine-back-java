@@ -20,8 +20,8 @@ import com.machine.service.data.tag.dao.IDataTagCategoryDao;
 import com.machine.service.data.tag.dao.IDataTagDao;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagCategoryEntity;
 import com.machine.service.data.tag.service.IDataTagCategoryService;
-import com.machine.starter.redis.cache.data.RedisCacheDataTagCategory;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.data.RedisDataTagCategoryCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -48,7 +48,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheDataTagCategory dataTagCategoryCache;
+    private RedisDataTagCategoryCache dataTagCategoryCache;
 
     @Autowired
     private IDataTagDao tagDao;

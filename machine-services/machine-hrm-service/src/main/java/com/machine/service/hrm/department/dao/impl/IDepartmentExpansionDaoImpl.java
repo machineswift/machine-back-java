@@ -37,23 +37,23 @@ public class IDepartmentExpansionDaoImpl implements IDepartmentExpansionDao {
 
     @Override
     public DepartmentExpansionEntity getByDepartmentId(String departmentId) {
-        Wrapper<DepartmentExpansionEntity> queryWrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
+        Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
                 .eq(DepartmentExpansionEntity::getDepartmentId, departmentId);
-        return departmentExpansionMapper.selectOne(queryWrapper);
+        return departmentExpansionMapper.selectOne(wrapper);
     }
 
     @Override
     public String updateByDepartmentId(DepartmentExpansionEntity updateEntity) {
-        Wrapper<DepartmentExpansionEntity> queryWrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
+        Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
                 .eq(DepartmentExpansionEntity::getDepartmentId, updateEntity.getDepartmentId());
-        int count = departmentExpansionMapper.update(updateEntity, queryWrapper);
+        int count = departmentExpansionMapper.update(updateEntity, wrapper);
         return count + "";
     }
 
     @Override
     public List<DepartmentExpansionEntity> listDepartmentExpansionByDepartmentIdSet(Set<String> idSet) {
-        Wrapper<DepartmentExpansionEntity> queryWrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
+        Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
                 .in (DepartmentExpansionEntity::getDepartmentId, idSet);
-        return departmentExpansionMapper.selectList(queryWrapper);
+        return departmentExpansionMapper.selectList(wrapper);
     }
 }

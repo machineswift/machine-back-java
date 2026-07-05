@@ -18,7 +18,7 @@ import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
+import com.machine.starter.redis.cache.iam.RedisIamPermissionCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class IIamPermissionBusinessImpl implements IIamPermissionBusiness {
 
     @Autowired
-    private RedisCacheIamPermission permissionCache;
+    private RedisIamPermissionCache permissionCache;
 
     @Autowired
     private IIamUserClient userClient;

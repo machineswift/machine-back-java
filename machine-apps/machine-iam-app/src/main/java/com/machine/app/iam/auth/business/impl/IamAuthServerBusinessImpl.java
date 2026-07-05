@@ -3,6 +3,7 @@ package com.machine.app.iam.auth.business.impl;
 import com.machine.app.iam.auth.business.IIamAuthServerBusiness;
 import com.machine.app.iam.auth.controller.vo.request.IamAuthCreateClientRequestVo;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.starter.security.config.db.CustomerRegisteredClientRepository;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -36,7 +36,7 @@ public class IamAuthServerBusinessImpl implements IIamAuthServerBusiness {
         if (null != clientInfo) {
             throw new IamBusinessException("iam.authServer.service.createClient.existClientId", "客户已经存在");
         }
-        String id = UUID.randomUUID().toString().replace("-", "");
+        String id = UUIDv7.generateWithoutDashes();
         String secret = passwordEncoder.encode(request.getPassword());
         clientInfo = RegisteredClient.withId(id)
                 .clientId(request.getClientId())

@@ -48,24 +48,24 @@ public class DataTagDaoImpl implements IDataTagDao {
 
     @Override
     public DataTagEntity getByCode(String code) {
-        Wrapper<DataTagEntity> queryWrapper = new LambdaQueryWrapper<DataTagEntity>()
+        Wrapper<DataTagEntity> wrapper = new LambdaQueryWrapper<DataTagEntity>()
                 .eq(DataTagEntity::getCode, code);
-        return tagMapper.selectOne(queryWrapper);
+        return tagMapper.selectOne(wrapper);
     }
 
     @Override
     public DataTagEntity getByCategoryIdAndName(String categoryId, String name) {
-        Wrapper<DataTagEntity> queryWrapper = new LambdaQueryWrapper<DataTagEntity>()
+        Wrapper<DataTagEntity> wrapper = new LambdaQueryWrapper<DataTagEntity>()
                 .eq(DataTagEntity::getCategoryId, categoryId)
                 .eq(DataTagEntity::getName, name);
-        return tagMapper.selectOne(queryWrapper);
+        return tagMapper.selectOne(wrapper);
     }
 
     @Override
     public List<DataTagEntity> selectByCategoryId(String categoryId) {
-        Wrapper<DataTagEntity> queryWrapper = new LambdaQueryWrapper<DataTagEntity>()
+        Wrapper<DataTagEntity> wrapper = new LambdaQueryWrapper<DataTagEntity>()
                 .eq(DataTagEntity::getCategoryId, categoryId);
-        return tagMapper.selectList(queryWrapper);
+        return tagMapper.selectList(wrapper);
     }
 
     @Override

@@ -21,7 +21,7 @@ docker run -d \
 -v /srv/data/activemq/data:/var/lib/artemis-instance/data \
 -v /srv/data/activemq/config:/var/lib/artemis-instance/etc \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 apache/activemq-artemis:2.42.0
 ```
@@ -43,7 +43,7 @@ docker run -d \
 -e MONGO_INITDB_ROOT_USERNAME=root \
 -e MONGO_INITDB_ROOT_PASSWORD=root \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 mongo:8.0.15
 
@@ -56,7 +56,7 @@ docker run -d \
 -e ME_CONFIG_MONGODB_ADMINUSERNAME=root \
 -e ME_CONFIG_MONGODB_ADMINPASSWORD=root \
 --cpus=1 \
---memory=1g --memory-swap=1g \
+--memory=1g \
 --restart unless-stopped \
 mongo-express:1.0.2
 
@@ -86,7 +86,7 @@ docker run -d \
 -v /srv/data/kafka/config:/opt/kafka/config \
 -v /srv/data/kafka/logs:/opt/kafka/logs \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 apache/kafka:4.1.0
 
@@ -98,7 +98,7 @@ docker run -d \
 -e KAFKA_CLUSTERS_0_NAME=local \
 -e KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092 \
 --cpus=1 \
---memory=1g --memory-swap=1g \
+--memory=1g \
 --restart unless-stopped \
 provectuslabs/kafka-ui:v0.7.2
 ```

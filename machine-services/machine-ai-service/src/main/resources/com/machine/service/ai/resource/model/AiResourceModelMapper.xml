@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.ai.resource.model.dao.mapper.AiResourceModelMapper">
+
+    <select id="selectPage" resultType="com.machine.service.ai.resource.model.dao.mapper.entity.AiResourceModelEntity">
+        SELECT * FROM t_ai_resource_model
+        <where>
+            <if test="inputDto.status != null  ">
+                AND status = #{inputDto.status}
+            </if>
+            <if test="inputDto.providerId != null and inputDto.providerId !='' ">
+                AND provider_id = #{inputDto.providerId}
+            </if>
+            <if test="inputDto.code != null and inputDto.code !='' ">
+                AND code like CONCAT('%', #{inputDto.code}, '%')
+            </if>
+            <if test="inputDto.name != null and inputDto.name !='' ">
+                AND name like CONCAT('%', #{inputDto.name}, '%')
+            </if>
+            <if test="inputDto.description != null and inputDto.description !='' ">
+                AND description like CONCAT('%', #{inputDto.description}, '%')
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND create_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND create_time <![CDATA[ < ]]>  #{inputDto.createEndTime}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND update_time <![CDATA[ < ]]>  #{inputDto.updateEndTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

@@ -12,7 +12,7 @@ import com.machine.service.data.shop.dao.IDataShopOrganizationRelationDao;
 import com.machine.service.data.shop.dao.mapper.DataShopOrganizationRelationMapper;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -86,19 +86,19 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
     @Override
     public DataShopOrganizationRelationEntity selectOneByUk(String shopId,
                                                             String organizationId) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getShopId, shopId)
                 .eq(DataShopOrganizationRelationEntity::getOrganizationId, organizationId);
-        return shopOrganizationRelationMapper.selectOne(queryWrapper);
+        return shopOrganizationRelationMapper.selectOne(wrapper);
     }
 
     @Override
     public DataShopOrganizationRelationEntity selectOneByUk(String shopId,
                                                             IamOrganizationTypeEnum organizationType) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getShopId, shopId)
                 .eq(DataShopOrganizationRelationEntity::getOrganizationType, organizationType);
-        return shopOrganizationRelationMapper.selectOne(queryWrapper);
+        return shopOrganizationRelationMapper.selectOne(wrapper);
     }
 
     @Override
@@ -111,32 +111,32 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
 
     @Override
     public List<DataShopOrganizationRelationEntity> listByShopId(String shopId) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getShopId, shopId);
-        return shopOrganizationRelationMapper.selectList(queryWrapper);
+        return shopOrganizationRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataShopOrganizationRelationEntity> listByOrganizationIdSet(Set<String> organizationIdSet) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .in(DataShopOrganizationRelationEntity::getOrganizationId, organizationIdSet);
-        return shopOrganizationRelationMapper.selectList(queryWrapper);
+        return shopOrganizationRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataShopOrganizationRelationEntity> listByShopIdSet(Set<String> shopIdSet) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .in(DataShopOrganizationRelationEntity::getShopId, shopIdSet);
-        return shopOrganizationRelationMapper.selectList(queryWrapper);
+        return shopOrganizationRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataShopOrganizationRelationEntity> listByShopIdSet(IamOrganizationTypeEnum organizationType,
                                                                     Set<String> shopIdSet) {
-        Wrapper<DataShopOrganizationRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
+        Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getOrganizationType, organizationType)
                 .in(DataShopOrganizationRelationEntity::getShopId, shopIdSet);
-        return shopOrganizationRelationMapper.selectList(queryWrapper);
+        return shopOrganizationRelationMapper.selectList(wrapper);
     }
 
     @Override

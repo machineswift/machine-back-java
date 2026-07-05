@@ -85,6 +85,18 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
         );
     }
 
+    @Override
+    @GetMapping("scm_backCategory_tree")
+    public String scmBackCategoryTree() {
+        return generateTreeKey(REDIS_SCM_BACK_CATEGORY, "后台分类树");
+    }
+
+    @Override
+    @GetMapping("scm_frontCategory_tree")
+    public String scmFrontCategoryTree() {
+        return generateTreeKey(REDIS_SCM_FRONT_CATEGORY, "前台分类树");
+    }
+
     /**
      * 生成树形结构的Redis key
      */
@@ -149,5 +161,13 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
     private static final String REDIS_HRM_DEPARTMENT = "REDIS_DATA_DEPARTMENT_";
 
 
+    /**
+     * 后台分类
+     */
+    private static final String REDIS_SCM_BACK_CATEGORY = "REDIS_SCM_BACK_CATEGORY_";
 
+    /**
+     * 前台分类
+     */
+    private static final String REDIS_SCM_FRONT_CATEGORY = "REDIS_SCM_FRONT_CATEGORY_";
 }

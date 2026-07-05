@@ -21,7 +21,7 @@ import com.machine.service.iam.user.dao.IIamUserDao;
 import com.machine.service.iam.user.dao.mapper.IamUserMapper;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,9 +171,9 @@ public class IamUserDaoImpl implements IIamUserDao {
 
     @Override
     public IamUserEntity getByUsername(String username) {
-        Wrapper<IamUserEntity> queryWrapper = new LambdaQueryWrapper<IamUserEntity>()
+        Wrapper<IamUserEntity> wrapper = new LambdaQueryWrapper<IamUserEntity>()
                 .eq(IamUserEntity::getUsername, username);
-        return userMapper.selectOne(queryWrapper);
+        return userMapper.selectOne(wrapper);
     }
 
     @Override
@@ -184,16 +184,16 @@ public class IamUserDaoImpl implements IIamUserDao {
 
     @Override
     public IamUserEntity getByCode(String code) {
-        Wrapper<IamUserEntity> queryWrapper = new LambdaQueryWrapper<IamUserEntity>()
+        Wrapper<IamUserEntity> wrapper = new LambdaQueryWrapper<IamUserEntity>()
                 .eq(IamUserEntity::getCode, code);
-        return userMapper.selectOne(queryWrapper);
+        return userMapper.selectOne(wrapper);
     }
 
     @Override
     public IamUserEntity getByPhone(String phone) {
-        Wrapper<IamUserEntity> queryWrapper = new LambdaQueryWrapper<IamUserEntity>()
+        Wrapper<IamUserEntity> wrapper = new LambdaQueryWrapper<IamUserEntity>()
                 .eq(IamUserEntity::getPhone, phone);
-        return userMapper.selectOne(queryWrapper);
+        return userMapper.selectOne(wrapper);
     }
 
     @Override

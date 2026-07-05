@@ -7,7 +7,7 @@ import com.machine.app.iam.auth.controller.vo.request.IamAuthChangePasswordReque
 import com.machine.app.iam.auth.controller.vo.request.IamAuthSmsCaptchaChangePasswordRequestVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCurrentUserFunctionPermissionResponseVo;
 import com.machine.app.iam.auth.controller.vo.response.IamAuthCurrentUserResponseVo;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,7 +43,7 @@ public class IamCurrentController {
     @Operation(summary = "用户自己修改密码")
     @PostMapping("change_password")
     public void changePassword(@RequestBody @Validated IamAuthChangePasswordRequestVo request) {
-        log.info("用户自己修改密码，userId={}", AppContext.getContext().getUserId());
+        log.info("用户自己修改密码，userId={}", AppContextHolder.getContext().getUserId());
         currentBusiness.changePassword(request);
     }
 

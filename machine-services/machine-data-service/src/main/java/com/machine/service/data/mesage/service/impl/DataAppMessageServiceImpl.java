@@ -12,11 +12,12 @@ import com.machine.client.data.message.dto.input.*;
 import com.machine.client.data.message.dto.output.AppMessageTemplateDetailOutputDto;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.data.message.DataMessageChannelEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.sdk.feishu.client.FeiShuMessageHttpClient;
 import com.machine.sdk.feishu.client.dto.input.FeiShuSendMessageInput;
 import com.machine.service.data.mesage.dao.IDataAppMessageDao;
@@ -33,7 +34,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,7 +75,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
 
     @Override
     public PageResponse<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
         inputDto.setReceiver(userId);
         Page<AppMessageListSuperOutputDto> outputDtoPage = appMessageDao.superPage(inputDto);
         List<AppMessageListSuperOutputDto> records = outputDtoPage.getRecords();
@@ -96,7 +96,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
     @Override
     public Boolean saveMessageRecord(AppMessageSaveInputDto request) {
         if (StringUtils.isBlank(request.getBatchCode())) {
-            request.setBatchCode(UUID.randomUUID().toString().replaceAll("-", "").toUpperCase());
+            request.setBatchCode(UUIDv7.generateWithoutDashes());
         }
         log.info("本次存储消息的批次号为：{}", request.getBatchCode());
         Set<String> receiverSet = request.getReceiverSet();
@@ -186,7 +186,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
 
     @Override
     public List<AppMessageGroupCountOutputDto> groupCount(AppMessageGroupCountInputDto inputDto) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
         inputDto.setReceiver(userId);
         log.info("分组查询当前用户未读消息，input={}", JSONUtil.toJsonStr(inputDto));
         return appMessageDao.groupCount(inputDto);
@@ -194,7 +194,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
 
     @Override
     public Integer getUnreadCount(AppMessageUnreadCountInputDto inputDto) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
         inputDto.setReceiver(userId);
         return appMessageDao.getUnreadCount(inputDto);
     }

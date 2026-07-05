@@ -2,7 +2,7 @@ package com.machine.test.temp.doc;
 
 import com.machine.client.doc.convert.IDocConvertClient;
 import com.machine.sdk.base.constant.CommonIamConstant;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class DocConvertController {
     public void test(@RequestPart("file") MultipartFile file,
                      HttpServletResponse response) {
 
-        AppContext.getContext().setUserId(CommonIamConstant.User.ROOT_USER_ID);
+        AppContextHolder.getContext().setUserId(CommonIamConstant.User.ROOT_USER_ID);
         String originalFilename = file.getOriginalFilename();
         log.info("开始文件转换: {}", originalFilename);
 

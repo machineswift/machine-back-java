@@ -160,25 +160,25 @@ public class DataFranchiseeDaoImpl implements IDataFranchiseeDao {
 
     @Override
     public DataFranchiseeEntity getByCode(String code) {
-        Wrapper<DataFranchiseeEntity> queryWrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
+        Wrapper<DataFranchiseeEntity> wrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
                 .eq(DataFranchiseeEntity::getCode, code);
-        return dataFranchiseeMapper.selectOne(queryWrapper);
+        return dataFranchiseeMapper.selectOne(wrapper);
     }
 
     @Override
     public DataFranchiseeEntity getByUserId(String userId) {
-        Wrapper<DataFranchiseeEntity> queryWrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
+        Wrapper<DataFranchiseeEntity> wrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
                 .eq(DataFranchiseeEntity::getUserId, userId);
-        return dataFranchiseeMapper.selectOne(queryWrapper);
+        return dataFranchiseeMapper.selectOne(wrapper);
     }
 
     @Override
     public DataFranchiseeEntity getByCertificate(DataCertificateTypeEnum certificateType,
                                                  String certificateNumber) {
-        Wrapper<DataFranchiseeEntity> queryWrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
+        Wrapper<DataFranchiseeEntity> wrapper = new LambdaQueryWrapper<DataFranchiseeEntity>()
                 .eq(DataFranchiseeEntity::getCertificateType, certificateType)
                 .eq(DataFranchiseeEntity::getCertificateNumber, certificateNumber);
-        return dataFranchiseeMapper.selectOne(queryWrapper);
+        return dataFranchiseeMapper.selectOne(wrapper);
     }
 
     @Override

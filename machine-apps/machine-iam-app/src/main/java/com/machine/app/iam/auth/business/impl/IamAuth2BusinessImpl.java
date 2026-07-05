@@ -11,14 +11,15 @@ import com.machine.client.iam.user.dto.input.IamThirdPartyUserBindInputDto;
 import com.machine.client.iam.user.dto.input.IamThirdPartyUserCreateInputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuth2SourceEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.sdk.base.tool.UUIDv7;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
@@ -43,7 +44,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.security.SecurityConstant.*;
@@ -102,8 +102,8 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
 
         String state = AuthStateUtils.createState();
         String redirectUrl = authRequest.authorize(state);
-        if (StrUtil.isNotBlank(AppContext.getContext().getUserId())) {
-            customerRedisCommands.set(state, AppContext.getContext().getUserId(), STATE_EXPIRATION_TIME);
+        if (StrUtil.isNotBlank(AppContextHolder.getContext().getUserId())) {
+            customerRedisCommands.set(state, AppContextHolder.getContext().getUserId(), STATE_EXPIRATION_TIME);
         }
         try {
             response.sendRedirect(redirectUrl);
@@ -131,7 +131,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
         IamUserDto userDto = userClient.getByThirdPartyUuid(IamAuth2SourceEnum.GITEE, authUser.getUuid());
         if (null != userDto) {
             // 处理登录逻辑
-            AppContext.getContext().setUserId(userDto.getUserId());
+            AppContextHolder.getContext().setUserId(userDto.getUserId());
             IamAuthLoginResponse loginResponse = processLogin(IamAuthMethodEnum.AUTH2_GITEE, userDto.getUserId(), userDto.getUsername(), request);
             redirectUrl(loginResponse, null, response);
             return;
@@ -145,7 +145,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
             customerRedisCommands.del(callback.getState());
         }
 
-        AppContext.getContext().setUserId(userId);
+        AppContextHolder.getContext().setUserId(userId);
         userDto = userClient.getByUserId(userId);
         if (null == userDto) {
             IamBusinessException businessException = new IamBusinessException("iam.auth2.business.callbackGitee.userNotExists", "用户不存在，请联系客服");
@@ -166,8 +166,8 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
 
         String state = AuthStateUtils.createState();
         String redirectUrl = authRequest.authorize(state);
-        if (StrUtil.isNotBlank(AppContext.getContext().getUserId())) {
-            customerRedisCommands.set(state, AppContext.getContext().getUserId(), STATE_EXPIRATION_TIME);
+        if (StrUtil.isNotBlank(AppContextHolder.getContext().getUserId())) {
+            customerRedisCommands.set(state, AppContextHolder.getContext().getUserId(), STATE_EXPIRATION_TIME);
         }
         try {
             response.sendRedirect(redirectUrl);
@@ -194,7 +194,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
         IamUserDto userDto = userClient.getByThirdPartyUuid(IamAuth2SourceEnum.FEISHU, authUser.getUuid());
         if (null != userDto) {
             // 处理登录逻辑
-            AppContext.getContext().setUserId(userDto.getUserId());
+            AppContextHolder.getContext().setUserId(userDto.getUserId());
             IamAuthLoginResponse loginResponse = processLogin(IamAuthMethodEnum.AUTH2_FEI_SHU, userDto.getUserId(), userDto.getUsername(), request);
             redirectUrl(loginResponse, null, response);
             return;
@@ -208,7 +208,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
             customerRedisCommands.del(callback.getState());
         }
 
-        AppContext.getContext().setUserId(userId);
+        AppContextHolder.getContext().setUserId(userId);
         userDto = userClient.getByUserId(userId);
         if (null == userDto) {
             IamBusinessException businessException = new IamBusinessException("iam.auth2.business.callbackFeiShu.userNotExists", "用户不存在，请联系客服");
@@ -260,7 +260,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
                                               String userName,
                                               HttpServletRequest request) {
         // 生成JWT accessToken
-        String accessTokenId = UUID.randomUUID().toString().replaceAll("-", "");
+        String accessTokenId = UUIDv7.generateWithoutDashes();
         long accessTokenExpire = System.currentTimeMillis() + AUTH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4AuthToken = new HashMap<>();
         claimMap4AuthToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, accessTokenId);
@@ -271,7 +271,7 @@ public class IamAuth2BusinessImpl implements IIamAuth2Business {
                 accessTokenExpire);
 
         //生成JWT refreshToken
-        String refreshTokenId = UUID.randomUUID().toString().replaceAll("-", "");
+        String refreshTokenId = UUIDv7.generateWithoutDashes();
         long refreshTokenExpire = System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4RefreshToken = new HashMap<>();
         claimMap4RefreshToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, refreshTokenId);

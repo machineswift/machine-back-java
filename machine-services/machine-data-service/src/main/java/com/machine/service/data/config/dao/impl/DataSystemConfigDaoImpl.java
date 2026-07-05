@@ -32,10 +32,10 @@ public class DataSystemConfigDaoImpl implements IDataSystemConfigDao {
 
     @Override
     public DataSystemConfigEntity getByUk(String category, String code) {
-        Wrapper<DataSystemConfigEntity> queryWrapper = new LambdaQueryWrapper<DataSystemConfigEntity>()
+        Wrapper<DataSystemConfigEntity> wrapper = new LambdaQueryWrapper<DataSystemConfigEntity>()
                 .eq(DataSystemConfigEntity::getCategory, category)
                 .eq(DataSystemConfigEntity::getCode, code);
-        return configMapper.selectOne(queryWrapper);
+        return configMapper.selectOne(wrapper);
     }
 
 }

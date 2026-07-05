@@ -3,10 +3,10 @@ package com.machine.starter.security.config;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
 import com.machine.starter.redis.cache.LocalCacheSystemConfig;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.SecurityProperties;
-import com.machine.starter.security.filter.CustomerContextHolderFilter;
+import com.machine.starter.security.filter.AppContextClearFilter;
 import com.machine.starter.security.handler.*;
 import com.machine.starter.security.login.sms.SmsAuthenticationFilter;
 import com.machine.starter.security.login.sms.SmsAuthenticationProvider;
@@ -160,7 +160,8 @@ public class CustomerWebSecurityConfig {
                 .securityMatcher("/iam/**", "/manage/**", "/super/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
 
-        http.addFilterBefore(new SelfJwtAuthenticationFilter(machineJwtUtil, userDetailsService, customerRedisCommands),
+        http.addFilterBefore(new SelfJwtAuthenticationFilter(
+                machineJwtUtil, userDetailsService, customerRedisCommands, authenticationEntryPoint),
                 UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -192,7 +193,7 @@ public class CustomerWebSecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
 
         // jwt token 过滤
-        http.addFilterBefore(new DefaultJwtAuthenticationFilter(),
+        http.addFilterBefore(new DefaultJwtAuthenticationFilter(accessDeniedHandler),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -249,7 +250,7 @@ public class CustomerWebSecurityConfig {
                                 .accessDeniedHandler(accessDeniedHandler)
                 );
 
-        http.addFilterBefore(new CustomerContextHolderFilter(), SecurityContextHolderFilter.class);
+        http.addFilterBefore(new AppContextClearFilter(), SecurityContextHolderFilter.class);
     }
 
 }

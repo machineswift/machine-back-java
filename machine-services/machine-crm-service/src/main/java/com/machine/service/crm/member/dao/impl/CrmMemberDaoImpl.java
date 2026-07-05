@@ -40,16 +40,16 @@ public class CrmMemberDaoImpl implements ICrmMemberDao {
 
     @Override
     public CrmMemberEntity getByPhone(String phone) {
-        Wrapper<CrmMemberEntity> queryWrapper = new LambdaQueryWrapper<CrmMemberEntity>()
+        Wrapper<CrmMemberEntity> wrapper = new LambdaQueryWrapper<CrmMemberEntity>()
                 .eq(CrmMemberEntity::getPhone, phone);
-        return memberMapper.selectOne(queryWrapper);
+        return memberMapper.selectOne(wrapper);
     }
 
     @Override
     public CrmMemberEntity getByEmail(String email) {
-        Wrapper<CrmMemberEntity> queryWrapper = new LambdaQueryWrapper<CrmMemberEntity>()
+        Wrapper<CrmMemberEntity> wrapper = new LambdaQueryWrapper<CrmMemberEntity>()
                 .eq(CrmMemberEntity::getEmail, email);
-        return memberMapper.selectOne(queryWrapper);
+        return memberMapper.selectOne(wrapper);
     }
 
     @Override

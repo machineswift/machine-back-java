@@ -38,9 +38,9 @@ public class DataMqMessageExternalDaoImpl implements IDataMqMessageExternalDao {
 
     @Override
     public DataMqMessageExternalEntity getByReliableMessageId(String reliableMessageId) {
-        Wrapper<DataMqMessageExternalEntity> queryWrapper = new LambdaQueryWrapper<DataMqMessageExternalEntity>()
+        Wrapper<DataMqMessageExternalEntity> wrapper = new LambdaQueryWrapper<DataMqMessageExternalEntity>()
                 .eq(DataMqMessageExternalEntity::getTableName, reliableMessageId)
                 .eq(DataMqMessageExternalEntity::getTableName, "t_mq_reliable_message");
-        return dataMqMessageExternalMapper.selectOne(queryWrapper);
+        return dataMqMessageExternalMapper.selectOne(wrapper);
     }
 }

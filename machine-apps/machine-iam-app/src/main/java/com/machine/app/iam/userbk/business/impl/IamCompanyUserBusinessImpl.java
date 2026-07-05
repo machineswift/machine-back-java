@@ -40,7 +40,7 @@ import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.hrm.RedisCacheHrmDepartment;
+import com.machine.starter.redis.cache.hrm.RedisHrmDepartmentCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 public class IamCompanyUserBusinessImpl implements IIamCompanyUserBusiness {
 
     @Autowired
-    private RedisCacheHrmDepartment departmentCache;
+    private RedisHrmDepartmentCache departmentCache;
 
     @Autowired
     private IamUserBusinessImpl userBusiness;

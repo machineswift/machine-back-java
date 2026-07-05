@@ -20,7 +20,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.data.RedisCacheDataArea;
+import com.machine.starter.redis.cache.data.RedisDataAreaCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class DataAreaBusinessImpl implements IDataAreaBusiness {
 
     @Autowired
-    private RedisCacheDataArea redisCacheDataArea;
+    private RedisDataAreaCache redisDataAreaCache;
 
     @Autowired
     private IIamUserClient userClient;
@@ -89,7 +89,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
 
     @Override
     public DataAreaTreeSimpleResponseVo treeSimple(DataAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto treeOutputDto = redisCacheDataArea.tree(request.getCountryCode());
+        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.tree(request.getCountryCode());
         if (null == treeOutputDto) {
             return null;
         }
@@ -98,7 +98,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
 
     @Override
     public DataAreaTreeExpandResponseVo treeExpand(DataAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto treeOutputDto = redisCacheDataArea.tree(request.getCountryCode());
+        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.tree(request.getCountryCode());
         if (null == treeOutputDto) {
             return null;
         }

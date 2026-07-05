@@ -4,8 +4,11 @@ import cn.idev.excel.FastExcel;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.file.attachment.dto.input.DataAttachmentCreateInputDto;
-import com.machine.client.data.file.download.dto.output.DataDownloadDetailOutputDto;
+import com.machine.client.data.filecenter.attachment.dto.DataFileTempCreateDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentCreateInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataFileTempCreateInputDto;
+import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4DataCodeClient;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
@@ -15,33 +18,44 @@ import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFrontPhotoDto;
+import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
-import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
 import com.machine.sdk.base.model.response.IdCodeResponse;
 import com.machine.sdk.base.tool.DateUtil;
-import com.machine.service.data.file.attachment.service.IDataAttachmentService;
-import com.machine.service.data.file.download.service.IDataDownloadService;
+import com.machine.sdk.base.tool.UUIDv7;
+import com.machine.service.data.filecenter.attachment.service.IDataAttachmentOperationLogService;
+import com.machine.service.data.filecenter.attachment.service.IDataAttachmentService;
+import com.machine.service.data.filecenter.attachment.service.IDataFileTempService;
+import com.machine.service.data.filecenter.download.service.IDataDownloadService;
 import com.machine.service.data.shop.dao.IDataShopDao;
 import com.machine.service.data.shop.dao.IDataShopLabelOptionRelationDao;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopEntity;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopLabelOptionRelationEntity;
 import com.machine.service.data.shop.service.IDataShopService;
 import com.machine.service.data.shop.service.bo.DataShopExportBo;
-import com.machine.starter.obs.function.ObsFunction;
+import com.machine.sdk.base.context.AppContextHolder;
+import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationResultEnum;
+import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationTypeEnum;
+import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
+import com.machine.starter.obs.service.ObsFileService;
+import org.dromara.x.file.storage.core.FileInfo;
 import com.machine.starter.obs.tool.AttachmentExpireTimeUtil;
-import com.machine.starter.obs.tool.ObsDownloadPathBuilder;
+
+import static com.machine.starter.obs.constant.ObsFileConstant.ATTACHMENT_DEFAULT_GROUP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,7 +80,13 @@ public class DataShopServiceImpl implements IDataShopService {
     private IDataAttachmentService attachmentService;
 
     @Autowired
-    private ObsFunction obsFunction;
+    private IDataFileTempService dataFileTempService;
+
+    @Autowired
+    private IDataAttachmentOperationLogService attachmentOperationLogService;
+
+    @Autowired
+    private ObsFileService obsFileService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -457,6 +477,8 @@ public class DataShopServiceImpl implements IDataShopService {
     @Override
     public String exportShop(DataShopExportInputDto inputDto) {
         DataDownloadDetailOutputDto downloadDetail = downloadService.getById(inputDto.getDownloadId());
+        ClientEnvironmentInfo environmentInfo = JSONUtil.toBean(downloadDetail.getFeatures(), ClientEnvironmentInfo.class);
+        AppContextHolder.getContext().setUserId(downloadDetail.getCreateBy());
 
         List<DataShopEntity> entityList = shopDao.listForExport(inputDto);
 
@@ -476,21 +498,51 @@ public class DataShopServiceImpl implements IDataShopService {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FastExcel.write(outputStream, DataShopExportBo.class).sheet("门店").doWrite(exportBoList);
-        byte[] bytes = outputStream.toByteArray();
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String uuid = UUIDv7.generateWithoutDashes();
         String originalFilename = "门店-" + DateUtil.getCurrentDate() + "-" + uuid + ".xlsx";
 
-        DataAttachmentCreateInputDto createInputDto = new DataAttachmentCreateInputDto();
-        createInputDto.setEntity(ModuleEntityEnum.DATA_DOWNLOAD);
-        createInputDto.setEntityId(inputDto.getDownloadId());
-        createInputDto.setFileType(DataFileTypeEnum.SPREADSHEET);
-        createInputDto.setOriginalName(originalFilename);
-        createInputDto.setStorageName(originalFilename);
-        createInputDto.setMd5Hash(uuid);
-        String path = new ObsDownloadPathBuilder().forDataShopExport(downloadDetail.getCreateBy());
-        createInputDto.setFileInfo(JSONUtil.toJsonStr(obsFunction.upload(bytes, originalFilename, path)));
-        createInputDto.setSize((long) bytes.length);
-        createInputDto.setExpireTime(AttachmentExpireTimeUtil.dataDownload());
-        return attachmentService.create(createInputDto);
+        // 上传到对象存储
+        String obsPath = "/temp/" + java.time.LocalDate.now() + "/" + UUIDv7.generateWithoutDashes();
+        FileInfo fileInfo = obsFileService.upload(new ByteArrayInputStream(outputStream.toByteArray()), originalFilename, obsPath);
+
+        // 记录临时文件
+        DataFileTempCreateInputDto fileTempCreateInputDto = new DataFileTempCreateInputDto();
+        fileTempCreateInputDto.setFileType(DataFileTypeEnum.SPREADSHEET);
+        fileTempCreateInputDto.setOriginalName(originalFilename);
+        fileTempCreateInputDto.setStorageName(fileInfo.getFilename());
+        fileTempCreateInputDto.setStoragePath(fileInfo.getPath());
+        fileTempCreateInputDto.setFileInfo(JSONUtil.toJsonStr(fileInfo));
+        fileTempCreateInputDto.setSize(fileInfo.getSize());
+        fileTempCreateInputDto.setExpireTime(System.currentTimeMillis() + 24 * 60 * 60 * 1000L);
+        String tempFileId = dataFileTempService.create(fileTempCreateInputDto);
+
+        // 创建附件
+        DataAttachmentCreateInputDto attachmentCreateInputDto = new DataAttachmentCreateInputDto();
+        attachmentCreateInputDto.setEntity(ModuleEntityEnum.DATA_DOWNLOAD);
+        attachmentCreateInputDto.setEntityId(downloadDetail.getId());
+        attachmentCreateInputDto.setAttachmentGroup(ATTACHMENT_DEFAULT_GROUP);
+        attachmentCreateInputDto.setExpireTime(AttachmentExpireTimeUtil.dataDownload());
+        attachmentCreateInputDto.setChangeDesc("门店下载");
+
+        DataFileTempCreateDto tempFileItem = new DataFileTempCreateDto();
+        tempFileItem.setFileId(tempFileId);
+        tempFileItem.setSort(1L);
+        attachmentCreateInputDto.setFileTempList(List.of(tempFileItem));
+        String attachmentId = attachmentService.create(attachmentCreateInputDto);
+
+        // 记录操作日志
+        DataAttachmentDetailOutputDto attachmentDetail =
+                attachmentService.getById(new IdRequest(attachmentId));
+        DataAttachmentOperationLogCreateInputDto logCreateInputDto = new DataAttachmentOperationLogCreateInputDto();
+        logCreateInputDto.setAttachmentId(attachmentId);
+        logCreateInputDto.setVersionId(attachmentDetail.getCurrentVersionId());
+        logCreateInputDto.setOperationType(DataAttachmentOperationTypeEnum.UPLOAD);
+        logCreateInputDto.setOperationResult(DataAttachmentOperationResultEnum.SUCCESS);
+        logCreateInputDto.setIpAddress(environmentInfo.getIpAddress());
+        logCreateInputDto.setPlatform(environmentInfo.getPlatform());
+        logCreateInputDto.setUserAgent(environmentInfo.getUserAgent());
+        attachmentOperationLogService.create(logCreateInputDto);
+
+        return attachmentId;
     }
 }

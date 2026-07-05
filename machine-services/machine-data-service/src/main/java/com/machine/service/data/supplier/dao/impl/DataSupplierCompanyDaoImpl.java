@@ -71,16 +71,16 @@ public class DataSupplierCompanyDaoImpl implements IDataSupplierCompanyDao {
 
     @Override
     public DataSupplierCompanyEntity getByName(String name) {
-        Wrapper<DataSupplierCompanyEntity> queryWrapper = new LambdaQueryWrapper<DataSupplierCompanyEntity>()
+        Wrapper<DataSupplierCompanyEntity> wrapper = new LambdaQueryWrapper<DataSupplierCompanyEntity>()
                 .eq(DataSupplierCompanyEntity::getName, name);
-        return dataSupplierCompanyMapper.selectOne(queryWrapper);
+        return dataSupplierCompanyMapper.selectOne(wrapper);
     }
 
     @Override
     public DataSupplierCompanyEntity getByByContactPhone(String contactPhone) {
-        Wrapper<DataSupplierCompanyEntity> queryWrapper = new LambdaQueryWrapper<DataSupplierCompanyEntity>()
+        Wrapper<DataSupplierCompanyEntity> wrapper = new LambdaQueryWrapper<DataSupplierCompanyEntity>()
                 .eq(DataSupplierCompanyEntity::getContactPhone, contactPhone);
-        return dataSupplierCompanyMapper.selectOne(queryWrapper);
+        return dataSupplierCompanyMapper.selectOne(wrapper);
     }
 
     @Override

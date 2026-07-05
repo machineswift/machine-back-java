@@ -1,7 +1,3 @@
-machine:
-  mybatis:
-    example: 1000
-
 spring:
   # DataSource Config
   datasource:

@@ -2,20 +2,21 @@ package com.machine.starter.redis;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
+import redis.clients.jedis.*;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -25,12 +26,6 @@ import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
 @Configuration(proxyBeanMethods = false)
 public class RedisAutoConfiguration {
 
-    @Value("${machine.redis.database:0}")
-    private int database;
-
-    @Value("${machine.redis.timeout:5000}")
-    private int timeout;
-
     @Autowired
     private RedisProperties redisProperties;
 
@@ -38,27 +33,49 @@ public class RedisAutoConfiguration {
     private ApplicationContext applicationContext;
 
     @Bean
-    public StatefulRedisConnection<String, String> connection() {
+    public redis.clients.jedis.RedisClient jedisRedisClient(RedisProperties redisProperties) {
+        // 构建客户端配置
+        DefaultJedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
+                .connectionTimeoutMillis(3000)
+                .socketTimeoutMillis(30000)
+                .password(redisProperties.getPassword())
+                .database(redisProperties.getDatabase())
+                .clientName("machine")
+                .build();
+
+        // 创建 RedisClient
+        return redis.clients.jedis.RedisClient.builder()
+                .hostAndPort(redisProperties.getHost(), redisProperties.getPort())
+                .clientConfig(clientConfig)
+                .build();
+    }
+
+    @Bean
+    public RedisClient lettuceRedisClient() {
         RedisURI redisUri = RedisURI.builder()
                 .withHost(redisProperties.getHost())
                 .withPort(redisProperties.getPort()).withAuthentication(
                         new StaticCredentialsProvider("", redisProperties.getPassword().toCharArray()))
-                .withDatabase(database)
-                .withTimeout(Duration.ofMillis(timeout))
+                .withDatabase(redisProperties.getDatabase())
+                .withTimeout(Duration.ofMillis(3000))
                 .build();
 
-        RedisClient client = RedisClient.create(redisUri);
-        client.setOptions(ClientOptions.builder()
+        return RedisClient.create(redisUri);
+    }
+
+    @Bean
+    public StatefulRedisConnection<String, String> connection(RedisClient redisClient) {
+        redisClient.setOptions(ClientOptions.builder()
                 .socketOptions(SocketOptions.builder()
                         .keepAlive(true)
                         .tcpNoDelay(true)
                         .build())
                 .autoReconnect(true)
                 .timeoutOptions(TimeoutOptions.builder()
-                        .fixedTimeout(Duration.ofMillis(timeout))
+                        .fixedTimeout(Duration.ofMillis(3000))
                         .build())
                 .build());
-        return client.connect();
+        return redisClient.connect();
     }
 
     /**
@@ -77,6 +94,30 @@ public class RedisAutoConfiguration {
         return new CustomerRedisCommands(redisCommands);
     }
 
+
+    @Bean
+    public JedisPooled jedisPooled(RedisProperties redisProperties) {
+        // 配置连接池
+        GenericObjectPoolConfig<Connection> poolConfig = new GenericObjectPoolConfig<>();
+        poolConfig.setMaxTotal(10);
+        poolConfig.setMaxIdle(5);
+        poolConfig.setMinIdle(2);
+
+        // 配置 Jedis 客户端
+        JedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
+                .connectionTimeoutMillis(3000)
+                .socketTimeoutMillis(3000)
+                .password(redisProperties.getPassword())
+                .database(redisProperties.getDatabase())
+                .build();
+
+        return new JedisPooled(
+                new HostAndPort(redisProperties.getHost(), redisProperties.getPort()),
+                clientConfig,
+                poolConfig
+        );
+    }
+
     /**
      * 主要用于分布式锁（看门狗）
      */
@@ -86,9 +127,9 @@ public class RedisAutoConfiguration {
         config.useSingleServer()
                 .setAddress("redis://" + redisProperties.getHost() + SEPARATOR_COLON + redisProperties.getPort())
                 .setPassword(redisProperties.getPassword())
-                .setDatabase(database)
+                .setDatabase(redisProperties.getDatabase())
                 .setKeepAlive(true)
-                .setTimeout(timeout)
+                .setTimeout(3000)
                 .setPingConnectionInterval(30000);
         config.setCodec(new JsonJacksonCodec());
         return Redisson.create(config);

@@ -21,7 +21,7 @@ docker run -p 3306:3306 \
 -v /srv/data/mysql/conf.d:/etc/mysql/conf.d \
 -e MYSQL_ROOT_PASSWORD=root \
 --cpus=1 \
---memory=1g --memory-swap=2g \
+--memory=1g \
 --restart unless-stopped \
 -d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
@@ -42,7 +42,7 @@ docker run -d \
 -e POSTGRES_PASSWORD=postgres \
 -e POSTGRES_DB=postgres \
 --cpus=1 \
---memory=1g --memory-swap=2g \
+--memory=1g \
 --restart unless-stopped \
 postgres:18.3
 ```
@@ -61,7 +61,7 @@ docker run -d --name redis \
 -v /srv/data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
 -v /srv/data/redis/logs:/logs \
 --cpus=0.2 \
---memory=0.5g --memory-swap=2g \
+--memory=0.5g \
 --restart unless-stopped \
 redis:8.6.2 --requirepass "redis"
 ```
@@ -81,7 +81,7 @@ docker run -d \
 -e RABBITMQ_DEFAULT_PASS=root \
 -v /srv/data/rabbitmq/data:/var/lib/rabbitmq \
 --cpus=0.2 \
---memory=0.2g --memory-swap=2g \
+--memory=0.2g \
 --restart unless-stopped \
 rabbitmq:4.2.5-management
 ```
@@ -106,7 +106,7 @@ docker run -d -p 9042:9042 \
 -e SCYLLA_ADMIN_USER=scylla \
 -e SCYLLA_ADMIN_PASSWORD=scylla \
 --cpus=0.5 \
---memory=0.5g --memory-swap=2g \
+--memory=0.5g \
 --restart unless-stopped \
  scylladb/scylla:2025.3
 ```
@@ -134,7 +134,7 @@ docker run -d -p 9000:9000 -p 9001:9001 \
 -v /srv/data/minio/disk8:/data/disk8 \
 -v /srv/data/minio/config:/root/.minio \
 --cpus=0.2 \
---memory=0.4g --memory-swap=2g \
+--memory=0.4g \
 --restart unless-stopped \
 minio/minio:RELEASE.2025-09-07T16-13-09Z server \
 /data/disk1 /data/disk2 /data/disk3 /data/disk4 \
@@ -161,6 +161,6 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_USER=root \
 -e MYSQL_SERVICE_PASSWORD=root \
 --cpus=1 \
---memory=2g --memory-swap=2g \
-nacos/nacos-server:v3.2.0
+--memory=2g \
+nacos/nacos-server:v3.2.2
 ```

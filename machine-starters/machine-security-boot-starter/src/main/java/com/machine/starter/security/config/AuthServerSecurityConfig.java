@@ -1,5 +1,6 @@
 package com.machine.starter.security.config;
 
+import com.machine.sdk.base.tool.UUIDv7;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -31,8 +32,6 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
-
-import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
@@ -124,7 +123,7 @@ public class AuthServerSecurityConfig {
     private JWKSource<SecurityContext> jwkSource() {
         RSAKey rsaKey = new RSAKey.Builder(customerKeyService.getTokenPublicKey())
                 .privateKey(customerKeyService.getTokenPrivateKey())
-                .keyID(UUID.randomUUID().toString())
+                .keyID(UUIDv7.generateWithoutDashes())
                 .build();
         JWKSet jwkSet = new JWKSet(rsaKey);
         return new ImmutableJWKSet<>(jwkSet);

@@ -48,8 +48,8 @@ public class IamOauth2RegisteredClientDaoImpl implements IIamOauth2RegisteredCli
 
     @Override
     public IamOauth2RegisteredClientEntity findByClientId(String clientId) {
-        Wrapper<IamOauth2RegisteredClientEntity> queryWrapper = new LambdaQueryWrapper<IamOauth2RegisteredClientEntity>()
+        Wrapper<IamOauth2RegisteredClientEntity> wrapper = new LambdaQueryWrapper<IamOauth2RegisteredClientEntity>()
                 .eq(IamOauth2RegisteredClientEntity::getClientId, clientId);
-        return authTokenMapper.selectOne(queryWrapper);
+        return authTokenMapper.selectOne(wrapper);
     }
 }

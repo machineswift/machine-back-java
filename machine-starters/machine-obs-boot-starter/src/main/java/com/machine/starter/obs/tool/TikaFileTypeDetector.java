@@ -1,6 +1,6 @@
 package com.machine.starter.obs.tool;
 
-import com.machine.sdk.base.envm.data.file.DataFileTypeEnum;
+import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;

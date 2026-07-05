@@ -3,8 +3,9 @@ package com.machine.starter.mq.function;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.starter.mq.constant.MqConstant;
@@ -16,7 +17,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
@@ -94,9 +94,9 @@ public class CustomerStreamBridge {
         log.info("发送消息到MQ，producerName={} payload={}", producerName, JSONUtil.toJsonStr(payload));
         streamBridge.send(producerName,
                 MessageBuilder.withPayload(payload)
-                        .setHeader(USER_ID_KEY, AppContext.getContext().getUserId())
+                        .setHeader(USER_ID_KEY, AppContextHolder.getContext().getUserId())
                         .setHeader(MqConstant.HEAD_KEY_PRODUCER_NAME, producerName)
-                        .setHeader(MqConstant.HEAD_KEY_MESSAGE_UUID, UUID.randomUUID().toString().replace("-", ""))
+                        .setHeader(MqConstant.HEAD_KEY_MESSAGE_UUID, UUIDv7.generateWithoutDashes())
                         .build());
     }
 
@@ -117,7 +117,7 @@ public class CustomerStreamBridge {
                                              EventTypeEnum eventType,
                                              T data) {
         String producerName = "WebHookFastEventProducer";
-        String messageId = UUID.randomUUID().toString().replace("-", "");
+        String messageId = UUIDv7.generateWithoutDashes();
         WebHookEventRequestBody<T> messageBody = new WebHookEventRequestBody<>(eventType, messageId, data);
 
         //应用Id
@@ -140,9 +140,9 @@ public class CustomerStreamBridge {
                 producerName, clientId, JSONUtil.toJsonStr(messageBody));
         streamBridge.send(producerName,
                 MessageBuilder.withPayload(messageBody)
-                        .setHeader(USER_ID_KEY, AppContext.getContext().getUserId())
+                        .setHeader(USER_ID_KEY, AppContextHolder.getContext().getUserId())
                         .setHeader(MqConstant.HEAD_KEY_PRODUCER_NAME, producerName)
-                        .setHeader(MqConstant.HEAD_KEY_MESSAGE_UUID, UUID.randomUUID().toString().replace("-", ""))
+                        .setHeader(MqConstant.HEAD_KEY_MESSAGE_UUID, UUIDv7.generateWithoutDashes())
                         .build());
     }
 

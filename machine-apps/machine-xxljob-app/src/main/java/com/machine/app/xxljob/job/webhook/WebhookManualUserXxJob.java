@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.input.IamUserQueryListOffsetInputDto;
 import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.starter.mq.function.CustomerStreamBridge;
@@ -31,7 +31,7 @@ public class WebhookManualUserXxJob {
 
     @XxlJob("WebhookUserJobHandler")
     public void webhookUserJobHandler() {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         String param = XxlJobHelper.getJobParam();
         XxlJobHelper.log("XXL-JOB, Webhook抛出用户创建事件开始");
 
@@ -60,6 +60,6 @@ public class WebhookManualUserXxJob {
             offset = outputDtoList.getLast().getId();
         }
         XxlJobHelper.log("XXL-JOB, Webhook抛出用户创建事件结束");
-        AppContext.getContext().clear();
+        AppContextHolder.getContext().clear();
     }
 }

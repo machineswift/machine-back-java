@@ -14,8 +14,8 @@ import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelation
 import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisCacheIamDataPermission;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisIamDataPermissionCache;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness {
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
-    private RedisCacheIamDataPermission redisCacheIamDataPermission;
+    private RedisIamDataPermissionCache redisIamDataPermissionCache;
 
     @Autowired
     private IDataShopOrganizationRelationClient shopOrganizationRelationClient;
@@ -45,7 +45,7 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
     public SuperOrganizationTreeSimpleSelfResponseVo treeSelfSimple(SupeOrganizationTreeRequestVo request) {
         IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             return JSONUtil.toBean(JSONUtil.toJsonStr(allTreeOutput), SuperOrganizationTreeSimpleSelfResponseVo.class);
@@ -71,7 +71,7 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
     public SuperOrganizationTreeExpandSelfResponseVo treeSelfExpand(SupeOrganizationTreeRequestVo request) {
         IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisCacheIamDataPermission.dataPermission4SuperApp();
+        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
 

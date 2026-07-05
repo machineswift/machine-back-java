@@ -30,16 +30,16 @@ public class YunXiCubeShopDaoImpl implements IYunXiCubeShopDao {
 
     @Override
     public YunXiCubeShopEntity getByCode(String code) {
-        Wrapper<YunXiCubeShopEntity> queryWrapper = new LambdaQueryWrapper<YunXiCubeShopEntity>()
+        Wrapper<YunXiCubeShopEntity> wrapper = new LambdaQueryWrapper<YunXiCubeShopEntity>()
                 .eq(YunXiCubeShopEntity::getCode, code)
                 .eq(YunXiCubeShopEntity::getDr, 0);
-        return cubeShopMapper.selectOne(queryWrapper);
+        return cubeShopMapper.selectOne(wrapper);
     }
 
     @Override
     public List<YunXiCubeShopEntity> selectByIds(Collection<Long> ids) {
-        Wrapper<YunXiCubeShopEntity> queryWrapper = new LambdaQueryWrapper<YunXiCubeShopEntity>()
+        Wrapper<YunXiCubeShopEntity> wrapper = new LambdaQueryWrapper<YunXiCubeShopEntity>()
                 .in(YunXiCubeShopEntity::getId, ids);
-        return cubeShopMapper.selectList(queryWrapper);
+        return cubeShopMapper.selectList(wrapper);
     }
 }

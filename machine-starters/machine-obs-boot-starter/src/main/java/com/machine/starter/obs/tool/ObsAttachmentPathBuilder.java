@@ -18,12 +18,13 @@ public class ObsAttachmentPathBuilder {
     /**
      * 构建附件路径
      */
-    public String forAttachment(ModuleEntityEnum entity,
+    public String forAttachment(ModuleEntityEnum entityEnum,
                                 String entityId,
-                                String version) {
+                                String attachmentGroup,
+                                int version) {
         ModuleEnum module;
 
-        switch (entity) {
+        switch (entityEnum) {
             case IAM_USER,
                  IAM_ROLE,
                  IAM_PERMISSION,
@@ -40,6 +41,6 @@ public class ObsAttachmentPathBuilder {
                     "上传附件没找到所属的模块");
 
         }
-        return strategy.buildAttachmentPath(module, entity, entityId, version);
+        return strategy.buildAttachmentPath(module, entityEnum, entityId, attachmentGroup, version);
     }
 }

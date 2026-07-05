@@ -13,7 +13,7 @@ import com.machine.service.iam.user.dao.mapper.IamUserRoleRelationMapper;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleBusinessRelationEntity;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -138,11 +138,11 @@ public class IamUserRoleBusinessRelationDaoImpl implements IIamUserRoleBusinessR
     public IamUserRoleBusinessRelationEntity getByUk(String userRoleRelationId,
                                                      String businessId,
                                                      IamUserRoleBusinessTypeEnum businessType) {
-        Wrapper<IamUserRoleBusinessRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
+        Wrapper<IamUserRoleBusinessRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
                 .eq(IamUserRoleBusinessRelationEntity::getUserRoleRelationId, userRoleRelationId)
                 .eq(IamUserRoleBusinessRelationEntity::getBusinessId, businessId)
                 .eq(IamUserRoleBusinessRelationEntity::getBusinessType, businessType);
-        return userRoleBusinessRelationMapper.selectOne(queryWrapper);
+        return userRoleBusinessRelationMapper.selectOne(wrapper);
     }
 
     @Override
@@ -151,9 +151,9 @@ public class IamUserRoleBusinessRelationDaoImpl implements IIamUserRoleBusinessR
             return List.of();
         }
 
-        Wrapper<IamUserRoleBusinessRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
+        Wrapper<IamUserRoleBusinessRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
                 .in(IamUserRoleBusinessRelationEntity::getUserRoleRelationId, userRoleRelationIdSet);
-        return userRoleBusinessRelationMapper.selectList(queryWrapper);
+        return userRoleBusinessRelationMapper.selectList(wrapper);
     }
 
     @Override
@@ -163,10 +163,10 @@ public class IamUserRoleBusinessRelationDaoImpl implements IIamUserRoleBusinessR
             return List.of();
         }
 
-        Wrapper<IamUserRoleBusinessRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
+        Wrapper<IamUserRoleBusinessRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleBusinessRelationEntity>()
                 .in(IamUserRoleBusinessRelationEntity::getBusinessId, businessIdSet)
                 .eq(IamUserRoleBusinessRelationEntity::getBusinessType, businessType);
-        return userRoleBusinessRelationMapper.selectList(queryWrapper);
+        return userRoleBusinessRelationMapper.selectList(wrapper);
     }
 
 

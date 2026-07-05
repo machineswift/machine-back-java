@@ -1,7 +1,7 @@
 package com.machine.sdk.base.model.dto.data.certificate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.dto.data.MaterialDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

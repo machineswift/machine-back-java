@@ -5,7 +5,7 @@ import com.machine.client.data.message.IDataMqReliableMessageClient;
 import com.machine.client.data.message.dto.input.MqReliableMessageCreateInputDto;
 import com.machine.client.data.message.dto.input.MqReliableMessageUpdate4ExceptionInputDto;
 import com.machine.client.data.message.dto.output.MqReliableMessageDetailDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.starter.mq.constant.MqConstant;
 import com.machine.starter.mq.domain.MqReliableMessageDto;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,7 +37,7 @@ public class MqReliableMessageAspect {
 
     @Before("producer()")
     public void before() {
-        AppContext.getContext().clear();
+        AppContextHolder.getContext().clear();
     }
 
 
@@ -202,7 +202,7 @@ public class MqReliableMessageAspect {
 
     @After("producer()")
     public void after() {
-        AppContext.getContext().clear();
+        AppContextHolder.getContext().clear();
     }
 
 

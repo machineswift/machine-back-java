@@ -23,7 +23,7 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_NAME;
 public class IamOrganizationBusinessImpl implements IIamOrganizationBusiness {
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IIamUserClient userClient;

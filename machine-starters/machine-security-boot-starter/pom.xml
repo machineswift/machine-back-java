@@ -5,7 +5,7 @@
     <parent>
         <artifactId>machine-starters</artifactId>
         <groupId>com.machine</groupId>
-        <version>2.0.0-RELEASE</version>
+        <version>2026.07-RELEASE</version>
     </parent>
     <artifactId>machine-security-boot-starter</artifactId>
 
@@ -49,13 +49,18 @@
         </dependency>
 
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>me.zhyd.oauth</groupId>
-            <artifactId>JustAuth</artifactId>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
         </dependency>
 
         <dependency>

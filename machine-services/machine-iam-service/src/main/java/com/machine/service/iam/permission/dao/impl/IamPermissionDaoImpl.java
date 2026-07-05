@@ -9,7 +9,7 @@ import com.machine.service.iam.permission.dao.IIamPermissionDao;
 import com.machine.service.iam.permission.dao.mapper.IamPermissionMapper;
 import com.machine.service.iam.permission.dao.mapper.entity.IamPermissionEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -91,17 +91,17 @@ public class IamPermissionDaoImpl implements IIamPermissionDao {
 
     @Override
     public IamPermissionEntity getByCode(String code) {
-        Wrapper<IamPermissionEntity> queryWrapper = new LambdaQueryWrapper<IamPermissionEntity>()
+        Wrapper<IamPermissionEntity> wrapper = new LambdaQueryWrapper<IamPermissionEntity>()
                 .eq(IamPermissionEntity::getCode, code);
-        return permissionMapper.selectOne(queryWrapper);
+        return permissionMapper.selectOne(wrapper);
     }
 
     @Override
     public IamPermissionEntity getByParentIdAndName(String parentId, String name) {
-        Wrapper<IamPermissionEntity> queryWrapper = new LambdaQueryWrapper<IamPermissionEntity>()
+        Wrapper<IamPermissionEntity> wrapper = new LambdaQueryWrapper<IamPermissionEntity>()
                 .eq(IamPermissionEntity::getParentId, parentId)
                 .eq(IamPermissionEntity::getName, name);
-        return permissionMapper.selectOne(queryWrapper);
+        return permissionMapper.selectOne(wrapper);
     }
 
     @Override

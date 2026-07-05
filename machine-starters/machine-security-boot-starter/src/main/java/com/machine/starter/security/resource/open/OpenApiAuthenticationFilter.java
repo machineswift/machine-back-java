@@ -2,7 +2,7 @@ package com.machine.starter.security.resource.open;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.base.EnvironmentEnum;
 import com.machine.sdk.base.exception.iam.access.OpenApiResourceBlackException;
 import com.machine.sdk.base.exception.iam.access.OpenApiResourceClientException;
@@ -51,7 +51,7 @@ public class OpenApiAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
 
         if (EnvironmentEnum.PROD.getName().equals(activeProfile)) {
             //校验ip白名单
@@ -66,7 +66,7 @@ public class OpenApiAuthenticationFilter extends OncePerRequestFilter {
                 null == localCacheRegisteredClient.getByClientId(clientId, oauth2RegisteredClientClient)) {
             throw new OpenApiResourceClientException("客户端验证失败，clientId=" + clientId);
         } else {
-            AppContext.getContext().setClientId(clientId);
+            AppContextHolder.getContext().setClientId(clientId);
         }
 
 

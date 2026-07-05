@@ -38,7 +38,7 @@ docker run -p 3306:3306 \
 -v /srv/data/mysql/conf.d:/etc/mysql/conf.d \
 -e MYSQL_ROOT_PASSWORD=root \
 --cpus=4 \
---memory=8g --memory-swap=8g \
+--memory=8g \
 --restart unless-stopped \
 -d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
@@ -56,7 +56,7 @@ docker run -d --name redis \
 -v /srv/data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
 -v /srv/data/redis/logs:/logs \
 --cpus=4 \
---memory=8g --memory-swap=8g \
+--memory=8g \
 --restart unless-stopped \
 redis:8.6.2 --requirepass "redis"
 ```
@@ -75,7 +75,7 @@ docker run -d \
 -p 15672:15672 -p 5672:5672  \
 -v /srv/data/rabbitmq/data:/var/lib/rabbitmq \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 rabbitmq:4.2.5-management
 ```
@@ -103,7 +103,7 @@ docker run -d -p 9000:9000 \
 -v /srv/data/minio/disk8:/data/disk8 \
 -v /srv/data/minio/config:/root/.minio \
 --cpus=4 \
---memory=8g --memory-swap=8g \
+--memory=8g \
 --restart unless-stopped \
 minio/minio:RELEASE.2025-04-22T22-12-26Z server \
 /data/disk1 /data/disk2 /data/disk3 /data/disk4 \
@@ -116,7 +116,7 @@ minio/minio:RELEASE.2025-04-22T22-12-26Z server \
 sudo mkdir -p /srv/data/clickhouse
 sudo chmod -R 777 /srv/data/clickhouse
 
-docker run -d -p 8123:8123 -p 9000:9000 -p 9009:9009 \
+docker run -d -p 8123:8123 -p 9000:9000 \
 --name clickhouse \
 --hostname clickhouse \
 --network machine \
@@ -126,9 +126,9 @@ docker run -d -p 8123:8123 -p 9000:9000 -p 9009:9009 \
 -e CLICKHOUSE_DB=clickhouse \
 --ulimit nofile=262144:262144 \
 --cpus=4 \
---memory=8g --memory-swap=8g \
+--memory=8g \
 --restart unless-stopped \
-clickhouse:25.9.3.48
+clickhouse:26.3.3.20
 ```
 
 ### 7. Elasticsearch 搜索引擎
@@ -147,7 +147,7 @@ docker run -p 9200:9200 -d --name elasticsearch \
 -v /srv/data/elasticsearch/logs:/usr/share/elasticsearch/logs \
 -v /srv/data/elasticsearch/backups:/usr/share/elasticsearch/backups \
 --cpus=4 \
---memory=8g --memory-swap=8g \
+--memory=8g \
 --restart unless-stopped \
 elasticsearch:8.19.12
 ```
@@ -168,7 +168,7 @@ docker run -p 5601:5601 -d --name kibana \
 -e "xpack.license.self_generated.type=basic" \
 -v /srv/data/kibana/plugins:/usr/share/kibana/plugins \
 --cpus=1 \
---memory=2g --memory-swap=2g \
+--memory=2g \
 --restart unless-stopped \
 kibana:8.19.12
 ```
@@ -188,7 +188,7 @@ docker run --name skywalking-server  -d \
 -p 11800:11800 \
 -p 12800:12800 \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 apache/skywalking-oap-server:10.3.0
 
@@ -200,7 +200,7 @@ docker run --name skywalking-ui  -d \
 -e SW_OAP_ADDRESS=http://skywalking-server:12800 \
 -p 9088:8080 \
 --cpus=1 \
---memory=2g --memory-swap=2g \
+--memory=2g \
 --restart unless-stopped \
 apache/skywalking-ui:10.3.0
 ```
@@ -218,7 +218,7 @@ docker run -d -p 8081:8081 -p 6123:6123 \
 -v /srv/data/flink/flink-state/jobmanager:/opt/flink/state \
 -v /srv/data/flink/flink-logs/jobmanager:/opt/flink/log \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 flink:2.1.0-java21 jobmanager
 
@@ -233,7 +233,7 @@ docker run -d \
 -v /srv/data/flink/flink-state/taskmanager-01:/opt/flink/state \
 -v /srv/data/flink/flink-logs/taskmanager-01:/opt/flink/log \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 flink:2.1.0-java21 taskmanager
 
@@ -248,7 +248,7 @@ docker run -d \
 -v /srv/data/flink/flink-state/taskmanager-02:/opt/flink/state \
 -v /srv/data/flink/flink-logs/taskmanager-02:/opt/flink/log \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
 flink:2.1.0-java21 taskmanager
 ```
@@ -271,9 +271,9 @@ docker run -d --name nacos \
 -e MYSQL_SERVICE_USER=root \
 -e MYSQL_SERVICE_PASSWORD=root \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 --restart unless-stopped \
-nacos/nacos-server:v3.2.0
+nacos/nacos-server:v3.2.2
 ```
 
 ### 12. XXL-JOB 任务调度中心
@@ -287,7 +287,7 @@ docker run -d \
 --spring.datasource.username=root \
 --spring.datasource.password=root" \
 --cpus=2 \
---memory=4g --memory-swap=4g \
+--memory=4g \
 xuxueli/xxl-job-admin:3.3.2
 ```
 

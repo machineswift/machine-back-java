@@ -5,7 +5,7 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.IIamUserLoginLogClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.exception.iam.authentication.AuthFeignUserIdException;
@@ -71,11 +71,11 @@ public class CustomerLoginFailureHandler implements AuthenticationFailureHandler
         }
 
         //新增登录失败日志
-        if (null != AppContext.getContext().getUserId()) {
-            IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContext.getContext().getUserId()));
+        if (null != AppContextHolder.getContext().getUserId()) {
+            IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContextHolder.getContext().getUserId()));
             IamUserLoginLogCreateInputDto inputDto = LoginLogUtil.getUserLoginLogCreateInputDto(userSimple);
             inputDto.setAuthAction(IamAuthActionEnum.LOGIN);
-            inputDto.setAuthMethod(AppContext.getContext().getAuthMethod());
+            inputDto.setAuthMethod(AppContextHolder.getContext().getAuthMethod());
             inputDto.setAuthResult(IamAuthResultEnum.FAIL);
             inputDto.setFailReason(result.getMessage());
             LoginLogUtil.setUserAgentInfo(request, inputDto);

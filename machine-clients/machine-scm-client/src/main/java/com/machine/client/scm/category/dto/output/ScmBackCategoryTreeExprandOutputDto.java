@@ -1,0 +1,35 @@
+package com.machine.client.scm.category.dto.output;
+
+import com.machine.sdk.base.model.tree.TreeNode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ScmBackCategoryTreeExprandOutputDto extends TreeNode<ScmBackCategoryTreeExprandOutputDto> {
+
+    @Schema(description = "编码")
+    private String code;
+
+    @Schema(description = "后台分类中的分类数")
+    private Integer backCategoryNumber;
+
+    @Schema(description = "创建人姓名")
+    private String createName;
+
+    @Schema(description = "创建人ID")
+    private String createBy;
+
+    @Schema(description = "创建时间（Unix 时间戳）")
+    private Long createTime;
+
+    @Schema(description = "操作人姓名")
+    private String updateName;
+
+    @Schema(description = "操作人ID")
+    private String updateBy;
+
+    @Schema(description = "更新时间（Unix 时间戳）")
+    private Long updateTime;
+}

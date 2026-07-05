@@ -33,9 +33,9 @@ public class DataAppMessageTemplateDaoImpl implements IDataAppMessageTemplateDao
 
     @Override
     public DataAppMessageTemplateEntity detailByType(AppMessageTemplateDetailByTypeInputDto inputDto) {
-        Wrapper<DataAppMessageTemplateEntity> queryWrapper = new LambdaQueryWrapper<DataAppMessageTemplateEntity>()
+        Wrapper<DataAppMessageTemplateEntity> wrapper = new LambdaQueryWrapper<DataAppMessageTemplateEntity>()
                 .eq(DataAppMessageTemplateEntity::getTemplateType, inputDto.getTemplateType().getCode());
-        return dataAppMessageTemplateMapper.selectOne(queryWrapper);
+        return dataAppMessageTemplateMapper.selectOne(wrapper);
     }
 
     @Override

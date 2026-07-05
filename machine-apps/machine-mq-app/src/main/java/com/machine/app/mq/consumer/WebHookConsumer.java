@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.sdk.base.model.dto.data.WebHookInfoDto;
 import com.machine.sdk.self.client.WebhookClient;
@@ -43,7 +43,7 @@ public class WebHookConsumer {
     public <T> Consumer<Message<WebHookEventRequestBody<T>>> webHookFastEventConsumer() {
         return ConsumerWrapper.of(msgData -> {
             String userId = (String) msgData.getHeaders().get(USER_ID_KEY);
-            AppContext.getContext().setUserId(userId);
+            AppContextHolder.getContext().setUserId(userId);
 
             log.info("WebHookFastEventConsumer-接到消息={}", JSONUtil.toJsonStr(msgData.getPayload()));
             processWebHookCallback(msgData.getPayload());

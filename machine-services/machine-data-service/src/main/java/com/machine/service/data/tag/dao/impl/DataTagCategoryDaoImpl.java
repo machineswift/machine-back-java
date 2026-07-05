@@ -6,7 +6,7 @@ import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.service.data.tag.dao.IDataTagCategoryDao;
 import com.machine.service.data.tag.dao.mapper.DataTagCategoryMapper;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagCategoryEntity;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,17 +64,17 @@ public class DataTagCategoryDaoImpl implements IDataTagCategoryDao {
     @Override
     public DataTagCategoryEntity getByParentIdAndName(String parentId,
                                                       String name) {
-        Wrapper<DataTagCategoryEntity> queryWrapper = new LambdaQueryWrapper<DataTagCategoryEntity>()
+        Wrapper<DataTagCategoryEntity> wrapper = new LambdaQueryWrapper<DataTagCategoryEntity>()
                 .eq(DataTagCategoryEntity::getParentId, parentId)
                 .eq(DataTagCategoryEntity::getName, name);
-        return tagCategoryMapper.selectOne(queryWrapper);
+        return tagCategoryMapper.selectOne(wrapper);
     }
 
     @Override
     public List<DataTagCategoryEntity> listAllByType(ProfileSubjectTypeEnum type) {
-        Wrapper<DataTagCategoryEntity> queryWrapper = new LambdaQueryWrapper<DataTagCategoryEntity>()
+        Wrapper<DataTagCategoryEntity> wrapper = new LambdaQueryWrapper<DataTagCategoryEntity>()
                 .eq(DataTagCategoryEntity::getType, type);
-        return tagCategoryMapper.selectList(queryWrapper);
+        return tagCategoryMapper.selectList(wrapper);
     }
 }
 

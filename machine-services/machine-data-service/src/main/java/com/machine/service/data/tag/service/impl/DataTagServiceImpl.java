@@ -14,7 +14,7 @@ import com.machine.service.data.tag.dao.IDataTagOptionDao;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagEntity;
 import com.machine.service.data.tag.dao.mapper.entity.DataTagCategoryEntity;
 import com.machine.service.data.tag.service.IDataTagService;
-import com.machine.starter.redis.cache.data.RedisCacheDataTagCategory;
+import com.machine.starter.redis.cache.data.RedisDataTagCategoryCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import java.util.Set;
 public class DataTagServiceImpl implements IDataTagService {
 
     @Autowired
-    private RedisCacheDataTagCategory dataTagCategoryCache;
+    private RedisDataTagCategoryCache dataTagCategoryCache;
 
     @Autowired
     private IDataTagDao tagDao;

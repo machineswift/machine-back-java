@@ -60,6 +60,18 @@ public interface IDataLeaf4RedisClient {
      */
     @GetMapping("data_tag_category_tree")
     String dataTagCategoryTree(@RequestParam("type") ProfileSubjectTypeEnum type);
+
+    /**
+     * 后台分类树数据的redis动态key
+     */
+    @GetMapping("scm_backCategory_tree")
+    String scmBackCategoryTree();
+
+    /**
+     * 前台分类树数据的redis动态key
+     */
+    @GetMapping("scm_frontCategory_tree")
+    String scmFrontCategoryTree();
 }
 
 

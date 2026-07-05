@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.data.filecenter.attachment.dao.mapper.DataAttachmentOperationLogMapper">
+
+    <select id="selectPage" resultType="com.machine.service.data.filecenter.attachment.dao.mapper.entity.DataAttachmentOperationLogEntity">
+        select l.*
+        from t_data_attachment_operation_log l
+        <where>
+            <if test="inputDto.attachmentId != null and inputDto.attachmentId != '' ">
+                AND l.attachment_id = #{inputDto.attachmentId}
+            </if>
+            <if test="inputDto.versionId != null and inputDto.versionId != '' ">
+                AND l.version_id = #{inputDto.versionId}
+            </if>
+            <if test="inputDto.operationTypeSet != null and inputDto.operationTypeSet.size > 0 ">
+                AND l.operation_type IN
+                <foreach item="item" collection="inputDto.operationTypeSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.operationResult != null ">
+                AND l.operation_result = #{inputDto.operationResult}
+            </if>
+            <if test="inputDto.ipAddress != null and inputDto.ipAddress != '' ">
+                AND l.ip_address #{inputDto.ipAddress}
+            </if>
+            <if test="inputDto.platform != null and inputDto.platform != '' ">
+                AND l.platform = #{inputDto.platform}
+            </if>
+            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0 ">
+                AND l.create_by IN
+                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND l.create_time >= #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND l.create_time <![CDATA[ <= ]]> #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY l.create_time DESC
+    </select>
+
+</mapper>

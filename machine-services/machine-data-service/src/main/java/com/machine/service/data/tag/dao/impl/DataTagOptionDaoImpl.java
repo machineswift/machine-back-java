@@ -44,25 +44,25 @@ public class DataTagOptionDaoImpl implements IDataTagOptionDao {
 
     @Override
     public DataTagOptionEntity getByTagIdAndCode(String tagId, String code) {
-        Wrapper<DataTagOptionEntity> queryWrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
+        Wrapper<DataTagOptionEntity> wrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
                 .eq(DataTagOptionEntity::getTagId, tagId)
                 .eq(DataTagOptionEntity::getCode, code);
-        return tagOptionMapper.selectOne(queryWrapper);
+        return tagOptionMapper.selectOne(wrapper);
     }
 
     @Override
     public DataTagOptionEntity getByTagIdAndName(String tagId, String name) {
-        Wrapper<DataTagOptionEntity> queryWrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
+        Wrapper<DataTagOptionEntity> wrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
                 .eq(DataTagOptionEntity::getTagId, tagId)
                 .eq(DataTagOptionEntity::getName, name);
-        return tagOptionMapper.selectOne(queryWrapper);
+        return tagOptionMapper.selectOne(wrapper);
     }
 
     @Override
     public List<DataTagOptionEntity> selectByTagId(String tagId) {
-        Wrapper<DataTagOptionEntity> queryWrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
+        Wrapper<DataTagOptionEntity> wrapper = new LambdaQueryWrapper<DataTagOptionEntity>()
                 .eq(DataTagOptionEntity::getTagId, tagId)
                 .orderByDesc(DataTagOptionEntity::getSort);
-        return tagOptionMapper.selectList(queryWrapper);
+        return tagOptionMapper.selectList(wrapper);
     }
 }

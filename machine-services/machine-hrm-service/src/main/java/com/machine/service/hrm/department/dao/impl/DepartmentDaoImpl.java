@@ -8,7 +8,7 @@ import com.machine.service.hrm.department.dao.IDepartmentDao;
 import com.machine.service.hrm.department.dao.mapper.IDepartmentMapper;
 import com.machine.service.hrm.department.dao.mapper.entity.DepartmentEntity;
 import com.machine.starter.mybatis.BaseEntity;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -56,10 +56,10 @@ public class DepartmentDaoImpl implements IDepartmentDao {
     @Override
     public DepartmentEntity getByName(String parentId,
                                       String name) {
-        Wrapper<DepartmentEntity> queryWrapper = new LambdaQueryWrapper<DepartmentEntity>()
+        Wrapper<DepartmentEntity> wrapper = new LambdaQueryWrapper<DepartmentEntity>()
                 .eq(DepartmentEntity::getParentId, parentId)
                 .eq(DepartmentEntity::getName, name);
-        return departmentMapper.selectOne(queryWrapper);
+        return departmentMapper.selectOne(wrapper);
     }
 
     @Override
@@ -69,10 +69,10 @@ public class DepartmentDaoImpl implements IDepartmentDao {
 
     @Override
     public List<DepartmentEntity> listSub4Recursion(String id) {
-        Wrapper<DepartmentEntity> queryWrapper = new LambdaQueryWrapper<DepartmentEntity>()
+        Wrapper<DepartmentEntity> wrapper = new LambdaQueryWrapper<DepartmentEntity>()
                 .eq(DepartmentEntity::getParentId, id)
                 .eq(DepartmentEntity::getStatus, BeiSenDepartmentStatusEnum.ENABLE);
-        List<DepartmentEntity> entityList = departmentMapper.selectList(queryWrapper);
+        List<DepartmentEntity> entityList = departmentMapper.selectList(wrapper);
         if (CollectionUtil.isEmpty(entityList)) {
             return null;
         }
@@ -80,10 +80,10 @@ public class DepartmentDaoImpl implements IDepartmentDao {
         List<DepartmentEntity> resultList = new ArrayList<>(entityList);
         List<String> currentIds = entityList.stream().map(BaseEntity::getId).toList();
         while (true) {
-            queryWrapper = new LambdaQueryWrapper<DepartmentEntity>()
+            wrapper = new LambdaQueryWrapper<DepartmentEntity>()
                     .in(DepartmentEntity::getParentId, currentIds)
                     .eq(DepartmentEntity::getStatus, BeiSenDepartmentStatusEnum.ENABLE);
-            entityList = departmentMapper.selectList(queryWrapper);
+            entityList = departmentMapper.selectList(wrapper);
             if (CollectionUtil.isEmpty(entityList)) {
                 break;
             }

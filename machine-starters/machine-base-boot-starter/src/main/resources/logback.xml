@@ -2,10 +2,10 @@
 <configuration>
     <!-- 日志输出格式 -->
     <property name="log.pattern_console"
-              value="%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %magenta([%thread]) %yellow([%tid]) %highlight([%-5level]) %green([%logger{128}]) -%msg%n"/>
+              value="%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %magenta([%thread]) %yellow([%tid]) %highlight([%-5level]) %blue([%X{userId:-}]) %green([%logger{128}]) -%msg%n"/>
 
     <property name="log.pattern_grpc"
-              value="【%d{yyyy-MM-dd HH:mm:ss.SSS}】【%thread】【%tid】【%-5level】【%logger{128}】-%msg%n"/>
+              value="【%d{yyyy-MM-dd HH:mm:ss.SSS}】【%thread】【%tid】【%-5level】【%X{userId:-}】【%logger{128}】-%msg%n"/>
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

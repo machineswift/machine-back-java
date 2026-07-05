@@ -26,36 +26,36 @@ public class JobPostRoleRelationDaoImpl implements IJobPostRoleRelationDao {
 
     @Override
     public int deleteByRoleId(String roleId) {
-        Wrapper<JobPostRoleRelationEntityEntity> queryWrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
+        Wrapper<JobPostRoleRelationEntityEntity> wrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
                 .eq(JobPostRoleRelationEntityEntity::getRoleId, roleId);
-        return jobPostRoleRelationMapper.delete(queryWrapper);
+        return jobPostRoleRelationMapper.delete(wrapper);
     }
 
     @Override
     public List<JobPostRoleRelationEntityEntity> selectByRoleId(String roleId) {
-        Wrapper<JobPostRoleRelationEntityEntity> queryWrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
+        Wrapper<JobPostRoleRelationEntityEntity> wrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
                 .eq(JobPostRoleRelationEntityEntity::getRoleId, roleId);
-        return jobPostRoleRelationMapper.selectList(queryWrapper);
+        return jobPostRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<JobPostRoleRelationEntityEntity> listByRoleIds(Set<String> roleIds) {
-        Wrapper<JobPostRoleRelationEntityEntity> queryWrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
+        Wrapper<JobPostRoleRelationEntityEntity> wrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
                 .in(JobPostRoleRelationEntityEntity::getRoleId, roleIds);
-        return jobPostRoleRelationMapper.selectList(queryWrapper);
+        return jobPostRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<JobPostRoleRelationEntityEntity> selectByJobPostId(String jobPostId) {
-        Wrapper<JobPostRoleRelationEntityEntity> queryWrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
+        Wrapper<JobPostRoleRelationEntityEntity> wrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
                 .eq(JobPostRoleRelationEntityEntity::getJobPostId, jobPostId);
-        return jobPostRoleRelationMapper.selectList(queryWrapper);
+        return jobPostRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<JobPostRoleRelationEntityEntity> listByJobPostIds(Set<String> jobPostIds) {
-        Wrapper<JobPostRoleRelationEntityEntity> queryWrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
+        Wrapper<JobPostRoleRelationEntityEntity> wrapper = new LambdaQueryWrapper<JobPostRoleRelationEntityEntity>()
                 .in(JobPostRoleRelationEntityEntity::getJobPostId, jobPostIds);
-        return jobPostRoleRelationMapper.selectList(queryWrapper);
+        return jobPostRoleRelationMapper.selectList(wrapper);
     }
 }

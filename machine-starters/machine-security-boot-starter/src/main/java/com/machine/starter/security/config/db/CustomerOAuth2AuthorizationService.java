@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationClient;
 import com.machine.client.iam.auth.dto.input.IamOAuth2AuthorizationDto;
 import com.machine.client.iam.auth.dto.output.IamOAuth2AuthorizationOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
@@ -27,7 +27,7 @@ public class CustomerOAuth2AuthorizationService implements OAuth2AuthorizationSe
 
     @Override
     public void save(OAuth2Authorization authorization) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         Assert.notNull(authorization, "authorization cannot be null");
         OAuth2Authorization existingAuthorization = findById(authorization.getId());
         if (existingAuthorization == null) {
@@ -39,14 +39,14 @@ public class CustomerOAuth2AuthorizationService implements OAuth2AuthorizationSe
 
     @Override
     public void remove(OAuth2Authorization authorization) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         String id = authorization.getId();
         oauth2AuthorizationClient.remove(id);
     }
 
     @Override
     public OAuth2Authorization findById(String id) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2AuthorizationOutputDto dto = oauth2AuthorizationClient.findById(id);
         if (Objects.isNull(dto)) {
             return null;
@@ -56,7 +56,7 @@ public class CustomerOAuth2AuthorizationService implements OAuth2AuthorizationSe
 
     @Override
     public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2AuthorizationDto iamOAuth2AuthorizationDto = new IamOAuth2AuthorizationDto();
         Assert.hasText(token, "token cannot be empty");
         if (tokenType == null) {

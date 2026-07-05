@@ -3,13 +3,14 @@ package com.machine.starter.security.login.username;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.IamUserDto;
 import com.machine.client.iam.user.dto.input.IamUserUpdatePasswordInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.base.exception.iam.authentication.UserStatusDisableException;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.exception.CaptchaWrongAuthenticationException;
 import io.micrometer.common.util.StringUtils;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 
 /**
  * 帐号密码登录认证
@@ -64,9 +67,10 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException(username);
         }
 
-        AppContext appContext = AppContext.getContext();
-        appContext.setUserId(iamUserDto.getUserId());
-        appContext.setAuthMethod(IamAuthMethodEnum.USERNAME_PASSWORD);
+        AppContextHolder appContextHolder = AppContextHolder.getContext();
+        appContextHolder.setUserId(iamUserDto.getUserId());
+        MDC.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());
+        appContextHolder.setAuthMethod(IamAuthMethodEnum.USERNAME_PASSWORD);
 
         if (!iamUserDto.isEnabled()) {
             throw new UserStatusDisableException("您的账号已被禁用，请联系客服了解详情");
@@ -93,7 +97,7 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
 
         String encodePassword = passwordEncoder.encode(password);
         IamUserUpdatePasswordInputDto inputDto = new IamUserUpdatePasswordInputDto();
-        inputDto.setUserId(AppContext.getContext().getUserId());
+        inputDto.setUserId(AppContextHolder.getContext().getUserId());
         inputDto.setPassword(encodePassword);
         userClient.updatePassword(inputDto);
     }

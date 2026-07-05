@@ -18,8 +18,8 @@ public class IamUserPermissionRelationDaoImpl implements IIamUserPermissionRelat
 
     @Override
     public List<IamUserPermissionRelationEntity> selectByPermissionId(String permissionId) {
-        Wrapper<IamUserPermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserPermissionRelationEntity>()
+        Wrapper<IamUserPermissionRelationEntity> wrapper = new LambdaQueryWrapper<IamUserPermissionRelationEntity>()
                 .eq(IamUserPermissionRelationEntity::getPermissionId, permissionId);
-        return userPermissionRelationMapper.selectList(queryWrapper);
+        return userPermissionRelationMapper.selectList(wrapper);
     }
 }

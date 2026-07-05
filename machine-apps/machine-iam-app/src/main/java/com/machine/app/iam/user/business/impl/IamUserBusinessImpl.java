@@ -10,8 +10,8 @@ import com.machine.app.iam.user.controller.vo.response.IamUserDetailResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserExpandListResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserRoleInfoResponse;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.client.data.file.download.IDataDownloadClient;
-import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
+import com.machine.client.data.filecenter.download.IDataDownloadClient;
+import com.machine.client.data.filecenter.download.dto.input.DataDownloadContentDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
 import com.machine.client.hrm.employee.IHrmEmployeeDefaultClient;
@@ -30,12 +30,15 @@ import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
-import com.machine.starter.redis.cache.hrm.RedisCacheHrmDepartment;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.sdk.base.tool.ClientEnvironmentUtil;
+import com.machine.sdk.base.tool.UUIDv7;
+import com.machine.starter.redis.cache.hrm.RedisHrmDepartmentCache;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,10 +70,10 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private RedisCacheHrmDepartment departmentCache;
+    private RedisHrmDepartmentCache departmentCache;
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private MachineJwtUtil machineJwtUtil;
@@ -505,7 +508,7 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
         inputDto.setUserIdSet(finallyqueryUserIdSet);
 
         //创建下载任务
-        String downloadId = UUID.randomUUID().toString().replace("-", "");
+        String downloadId = UUIDv7.generateWithoutDashes();
         DataDownloadContentDto downloadTask = new DataDownloadContentDto();
         downloadTask.setId(downloadId);
         downloadTask.setModule(ModuleEnum.IAM);
@@ -516,8 +519,12 @@ public class IamUserBusinessImpl implements IIamUserBusiness {
 
         inputDto.setDownloadId(downloadId);
         downloadTask.setJsonParams(JSONUtil.toJsonStr(inputDto));
-        downloadClient.createTask(downloadTask);
 
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        ClientEnvironmentInfo environmentInfo = ClientEnvironmentUtil.buildInfo(servletRequest);
+        downloadTask.setFeatures(JSONUtil.toJsonStr(environmentInfo));
+
+        downloadClient.createTask(downloadTask);
         //MaterialDto material = userClient.exportUser(inputDto);
     }
 

@@ -86,16 +86,16 @@ public class DataLabelOptionDaoImpl implements IDataLabelOptionDao {
     @Override
     public DataLabelOptionEntity getByLabelIdAndName(String labelId,
                                                      String name) {
-        Wrapper<DataLabelOptionEntity> queryWrapper = new LambdaQueryWrapper<DataLabelOptionEntity>()
+        Wrapper<DataLabelOptionEntity> wrapper = new LambdaQueryWrapper<DataLabelOptionEntity>()
                 .eq(DataLabelOptionEntity::getLabelId, labelId)
                 .eq(DataLabelOptionEntity::getName, name);
-        return labelOptionMapper.selectOne(queryWrapper);
+        return labelOptionMapper.selectOne(wrapper);
     }
 
     @Override
     public List<DataLabelOptionEntity> listByIdSet(Set<String> idSet) {
-        Wrapper<DataLabelOptionEntity> queryWrapper = new LambdaQueryWrapper<DataLabelOptionEntity>()
+        Wrapper<DataLabelOptionEntity> wrapper = new LambdaQueryWrapper<DataLabelOptionEntity>()
                 .in(DataLabelOptionEntity::getId, idSet);
-        return labelOptionMapper.selectList(queryWrapper);
+        return labelOptionMapper.selectList(wrapper);
     }
 }

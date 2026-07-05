@@ -14,7 +14,7 @@ import com.machine.service.hrm.department.dao.IDepartmentExpansionDao;
 import com.machine.service.hrm.department.dao.mapper.entity.DepartmentEntity;
 import com.machine.service.hrm.department.dao.mapper.entity.DepartmentExpansionEntity;
 import com.machine.service.hrm.department.service.IDepartmentService;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

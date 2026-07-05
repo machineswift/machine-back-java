@@ -40,9 +40,9 @@ public class CrmCustomerDaoImpl implements ICrmCustomerDao {
 
     @Override
     public CrmCustomerEntity getByIdentityCardNumber(String identityCardNumber) {
-        Wrapper<CrmCustomerEntity> queryWrapper = new LambdaQueryWrapper<CrmCustomerEntity>()
+        Wrapper<CrmCustomerEntity> wrapper = new LambdaQueryWrapper<CrmCustomerEntity>()
                 .eq(CrmCustomerEntity::getIdentityCardNumber, identityCardNumber);
-        return customerMapper.selectOne(queryWrapper);
+        return customerMapper.selectOne(wrapper);
     }
 
     @Override

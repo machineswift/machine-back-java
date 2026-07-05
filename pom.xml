@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.machine</groupId>
     <artifactId>machine-back-java</artifactId>
-    <version>2.0.0-RELEASE</version>
+    <version>2026.07-RELEASE</version>
 
     <modules>
         <module>machine-generals</module>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2025.1.1</version>
+                <version>2025.1.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -48,7 +48,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>4.0.5</version>
+                <version>4.0.7</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -56,13 +56,13 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webmvc</artifactId>
-                <version>4.0.5</version>
+                <version>4.0.7</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-tomcat</artifactId>
-                <version>4.0.5</version>
+                <version>4.0.7</version>
             </dependency>
             <!-- spring boot 结束-->
 
@@ -70,31 +70,53 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>2.0.0-M4</version>
+                <version>2.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
-        <!--    <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-bom</artifactId>
-                <version>1.1.2.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!--    <dependency>
+                    <groupId>com.alibaba.cloud.ai</groupId>
+                    <artifactId>spring-ai-alibaba-bom</artifactId>
+                    <version>1.1.2.2</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
 
-            <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-                <version>1.1.2.2</version>
-            </dependency>
+                <dependency>
+                    <groupId>com.alibaba.cloud.ai</groupId>
+                    <artifactId>spring-ai-alibaba-agent-framework</artifactId>
+                    <version>1.1.2.2</version>
+                </dependency>
 
-            <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-                <version>1.1.2.2</version>
-            </dependency>-->
+                <dependency>
+                    <groupId>com.alibaba.cloud.ai</groupId>
+                    <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+                    <version>1.1.2.2</version>
+                </dependency>-->
             <!-- SPRING AI 结束-->
+
+            <!-- camunda 开始 -->
+            <dependency>
+                <groupId>org.cibseven.bpm</groupId>
+                <artifactId>cibseven-bom</artifactId>
+                <version>2.2.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js</artifactId>
+                <version>23.0.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js-scriptengine</artifactId>
+                <version>23.0.6</version>
+            </dependency>
+            <!-- camunda 结束 -->
 
             <!-- sky walking 开始-->
             <dependency>
@@ -109,22 +131,6 @@
                 <version>9.6.0</version>
             </dependency>
             <!-- sky walking 结束-->
-
-            <!-- camunda 开始 -->
-            <dependency>
-                <groupId>org.camunda.bpm</groupId>
-                <artifactId>camunda-bom</artifactId>
-                <version>7.24.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.camunda.bpm</groupId>
-                <artifactId>camunda-external-task-client</artifactId>
-                <version>7.24.0</version>
-            </dependency>
-            <!-- camunda 结束 -->
 
             <!-- swagger 开始 -->
             <dependency>
@@ -144,25 +150,25 @@
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>4.3.0</version>
+                <version>4.4.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
-                <version>4.3.0</version>
+                <version>4.4.0</version>
             </dependency>
 
             <dependency>
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
-                <version>7.4.1</version>
+                <version>7.5.2</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
-                <version>3.2.3</version>
+                <version>3.2.4</version>
             </dependency>
             <!--redis 结束-->
 
@@ -206,7 +212,7 @@
             <dependency>
                 <groupId>com.github.gavlyukovskiy</groupId>
                 <artifactId>p6spy-spring-boot-starter</artifactId>
-                <version>2.0.0</version>
+                <version>2.0.1</version>
             </dependency>
             <!-- mybatis-plus 结束-->
 
@@ -214,18 +220,18 @@
             <dependency>
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-walkthrough-common</artifactId>
-                <version>2.1.0</version>
+                <version>2.2.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-streaming-java</artifactId>
-                <version>2.1.0</version>
+                <version>2.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-clients</artifactId>
-                <version>2.1.0</version>
+                <version>2.2.1</version>
             </dependency>
 
             <dependency>
@@ -249,27 +255,9 @@
             </dependency>
 
             <dependency>
-                <groupId>com.huaweicloud</groupId>
-                <artifactId>esdk-obs-java</artifactId>
-                <version>3.22.12</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.aliyun.oss</groupId>
-                <artifactId>aliyun-sdk-oss</artifactId>
-                <version>3.16.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.qcloud</groupId>
-                <artifactId>cos_api</artifactId>
-                <version>5.6.260</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>8.5.17</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.26.2</version>
             </dependency>
 
             <dependency>
@@ -287,13 +275,37 @@
             <dependency>
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-core</artifactId>
-                <version>3.2.3</version>
+                <version>3.3.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-parsers-standard-package</artifactId>
-                <version>3.2.3</version>
+                <version>3.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>8.5.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.huaweicloud</groupId>
+                <artifactId>esdk-obs-java</artifactId>
+                <version>3.22.12</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>3.16.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>5.6.260</version>
             </dependency>
             <!-- obs 文件服务 结束-->
 
@@ -301,17 +313,17 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.18.7</version>
+                <version>1.18.9</version>
             </dependency>
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy-agent</artifactId>
-                <version>1.18.7</version>
+                <version>1.18.9</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.30.2-GA</version>
+                <version>3.31.0-GA</version>
             </dependency>
             <!-- 修改类的字节码  结束-->
 
@@ -332,31 +344,31 @@
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-miniapp</artifactId>
-                <version>4.8.2.B</version>
+                <version>4.8.3-20260601.221544</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-pay</artifactId>
-                <version>4.8.2.B</version>
+                <version>4.8.3-20260601.221544</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-open</artifactId>
-                <version>4.8.2.B</version>
+                <version>4.8.3-20260601.221544</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-mp</artifactId>
-                <version>4.8.2.B</version>
+                <version>4.8.3-20260601.221544</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-cp</artifactId>
-                <version>4.8.2.B</version>
+                <version>4.8.3-20260601.221544</version>
             </dependency>
             <!-- 微信 结束  -->
 
@@ -390,6 +402,22 @@
             </dependency>
 
             <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-bom</artifactId>
+                <version>11.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bc-jdk18on-bom</artifactId>
+                <version>1.84</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>2.14.5</version>
@@ -398,7 +426,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.6</version>
+                <version>5.6.1</version>
             </dependency>
 
             <dependency>
@@ -416,19 +444,19 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.8.44</version>
+                <version>5.8.46</version>
             </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.5.0-jre</version>
+                <version>33.6.0-jre</version>
             </dependency>
 
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.22.1</version>
+                <version>1.22.2</version>
             </dependency>
 
             <dependency>
@@ -440,7 +468,7 @@
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.13.2</version>
+                <version>2.14.0</version>
             </dependency>
 
             <dependency>
@@ -449,18 +477,12 @@
                 <version>1.16.7</version>
             </dependency>
 
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>0.13.0</version>
-            </dependency>
-
             <!-- 工具  结束-->
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.44</version>
+                <version>1.18.46</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

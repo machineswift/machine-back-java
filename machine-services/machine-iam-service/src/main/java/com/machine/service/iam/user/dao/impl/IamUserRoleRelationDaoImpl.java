@@ -11,7 +11,7 @@ import com.machine.service.iam.user.dao.IIamUserRoleRelationDao;
 import com.machine.service.iam.user.dao.mapper.IamUserRoleRelationMapper;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -101,10 +101,10 @@ public class IamUserRoleRelationDaoImpl implements IIamUserRoleRelationDao {
     @Override
     public IamUserRoleRelationEntity getByUk(String userId,
                                              String roleId) {
-        Wrapper<IamUserRoleRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
+        Wrapper<IamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
                 .eq(IamUserRoleRelationEntity::getUserId, userId)
                 .eq(IamUserRoleRelationEntity::getRoleId, roleId);
-        return userRoleRelationMapper.selectOne(queryWrapper);
+        return userRoleRelationMapper.selectOne(wrapper);
     }
 
     @Override
@@ -114,16 +114,16 @@ public class IamUserRoleRelationDaoImpl implements IIamUserRoleRelationDao {
 
     @Override
     public List<IamUserRoleRelationEntity> listByUserId(String userId) {
-        Wrapper<IamUserRoleRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
+        Wrapper<IamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
                 .eq(IamUserRoleRelationEntity::getUserId, userId);
-        return userRoleRelationMapper.selectList(queryWrapper);
+        return userRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<IamUserRoleRelationEntity> selectByRoleId(String roleId) {
-        Wrapper<IamUserRoleRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
+        Wrapper<IamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
                 .eq(IamUserRoleRelationEntity::getRoleId, roleId);
-        return userRoleRelationMapper.selectList(queryWrapper);
+        return userRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
@@ -133,16 +133,16 @@ public class IamUserRoleRelationDaoImpl implements IIamUserRoleRelationDao {
 
     @Override
     public List<IamUserRoleRelationEntity> listByRoleIdSet(Set<String> roleIdSet) {
-        Wrapper<IamUserRoleRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
+        Wrapper<IamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
                 .in(IamUserRoleRelationEntity::getRoleId, roleIdSet);
-        return userRoleRelationMapper.selectList(queryWrapper);
+        return userRoleRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<IamUserRoleRelationEntity> listByUserIdSet(Set<String> userIdSet) {
-        Wrapper<IamUserRoleRelationEntity> queryWrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
+        Wrapper<IamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<IamUserRoleRelationEntity>()
                 .in(IamUserRoleRelationEntity::getUserId, userIdSet);
-        return userRoleRelationMapper.selectList(queryWrapper);
+        return userRoleRelationMapper.selectList(wrapper);
     }
 
     @Override

@@ -51,24 +51,24 @@ public class IamOauth2AuthorizationDaoImpl implements IIamOauth2AuthorizationDao
     public IamOauth2AuthorizationEntity findByToken(IamOauth2AuthorizationEntity entity) {
          try {
             Map<String, Object> map = entityToMap(entity);
-            QueryWrapper<IamOauth2AuthorizationEntity> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<IamOauth2AuthorizationEntity> wrapper = new QueryWrapper<>();
 
             if (map.size() == 1) {
                 for (Map.Entry<String, Object> entry : map.entrySet()) {
-                    queryWrapper.eq(entry.getKey(), entry.getValue());
+                    wrapper.eq(entry.getKey(), entry.getValue());
                 }
             } else if (map.size() > 1) {
                 boolean first = true;
                 for (Map.Entry<String, Object> entry : map.entrySet()) {
                     if (!first) {
-                        queryWrapper.or();
+                        wrapper.or();
                     }
-                    queryWrapper.eq(entry.getKey(), entry.getValue());
+                    wrapper.eq(entry.getKey(), entry.getValue());
                     first = false;
                 }
             }
 
-            return authorizationMapper.selectOne(queryWrapper);
+            return authorizationMapper.selectOne(wrapper);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to convert entity to map", e);
         }

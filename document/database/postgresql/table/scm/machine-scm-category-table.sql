@@ -5,7 +5,6 @@ CREATE TABLE t_scm_back_category
     parent_id   VARCHAR(32) NOT NULL,
     code        VARCHAR(32) NOT NULL,
     name        VARCHAR(32) NOT NULL,
-    status      VARCHAR(8) NOT NULL DEFAULT 'DISABLE',
     sort        BIGINT NOT NULL DEFAULT 0,
     features    TEXT,
     create_by   VARCHAR(32) NOT NULL,
@@ -22,7 +21,6 @@ COMMENT ON COLUMN t_scm_back_category.id IS 'ID';
 COMMENT ON COLUMN t_scm_back_category.parent_id IS '父ID';
 COMMENT ON COLUMN t_scm_back_category.code IS '编码';
 COMMENT ON COLUMN t_scm_back_category.name IS '名称';
-COMMENT ON COLUMN t_scm_back_category.status IS '状态';
 COMMENT ON COLUMN t_scm_back_category.sort IS '排序，sort值大的排序靠前';
 COMMENT ON COLUMN t_scm_back_category.features IS '扩展特性JSON';
 COMMENT ON COLUMN t_scm_back_category.create_by IS '创建人';
@@ -37,7 +35,6 @@ CREATE TABLE t_scm_front_category
     parent_id   VARCHAR(32) NOT NULL,
     code        VARCHAR(32) NOT NULL,
     name        VARCHAR(32) NOT NULL,
-    status      VARCHAR(8) NOT NULL DEFAULT 'DISABLE',
     sort        BIGINT NOT NULL DEFAULT 0,
     features    TEXT,
     create_by   VARCHAR(32) NOT NULL,
@@ -54,7 +51,6 @@ COMMENT ON COLUMN t_scm_front_category.id IS 'ID';
 COMMENT ON COLUMN t_scm_front_category.parent_id IS '父ID';
 COMMENT ON COLUMN t_scm_front_category.code IS '编码';
 COMMENT ON COLUMN t_scm_front_category.name IS '名称';
-COMMENT ON COLUMN t_scm_front_category.status IS '状态';
 COMMENT ON COLUMN t_scm_front_category.sort IS '排序，sort值大的排序靠前';
 COMMENT ON COLUMN t_scm_front_category.features IS '扩展特性JSON';
 COMMENT ON COLUMN t_scm_front_category.create_by IS '创建人';
@@ -108,7 +104,6 @@ CREATE TABLE t_scm_property
     is_required   BOOLEAN NOT NULL DEFAULT false,
     is_multiple   BOOLEAN NOT NULL DEFAULT false,
     is_search     BOOLEAN NOT NULL DEFAULT false,
-    sort               BIGINT NOT NULL DEFAULT 0,
     features           TEXT,
     create_by          VARCHAR(32) NOT NULL,
     create_time        BIGINT NOT NULL,
@@ -128,7 +123,6 @@ COMMENT ON COLUMN t_scm_property.input_type IS '输入方式';
 COMMENT ON COLUMN t_scm_property.is_required IS '是否必需';
 COMMENT ON COLUMN t_scm_property.is_multiple IS '是否多选';
 COMMENT ON COLUMN t_scm_property.is_search IS '是否可搜索';
-COMMENT ON COLUMN t_scm_property.sort IS '排序，sort值大的排序靠前';
 COMMENT ON COLUMN t_scm_property.features IS '扩展特性JSON';
 COMMENT ON COLUMN t_scm_property.create_by IS '创建人';
 COMMENT ON COLUMN t_scm_property.create_time IS '创建时间';

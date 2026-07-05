@@ -90,7 +90,7 @@ public class AiOllamaController {
 
     @GetMapping("test_multimodality")
     public void testMultimodality() {
-        ClassPathResource imageResource = new ClassPathResource("doc/image/地球.jpeg");
+        ClassPathResource imageResource = new ClassPathResource("doc/image/multimodal.jpeg");
 
         OllamaChatOptions options = OllamaChatOptions
                 .builder()

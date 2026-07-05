@@ -1,0 +1,26 @@
+package com.machine.client.data.filecenter.attachment;
+
+import com.machine.client.data.filecenter.attachment.dto.output.DataFileDetailOutputDto;
+import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.request.IdSetRequest;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Map;
+
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/file_center/file",
+        configuration = OpenFeignMinTimeConfig.class)
+public interface IDataFileClient {
+
+    @PostMapping("get_by_id")
+    DataFileDetailOutputDto getById(@RequestBody @Validated IdRequest request);
+
+    @PostMapping("map_by_idSet")
+    Map<String, DataFileDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
+
+}
+
+

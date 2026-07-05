@@ -90,16 +90,16 @@ public class DataShopLabelOptionRelationDaoImpl implements IDataShopLabelOptionR
 
     @Override
     public List<DataShopLabelOptionRelationEntity> listByLabelOptionId(String labelOptionId) {
-        Wrapper<DataShopLabelOptionRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
+        Wrapper<DataShopLabelOptionRelationEntity> wrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
                 .eq(DataShopLabelOptionRelationEntity::getLabelOptionId, labelOptionId);
-        return shopLabelOptionRelationMapper.selectList(queryWrapper);
+        return shopLabelOptionRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataShopLabelOptionRelationEntity> listByShopIds(Set<String> shopIdSet) {
-        Wrapper<DataShopLabelOptionRelationEntity> queryWrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
+        Wrapper<DataShopLabelOptionRelationEntity> wrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
                 .in(DataShopLabelOptionRelationEntity::getShopId, shopIdSet);
-        return shopLabelOptionRelationMapper.selectList(queryWrapper);
+        return shopLabelOptionRelationMapper.selectList(wrapper);
     }
 
 }

@@ -16,8 +16,8 @@ import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.service.data.area.dao.IDataAreaDao;
 import com.machine.service.data.area.dao.mapper.entity.DataAreaEntity;
 import com.machine.service.data.area.service.IDataAreaService;
-import com.machine.starter.redis.cache.data.RedisCacheDataArea;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.data.RedisDataAreaCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -39,7 +39,7 @@ import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Area.D
 public class DataAreaServiceImpl implements IDataAreaService {
 
     @Autowired
-    private RedisCacheDataArea areaCache;
+    private RedisDataAreaCache areaCache;
 
     @Autowired
     private RedissonClient redissonClient;

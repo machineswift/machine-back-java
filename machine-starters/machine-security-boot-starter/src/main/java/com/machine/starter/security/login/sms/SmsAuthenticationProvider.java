@@ -2,22 +2,24 @@ package com.machine.starter.security.login.sms;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.base.exception.iam.authentication.UserStatusDisableException;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.exception.CaptchaWrongAuthenticationException;
 import com.machine.starter.security.exception.PhoneNotFoundException;
 import lombok.SneakyThrows;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Iam.LOCK_IAM_AUTH_SMS_CAPTCHA_PHONE_LOGIN_SUBMIT;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_SMS_CAPTCHA_PHONE_LOGIN;
 
@@ -48,9 +50,10 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
             throw new PhoneNotFoundException(phone);
         }
 
-        AppContext appContext = AppContext.getContext();
-        appContext.setUserId(iamUserDto.getUserId());
-        appContext.setAuthMethod(IamAuthMethodEnum.PHONE_CAPTCHA);
+        AppContextHolder appContextHolder = AppContextHolder.getContext();
+        appContextHolder.setUserId(iamUserDto.getUserId());
+        MDC.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());
+        appContextHolder.setAuthMethod(IamAuthMethodEnum.PHONE_CAPTCHA);
 
         if (!iamUserDto.isEnabled()) {
             throw new UserStatusDisableException("您的账号已被禁用，请联系客服了解详情");

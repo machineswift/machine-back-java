@@ -42,9 +42,9 @@ public class DataSupplierUserDaoImpl implements IDataSupplierUserDao {
 
     @Override
     public DataSupplierUserEntity getByUserId(String userId) {
-        Wrapper<DataSupplierUserEntity> queryWrapper = new LambdaQueryWrapper<DataSupplierUserEntity>()
+        Wrapper<DataSupplierUserEntity> wrapper = new LambdaQueryWrapper<DataSupplierUserEntity>()
                 .eq(DataSupplierUserEntity::getUserId, userId);
-        return dataSupplierUserMapper.selectOne(queryWrapper);
+        return dataSupplierUserMapper.selectOne(wrapper);
     }
 
     @Override

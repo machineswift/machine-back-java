@@ -36,7 +36,7 @@ public class OpenFeignMaxTimeConfig {
     @Bean
     public Request.Options options() {
         return new Request.Options(5L, TimeUnit.SECONDS,
-                2 * 3600L, TimeUnit.SECONDS, false);
+                6 * 60 * 60L, TimeUnit.SECONDS, false);
     }
 
     @Bean

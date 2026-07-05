@@ -14,7 +14,7 @@ import com.machine.service.iam.role.dao.IIamRoleDao;
 import com.machine.service.iam.role.dao.mapper.IamRoleMapper;
 import com.machine.service.iam.role.dao.mapper.entity.IamRoleEntity;
 import com.machine.starter.mq.function.CustomerStreamBridge;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -95,9 +95,9 @@ public class IamRoleDaoImpl implements IIamRoleDao {
 
     @Override
     public IamRoleEntity getByName(String name) {
-        Wrapper<IamRoleEntity> queryWrapper = new LambdaQueryWrapper<IamRoleEntity>()
+        Wrapper<IamRoleEntity> wrapper = new LambdaQueryWrapper<IamRoleEntity>()
                 .eq(IamRoleEntity::getName, name);
-        return roleMapper.selectOne(queryWrapper);
+        return roleMapper.selectOne(wrapper);
     }
 
     @Override

@@ -5,11 +5,12 @@ import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.IIamUserLoginLogClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.model.AppResult;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.MachineJwtUtil;
 import com.machine.starter.security.util.LoginLogUtil;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 import static com.machine.starter.security.SecurityConstant.*;
@@ -49,22 +49,22 @@ public class CustomerLoginSuccessHandler implements AuthenticationSuccessHandler
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         // 生成JWT accessToken
-        String accessTokenId = UUID.randomUUID().toString().replaceAll("-", "");
+        String accessTokenId = UUIDv7.generateWithoutDashes();
         long accessTokenExpire = System.currentTimeMillis() + AUTH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4AuthToken = new HashMap<>();
         claimMap4AuthToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, accessTokenId);
-        claimMap4AuthToken.put(USER_ID_KEY, AppContext.getContext().getUserId());
+        claimMap4AuthToken.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());
         String accessToken = machineJwtUtils.generateToken(
                 authentication.getName(),
                 claimMap4AuthToken,
                 accessTokenExpire);
 
         //生成JWT refreshToken
-        String refreshTokenId = UUID.randomUUID().toString().replaceAll("-", "");
+        String refreshTokenId = UUIDv7.generateWithoutDashes();
         long refreshTokenExpire = System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4RefreshToken = new HashMap<>();
         claimMap4RefreshToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, refreshTokenId);
-        claimMap4RefreshToken.put(USER_ID_KEY, AppContext.getContext().getUserId());
+        claimMap4RefreshToken.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());
         claimMap4RefreshToken.put(AUTH_TOKEN_REFRESH_TOKEN_KEY, AUTH_TOKEN_REFRESH_TOKEN_KEY);
         String refreshToken = machineJwtUtils.generateToken(
                 authentication.getName(),
@@ -72,10 +72,10 @@ public class CustomerLoginSuccessHandler implements AuthenticationSuccessHandler
                 refreshTokenExpire);
 
         //新增登录成功日志
-        IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContext.getContext().getUserId()));
+        IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(AppContextHolder.getContext().getUserId()));
         IamUserLoginLogCreateInputDto inputDto = LoginLogUtil.getUserLoginLogCreateInputDto(userSimple);
         inputDto.setAuthAction(IamAuthActionEnum.LOGIN);
-        inputDto.setAuthMethod(AppContext.getContext().getAuthMethod());
+        inputDto.setAuthMethod(AppContextHolder.getContext().getAuthMethod());
         inputDto.setAuthResult(IamAuthResultEnum.SUCCESS);
         inputDto.setAccessTokenId(accessTokenId);
         inputDto.setRefreshTokenId(refreshTokenId);

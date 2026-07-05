@@ -9,8 +9,8 @@ import com.machine.app.manage.data.shop.controller.vo.response.*;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
 import com.machine.client.data.label.IDataLabelOptionClient;
 import com.machine.client.data.label.dto.output.DataLabelOptionListOutputDto;
-import com.machine.client.data.file.download.IDataDownloadClient;
-import com.machine.client.data.file.download.dto.input.DataDownloadContentDto;
+import com.machine.client.data.filecenter.download.IDataDownloadClient;
+import com.machine.client.data.filecenter.download.dto.input.DataDownloadContentDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.IDataShopLabelOptionRelationClient;
@@ -25,7 +25,8 @@ import com.machine.sdk.base.envm.base.StorageTypeEnum;
 import com.machine.sdk.base.envm.data.DataCountryEnum;
 import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
@@ -33,12 +34,17 @@ import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFrontPhotoDt
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.tool.ClientEnvironmentUtil;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.data.RedisCacheDataArea;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.sdk.base.tool.UUIDv7;
+import com.machine.starter.redis.cache.data.RedisDataAreaCache;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,10 +58,10 @@ import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_
 public class DataShopBusinessImpl implements IDataShopBusiness {
 
     @Autowired
-    private RedisCacheDataArea areaCache;
+    private RedisDataAreaCache areaCache;
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IIamUserClient userClient;
@@ -533,7 +539,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         }
         inputDto.setShopIdSet(finallyQueryShopIdSet);
 
-        String downloadId = UUID.randomUUID().toString().replace("-", "");
+        String downloadId = UUIDv7.generateWithoutDashes();
         DataDownloadContentDto downloadTask = new DataDownloadContentDto();
         downloadTask.setId(downloadId);
         downloadTask.setModule(ModuleEnum.DATA);
@@ -541,9 +547,13 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         downloadTask.setClassName(IDataShopClient.class.getName());
         downloadTask.setMethodName("exportShop");
         downloadTask.setParamsClassName(DataShopExportInputDto.class.getName());
-
         inputDto.setDownloadId(downloadId);
         downloadTask.setJsonParams(JSONUtil.toJsonStr(inputDto));
+
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        ClientEnvironmentInfo environmentInfo = ClientEnvironmentUtil.buildInfo(servletRequest);
+        downloadTask.setFeatures(JSONUtil.toJsonStr(environmentInfo));
+
         downloadClient.createTask(downloadTask);
     }
 

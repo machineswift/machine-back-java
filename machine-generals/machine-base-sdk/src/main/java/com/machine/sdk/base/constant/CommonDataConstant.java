@@ -2,6 +2,7 @@ package com.machine.sdk.base.constant;
 
 public class CommonDataConstant {
 
+
     public static class Label {
         /**
          * 标签编码前缀

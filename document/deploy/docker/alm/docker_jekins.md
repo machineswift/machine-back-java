@@ -15,7 +15,7 @@ docker run -d \
   --memory=8g \
   --memory-swap=8g \
   --restart unless-stopped \
-  jenkins/jenkins:2.533-jdk21
+jenkins/jenkins:2.563-jdk21
 ```
 ### 查看 admin 密码
 ```text

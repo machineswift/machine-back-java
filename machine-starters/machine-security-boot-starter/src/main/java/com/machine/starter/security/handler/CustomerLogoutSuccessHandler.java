@@ -7,16 +7,16 @@ import com.machine.client.iam.user.IIamUserLoginLogClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.sdk.base.model.AppResult;
 import com.machine.sdk.base.model.request.IdRequest;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.MachineJwtUtil;
+import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
 import com.machine.starter.security.util.LoginLogUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,7 +63,7 @@ public class CustomerLogoutSuccessHandler implements LogoutSuccessHandler {
             请求资源时判断是否存在缓存的黑名单中，存在则拒绝访问。
          */
         String jwt = request.getHeader(AUTH_TOKEN_HEADER_KEY);
-        Claims claimHeader = machineJwtUtil.getClaimsByToken(jwt.substring(BEARER_TYPE.length() + 1));
+        JwtClaims claimHeader = machineJwtUtil.getClaimsByToken(jwt.substring(BEARER_TYPE.length() + 1));
         String accessTokenId = claimHeader.getId();
 
         //验证是否为黑名单
@@ -76,7 +76,7 @@ public class CustomerLogoutSuccessHandler implements LogoutSuccessHandler {
                 (claimHeader.getExpiration().getTime() - System.currentTimeMillis()) / 1000);
 
         String currentUserId = claimHeader.get(USER_ID_KEY).toString();
-        AppContext.getContext().setUserId(currentUserId);
+        AppContextHolder.getContext().setUserId(currentUserId);
         IamUserLoginLogDetailOutputDto detailOutputDto = loginLogClient.getLoginSuccessByAccessTokenId(accessTokenId);
 
         List<String> hasProcessLoginLogList = blackAllAvailableToken(machineJwtUtil, currentUserId, loginLogClient, customerRedisCommands);

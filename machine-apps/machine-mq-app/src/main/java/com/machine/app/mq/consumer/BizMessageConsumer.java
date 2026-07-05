@@ -3,7 +3,7 @@ package com.machine.app.mq.consumer;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.message.IDataAppMessageClient;
 import com.machine.client.data.message.dto.input.AppMessageSendInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.ConsumerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class BizMessageConsumer {
     public Consumer<Message<AppMessageSendInputDto>> businessMessageConsumer() {
         return ConsumerWrapper.of(msgData -> {
             String userId = (String) msgData.getHeaders().get(USER_ID_KEY);
-            AppContext.getContext().setUserId(userId);
+            AppContextHolder.getContext().setUserId(userId);
 
             log.info("businessMessageConsumer-接到消息={}", JSONUtil.toJsonStr(msgData.getPayload()));
             messageClient.sendMessage(msgData.getPayload());

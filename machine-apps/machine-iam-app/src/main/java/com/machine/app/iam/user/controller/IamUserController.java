@@ -7,7 +7,6 @@ import com.machine.app.iam.user.controller.vo.request.*;
 import com.machine.app.iam.user.controller.vo.response.IamUserDetailResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserExpandListResponseVo;
 import com.machine.app.iam.user.controller.vo.response.IamUserSimpleListResponseVo;
-import com.machine.sdk.base.context.AppContext;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
 import com.machine.sdk.base.model.response.PageResponse;
@@ -64,8 +63,7 @@ public class IamUserController {
     @PostMapping("update_password")
     @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_PASSWORD')")
     public void updatePassword(@RequestBody @Validated IamUserUpdatePasswordRequestVo request) {
-        log.info("修改用户密码，userId={} updateId={}",
-                AppContext.getContext().getUserId(), request.getId());
+        log.info("修改用户密码，updateId={}", request.getId());
         userBusiness.updatePassword(request);
     }
 
@@ -73,8 +71,7 @@ public class IamUserController {
     @PostMapping("update_permission")
     @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_PERMISSION')")
     public void updatePermission(@RequestBody @Validated IamUserUpdatePermissionRequestVo request) {
-        log.info("修改用户权限，userId={} updateId={}",
-                AppContext.getContext().getUserId(), request.getId());
+        log.info("修改用户权限，updateId={}", request.getId());
         userBusiness.updatePermission(request);
     }
 

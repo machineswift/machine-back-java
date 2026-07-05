@@ -49,3 +49,16 @@ camunda:
     admin-user:
       id: root
       password: root
+    filter:
+      create: All tasks
+
+cibseven:
+  webclient:
+    authentication:
+      jwtSecret: 8Vy6wQTWKBZJY/cJbJQIFfYjBFj67snd3u5ETVeG7/jx4QJAQIHCGPvbRdjSpin+75q7EOIBJhBzDBhJt229miaK0vRm1eeGgvYpM28x1Xe9d22Xw7vpmApAhuN+ydf2dtU2p2UzjNYjsY37GIfoKLX97zVxLZwqpVt3Xm3b0w5IVo4ynyw920mjWThSh4k1wAwStvTJ9prCHIseOUBElrveRyCJn1fGU0GyWBINDx9aH8MlHtjAx9OklsxJ01eI759Ox1qouVcG0+4AVz651LdE9+ysnah6vjfwxWhkUG35yurhHqaDVUw1Mm6HEhJDgp9KFs6lPIZw6q4fCkfPWA==
+      tokenValidMinutes: 60
+      tokenProlongMinutes: 1440
+    services:
+      basePath: services/v1
+    engineRest:
+      url: http://localhost:8080

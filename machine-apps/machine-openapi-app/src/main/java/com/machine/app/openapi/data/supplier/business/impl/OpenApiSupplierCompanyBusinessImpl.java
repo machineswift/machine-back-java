@@ -14,7 +14,7 @@ import com.machine.client.data.supplier.dto.DataSupplierCompanyFinancialInformat
 import com.machine.client.data.supplier.dto.input.DataSupplierCompanyQueryListOffsetInputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

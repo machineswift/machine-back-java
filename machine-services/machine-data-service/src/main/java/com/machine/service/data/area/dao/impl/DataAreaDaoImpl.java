@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.service.data.area.dao.IDataAreaDao;
 import com.machine.service.data.area.dao.mapper.DataAreaMapper;
 import com.machine.service.data.area.dao.mapper.entity.DataAreaEntity;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -73,17 +73,17 @@ public class DataAreaDaoImpl implements IDataAreaDao {
 
     @Override
     public DataAreaEntity getByCode(String code) {
-        Wrapper<DataAreaEntity> queryWrapper = new LambdaQueryWrapper<DataAreaEntity>()
+        Wrapper<DataAreaEntity> wrapper = new LambdaQueryWrapper<DataAreaEntity>()
                 .eq(DataAreaEntity::getCode, code);
-        return dataAreaMapper.selectOne(queryWrapper);
+        return dataAreaMapper.selectOne(wrapper);
     }
 
     @Override
     public DataAreaEntity getByParentIdAndName(String parentId, String name) {
-        Wrapper<DataAreaEntity> queryWrapper = new LambdaQueryWrapper<DataAreaEntity>()
+        Wrapper<DataAreaEntity> wrapper = new LambdaQueryWrapper<DataAreaEntity>()
                 .eq(DataAreaEntity::getParentId, parentId)
                 .eq(DataAreaEntity::getName, name);
-        return dataAreaMapper.selectOne(queryWrapper);
+        return dataAreaMapper.selectOne(wrapper);
     }
 
     @Override
@@ -97,16 +97,16 @@ public class DataAreaDaoImpl implements IDataAreaDao {
 
     @Override
     public List<DataAreaEntity> selectByParentId(String parentId) {
-        Wrapper<DataAreaEntity> queryWrapper = new LambdaQueryWrapper<DataAreaEntity>()
+        Wrapper<DataAreaEntity> wrapper = new LambdaQueryWrapper<DataAreaEntity>()
                 .eq(DataAreaEntity::getParentId, parentId);
-        return dataAreaMapper.selectList(queryWrapper);
+        return dataAreaMapper.selectList(wrapper);
     }
 
     @Override
     public List<DataAreaEntity> selectByParentIdSet(Set<String> parentIdSet) {
-        Wrapper<DataAreaEntity> queryWrapper = new LambdaQueryWrapper<DataAreaEntity>()
+        Wrapper<DataAreaEntity> wrapper = new LambdaQueryWrapper<DataAreaEntity>()
                 .in(DataAreaEntity::getParentId, parentIdSet);
-        return dataAreaMapper.selectList(queryWrapper);
+        return dataAreaMapper.selectList(wrapper);
     }
 
     @Override

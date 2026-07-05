@@ -8,8 +8,9 @@ import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogCreateInputDto;
 import com.machine.client.iam.user.dto.input.IamUserLoginLogQueryAvailableInputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogAvailableOutputDto;
-import com.machine.starter.redis.function.CustomerRedisCommands;
-import io.jsonwebtoken.Claims;
+import com.machine.sdk.base.tool.ClientEnvironmentUtil;
+import com.machine.starter.redis.command.CustomerRedisCommands;
+import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.*;
@@ -31,7 +32,7 @@ public class LoginLogUtil {
 
     public static void setUserAgentInfo(HttpServletRequest request,
                                         IamUserLoginLogCreateInputDto inputDto) {
-        inputDto.setIpAddress(getIpAddress(request));
+        inputDto.setIpAddress(ClientEnvironmentUtil.getIpAddress(request));
         String userAgentStr = request.getHeader("User-Agent");
         Platform platform = UserAgentUtil.parse(userAgentStr).getPlatform();
         inputDto.setUserAgent(userAgentStr);
@@ -56,7 +57,7 @@ public class LoginLogUtil {
 
             if (outputDto.getAccessTokenExpire().compareTo(currentTimeMillis) > 0) {
                 String accessToken = outputDto.getAccessToken();
-                Claims claimAuthToken = machineJwtUtil.getClaimsByToken(accessToken);
+                JwtClaims claimAuthToken = machineJwtUtil.getClaimsByToken(accessToken);
 
                 if (StrUtil.isBlank(customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claimAuthToken.getId()))) {
                     customerRedisCommands.set(IAM_AUTH_TOKEN_ID + claimAuthToken.getId(),
@@ -70,7 +71,7 @@ public class LoginLogUtil {
             currentTimeMillis = System.currentTimeMillis() + 10;
             if (outputDto.getRefreshTokenExpire().compareTo(currentTimeMillis) > 0) {
                 String refreshToken = outputDto.getRefreshToken();
-                Claims claimRefreshToken = machineJwtUtil.getClaimsByToken(refreshToken);
+                JwtClaims claimRefreshToken = machineJwtUtil.getClaimsByToken(refreshToken);
                 if (hasProcessTokenSet.contains(claimRefreshToken.getId())) {
                     continue;
                 }
@@ -88,13 +89,4 @@ public class LoginLogUtil {
         }
         return hasProcessLoginLogList;
     }
-
-    private static String getIpAddress(HttpServletRequest request) {
-        String ipAddress = request.getHeader("X-Forwarded-For");
-        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
-            ipAddress = request.getRemoteAddr();
-        }
-        return ipAddress;
-    }
-
 }

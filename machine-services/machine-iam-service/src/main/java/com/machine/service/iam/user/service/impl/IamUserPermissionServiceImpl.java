@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.iam.user.dto.input.IamDataPermission4ManageInputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.permission.IamDataPermissionResultTypeEnum;
 import com.machine.sdk.base.envm.iam.permission.IamDataPermissionScopeTypeEnum;
 import com.machine.sdk.base.envm.iam.role.IamUserRoleBusinessTypeEnum;
@@ -30,7 +30,7 @@ import com.machine.service.iam.user.dao.mapper.entity.IamUserOrganizationRelatio
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleBusinessRelationEntity;
 import com.machine.service.iam.user.dao.mapper.entity.IamUserRoleRelationEntity;
 import com.machine.service.iam.user.service.IIamUserPermissionService;
-import com.machine.starter.redis.cache.iam.RedisCacheIamOrganization;
+import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ import static com.machine.sdk.base.constant.CommonIamConstant.DATA_PERMISSION_DE
 public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
 
     @Autowired
-    private RedisCacheIamOrganization organizationCache;
+    private RedisIamOrganizationCache organizationCache;
 
     @Autowired
     private IIamRoleDao roleDao;
@@ -72,7 +72,7 @@ public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
 
     @Override
     public DataPermissionDto dataPermission4SuperApp() {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
 
         Map<IamOrganizationTypeEnum, Set<String>> organizationRecursionIdMap = new HashMap<>();
         {//组织信息
@@ -129,7 +129,7 @@ public class IamUserPermissionServiceImpl implements IIamUserPermissionService {
 
     @Override
     public DataPermissionDto dataPermission4Manage(IamDataPermission4ManageInputDto inputDto) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
 
         String permissionCode = inputDto.getPermissionCode();
         String functionCode = inputDto.getFunctionCode();

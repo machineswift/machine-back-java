@@ -6,7 +6,7 @@ import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermi
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionQueryAppListRequestVo;
 import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisCacheIamPermission;
+import com.machine.starter.redis.cache.iam.RedisIamPermissionCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.List;
 public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness {
 
     @Autowired
-    private RedisCacheIamPermission permissionCache;
+    private RedisIamPermissionCache permissionCache;
 
     @Override
     public List<IamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request) {

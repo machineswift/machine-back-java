@@ -17,11 +17,11 @@ import com.machine.client.data.shop.dto.output.*;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.sdk.base.envm.data.DataCountryEnum;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.data.RedisCacheDataArea;
+import com.machine.starter.redis.cache.data.RedisDataAreaCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ import java.util.*;
 public class OpenApiShopBusinessImpl implements IOpenApiShopBusiness {
 
     @Autowired
-    private RedisCacheDataArea areaCache;
+    private RedisDataAreaCache areaCache;
 
     @Autowired
     private IIamUserClient userClient;

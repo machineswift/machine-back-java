@@ -4,7 +4,7 @@ import com.machine.client.data.supplier.dto.DataSupplierCompanyContractInformati
 import com.machine.client.data.supplier.dto.DataSupplierCompanyFinancialInformationDto;
 import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.sdk.base.envm.data.DataSupplierBusinessCategoryEnum;
-import com.machine.sdk.base.model.dto.data.AddressInfoDto;
+import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

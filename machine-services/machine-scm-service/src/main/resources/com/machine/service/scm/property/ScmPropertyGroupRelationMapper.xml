@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.scm.property.dao.mapper.ScmPropertyGroupRelationMapper">
+
+    <select id="listPropertyIdByGroupId" resultType="java.lang.String">
+        select property_id from t_scm_property_group_relation where group_id = #{groupId} order by sort desc
+    </select>
+
+    <select id="listByGroupIdSet" resultType="com.machine.service.scm.property.dao.mapper.entity.ScmPropertyGroupRelationEntity">
+        select * from t_scm_property_group_relation where group_id in
+        <foreach item="item" collection="groupIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by sort desc
+    </select>
+
+    <delete id="deleteByGroupId">
+        delete from t_scm_property_group_relation where group_id = #{groupId}
+    </delete>
+
+    <delete id="deleteByPropertyId">
+        delete from t_scm_property_group_relation where property_id = #{propertyId}
+    </delete>
+
+    <select id="countByGroupAndProperty" resultType="java.lang.Integer">
+        select count(0) from t_scm_property_group_relation where group_id = #{groupId} and property_id = #{propertyId}
+    </select>
+
+</mapper>

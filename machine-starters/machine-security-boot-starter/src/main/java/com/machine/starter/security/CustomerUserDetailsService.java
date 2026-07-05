@@ -6,10 +6,10 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.user.IIamUserClient;
 import com.machine.client.iam.user.dto.output.IamUserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.starter.redis.cache.iam.RedisCacheIamFunctionPermission;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.iam.RedisIamFunctionPermissionCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,19 +25,19 @@ public class CustomerUserDetailsService {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheIamFunctionPermission redisCacheIamFunctionPermission;
+    private RedisIamFunctionPermissionCache redisIamFunctionPermissionCache;
 
     @Autowired
     private IIamUserClient userClient;
 
     public UserDetails loadUserDetails() throws UsernameNotFoundException {
         //查询功能权限信息
-        IamUserAuthDetailOutputDto userDetailDto = redisCacheIamFunctionPermission.functionPermission();
+        IamUserAuthDetailOutputDto userDetailDto = redisIamFunctionPermissionCache.functionPermission();
         return new CustomerUserDetails(userDetailDto);
     }
 
     public IamUserDto loadUserInCache() {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
         String value = customerRedisCommands.get(IAM_USER_BASE_KEY + userId);
         if (StrUtil.isNotEmpty(value)) {
             if (EMPTY_OBJECT.equals(value)) {

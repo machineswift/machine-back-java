@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.shop.dto.input.DataSuperShopCollectIdInputDto;
 import com.machine.client.data.shop.dto.input.DataSuperShopListCollectShopInputDto;
 import com.machine.client.data.shop.dto.output.DataShopListOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.shop.dao.IDataShopDao;
 import com.machine.service.data.shop.dao.IDataUserCollectShopDao;
@@ -38,25 +38,25 @@ public class DataUserCollectShopServiceImpl implements IDataUserCollectShopServi
         Set<String> collectShopIdSet = inputDto.getCollectShopIdSet();
 
         if (CollectionUtil.isNotEmpty(unCollectShopIdSet)) {
-            userCollectShopDao.deleteByShopIdSet(AppContext.getContext().getUserId(), unCollectShopIdSet);
+            userCollectShopDao.deleteByShopIdSet(AppContextHolder.getContext().getUserId(), unCollectShopIdSet);
         }
 
         if (CollectionUtil.isNotEmpty(collectShopIdSet)) {
             //查询已经被收藏的门店
-            List<String> shopIdList = userCollectShopDao.listCollectedIdByShopIdSet(AppContext.getContext().getUserId(), collectShopIdSet);
+            List<String> shopIdList = userCollectShopDao.listCollectedIdByShopIdSet(AppContextHolder.getContext().getUserId(), collectShopIdSet);
             if (CollectionUtil.isNotEmpty(shopIdList)) {
                 shopIdList.forEach(collectShopIdSet::remove);
             }
 
             if (CollectionUtil.isNotEmpty(collectShopIdSet)) {
-                userCollectShopDao.insertByShopIdSet(AppContext.getContext().getUserId(), collectShopIdSet);
+                userCollectShopDao.insertByShopIdSet(AppContextHolder.getContext().getUserId(), collectShopIdSet);
             }
         }
     }
 
     @Override
     public List<String> listCollectedIdByShopIdSet(IdSetRequest request) {
-        return userCollectShopDao.listCollectedIdByShopIdSet(AppContext.getContext().getUserId(), request.getIdSet());
+        return userCollectShopDao.listCollectedIdByShopIdSet(AppContextHolder.getContext().getUserId(), request.getIdSet());
     }
 
     @Override

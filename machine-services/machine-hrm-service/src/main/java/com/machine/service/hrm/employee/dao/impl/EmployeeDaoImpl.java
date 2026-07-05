@@ -35,9 +35,9 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public EmployeeEntity getByUserId(String userId) {
-        Wrapper<EmployeeEntity> queryWrapper = new LambdaQueryWrapper<EmployeeEntity>()
+        Wrapper<EmployeeEntity> wrapper = new LambdaQueryWrapper<EmployeeEntity>()
                 .eq(EmployeeEntity::getUserId, userId);
-        return employeeMapper.selectOne(queryWrapper);
+        return employeeMapper.selectOne(wrapper);
     }
 
     @Override
@@ -52,9 +52,9 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public List<EmployeeEntity> selectByUserIdSet(Set<String> userIdSet) {
-        Wrapper<EmployeeEntity> queryWrapper = new LambdaQueryWrapper<EmployeeEntity>()
+        Wrapper<EmployeeEntity> wrapper = new LambdaQueryWrapper<EmployeeEntity>()
                 .in(EmployeeEntity::getUserId, userIdSet);
-        return employeeMapper.selectList(queryWrapper);
+        return employeeMapper.selectList(wrapper);
     }
 
     @Override

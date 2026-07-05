@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
 import com.machine.client.iam.auth.dto.IamOAuth2RegisteredClientDto;
 import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -29,7 +29,7 @@ public class CustomerRegisteredClientRepository implements RegisteredClientRepos
 
     @Override
     public void save(RegisteredClient registeredClient) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         Assert.notNull(registeredClient, "registeredClient cannot be null");
         RegisteredClient existingRegisteredClient = findById(registeredClient.getId());
         if (existingRegisteredClient != null) {
@@ -41,7 +41,7 @@ public class CustomerRegisteredClientRepository implements RegisteredClientRepos
     }
 
     public void insertRegisteredClient(RegisteredClient registeredClient) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2RegisteredClientDto dto = new IamOAuth2RegisteredClientDto();
         dto.setClientId(registeredClient.getClientId());
         dto.setId(registeredClient.getId());
@@ -60,7 +60,7 @@ public class CustomerRegisteredClientRepository implements RegisteredClientRepos
 
     @Override
     public RegisteredClient findById(String id) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2RegisteredClientDetailOutputDto dto = registeredClientClient.getById(id);
         if(Objects.isNull(dto)){
             return null;
@@ -70,7 +70,7 @@ public class CustomerRegisteredClientRepository implements RegisteredClientRepos
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2RegisteredClientDetailOutputDto dto = registeredClientClient.getByClientId(clientId);
         if(Objects.isNull(dto)){
             return null;
@@ -124,7 +124,7 @@ public class CustomerRegisteredClientRepository implements RegisteredClientRepos
     }
 
     private void updateRegisteredClient(RegisteredClient registeredClient) {
-        AppContext.getContext().setUserId(SYSTEM_USER_ID);
+        AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
         IamOAuth2RegisteredClientDto dto = new IamOAuth2RegisteredClientDto();
         dto.setClientId(registeredClient.getClientId());
         dto.setId(registeredClient.getId());

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.machine.service.iam.role.dao.IIamRolePermissionRelationDao;
 import com.machine.service.iam.role.dao.mapper.IamRolePermissionRelationMapper;
 import com.machine.service.iam.role.dao.mapper.entity.IamRolePermissionRelationEntity;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -42,30 +42,30 @@ public class IamRolePermissionRelationDaoImpl implements IIamRolePermissionRelat
         customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
         customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
-        Wrapper<IamRolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
+        Wrapper<IamRolePermissionRelationEntity> wrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
                 .eq(IamRolePermissionRelationEntity::getRoleId, roleId);
-        return rolePermissionRelationMapper.delete(queryWrapper);
+        return rolePermissionRelationMapper.delete(wrapper);
     }
 
     @Override
     public List<IamRolePermissionRelationEntity> selectByRoleId(String roleId) {
-        Wrapper<IamRolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
+        Wrapper<IamRolePermissionRelationEntity> wrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
                 .eq(IamRolePermissionRelationEntity::getRoleId, roleId);
-        return rolePermissionRelationMapper.selectList(queryWrapper);
+        return rolePermissionRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<IamRolePermissionRelationEntity> selectByRoleIds(Collection<String> roleIds) {
-        Wrapper<IamRolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
+        Wrapper<IamRolePermissionRelationEntity> wrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
                 .in(IamRolePermissionRelationEntity::getRoleId, roleIds);
-        return rolePermissionRelationMapper.selectList(queryWrapper);
+        return rolePermissionRelationMapper.selectList(wrapper);
     }
 
     @Override
     public List<IamRolePermissionRelationEntity> selectByPermissionId(String permissionId) {
-        Wrapper<IamRolePermissionRelationEntity> queryWrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
+        Wrapper<IamRolePermissionRelationEntity> wrapper = new LambdaQueryWrapper<IamRolePermissionRelationEntity>()
                 .eq(IamRolePermissionRelationEntity::getPermissionId, permissionId);
-        return rolePermissionRelationMapper.selectList(queryWrapper);
+        return rolePermissionRelationMapper.selectList(wrapper);
     }
 
     @Override

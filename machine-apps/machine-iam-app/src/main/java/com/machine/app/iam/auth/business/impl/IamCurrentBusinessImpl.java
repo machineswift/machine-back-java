@@ -16,17 +16,17 @@ import com.machine.client.iam.user.dto.input.IamUserUpdatePasswordInputDto;
 import com.machine.client.iam.user.dto.output.IamUserAuthDetailOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
 import com.machine.client.iam.user.dto.output.IamUserLoginLogDetailOutputDto;
-import com.machine.sdk.base.context.AppContext;
+import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.iam.auth.IamAuthActionEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
 import com.machine.sdk.base.envm.iam.auth.IamAuthResultEnum;
 import com.machine.sdk.base.exception.iam.IamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
-import com.machine.starter.redis.cache.iam.RedisCacheIamFunctionPermission;
-import com.machine.starter.redis.function.CustomerRedisCommands;
+import com.machine.starter.redis.cache.iam.RedisIamFunctionPermissionCache;
+import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
-import io.jsonwebtoken.Claims;
+import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
     private CustomerRedisCommands customerRedisCommands;
 
     @Autowired
-    private RedisCacheIamFunctionPermission redisCacheIamFunctionPermission;
+    private RedisIamFunctionPermissionCache redisIamFunctionPermissionCache;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -78,7 +78,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
 
     @Override
     public void changePassword(IamAuthChangePasswordRequestVo request) {
-        IamUserDto iamUserDto = userClient.getByUserId(AppContext.getContext().getUserId());
+        IamUserDto iamUserDto = userClient.getByUserId(AppContextHolder.getContext().getUserId());
         // 验证旧密码
         if (!passwordEncoder.matches(request.getOldPassword(), iamUserDto.getPassword())) {
             throw new InvalidParameterException("旧密码不正确");
@@ -125,7 +125,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
             lock.unlock();
         }
 
-        AppContext.getContext().setUserId(iamUserDto.getUserId());
+        AppContextHolder.getContext().setUserId(iamUserDto.getUserId());
         userClient.updatePassword(new IamUserUpdatePasswordInputDto(iamUserDto.getUserId(),
                 passwordEncoder.encode(request.getNewPassword())));
 
@@ -135,7 +135,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
 
     @Override
     public IamAuthCurrentUserResponseVo userInfo() {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
 
         String value = customerRedisCommands.get(IAM_USER_BASE_KEY + userId);
         if (StrUtil.isNotEmpty(value)) {
@@ -151,7 +151,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
 
     @Override
     public IamAuthCurrentUserFunctionPermissionResponseVo functionPermission() {
-        IamUserAuthDetailOutputDto outputDto = redisCacheIamFunctionPermission.functionPermission();
+        IamUserAuthDetailOutputDto outputDto = redisIamFunctionPermissionCache.functionPermission();
         return new IamAuthCurrentUserFunctionPermissionResponseVo(outputDto.getRoleCodeList(), outputDto.getPermissionCodeList());
     }
 
@@ -159,9 +159,9 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
      * 用户修改自己密码记录日志，并失效所有token
      */
     private void blackAuthToken4SelfUpdatePassword(HttpServletRequest request) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
         String accessToken = request.getHeader(AUTH_TOKEN_HEADER_KEY);
-        Claims claimHeader = machineJwtUtil.getClaimsByToken(accessToken.substring(BEARER_TYPE.length() + 1));
+        JwtClaims claimHeader = machineJwtUtil.getClaimsByToken(accessToken.substring(BEARER_TYPE.length() + 1));
         String accessTokenId = claimHeader.getId();
 
         customerRedisCommands.set(IAM_AUTH_TOKEN_ID + accessTokenId,
@@ -191,7 +191,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
      * 用户修改自己密码记录日志，并失效所有token
      */
     private void blackAuthToken4SelfUpdatePasswordPhoneCaptcha(HttpServletRequest request) {
-        String userId = AppContext.getContext().getUserId();
+        String userId = AppContextHolder.getContext().getUserId();
 
         List<String> hasProcessLoginLogList = blackAllAvailableToken(machineJwtUtil, userId, loginLogClient, customerRedisCommands);
 

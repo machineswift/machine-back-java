@@ -1,4 +1,5 @@
-DELETE FROM t_iam_user;
+DELETE
+FROM t_iam_user;
 INSERT INTO t_iam_user (id, username, status, password, code, phone, name, gender,
                         description, create_by, create_time, update_by, update_time)
 VALUES ('root', 'root', 'ENABLE', '{noop}123456', 'ROOT', '110', '超级管理员', 'UNDEFINED', '', 'system', 1729736640000,
@@ -6,18 +7,26 @@ VALUES ('root', 'root', 'ENABLE', '{noop}123456', 'ROOT', '110', '超级管理�
        ('admin', 'admin', 'ENABLE', '{noop}123456', 'ADMIN', '119', '管理员', 'UNDEFINED', '', 'system', 1729736640000,
         'system', 1729736640000),
        ('system', 'system', 'ENABLE', '{noop}123456', 'SYSTEM', '120', '系统', 'UNDEFINED', '', 'system', 1729736640000,
+        'system', 1729736640000),
+       ('demo', 'demo', 'ENABLE', '{noop}123456', 'DEMO', '114', 'demo', 'UNDEFINED', '', 'system', 1729736640000,
+        'system', 1729736640000),
+       ('guest', 'guest', 'ENABLE', '{noop}123456', 'GUEST', '111', '访客', 'UNDEFINED', '', 'system', 1729736640000,
         'system', 1729736640000);
 
 
-DELETE FROM t_iam_user_type_relation;
+DELETE
+FROM t_iam_user_type_relation;
 INSERT INTO t_iam_user_type_relation (id, user_id, user_type, sort, create_by, create_time,
                                       update_by, update_time)
 VALUES ('type001', 'root', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000),
        ('type002', 'admin', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000),
-       ('type003', 'system', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000);
+       ('type003', 'system', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000),
+       ('type004', 'demo', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000),
+       ('type005', 'guest', 'COMPANY', 0, 'system', 1729736640000, 'system', 1729736640000);
 
 
-DELETE FROM t_iam_organization;
+DELETE
+FROM t_iam_organization;
 INSERT INTO t_iam_organization (id, parent_id, name, code, type, description, sort,
                                 create_by, create_time, update_by, update_time)
 VALUES ('operations', 'root', '运营', 'YWZZ202410240001', 'OPERATIONS', '运营根组织', 300, 'system', 1729736640000,
@@ -28,7 +37,8 @@ VALUES ('operations', 'root', '运营', 'YWZZ202410240001', 'OPERATIONS', '运�
         1729736640000);
 
 
-DELETE FROM t_iam_role;
+DELETE
+FROM t_iam_role;
 INSERT INTO t_iam_role
 (id, parent_id, code, status, type, name, description, sort, create_by, create_time, update_by,
  update_time)
@@ -38,7 +48,8 @@ VALUES ('root', 'company', 'ROOT', 'ENABLE', 'COMPANY', '超级管理员', '超�
         'system', 1729736640000);
 
 
-DELETE FROM t_iam_user_organization_relation;
+DELETE
+FROM t_iam_user_organization_relation;
 INSERT INTO t_iam_user_organization_relation
 (id, user_id, organization_id, organization_type, sort, create_by, create_time, update_by,
  update_time)
@@ -49,7 +60,8 @@ VALUES ('rootXXX1', 'root', 'operations', 'OPERATIONS', 800, 'system', 172973664
        ('adminXXX2', 'admin', 'marketing', 'MARKETING', 800, 'system', 1729736640000, 'system', 1729736640000),
        ('adminXXX', 'admin', 'takeout', 'TAKEOUT', 800, 'system', 1729736640000, 'system', 1729736640000);
 
-DELETE FROM t_iam_permission;
+DELETE
+FROM t_iam_permission;
 INSERT INTO t_iam_permission (id, parent_id, resource_type, code, name,
                               description, sort, create_by, create_time, update_by, update_time)
 VALUES ('machine', 'root', 'APP', 'MACHINE', 'machine', 'machine', 800, 'system', 1729736640000, 'system',
@@ -160,6 +172,9 @@ VALUES ('chairman', 'company', 'CHAIRMAN', 'ENABLE', 'COMPANY', '董事长', '�
         1729736640000, 'system', 1729736640000),
        ('specialist', 'company', 'SPECIALIST', 'ENABLE', 'COMPANY', '专员', '专员', 2634337740000, 'system',
         1729736640000, 'system', 1729736640000),
+       ('guest', 'company', 'GUEST', 'ENABLE', 'COMPANY', '访客', '访客账户',2634337740000, 'root',
+        1729736640000, 'root', 1729736640000),
+
        ('franchisee', 'shop', 'FRANCHISEE', 'ENABLE', 'SHOP', '加盟商', '加盟商', 2634337730000, 'system',
         1729736640000, 'system', 1729736640000),
        ('store_manager', 'shop', 'STORE_MANAGER', 'ENABLE', 'SHOP', '店长', '店长', 2634337720000, 'system',

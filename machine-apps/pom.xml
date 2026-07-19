@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-back-java</artifactId>
-        <version>2026.07-RELEASE</version>
+        <version>2026.07.20-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -14,8 +14,8 @@
 
     <modules>
         <module>machine-iam-app</module>
-        <module>machine-manage-app</module>
-        <module>machine-super-app</module>
+        <module>machine-admin-app</module>
+        <module>machine-partner-app</module>
         <module>machine-openapi-app</module>
         <module>machine-mq-app</module>
         <module>machine-xxljob-app</module>

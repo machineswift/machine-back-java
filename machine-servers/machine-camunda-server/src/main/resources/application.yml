@@ -61,4 +61,14 @@ cibseven:
     services:
       basePath: services/v1
     engineRest:
-      url: http://localhost:8080
+      url: http://localhost:8080/machine-camunda-server
+    modeler:
+      enabled: true
+    admin:
+      enabled: true
+      deploy:
+        enabled: true
+    tasklist:
+      enabled: true
+    cockpit:
+      enabled: true

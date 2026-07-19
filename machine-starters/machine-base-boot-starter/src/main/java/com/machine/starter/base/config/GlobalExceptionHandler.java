@@ -29,18 +29,8 @@ public class GlobalExceptionHandler {
      * AuthToken使用异常
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = AuthTokenExpireException.class)
-    public AppResult<Objects> errorHandler(AuthTokenExpireException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.authTokenExpire", exception.getMessage());
-    }
-
-    /**
-     * AuthToken使用异常
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = AuthTokenParsingException.class)
-    public AppResult<Objects> errorHandler(AuthTokenParsingException exception) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = AuthTokenInvalidException.class)
+    public AppResult<Objects> errorHandler(AuthTokenInvalidException exception) {
         log.error(exception.getMessage(), exception);
         return AppResult.fail("iam.auth.authentication.authTokenParsingFailed", exception.getMessage());
     }

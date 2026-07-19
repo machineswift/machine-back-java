@@ -10,9 +10,11 @@ import com.machine.client.iam.user.dto.input.IamUserLoginLogQueryAvailableInputD
 import com.machine.client.iam.user.dto.output.IamUserLoginLogAvailableOutputDto;
 import com.machine.sdk.base.tool.ClientEnvironmentUtil;
 import com.machine.starter.redis.command.CustomerRedisCommands;
-import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
+import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
@@ -57,12 +59,13 @@ public class LoginLogUtil {
 
             if (outputDto.getAccessTokenExpire().compareTo(currentTimeMillis) > 0) {
                 String accessToken = outputDto.getAccessToken();
-                JwtClaims claimAuthToken = machineJwtUtil.getClaimsByToken(accessToken);
+                Jwt claimAuthToken = machineJwtUtil.getClaimsByToken(accessToken);
 
                 if (StrUtil.isBlank(customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claimAuthToken.getId()))) {
+                    Duration ttl = Duration.between(Instant.now(), claimAuthToken.getExpiresAt());
+                    long ttlSeconds = Math.max(1, ttl.getSeconds());
                     customerRedisCommands.set(IAM_AUTH_TOKEN_ID + claimAuthToken.getId(),
-                            claimAuthToken.get(USER_ID_KEY).toString(),
-                            (claimAuthToken.getExpiration().getTime() - System.currentTimeMillis()) / 1000);
+                            claimAuthToken.getClaim(USER_ID_KEY).toString(),ttlSeconds);
                     hasProcessTokenSet.add(claimAuthToken.getId());
                     hasProcessLoginLogList.add(outputDto.getId());
                 }
@@ -71,15 +74,16 @@ public class LoginLogUtil {
             currentTimeMillis = System.currentTimeMillis() + 10;
             if (outputDto.getRefreshTokenExpire().compareTo(currentTimeMillis) > 0) {
                 String refreshToken = outputDto.getRefreshToken();
-                JwtClaims claimRefreshToken = machineJwtUtil.getClaimsByToken(refreshToken);
+                Jwt claimRefreshToken = machineJwtUtil.getClaimsByToken(refreshToken);
                 if (hasProcessTokenSet.contains(claimRefreshToken.getId())) {
                     continue;
                 }
 
                 if (StrUtil.isBlank(customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claimRefreshToken.getId()))) {
+                    Duration ttl = Duration.between(Instant.now(), claimRefreshToken.getExpiresAt());
+                    long ttlSeconds = Math.max(1, ttl.getSeconds());
                     customerRedisCommands.set(IAM_AUTH_TOKEN_ID + claimRefreshToken.getId(),
-                            claimRefreshToken.get(USER_ID_KEY).toString(),
-                            (claimRefreshToken.getExpiration().getTime() - System.currentTimeMillis()) / 1000);
+                            claimRefreshToken.getClaim(USER_ID_KEY).toString(),ttlSeconds);
 
                     if (!hasProcessLoginLogList.contains(claimRefreshToken.getId())) {
                         hasProcessLoginLogList.add(outputDto.getId());

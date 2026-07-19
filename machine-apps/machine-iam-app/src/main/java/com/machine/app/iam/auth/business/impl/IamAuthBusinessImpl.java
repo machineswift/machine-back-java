@@ -37,8 +37,8 @@ import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.login.IamAuthLoginResponse;
 import com.machine.starter.security.util.MachineJwtUtil;
-import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
 import com.machine.starter.security.util.LoginLogUtil;
+import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
@@ -54,6 +54,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -242,14 +243,14 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
     @Override
     public IamAuthLoginResponse accessToken(IamAuthAccessTokenRequestVo request) {
         String refreshToken = request.getRefreshToken();
-        JwtClaims claims = machineJwtUtil.getClaimsByToken(refreshToken);
-        if (null == claims.get(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
+        Jwt refreshJwt = machineJwtUtil.getClaimsByToken(refreshToken);
+        if (null == refreshJwt.getClaim(AUTH_TOKEN_REFRESH_TOKEN_KEY)) {
             throw new AuthTokenUseException("AccessToken不能用于换取Token");
         }
 
-        AppContextHolder.getContext().setUserId(claims.getStr(USER_ID_KEY));
+        AppContextHolder.getContext().setUserId(refreshJwt.getClaimAsString(USER_ID_KEY));
         //验证是否为黑名单
-        if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claims.getId())) {
+        if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + refreshJwt.getId())) {
             throw new JwtTokenBlackException("refreshToken失效，请重新登录");
         }
 
@@ -257,11 +258,11 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
         long accessTokenExpire = System.currentTimeMillis() + AUTH_TOKEN_EXPIRE_TIMESTAMP;
         Map<String, Object> claimMap4AuthToken = new HashMap<>();
         claimMap4AuthToken.put(AUTH_TOKEN_ACCESS_TOKEN_ID_KEY, accessTokenId);
-        claimMap4AuthToken.put(USER_ID_KEY, claims.getStr(USER_ID_KEY));
+        claimMap4AuthToken.put(USER_ID_KEY, refreshJwt.getClaimAsString(USER_ID_KEY));
 
         //生成 jwt token
         String accessToken = machineJwtUtil.generateToken(
-                claims.getSubject(),
+                refreshJwt.getSubject(),
                 claimMap4AuthToken,
                 accessTokenExpire);
 
@@ -272,9 +273,9 @@ public class IamAuthBusinessImpl implements IIamAuthBusiness {
         inputDto.setAuthMethod(IamAuthMethodEnum.REFRESH_TOKEN);
         inputDto.setAuthResult(IamAuthResultEnum.SUCCESS);
         inputDto.setAccessTokenId(accessTokenId);
-        inputDto.setRefreshTokenId(claims.getId());
+        inputDto.setRefreshTokenId(refreshJwt.getId());
         inputDto.setAccessTokenExpire(accessTokenExpire);
-        inputDto.setRefreshTokenExpire(claims.getExpiration().getTime());
+        inputDto.setRefreshTokenExpire(refreshJwt.getExpiresAt().toEpochMilli());
         inputDto.setAccessToken(accessToken);
         inputDto.setRefreshToken(refreshToken);
 

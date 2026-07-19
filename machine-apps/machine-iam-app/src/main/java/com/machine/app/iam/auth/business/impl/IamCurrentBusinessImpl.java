@@ -26,7 +26,7 @@ import com.machine.starter.redis.cache.iam.RedisIamFunctionPermissionCache;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
-import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
+import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +39,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.InvalidParameterException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
@@ -161,12 +163,13 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
     private void blackAuthToken4SelfUpdatePassword(HttpServletRequest request) {
         String userId = AppContextHolder.getContext().getUserId();
         String accessToken = request.getHeader(AUTH_TOKEN_HEADER_KEY);
-        JwtClaims claimHeader = machineJwtUtil.getClaimsByToken(accessToken.substring(BEARER_TYPE.length() + 1));
+        Jwt claimHeader = machineJwtUtil.getClaimsByToken(accessToken.substring(BEARER_TYPE.length() + 1));
         String accessTokenId = claimHeader.getId();
 
+        Duration ttl = Duration.between(Instant.now(), claimHeader.getExpiresAt());
+        long ttlSeconds = Math.max(1, ttl.getSeconds());
         customerRedisCommands.set(IAM_AUTH_TOKEN_ID + accessTokenId,
-                claimHeader.get(USER_ID_KEY).toString(),
-                (claimHeader.getExpiration().getTime() - System.currentTimeMillis()) / 1000);
+                claimHeader.getClaim(USER_ID_KEY).toString(),ttlSeconds);
 
         IamUserLoginLogDetailOutputDto detailOutputDto = loginLogClient.getLoginSuccessByAccessTokenId(accessTokenId);
         List<String> hasProcessLoginLogList = blackAllAvailableToken(machineJwtUtil, userId, loginLogClient, customerRedisCommands);
@@ -175,11 +178,11 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
         IamUserDetailOutputDto userSimple = userClient.detail(new IdRequest(userId));
         IamUserLoginLogCreateInputDto inputDto = LoginLogUtil.getUserLoginLogCreateInputDto(userSimple);
         inputDto.setAuthAction(IamAuthActionEnum.USER_CHANGE_PASSWORD);
-        inputDto.setAuthMethod(detailOutputDto.getAuthMethod());
+        inputDto.setAuthMethod(detailOutputDto != null ? detailOutputDto.getAuthMethod() : null);
         inputDto.setAuthResult(IamAuthResultEnum.SUCCESS);
         inputDto.setAccessTokenId(accessTokenId);
-        inputDto.setAccessTokenExpire(detailOutputDto.getAccessTokenExpire());
-        inputDto.setAccessToken(detailOutputDto.getAccessToken());
+        inputDto.setAccessTokenExpire(detailOutputDto != null ? detailOutputDto.getAccessTokenExpire() : null);
+        inputDto.setAccessToken(detailOutputDto != null ? detailOutputDto.getAccessToken() : null);
 
         //记录被联动处理的日志ID
         inputDto.setDescription(JSON.toJSONString(hasProcessLoginLogList));

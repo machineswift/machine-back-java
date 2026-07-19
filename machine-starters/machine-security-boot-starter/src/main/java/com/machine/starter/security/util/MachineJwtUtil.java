@@ -1,23 +1,26 @@
 package com.machine.starter.security.util;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.exceptions.ValidateException;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.JWTValidator;
-import com.machine.sdk.base.exception.iam.authentication.AuthTokenExpireException;
-import com.machine.sdk.base.exception.iam.authentication.AuthTokenParsingException;
+import com.machine.sdk.base.exception.iam.authentication.AuthTokenInvalidException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.security.oauth2.jwt.*;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.time.Instant;
 import java.util.Map;
 
+@Slf4j
 public class MachineJwtUtil {
 
-    private final byte[] secretKey;
+    private final NimbusJwtDecoder jwtDecoder;
+    private final NimbusJwtEncoder jwtEncoder;
 
-    public MachineJwtUtil(String secret) {
-        this.secretKey = secret.getBytes(StandardCharsets.UTF_8);
+    public MachineJwtUtil(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+        this.jwtDecoder = NimbusJwtDecoder.withPublicKey(publicKey).build();
+        this.jwtEncoder = NimbusJwtEncoder.withKeyPair(publicKey, privateKey)
+                .algorithm(SignatureAlgorithm.RS256)
+                .build();
     }
 
     /**
@@ -27,79 +30,38 @@ public class MachineJwtUtil {
                                 Map<String, Object> claims,
                                 long expire) {
         String tokenId = claims.get("tokenId").toString();
-        claims.remove("tokenId");
 
-        JWT jwt = JWT.create()
-                .setHeader("type", "JWT")
-                .setHeader("alg", "HS512")
-                .setPayload("sub", username)
-                .setPayload("iss", "machine")
-                .setPayload("iat", DateUtil.date())
-                .setPayload("exp", DateUtil.date(expire))
-                .setPayload("jti", tokenId)
-                .setKey(secretKey);
+        JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
+                .issuer("machine")
+                .subject(username)
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.ofEpochMilli(expire))
+                .id(tokenId);
 
-        // 设置自定义claims
+        // 设置自定义claims（跳过已处理的tokenId）
         for (Map.Entry<String, Object> entry : claims.entrySet()) {
-            jwt.setPayload(entry.getKey(), entry.getValue());
-        }
-
-        return jwt.sign();
-    }
-
-
-    /**
-     * 解析JWT
-     */
-    public JwtClaims getClaimsByToken(String token) {
-        try {
-            JWT jwt = JWTUtil.parseToken(token);
-            jwt.setKey(secretKey);
-
-            // 验证过期时间
-            JWTValidator.of(jwt).validateDate(DateUtil.date());
-
-            // 验证签名
-            if (!jwt.verify()) {
-                throw new AuthTokenParsingException("token认证失败");
+            if (!"tokenId".equals(entry.getKey())) {
+                claimsBuilder.claim(entry.getKey(), entry.getValue());
             }
-            return new JwtClaims(jwt);
-        } catch (ValidateException e) {
-            throw new AuthTokenExpireException("token过期");
-        } catch (Exception e) {
-            throw new AuthTokenParsingException("token解析失败");
         }
+
+        JwsHeader jwsHeader = JwsHeader.with(SignatureAlgorithm.RS256)
+                .type("JWT")
+                .build();
+
+        Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claimsBuilder.build()));
+        return jwt.getTokenValue();
     }
 
     /**
-     * JWT Claims 包装类，兼容原 jjwt Claims 的常用方法
+     * 解析JWT，直接返回 Spring Security 原生 {@link Jwt} 对象
      */
-    public static class JwtClaims {
-
-        private final JWT jwt;
-
-        JwtClaims(JWT jwt) {
-            this.jwt = jwt;
-        }
-
-        public String getId() {
-            return jwt.getPayload().getClaimsJson().getStr("jti");
-        }
-
-        public Object get(String key) {
-            return jwt.getPayload().getClaimsJson().getObj(key);
-        }
-
-        public String getStr(String key) {
-            return jwt.getPayload().getClaimsJson().getStr(key);
-        }
-
-        public String getSubject() {
-            return jwt.getPayload().getClaimsJson().getStr("sub");
-        }
-
-        public Date getExpiration() {
-            return jwt.getPayload().getClaimsJson().getDate("exp");
+    public Jwt getClaimsByToken(String token) {
+        try {
+            return jwtDecoder.decode(token);
+        } catch (JwtException e) {
+            log.error("token解析失败", e);
+            throw new AuthTokenInvalidException("token解析失败");
         }
     }
 }

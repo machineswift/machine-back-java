@@ -5,7 +5,7 @@
     <parent>
         <artifactId>machine-starters</artifactId>
         <groupId>com.machine</groupId>
-        <version>2026.07-RELEASE</version>
+        <version>2026.07.20-RELEASE</version>
     </parent>
     <artifactId>machine-security-boot-starter</artifactId>
 

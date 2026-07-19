@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.machine</groupId>
     <artifactId>machine-back-java</artifactId>
-    <version>2026.07-RELEASE</version>
+    <version>2026.07.20-RELEASE</version>
 
     <modules>
         <module>machine-generals</module>
@@ -16,9 +16,9 @@
         <module>machine-tests</module>
     </modules>
 
-    <name>machine</name>
+    <name>machine-back-java</name>
     <packaging>pom</packaging>
-    <description>machine</description>
+    <description>machine back java</description>
 
     <properties>
         <resource.encoding>UTF-8</resource.encoding>
@@ -75,25 +75,13 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--    <dependency>
-                    <groupId>com.alibaba.cloud.ai</groupId>
-                    <artifactId>spring-ai-alibaba-bom</artifactId>
-                    <version>1.1.2.2</version>
-                    <type>pom</type>
-                    <scope>import</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.alibaba.cloud.ai</groupId>
-                    <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-                    <version>1.1.2.2</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.alibaba.cloud.ai</groupId>
-                    <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-                    <version>1.1.2.2</version>
-                </dependency>-->
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>2.0.0-M1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- SPRING AI 结束-->
 
             <!-- camunda 开始 -->
@@ -477,6 +465,11 @@
                 <version>1.16.7</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>10.9</version>
+            </dependency>
             <!-- 工具  结束-->
 
             <dependency>

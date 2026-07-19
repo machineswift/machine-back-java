@@ -9,7 +9,7 @@ import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.SecurityConstant;
 import com.machine.sdk.base.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.starter.security.util.MachineJwtUtil;
-import com.machine.starter.security.util.MachineJwtUtil.JwtClaims;
+import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,9 +57,9 @@ public class SelfJwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new AuthenticationCredentialsNotFoundException("token 为空");
             }
 
-            JwtClaims claims = machineJwtUtil.getClaimsByToken(jwt.substring(SecurityConstant.BEARER_TYPE.length() + 1));
+            Jwt claims = machineJwtUtil.getClaimsByToken(jwt.substring(SecurityConstant.BEARER_TYPE.length() + 1));
 
-            AppContextHolder.getContext().setUserId(claims.getStr(USER_ID_KEY));
+            AppContextHolder.getContext().setUserId(claims.getClaimAsString(USER_ID_KEY));
             MDC.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());
             //验证是否为黑名单
             if (null != customerRedisCommands.get(IAM_AUTH_TOKEN_ID + claims.getId())) {

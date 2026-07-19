@@ -60,65 +60,65 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 
 #### 🖥️ 服务器 JVM 配置
 基础设施服务器的JVM参数优化：
-- [machine-gateway-server.properties](vm_options/local/servers/machine-gateway-server.properties) - 网关服务器JVM参数
-- [machine-camunda-server.properties](vm_options/local/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
+- [machine-gateway-server.properties](../vm_options/local/servers/machine-gateway-server.properties) - 网关服务器JVM参数
+- [machine-camunda-server.properties](../vm_options/local/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
 
 #### 📱 应用 JVM 配置
 业务应用模块的JVM参数配置：
-- [machine-iam-app.properties](vm_options/local/apps/machine-iam-app.properties) - 身份认证应用JVM参数
-- [machine-manage-app.properties](vm_options/local/apps/machine-manage-app.properties) - 管理应用JVM参数
-- [machine-super-app.properties](vm_options/local/apps/machine-super-app.properties) - 超级管理员应用JVM参数
-- [machine-openapi-app.properties](vm_options/local/apps/machine-openapi-app.properties) - 开放API应用JVM参数
-- [machine-mq-app.properties](vm_options/local/apps/machine-mq-app.properties) - 消息队列应用JVM参数
-- [machine-xxljob-app.properties](vm_options/local/apps/machine-xxljob-app.properties) - 定时任务应用JVM参数
+- [machine-iam-app.properties](../vm_options/local/apps/machine-iam-app.properties) - 身份认证应用JVM参数
+- [machine-admin-app.properties](../vm_options/local/apps/machine-admin-app.properties) - 管理应用JVM参数
+- [machine-partner-app.properties](../vm_options/local/apps/machine-partner-app.properties) - 超级管理员应用JVM参数
+- [machine-openapi-app.properties](../vm_options/local/apps/machine-openapi-app.properties) - 开放API应用JVM参数
+- [machine-mq-app.properties](../vm_options/local/apps/machine-mq-app.properties) - 消息队列应用JVM参数
+- [machine-xxljob-app.properties](../vm_options/local/apps/machine-xxljob-app.properties) - 定时任务应用JVM参数
 
 #### ⚙️ 服务 JVM 配置
 微服务业务组件的JVM参数配置：
-- [machine-iam-service.properties](vm_options/local/services/machine-iam-service.properties) - 身份认证服务JVM参数
-- [machine-data-service.properties](vm_options/local/services/machine-data-service.properties) - 数据服务JVM参数
-- [machine-ai-service.properties](vm_options/local/services/machine-ai-service.properties) - AI服务JVM参数
-- [machine-hrm-service.properties](vm_options/local/services/machine-hrm-service.properties) - 人力资源服务JVM参数
-- [machine-crm-service.properties](vm_options/local/services/machine-crm-service.properties) - 客户关系管理服务JVM参数
-- [machine-scm-service.properties](vm_options/local/services/machine-scm-service.properties) - 供应链管理服务JVM参数
-- [machine-tpp-service.properties](vm_options/local/services/machine-tpp-service.properties) - 第三方平台服务JVM参数
-- [machine-doc-service.properties](vm_options/local/services/machine-doc-service.properties) - 文档服务JVM参数
-- [machine-plugin-service.properties](vm_options/local/services/machine-plugin-service.properties) - 插件服务JVM参数
+- [machine-iam-service.properties](../vm_options/local/services/machine-iam-service.properties) - 身份认证服务JVM参数
+- [machine-data-service.properties](../vm_options/local/services/machine-data-service.properties) - 数据服务JVM参数
+- [machine-ai-service.properties](../vm_options/local/services/machine-ai-service.properties) - AI服务JVM参数
+- [machine-hrm-service.properties](../vm_options/local/services/machine-hrm-service.properties) - 人力资源服务JVM参数
+- [machine-crm-service.properties](../vm_options/local/services/machine-crm-service.properties) - 客户关系管理服务JVM参数
+- [machine-scm-service.properties](../vm_options/local/services/machine-scm-service.properties) - 供应链管理服务JVM参数
+- [machine-tpp-service.properties](../vm_options/local/services/machine-tpp-service.properties) - 第三方平台服务JVM参数
+- [machine-doc-service.properties](../vm_options/local/services/machine-doc-service.properties) - 文档服务JVM参数
+- [machine-plugin-service.properties](../vm_options/local/services/machine-plugin-service.properties) - 插件服务JVM参数
 
 #### 🧪 测试 JVM 配置
-- [machine-temp-test.properties](vm_options/local/tests/machine-temp-test.properties) - 临时测试 JVM 参数
-- [machine-flink-test.properties](vm_options/local/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
+- [machine-temp-test.properties](../vm_options/local/tests/machine-temp-test.properties) - 临时测试 JVM 参数
+- [machine-flink-test.properties](../vm_options/local/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
 
 ### 🧪 测试环境 (Test)
 
 #### 🖥️ 服务器 JVM 配置
 测试环境基础设施服务器的JVM参数：
-- [machine-gateway-server.properties](vm_options/test/servers/machine-gateway-server.properties) - 网关服务器JVM参数
-- [machine-camunda-server.properties](vm_options/test/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
+- [machine-gateway-server.properties](../vm_options/test/servers/machine-gateway-server.properties) - 网关服务器JVM参数
+- [machine-camunda-server.properties](../vm_options/test/servers/machine-camunda-server.properties) - 工作流服务器JVM参数
 
 #### 📱 应用 JVM 配置
 测试环境业务应用模块的JVM参数：
-- [machine-iam-app.properties](vm_options/test/apps/machine-iam-app.properties) - 身份认证应用JVM参数
-- [machine-manage-app.properties](vm_options/test/apps/machine-manage-app.properties) - 管理应用JVM参数
-- [machine-super-app.properties](vm_options/test/apps/machine-super-app.properties) - 超级管理员应用JVM参数
-- [machine-openapi-app.properties](vm_options/test/apps/machine-openapi-app.properties) - 开放API应用JVM参数
-- [machine-mq-app.properties](vm_options/test/apps/machine-mq-app.properties) - 消息队列应用JVM参数
-- [machine-xxljob-app.properties](vm_options/test/apps/machine-xxljob-app.properties) - 定时任务应用JVM参数
+- [machine-iam-app.properties](../vm_options/test/apps/machine-iam-app.properties) - 身份认证应用JVM参数
+- [machine-admin-app.properties](../vm_options/test/apps/machine-admin-app.properties) - 管理应用JVM参数
+- [machine-partner-app.properties](../vm_options/test/apps/machine-partner-app.properties) - 超级管理员应用JVM参数
+- [machine-openapi-app.properties](../vm_options/test/apps/machine-openapi-app.properties) - 开放API应用JVM参数
+- [machine-mq-app.properties](../vm_options/test/apps/machine-mq-app.properties) - 消息队列应用JVM参数
+- [machine-xxljob-app.properties](../vm_options/test/apps/machine-xxljob-app.properties) - 定时任务应用JVM参数
 
 #### ⚙️ 服务 JVM 配置
 测试环境微服务业务组件的JVM参数：
-- [machine-iam-service.properties](vm_options/test/services/machine-iam-service.properties) - 身份认证服务JVM参数
-- [machine-data-service.properties](vm_options/test/services/machine-data-service.properties) - 数据服务JVM参数
-- [machine-ai-service.properties](vm_options/test/services/machine-ai-service.properties) - AI服务JVM参数
-- [machine-hrm-service.properties](vm_options/test/services/machine-hrm-service.properties) - 人力资源服务JVM参数
-- [machine-crm-service.properties](vm_options/test/services/machine-crm-service.properties) - 客户关系管理服务JVM参数
-- [machine-scm-service.properties](vm_options/test/services/machine-scm-service.properties) - 供应链管理服务JVM参数
-- [machine-tpp-service.properties](vm_options/test/services/machine-tpp-service.properties) - 第三方平台服务JVM参数
-- [machine-doc-service.properties](vm_options/test/services/machine-doc-service.properties) - 文档服务JVM参数
-- [machine-plugin-service.properties](vm_options/test/services/machine-plugin-service.properties) - 插件服务JVM参数
+- [machine-iam-service.properties](../vm_options/test/services/machine-iam-service.properties) - 身份认证服务JVM参数
+- [machine-data-service.properties](../vm_options/test/services/machine-data-service.properties) - 数据服务JVM参数
+- [machine-ai-service.properties](../vm_options/test/services/machine-ai-service.properties) - AI服务JVM参数
+- [machine-hrm-service.properties](../vm_options/test/services/machine-hrm-service.properties) - 人力资源服务JVM参数
+- [machine-crm-service.properties](../vm_options/test/services/machine-crm-service.properties) - 客户关系管理服务JVM参数
+- [machine-scm-service.properties](../vm_options/test/services/machine-scm-service.properties) - 供应链管理服务JVM参数
+- [machine-tpp-service.properties](../vm_options/test/services/machine-tpp-service.properties) - 第三方平台服务JVM参数
+- [machine-doc-service.properties](../vm_options/test/services/machine-doc-service.properties) - 文档服务JVM参数
+- [machine-plugin-service.properties](../vm_options/test/services/machine-plugin-service.properties) - 插件服务JVM参数
 
 #### 🧪 测试 JVM 配置
-- [machine-temp-test.properties](vm_options/test/tests/machine-temp-test.properties) - 临时测试 JVM 参数
-- [machine-flink-test.properties](vm_options/test/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
+- [machine-temp-test.properties](../vm_options/test/tests/machine-temp-test.properties) - 临时测试 JVM 参数
+- [machine-flink-test.properties](../vm_options/test/tests/machine-flink-test.properties) - Flink 测试 JVM 参数（按需新建）
 
 ---
 
@@ -134,8 +134,8 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 ### 📱 应用 Dockerfile
 业务应用模块的镜像构建配置：
 - [machine-iam-app.Dockerfile](../../machine-apps/machine-iam-app/Dockerfile) - 身份认证应用镜像构建
-- [machine-manage-app.Dockerfile](../../machine-apps/machine-manage-app/Dockerfile) - 管理应用镜像构建
-- [machine-super-app.Dockerfile](../../machine-apps/machine-super-app/Dockerfile) - 超级管理员应用镜像构建
+- [machine-admin-app.Dockerfile](../../machine-apps/machine-admin-app/Dockerfile) - 管理应用镜像构建
+- [machine-partner-app.Dockerfile](../../machine-apps/machine-partner-app/Dockerfile) - 超级管理员应用镜像构建
 - [machine-openapi-app.Dockerfile](../../machine-apps/machine-openapi-app/Dockerfile) - 开放API应用镜像构建
 - [machine-mq-app.Dockerfile](../../machine-apps/machine-mq-app/Dockerfile) - 消息队列应用镜像构建
 - [machine-xxljob-app.Dockerfile](../../machine-apps/machine-xxljob-app/Dockerfile) - 定时任务应用镜像构建

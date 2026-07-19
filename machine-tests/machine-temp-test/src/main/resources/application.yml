@@ -36,3 +36,8 @@ logging:
           chat:
             client:
               advisor: DEBUG
+
+camunda:
+  bpm:
+    client:
+      base-url: http://localhost:8080/machine-camunda-server/engine-rest

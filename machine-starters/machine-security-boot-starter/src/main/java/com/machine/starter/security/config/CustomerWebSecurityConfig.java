@@ -157,7 +157,7 @@ public class CustomerWebSecurityConfig {
     public SecurityFilterChain selfApiFilterChain(HttpSecurity http) throws Exception {
         commonHttpSecuritySetting(http);
         http
-                .securityMatcher("/iam/**", "/manage/**", "/super/**")
+                .securityMatcher("/iam/**", "/admin/**", "/partner/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
 
         http.addFilterBefore(new SelfJwtAuthenticationFilter(
@@ -240,7 +240,8 @@ public class CustomerWebSecurityConfig {
 
         http
                 .logout(logout ->
-                        logout.logoutUrl("/iam/auth/logout").logoutSuccessHandler(logoutSuccessHandler)
+                        logout.logoutUrl("/iam/auth/logout")
+                                .logoutSuccessHandler(logoutSuccessHandler)
                 )
                 .exceptionHandling(exceptionHandle ->
                         exceptionHandle

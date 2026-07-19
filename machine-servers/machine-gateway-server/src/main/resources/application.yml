@@ -20,10 +20,10 @@ spring:
               filters:
                 - StripPrefix=1
 
-            - id: machine-super-app
-              uri: lb://machine-super-app
+            - id: machine-partner-app
+              uri: lb://machine-partner-app
               predicates:
-                - Path=/machine-gateway-server/machine-super-app/**
+                - Path=/machine-gateway-server/machine-partner-app/**
               filters:
                 - StripPrefix=1
 
@@ -34,10 +34,10 @@ spring:
               filters:
                 - StripPrefix=1
 
-            - id: machine-manage-app
-              uri: lb://machine-manage-app
+            - id: machine-admin-app
+              uri: lb://machine-admin-app
               predicates:
-                - Path=/machine-gateway-server/machine-manage-app/**
+                - Path=/machine-gateway-server/machine-admin-app/**
               filters:
                 - StripPrefix=1
 
@@ -59,20 +59,20 @@ spring:
               predicates:
                 - Path=/machine-iam-app/v3/api-docs/**
 
-            - id: machine-super-app_swagger
-              uri: lb://machine-super-app
+            - id: machine-partner-app_swagger
+              uri: lb://machine-partner-app
               predicates:
-                - Path=/machine-super-app/v3/api-docs/**
+                - Path=/machine-partner-app/v3/api-docs/**
 
             - id: machine-openapi-app_swagger
               uri: lb://machine-openapi-app
               predicates:
                 - Path=/machine-openapi-app/v3/api-docs/**
 
-            - id: machine-manage-app_swagger
-              uri: lb://machine-manage-app
+            - id: machine-admin-app_swagger
+              uri: lb://machine-admin-app
               predicates:
-                - Path=/machine-manage-app/v3/api-docs/**
+                - Path=/machine-admin-app/v3/api-docs/**
 
             - id: machine-camunda-server
               uri: lb://machine-camunda-server

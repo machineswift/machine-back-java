@@ -1,7 +1,7 @@
 package com.machine.service.data.tag.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagOptionDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagOptionListOutputDto;
@@ -170,7 +170,7 @@ public class DataTagOptionServiceImpl implements IDataTagOptionService {
     @Override
     public List<DataTagOptionListOutputDto> selectList(DataTagOptionQueryListInputDto inputDto) {
         List<DataTagOptionEntity> entityList = tagOptionDao.selectByTagId(inputDto.getTagId());
-        if (CollectionUtils.isEmpty(entityList)) {
+        if (CollectionUtil.isEmpty(entityList)) {
             return List.of();
         }
         return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataTagOptionListOutputDto.class);

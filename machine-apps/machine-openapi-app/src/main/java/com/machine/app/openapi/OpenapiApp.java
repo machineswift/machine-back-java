@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 public class OpenapiApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(OpenapiApp.class, args);
     }
 

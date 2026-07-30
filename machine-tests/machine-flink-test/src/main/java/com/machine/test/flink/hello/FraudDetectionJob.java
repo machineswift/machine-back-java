@@ -11,7 +11,7 @@ import org.apache.flink.walkthrough.common.source.TransactionSource;
  * Skeleton code for the datastream walkthrough
  */
 public class FraudDetectionJob {
-    public static void main(String[] args) throws Exception {
+    static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         DataStream<Transaction> transactions = env

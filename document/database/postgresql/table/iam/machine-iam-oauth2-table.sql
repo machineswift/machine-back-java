@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS t_iam_oauth2_registered_client;
 CREATE TABLE t_iam_oauth2_registered_client
 (
-    id                            VARCHAR(128) NOT NULL,
+    id                            VARCHAR(32) NOT NULL,
     status                        VARCHAR(8) NOT NULL DEFAULT 'ENABLE',
-    client_id                     VARCHAR(64) NOT NULL,
+    client_id                     VARCHAR(32) NOT NULL,
     client_id_issued_at           BIGINT NOT NULL,
-    client_secret                 VARCHAR(256),
+    client_secret                 VARCHAR(512),
     client_secret_expires_at      BIGINT,
-    client_name                   VARCHAR(256) NOT NULL,
+    client_name                   VARCHAR(64) NOT NULL,
     client_authentication_methods VARCHAR(1024) NOT NULL,
     authorization_grant_types     VARCHAR(1024) NOT NULL,
     redirect_uris                 VARCHAR(1024),
@@ -20,10 +20,12 @@ CREATE TABLE t_iam_oauth2_registered_client
     create_time                   BIGINT NOT NULL,
     update_by                     VARCHAR(32) NOT NULL,
     update_time                   BIGINT NOT NULL,
-    CONSTRAINT pk_t_iam_oauth2_registered_client PRIMARY KEY (id)
+    CONSTRAINT pk_t_iam_oauth2_registered_client PRIMARY KEY (id),
+    CONSTRAINT uk_t_iam_user_01 UNIQUE (client_id),
+    CONSTRAINT uk_t_iam_user_02 UNIQUE (client_name)
 );
 
-COMMENT ON TABLE t_iam_oauth2_registered_client IS 'OAuth2 客户端注册信息表';
+COMMENT ON TABLE t_iam_oauth2_registered_client IS 'OAuth2 客户端信息表';
 COMMENT ON COLUMN t_iam_oauth2_registered_client.id IS 'ID';
 COMMENT ON COLUMN t_iam_oauth2_registered_client.status IS '状态,（DISABLE:禁用，ENABLE:启用）';
 COMMENT ON COLUMN t_iam_oauth2_registered_client.client_id IS '客户端ID';

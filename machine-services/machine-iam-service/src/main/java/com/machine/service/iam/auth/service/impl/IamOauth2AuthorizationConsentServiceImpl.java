@@ -1,7 +1,6 @@
 package com.machine.service.iam.auth.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.machine.client.iam.auth.dto.IamAuthTokenAddDto;
 import com.machine.client.iam.auth.dto.input.IamOauth2AuthorizationConsentInputDto;
 import com.machine.client.iam.auth.dto.output.IamOauth2AuthorizationConsentOutputDto;
 import com.machine.service.iam.auth.dao.IIamOauth2AuthorizationConsentDao;
@@ -19,11 +18,6 @@ public class IamOauth2AuthorizationConsentServiceImpl implements IIamOauth2Autho
 
     @Autowired
     private IIamOauth2AuthorizationConsentDao authorizationConsentDao;
-
-    @Override
-    public int add(IamAuthTokenAddDto dto) {
-        return 0;
-    }
 
     @Override
     public void update(IamOauth2AuthorizationConsentInputDto dto) {

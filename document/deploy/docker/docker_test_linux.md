@@ -40,7 +40,7 @@ docker run -p 3306:3306 \
 --cpus=4 \
 --memory=8g \
 --restart unless-stopped \
--d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+-d mysql:9.7.2 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
 
 ### 3. Redis 缓存
@@ -58,7 +58,7 @@ docker run -d --name redis \
 --cpus=4 \
 --memory=8g \
 --restart unless-stopped \
-redis:8.6.2 --requirepass "redis"
+redis:8.8 --requirepass "redis"
 ```
 
 ### 4. RabbitMQ 消息队列
@@ -77,7 +77,7 @@ docker run -d \
 --cpus=2 \
 --memory=4g \
 --restart unless-stopped \
-rabbitmq:4.2.5-management
+rabbitmq:4.3.4-management
 ```
 
 ### 5. MinIO 对象存储
@@ -149,7 +149,7 @@ docker run -p 9200:9200 -d --name elasticsearch \
 --cpus=4 \
 --memory=8g \
 --restart unless-stopped \
-elasticsearch:8.19.12
+elasticsearch:8.19.19
 ```
 
 ### 8. Kibana 日志分析
@@ -170,7 +170,7 @@ docker run -p 5601:5601 -d --name kibana \
 --cpus=1 \
 --memory=2g \
 --restart unless-stopped \
-kibana:8.19.12
+kibana:8.19.19
 ```
 
 ### 9. SkyWalking 链路追踪

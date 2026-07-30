@@ -28,14 +28,14 @@ public class IamUserLoginLogController {
 
     @Operation(summary = "详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:LOGIN_LOG:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:LOGIN_LOG:DETAIL')")
     public IamUserLoginLogDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return userLoginLogBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询(应用于角色管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:LOGIN_LOG:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:LOGIN_LOG:PAGE_EXPAND')")
     public PageResponse<IamUserLoginLogExpandListResponseVo> pageExpand(@RequestBody @Validated IamUserLoginLogQueryPageRequestVo request) {
         return userLoginLogBusiness.pageExpand(request);
     }

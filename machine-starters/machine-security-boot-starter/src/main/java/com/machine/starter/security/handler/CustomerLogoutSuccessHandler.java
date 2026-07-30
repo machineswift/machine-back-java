@@ -15,6 +15,7 @@ import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.MachineJwtUtil;
 import com.machine.starter.security.util.LoginLogUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,7 +64,7 @@ public class CustomerLogoutSuccessHandler implements LogoutSuccessHandler {
          * 注销登录时，缓存JWT至Redis，且缓存有效时间设置为JWT的有效期。
          * 请求资源时判断是否存在缓存的黑名单中，存在则拒绝访问。
          */
-        String jwt = request.getHeader(AUTH_TOKEN_HEADER_KEY);
+        String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
         Jwt claimHeader = machineJwtUtil.getClaimsByToken(jwt.substring(BEARER_TYPE.length() + 1));
         String accessTokenId = claimHeader.getId();
 

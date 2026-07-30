@@ -269,7 +269,7 @@ public class SampleXxlJob {
         return false;
     }
 
-    /*public static void main(String[] args) {
+    /*static void main(String[] args) {
         HttpJobParam httpJobParam = new HttpJobParam();
         httpJobParam.setUrl("http://www.baidu.com");
         httpJobParam.setMethod(Method.POST.name());

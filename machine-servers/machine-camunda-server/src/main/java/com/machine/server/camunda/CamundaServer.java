@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class CamundaServer {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(CamundaServer.class, args);
     }
 

@@ -1,7 +1,7 @@
 package com.machine.starter.security.resource.open;
 
 import cn.hutool.core.util.StrUtil;
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.base.EnvironmentEnum;
 import com.machine.sdk.base.exception.iam.access.OpenApiResourceBlackException;

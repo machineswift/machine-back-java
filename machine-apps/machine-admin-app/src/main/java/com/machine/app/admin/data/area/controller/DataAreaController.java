@@ -30,7 +30,7 @@ public class DataAreaController {
 
     @Operation(summary = "创建区域")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataAreaCreateRequestVo request) {
         log.info("创建区域，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(areaBusiness.create(request));
@@ -38,7 +38,7 @@ public class DataAreaController {
 
     @Operation(summary = "删除区域")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.delete(request);
@@ -46,7 +46,7 @@ public class DataAreaController {
 
     @Operation(summary = "修改区域")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE')")
     public void update(@RequestBody @Validated DataAreaUpdateRequestVo request) {
         log.info("修改区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.update(request);
@@ -54,7 +54,7 @@ public class DataAreaController {
 
     @Operation(summary = "修改父区域ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated DataAreaUpdateParentRequestVo request) {
         log.info("修改父区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.updateParent(request);
@@ -62,21 +62,21 @@ public class DataAreaController {
 
     @Operation(summary = "区域详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:DETAIL')")
     public DataAreaDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return areaBusiness.detail(request);
     }
     
     @Operation(summary = "区域树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:TREE_SIMPLE')")
     public DataAreaTreeSimpleResponseVo treeSimple(@RequestBody @Validated DataAreaTreeRequestVo request) {
         return areaBusiness.treeSimple(request);
     }
 
     @Operation(summary = "区域树(应用于区域管理菜单)")
     @PostMapping("tree_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:AREA:TREE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:TREE_EXPAND')")
     public DataAreaTreeExpandResponseVo treeExpand(@RequestBody @Validated DataAreaTreeRequestVo request) {
         return areaBusiness.treeExpand(request);
     }

@@ -20,7 +20,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Import({CustomerWebMvcConfigurer.class})
 public class DocServiceApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(DocServiceApp.class, args);
     }
 

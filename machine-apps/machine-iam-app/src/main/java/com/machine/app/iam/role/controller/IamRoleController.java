@@ -28,7 +28,7 @@ public class IamRoleController {
 
     @Operation(summary = "创建角色")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated IamRoleCreateRequestVo request) {
         log.info("创建角色，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(roleBusiness.create(request));
@@ -36,7 +36,7 @@ public class IamRoleController {
 
     @Operation(summary = "删除角色")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除角色，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.delete(request);
@@ -44,7 +44,7 @@ public class IamRoleController {
 
     @Operation(summary = "修改角色")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE')")
     public void update(@RequestBody @Validated IamRoleUpdateRequestVo request) {
         log.info("修改角色，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.update(request);
@@ -52,7 +52,7 @@ public class IamRoleController {
 
     @Operation(summary = "修改角色状态")
     @PostMapping("update_status")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:UPDATE_STATUS')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE_STATUS')")
     public void updateStatus(@RequestBody @Validated IamRoleUpdateStatusRequestVo request) {
         log.info("修改角色状态，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.updateStatus(request);
@@ -60,7 +60,7 @@ public class IamRoleController {
 
     @Operation(summary = "修改角色权限")
     @PostMapping("update_permission")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:UPDATE_PERMISSION')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE_PERMISSION')")
     public void updatePermission(@RequestBody @Validated IamRoleUpdatePermissionRequestVo request) {
         log.info("修改角色权限，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.updatePermission(request);
@@ -68,21 +68,21 @@ public class IamRoleController {
 
     @Operation(summary = "角色详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:DETAIL')")
     public IamRoleDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return roleBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询角色(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:PAGE_SIMPLE')")
     public PageResponse<IamRoleSimpleListResponseVo> pageSimple(@RequestBody @Validated IamRoleQueryPageRequestVo request) {
         return roleBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询角色(应用于角色管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ROLE:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:PAGE_EXPAND')")
     public PageResponse<IamRoleExpandListResponseVo> pageExpand(@RequestBody @Validated IamRoleQueryPageRequestVo request) {
         return roleBusiness.pageExpand(request);
     }

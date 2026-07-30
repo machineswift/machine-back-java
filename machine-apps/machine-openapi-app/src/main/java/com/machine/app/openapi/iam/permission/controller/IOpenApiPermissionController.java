@@ -27,21 +27,21 @@ public class IOpenApiPermissionController {
 
     @Operation(summary = "应用列表（根节点）")
     @PostMapping("list_app")
-    @PreAuthorize("hasAnyAuthority('iam','iam_permission')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_APP')")
     public List<IamPermissionTreeOutputDto> listApp(@RequestBody @Validated OpenApiPermissionQueryAppListRequestVo request) {
         return permissionBusiness.listApp(request);
     }
     
     @Operation(summary = "获取权限详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('iam','iam_permission')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:DETAIL')")
     public IamPermissionTreeOutputDto detail(@RequestBody @Valid OpenApiPermissionIdRequestVo requestVo) {
         return permissionBusiness.detail(requestVo);
     }
 
     @Operation(summary = "获取子权限ID列表")
     @PostMapping("list_sub_id")
-    @PreAuthorize("hasAnyAuthority('iam','iam_permission')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_SUB_ID')")
     public List<String> listSubId(@RequestBody @Valid OpenApiPermissionListSubRequestVo request) {
         return permissionBusiness.listSubId(request);
     }
@@ -49,7 +49,7 @@ public class IOpenApiPermissionController {
     @Operation(summary = "获取子权限列表",
             description = "本接口只支持获取当前权限的下一级权限基础信息，不支持获取当前权限下所有层级子权限。")
     @PostMapping("list_sub")
-    @PreAuthorize("hasAnyAuthority('iam','iam_permission')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_SUB')")
     public List<IamPermissionTreeOutputDto> listSub(@RequestBody @Valid OpenApiPermissionListSubRequestVo request) {
         return permissionBusiness.listSub(request);
     }
@@ -57,7 +57,7 @@ public class IOpenApiPermissionController {
     @Operation(summary = "获取指定权限的所有父权限ID列表",
             description = "获取的list元素第一个是当前权限ID，最后一个是父权限ID，从左至右权限层级递增。")
     @PostMapping("list_parent_by_target")
-    @PreAuthorize("hasAnyAuthority('iam','iam_permission')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_PARENT_BY_TARGET')")
     public List<String> listParentByTarget(@RequestBody @Valid OpenApiPermissionIdRequestVo requestVo) {
         return permissionBusiness.listParentByTarget(requestVo);
     }

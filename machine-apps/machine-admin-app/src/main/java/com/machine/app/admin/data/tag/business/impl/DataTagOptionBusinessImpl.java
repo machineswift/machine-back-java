@@ -2,7 +2,6 @@ package com.machine.app.admin.data.tag.business.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.machine.app.admin.data.tag.business.IDataTagOptionBusiness;
 import com.machine.app.admin.data.tag.controller.vo.request.*;
 import com.machine.app.admin.data.tag.controller.vo.response.DataTagOptionDetailResponseVo;
@@ -94,7 +93,7 @@ public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
         DataTagOptionQueryListInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataTagOptionQueryListInputDto.class);
         List<DataTagOptionListOutputDto> outputDtoList = tagOptionClient.selectList(inputDto);
 
-        if (CollectionUtils.isEmpty(outputDtoList)) {
+        if (CollectionUtil.isEmpty(outputDtoList)) {
             return List.of();
         }
         return JSONUtil.toList(JSONUtil.toJsonStr(outputDtoList), DataTagOptionSimpleListResponseVo.class);

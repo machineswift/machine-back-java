@@ -163,6 +163,10 @@ public class IamUserServiceImpl implements IIamUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateStatus(IamUserUpdateStatusInputDto inputDto) {
+        IamUserEntity dbEntity = userDao.getById(inputDto.getId());
+        if (null == dbEntity || inputDto.getStatus()==dbEntity.getStatus()) {
+            return 0;
+        }
         return userDao.updateStatus(inputDto.getId(), inputDto.getStatus());
     }
 

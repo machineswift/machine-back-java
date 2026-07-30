@@ -23,7 +23,7 @@ docker run -p 3306:3306 \
 --cpus=1 \
 --memory=1g \
 --restart unless-stopped \
--d mysql:9.6.0 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+-d mysql:9.7.2 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 ```
 
 ## PostgreSQL
@@ -44,7 +44,7 @@ docker run -d \
 --cpus=1 \
 --memory=1g \
 --restart unless-stopped \
-postgres:18.3
+postgres:18.4
 ```
 
 ## Redis
@@ -63,7 +63,7 @@ docker run -d --name redis \
 --cpus=0.2 \
 --memory=0.5g \
 --restart unless-stopped \
-redis:8.6.2 --requirepass "redis"
+redis:8.8 --requirepass "redis"
 ```
 
 ## RabbitMQ
@@ -83,7 +83,7 @@ docker run -d \
 --cpus=0.2 \
 --memory=0.2g \
 --restart unless-stopped \
-rabbitmq:4.2.5-management
+rabbitmq:4.3.4-management
 ```
 
 ## ScyllaDB

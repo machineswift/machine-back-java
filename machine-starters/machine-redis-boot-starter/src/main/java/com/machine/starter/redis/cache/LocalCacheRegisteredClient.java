@@ -2,8 +2,8 @@ package com.machine.starter.redis.cache;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.github.benmanes.caffeine.cache.Cache;
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
-import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
+import com.machine.sdk.base.model.dto.iam.identity.IamOAuth2RegisteredClientDto;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +17,16 @@ public class LocalCacheRegisteredClient {
     @Resource(name = "oauth2RegisteredClientCaffeine")
     private Cache<String, Object> caffeineCache;
 
-    public IamOAuth2RegisteredClientDetailOutputDto getByClientId(String clientId,
-                                                                  IIamOauth2RegisteredClientClient oauth2RegisteredClientClient) {
-        IamOAuth2RegisteredClientDetailOutputDto registeredClient =
-                (IamOAuth2RegisteredClientDetailOutputDto) caffeineCache.getIfPresent(clientId);
+    public IamOAuth2RegisteredClientDto getByClientId(String clientId,
+                                                      IIamOauth2RegisteredClientClient oauth2RegisteredClientClient) {
+        IamOAuth2RegisteredClientDto registeredClient =
+                (IamOAuth2RegisteredClientDto) caffeineCache.getIfPresent(clientId);
 
         if (null != registeredClient) {
             return registeredClient;
         }
 
-        IamOAuth2RegisteredClientDetailOutputDto outputDto = oauth2RegisteredClientClient.getByClientId(clientId);
+        IamOAuth2RegisteredClientDto outputDto = oauth2RegisteredClientClient.getByClientId(clientId);
         if (null != outputDto) {
             caffeineCache.put(clientId, outputDto);
         }
@@ -42,9 +42,9 @@ public class LocalCacheRegisteredClient {
         }
 
         List<String> outputDtoList = oauth2RegisteredClientClient.allEnableClientId();
-        if(CollectionUtil.isNotEmpty(outputDtoList)) {
+        if (CollectionUtil.isNotEmpty(outputDtoList)) {
             caffeineCache.put(ALL_CACHE_KEY, outputDtoList);
-        }else {
+        } else {
             caffeineCache.put(ALL_CACHE_KEY, List.of());
         }
         return outputDtoList;

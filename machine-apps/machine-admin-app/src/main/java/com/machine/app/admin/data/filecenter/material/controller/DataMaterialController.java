@@ -32,7 +32,7 @@ public class DataMaterialController {
 
     @Operation(summary = "新增")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCreateRequestVo request,
                                      HttpServletRequest servletRequest) {
         log.info("新增素材，request={}", JSONUtil.toJsonStr(request));
@@ -41,7 +41,7 @@ public class DataMaterialController {
 
     @Operation(summary = "修改")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE')")
     public void update(@RequestBody @Validated DataMaterialUpdateRequestVo request,
                        HttpServletRequest servletRequest) {
         log.info("修改素材，request={}", JSONUtil.toJsonStr(request));
@@ -50,7 +50,7 @@ public class DataMaterialController {
 
     @Operation(summary = "修改分类")
     @PostMapping("update_category")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:UPDATE_CATEGORY')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE_CATEGORY')")
     public void updateCategory(@RequestBody @Validated DataMaterialUpdateCategoryRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialBusiness.updateCategory(request);
@@ -58,14 +58,14 @@ public class DataMaterialController {
 
     @Operation(summary = "素材详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:DETAIL')")
     public DataMaterialDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return materialBusiness.detail(request);
     }
 
     @Operation(summary = "获取素材文件预签名 URL（用于图片/视频预览/附件下载）")
     @PostMapping("download_url")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:DOWNLOAD_URL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:DOWNLOAD_URL')")
     public DataMaterialUrlResponseVo getDownloadUrl(@RequestBody @Validated IdRequest request) {
         String url = materialBusiness.getDownloadUrl(request);
         return new DataMaterialUrlResponseVo(url);
@@ -73,7 +73,7 @@ public class DataMaterialController {
 
     @Operation(summary = "素材分页列表(管理端)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:PAGE_EXPAND')")
     public PageResponse<DataMaterialExpandListResponseVo> pageExpand(@RequestBody @Validated DataMaterialQueryPageRequestVo request) {
         return materialBusiness.pageExpand(request);
     }

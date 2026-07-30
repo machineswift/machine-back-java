@@ -13,11 +13,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 @SpringBootApplication(scanBasePackages = {
         "com.machine.starter",
-        "com.machine.test.temp"
+        "com.machine.test.flink"
 })
 public class FlinkTestApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(FlinkTestApp.class, args);
     }
 

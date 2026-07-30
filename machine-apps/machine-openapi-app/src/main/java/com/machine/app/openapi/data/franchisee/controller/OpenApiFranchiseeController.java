@@ -30,28 +30,28 @@ public class OpenApiFranchiseeController {
 
     @Operation(summary = "获取加盟商详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('data','data_franchisee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:FRANCHISEE:DETAIL')")
     public OpenApiFranchiseeDetailResponseVo detail(@RequestBody @Valid OpenApiFranchiseeIdRequestVo request) {
         return franchiseeBusiness.detail(request);
     }
 
     @Operation(summary = "获取身份证")
     @PostMapping("identity_card")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:FRANCHISEE:IDENTITY_CARD')")
     public OpenapiFranchiseeIdentityCardResponseVo identityCard(@RequestBody @Valid OpenApiFranchiseeIdRequestVo request) {
         return franchiseeBusiness.identityCard(request);
     }
 
     @Operation(summary = "获取健康证")
     @PostMapping("health_certificate")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:FRANCHISEE:HEALTH_CERTIFICATE')")
     public OpenapiFranchiseeHealthCertificateResponseVo healthCertificate(@RequestBody @Valid OpenApiFranchiseeIdRequestVo request) {
         return franchiseeBusiness.healthCertificate(request);
     }
 
     @Operation(summary = "获取加盟商列表(基础信息)")
     @PostMapping("list_sample")
-    @PreAuthorize("hasAnyAuthority('data','data_franchisee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:FRANCHISEE:LIST_SAMPLE')")
     public List<OpenApiFranchiseeListSampleResponseVo> listSample(@RequestBody @Valid OpenApiFranchiseeListSampleRequestVo request) {
         return franchiseeBusiness.listSample(request);
     }

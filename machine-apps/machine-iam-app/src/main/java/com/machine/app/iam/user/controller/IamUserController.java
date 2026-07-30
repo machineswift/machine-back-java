@@ -29,7 +29,7 @@ public class IamUserController {
 
     @Operation(summary = "创建用户")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated IamUserCreateRequestVo request) {
         log.info("创建用户，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(userBusiness.create(request));
@@ -37,7 +37,7 @@ public class IamUserController {
 
     @Operation(summary = "修改用户")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:UPDATE')")
     public void update(@RequestBody @Validated IamUserUpdateRequestVo request) {
         log.info("修改用户，request={}", JSONUtil.toJsonStr(request));
         userBusiness.update(request);
@@ -45,7 +45,7 @@ public class IamUserController {
 
     @Operation(summary = "修改用户状态")
     @PostMapping("update_status")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_STATUS')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:UPDATE_STATUS')")
     public void updateStatus(@RequestBody @Validated IamUserUpdateStatusRequestVo request) {
         log.info("修改用户状态，request={}", JSONUtil.toJsonStr(request));
         userBusiness.updateStatus(request);
@@ -53,7 +53,7 @@ public class IamUserController {
 
     @Operation(summary = "修改用户手机号")
     @PostMapping("update_phone")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_PHONE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:UPDATE_PHONE')")
     public void updatePhone(@RequestBody @Validated IamUserUpdatePhoneRequestVo request) {
         log.info("修改用户手机号，request={}", JSONUtil.toJsonStr(request));
         userBusiness.updatePhone(request);
@@ -61,7 +61,7 @@ public class IamUserController {
 
     @Operation(summary = "修改用户密码")
     @PostMapping("update_password")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_PASSWORD')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:UPDATE_PASSWORD')")
     public void updatePassword(@RequestBody @Validated IamUserUpdatePasswordRequestVo request) {
         log.info("修改用户密码，updateId={}", request.getId());
         userBusiness.updatePassword(request);
@@ -69,7 +69,7 @@ public class IamUserController {
 
     @Operation(summary = "修改用户权限")
     @PostMapping("update_permission")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:UPDATE_PERMISSION')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:UPDATE_PERMISSION')")
     public void updatePermission(@RequestBody @Validated IamUserUpdatePermissionRequestVo request) {
         log.info("修改用户权限，updateId={}", request.getId());
         userBusiness.updatePermission(request);
@@ -77,28 +77,28 @@ public class IamUserController {
 
     @Operation(summary = "用户详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:DETAIL')")
     public IamUserDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return userBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询用户(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:PAGE_SIMPLE')")
     public PageResponse<IamUserSimpleListResponseVo> pageSimple(@RequestBody @Validated IamUserQueryPageRequestVo request) {
         return userBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询用户(应用于管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:PAGE_EXPAND')")
     public PageResponse<IamUserExpandListResponseVo> pageExpand(@RequestBody @Validated IamUserQueryPageRequestVo request) {
         return userBusiness.pageExpand(request);
     }
 
     @Operation(summary = "导出")
     @PostMapping("export")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:USER:EXPORT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:EXPORT')")
     public void export(@RequestBody @Validated IamUserExportRequestVo request) {
         log.info("导出用户，request={}", JSONUtil.toJsonStr(request));
         userBusiness.export(request);

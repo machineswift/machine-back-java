@@ -29,28 +29,28 @@ public class OpenApiShopController {
 
     @Operation(summary = "获取门店ID(根据门店编码)")
     @PostMapping("id_by_code")
-    @PreAuthorize("hasAnyAuthority('data','data_shop')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP:ID_BY_CODE')")
     public IdResponse<String> idByCode(@RequestBody @Valid OpenApiShopCodeRequestVo request) {
         return new IdResponse<>(shopBusiness.idByCode(request));
     }
 
     @Operation(summary = "获取门店ID集合(根据门店编码)")
     @PostMapping("id_by_codeSet")
-    @PreAuthorize("hasAnyAuthority('data','data_shop')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP:ID_BY_CODESET')")
     public MapResponse<String, String> idByCodeSet(@RequestBody @Valid OpenApiShopCodeSetRequestVo request) {
         return new MapResponse<>(shopBusiness.idByCodeSet(request));
     }
 
     @Operation(summary = "获取门店详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('data','data_shop')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP:DETAIL')")
     public OpenApiShopDetailResponseVo detail(@RequestBody @Valid OpenApiShopIdRequestVo request) {
         return shopBusiness.detail(request);
     }
 
     @Operation(summary = "获取门店列表(基础信息)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAnyAuthority('data','data_shop')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP:LIST_SIMPLE')")
     public List<OpenApiShopListSimpleResponseVo> listSimple(@RequestBody @Valid OpenApiShopListSimpleRequestVo request) {
         return shopBusiness.listSimple(request);
     }

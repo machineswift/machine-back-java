@@ -32,7 +32,7 @@ public class ScmPropertyValueController {
 
     @Operation(summary = "创建属性枚举值")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_VALUE:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyValueCreateRequestVo request) {
         log.info("创建属性值，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(propertyValueBusiness.create(request));
@@ -40,7 +40,7 @@ public class ScmPropertyValueController {
 
     @Operation(summary = "修改属性枚举值")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_VALUE:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:UPDATE')")
     public void update(@RequestBody @Validated ScmPropertyValueUpdateRequestVo request) {
         log.info("修改属性值，request={}", JSONUtil.toJsonStr(request));
         propertyValueBusiness.update(request);
@@ -48,7 +48,7 @@ public class ScmPropertyValueController {
 
     @Operation(summary = "删除属性枚举值")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_VALUE:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:DELETE')")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性值，id={}", request.getId());
         propertyValueBusiness.deleteById(request);
@@ -56,7 +56,7 @@ public class ScmPropertyValueController {
 
     @Operation(summary = "根据属性ID查询枚举值列表")
     @PostMapping("list_by_property_id")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_VALUE:LIST')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:LIST')")
     public List<ScmPropertyValueListResponseVo> listByPropertyId(
             @RequestBody @Validated ScmPropertyValueListByPropertyRequestVo request) {
         return propertyValueBusiness.listByPropertyId(request);

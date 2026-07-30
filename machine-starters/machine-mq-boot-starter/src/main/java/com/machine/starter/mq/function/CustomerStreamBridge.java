@@ -1,10 +1,10 @@
 package com.machine.starter.mq.function;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
-import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.dto.iam.identity.IamOAuth2RegisteredClientDto;
 import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.sdk.self.envm.EventTypeEnum;
@@ -69,7 +69,7 @@ public class CustomerStreamBridge {
     public <T> void sendWebHookEvent(String clientId,
                                      EventTypeEnum eventType,
                                      T data) {
-        IamOAuth2RegisteredClientDetailOutputDto registeredClient =
+        IamOAuth2RegisteredClientDto registeredClient =
                 localCacheRegisteredClient.getByClientId(clientId, oauth2RegisteredClientClient);
         if (registeredClient == null) {
             return;
@@ -104,7 +104,7 @@ public class CustomerStreamBridge {
                                              T data) {
         List<String> clientIdList = localCacheRegisteredClient.allRegisteredClientIds(oauth2RegisteredClientClient);
         for (String clientId : clientIdList) {
-            IamOAuth2RegisteredClientDetailOutputDto registeredClient =
+            IamOAuth2RegisteredClientDto registeredClient =
                     localCacheRegisteredClient.getByClientId(clientId, oauth2RegisteredClientClient);
             if (registeredClient == null) {
                 continue;
@@ -113,7 +113,7 @@ public class CustomerStreamBridge {
         }
     }
 
-    private <T> void sendWebHookEventPrivate(IamOAuth2RegisteredClientDetailOutputDto registeredClient,
+    private <T> void sendWebHookEventPrivate(IamOAuth2RegisteredClientDto registeredClient,
                                              EventTypeEnum eventType,
                                              T data) {
         String producerName = "WebHookFastEventProducer";
@@ -129,11 +129,11 @@ public class CustomerStreamBridge {
             return;
         }
 
-        if (null == registeredClient.getWebHookInfo()) {
-            log.warn("WebHookFastEventProducer-应用未配置WebHook信息忽略消息，clientId={} requestBody={}",
-                    clientId, JSONUtil.toJsonStr(messageBody));
-            return;
-        }
+//        if (null == registeredClient.getWebHookInfo()) {
+//            log.warn("WebHookFastEventProducer-应用未配置WebHook信息忽略消息，clientId={} requestBody={}",
+//                    clientId, JSONUtil.toJsonStr(messageBody));
+//            return;
+//        }
 
         //开始发送消息
         log.info("WebHookFastEventProducer-事件消息发送，producerName={} clientId={} messageBody={}",

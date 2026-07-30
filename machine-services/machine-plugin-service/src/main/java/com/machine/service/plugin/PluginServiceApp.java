@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({CustomerWebMvcConfigurer.class})
 public class PluginServiceApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(PluginServiceApp.class, args);
     }
 

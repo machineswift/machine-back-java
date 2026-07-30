@@ -88,7 +88,7 @@ docker run -d \
 --cpus=1 \
 --memory=2g --memory-swap=5g \
 --restart unless-stopped \
-postgres:18.0
+postgres:18.4
 ```
 
 ## 运行Confluence容器

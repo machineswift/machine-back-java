@@ -1,13 +1,10 @@
 package com.machine.app.mq.consumer;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
-import com.machine.client.iam.auth.dto.output.IamOAuth2RegisteredClientDetailOutputDto;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.model.dto.data.WebHookInfoDto;
-import com.machine.sdk.self.client.WebhookClient;
+import com.machine.sdk.base.model.dto.iam.identity.IamOAuth2RegisteredClientDto;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
 import jakarta.annotation.Resource;
@@ -52,7 +49,7 @@ public class WebHookConsumer {
 
     private <T> void processWebHookCallback(WebHookEventRequestBody<T> requestBody) {
         String clientId = requestBody.getClientId();
-        IamOAuth2RegisteredClientDetailOutputDto outputDto = localCacheRegisteredClient
+        IamOAuth2RegisteredClientDto outputDto = localCacheRegisteredClient
                 .getByClientId(clientId, oauth2RegisteredClientClient);
 
         if (StatusEnum.DISABLE == outputDto.getStatus()) {
@@ -60,15 +57,15 @@ public class WebHookConsumer {
             return;
         }
 
-        WebHookInfoDto webHookInfo = outputDto.getWebHookInfo();
-        if (null == webHookInfo ||
-                StrUtil.isBlank(webHookInfo.getCallBackUrl()) ||
-                StrUtil.isBlank(webHookInfo.getSecret())) {
-            log.warn("WebHookFastEventConsumer-应用未配置回调地址忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));
-            return;
-        }
-
-        WebhookClient.callBack(okHttpClient, webHookInfo, requestBody);
+//        WebHookInfoDto webHookInfo = outputDto.getWebHookInfo();
+//        if (null == webHookInfo ||
+//                StrUtil.isBlank(webHookInfo.getCallBackUrl()) ||
+//                StrUtil.isBlank(webHookInfo.getSecret())) {
+//            log.warn("WebHookFastEventConsumer-应用未配置回调地址忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));
+//            return;
+//        }
+//
+//        WebhookClient.callBack(okHttpClient, webHookInfo, requestBody);
     }
 
 }

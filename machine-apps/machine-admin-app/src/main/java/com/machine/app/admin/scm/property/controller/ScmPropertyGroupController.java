@@ -38,7 +38,7 @@ public class ScmPropertyGroupController {
 
     @Operation(summary = "创建属性分组")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyGroupCreateRequestVo request) {
         log.info("创建属性分组，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(propertyGroupBusiness.create(request));
@@ -46,7 +46,7 @@ public class ScmPropertyGroupController {
 
     @Operation(summary = "修改属性分组")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:UPDATE')")
     public void update(@RequestBody @Validated ScmPropertyGroupUpdateRequestVo request) {
         log.info("修改属性分组，request={}", JSONUtil.toJsonStr(request));
         propertyGroupBusiness.update(request);
@@ -54,7 +54,7 @@ public class ScmPropertyGroupController {
 
     @Operation(summary = "删除属性分组")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:DELETE')")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性分组，id={}", request.getId());
         propertyGroupBusiness.deleteById(request);
@@ -62,14 +62,14 @@ public class ScmPropertyGroupController {
 
     @Operation(summary = "查询属性分组详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:DETAIL')")
     public ScmPropertyGroupDetailResponseVo getById(@RequestBody @Valid IdRequest request) {
         return propertyGroupBusiness.getById(request);
     }
 
     @Operation(summary = "修改属性分组排序")
     @PostMapping("update_sort")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:UPDATE_SORT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:UPDATE_SORT')")
     public void updateSort(@RequestBody @Validated ScmPropertyGroupUpdateSortRequestVo request) {
         log.info("修改属性分组排序，request={}", JSONUtil.toJsonStr(request));
         propertyGroupBusiness.updateSort(request);
@@ -77,7 +77,7 @@ public class ScmPropertyGroupController {
 
     @Operation(summary = "根据后台叶子类目ID查询属性分组列表")
     @PostMapping("list_by_back_category_id")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY_GROUP:LIST')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:LIST')")
     public List<ScmPropertyGroupListResponseVo> listByBackCategoryId(
             @RequestBody @Validated ScmPropertyGroupListByBackCategoryRequestVo request) {
         return propertyGroupBusiness.listByBackCategoryId(request);

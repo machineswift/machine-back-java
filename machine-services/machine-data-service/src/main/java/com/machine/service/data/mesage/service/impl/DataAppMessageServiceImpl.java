@@ -2,7 +2,6 @@ package com.machine.service.data.mesage.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.message.dto.output.AppMessageContentDto;
 import com.machine.client.data.message.dto.output.AppMessageGroupCountOutputDto;
@@ -100,7 +99,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
         }
         log.info("本次存储消息的批次号为：{}", request.getBatchCode());
         Set<String> receiverSet = request.getReceiverSet();
-        if (CollectionUtils.isEmpty(receiverSet)) {
+        if (CollectionUtil.isEmpty(receiverSet)) {
             throw new IamBusinessException("data.message.saveMessageRecord.receiverIsNull", "接收人不能为空");
         }
         AppMessageTemplateDetailByTypeInputDto inputDto = new AppMessageTemplateDetailByTypeInputDto();

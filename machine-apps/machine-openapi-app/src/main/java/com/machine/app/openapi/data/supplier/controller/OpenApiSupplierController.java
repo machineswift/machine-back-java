@@ -30,21 +30,21 @@ public class OpenApiSupplierController {
 
     @Operation(summary = "获取供应商详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('data','data_supplier')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SUPPLIER:DETAIL')")
     public OpenApiSupplierDetailResponseVo detail(@RequestBody @Valid OpenApiSupplierIdRequestVo request) {
         return supplierBusiness.detail(request);
     }
 
     @Operation(summary = "获取供应商详情（根据用户Id）")
     @PostMapping("detail_by_userId")
-    @PreAuthorize("hasAnyAuthority('data','data_supplier')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SUPPLIER:DETAIL_BY_USERID')")
     public OpenApiSupplierDetailResponseVo detailByUserId(@RequestBody @Valid OpenApiUserIdRequestVo request) {
         return supplierBusiness.detailByUserId(request);
     }
 
     @Operation(summary = "获取供应商列表(基础信息)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAnyAuthority('data','data_supplier')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SUPPLIER:LIST_SIMPLE')")
     public List<OpenApiSupplierListSimpleResponseVo> listSimple(@RequestBody @Valid OpenApiSupplierListSimpleRequestVo request) {
         return supplierBusiness.listSimple(request);
     }

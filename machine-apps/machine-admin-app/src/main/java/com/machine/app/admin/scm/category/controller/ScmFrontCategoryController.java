@@ -30,7 +30,7 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "创建前台分类")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated ScmFrontCategoryCreateRequestVo request) {
         log.info("创建前台分类，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(frontCategoryBusiness.create(request));
@@ -38,7 +38,7 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "删除前台分类")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:DELETE')")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除前台分类，id={}", request.getId());
         frontCategoryBusiness.deleteById(request);
@@ -46,7 +46,7 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "修改前台分类")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:UPDATE')")
     public void update(@RequestBody @Validated ScmFrontCategoryUpdateRequestVo request) {
         log.info("修改前台分类，request={}", JSONUtil.toJsonStr(request));
         frontCategoryBusiness.update(request);
@@ -54,7 +54,7 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "修改父分类ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated ScmFrontCategoryUpdateParentRequestVo request) {
         log.info("修改前台分类父ID，request={}", JSONUtil.toJsonStr(request));
         frontCategoryBusiness.updateParent(request);
@@ -62,21 +62,21 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "查询前台分类详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:DETAIL')")
     public ScmFrontCategoryDetailResponseVo getById(@RequestBody @Valid IdRequest request) {
         return frontCategoryBusiness.getById(request);
     }
 
     @Operation(summary = "前台分类树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:TREE_SIMPLE')")
     public ScmFrontCategoryTreeOutputDto treeSimple() {
         return frontCategoryBusiness.treeSimple();
     }
 
     @Operation(summary = "前台分类树(应用于组织管理菜单)")
     @PostMapping("tree_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:FRONT_CATEGORY:TREE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:TREE_EXPAND')")
     public ScmFrontCategoryTreeExpandOutputDto treeExpand() {
         return frontCategoryBusiness.treeExpand();
     }

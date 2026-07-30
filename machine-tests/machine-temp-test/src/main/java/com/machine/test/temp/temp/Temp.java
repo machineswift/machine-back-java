@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class Temp {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // 生成 256 字节随机数据
         byte[] key = new byte[256];
         new SecureRandom().nextBytes(key);

@@ -1,8 +1,8 @@
 package com.machine.app.iam.dictionary.controller;
 
 import com.machine.app.iam.dictionary.business.IIamEnumBusiness;
-import com.machine.app.iam.dictionary.controller.request.IamDictionaryEnumRequestVo;
-import com.machine.app.iam.dictionary.controller.response.IamDictionaryEnumInfoResponse;
+import com.machine.app.iam.dictionary.controller.vo.request.IamDictionaryEnumRequestVo;
+import com.machine.app.iam.dictionary.controller.vo.response.IamDictionaryEnumInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

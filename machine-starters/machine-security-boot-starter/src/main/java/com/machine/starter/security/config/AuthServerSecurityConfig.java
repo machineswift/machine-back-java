@@ -8,7 +8,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationClient;
 import com.machine.client.iam.auth.IIamOauth2AuthorizationConsentClient;
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.starter.security.SecurityProperties;
 import com.machine.starter.security.config.db.CustomerOAuth2AuthorizationConsentService;
 import com.machine.starter.security.config.db.CustomerOAuth2AuthorizationService;

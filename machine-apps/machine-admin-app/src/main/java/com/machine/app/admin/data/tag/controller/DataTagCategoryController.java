@@ -29,7 +29,7 @@ public class DataTagCategoryController {
 
     @Operation(summary = "创建智能标签分类")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataTagCategoryCreateRequestVo request) {
         log.info("创建智能标签分类，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(tagCategoryBusiness.create(request));
@@ -37,7 +37,7 @@ public class DataTagCategoryController {
 
     @Operation(summary = "删除智能标签分类")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签分类，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.delete(request);
@@ -45,7 +45,7 @@ public class DataTagCategoryController {
 
     @Operation(summary = "修改智能标签分类")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE')")
     public void update(@RequestBody @Validated DataTagCategoryUpdateRequestVo request) {
         log.info("修改智能标签分类，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.update(request);
@@ -53,7 +53,7 @@ public class DataTagCategoryController {
 
     @Operation(summary = "修改智能标签分类排序")
     @PostMapping("update_sort")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_SORT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_SORT')")
     public void updateSort(@RequestBody @Validated DataTagCategoryUpdateSortRequestVo request) {
         log.info("修改智能标签分类排序，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.updateSort(request);
@@ -61,7 +61,7 @@ public class DataTagCategoryController {
 
     @Operation(summary = "修改智能标签分类父ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated DataTagCategoryUpdateParentRequestVo request) {
         log.info("修改智能标签分类父ID，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.updateParent(request);
@@ -69,14 +69,14 @@ public class DataTagCategoryController {
 
     @Operation(summary = "智能标签分类详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:DETAIL')")
     public DataTagCategoryDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return tagCategoryBusiness.detail(request);
     }
 
     @Operation(summary = "智能标签分类树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_CATEGORY:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:TREE_SIMPLE')")
     public DataTagCategoryTreeSimpleOutputDto treeSimple(@RequestBody @Validated DataTagCategoryTreeRequestVo request) {
         return tagCategoryBusiness.treeSimple(request);
     }

@@ -34,7 +34,7 @@ public class ScmPropertyController {
 
     @Operation(summary = "创建属性")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyCreateRequestVo request) {
         log.info("创建属性，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(propertyBusiness.create(request));
@@ -42,7 +42,7 @@ public class ScmPropertyController {
 
     @Operation(summary = "修改属性")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:UPDATE')")
     public void update(@RequestBody @Validated ScmPropertyUpdateRequestVo request) {
         log.info("修改属性，request={}", JSONUtil.toJsonStr(request));
         propertyBusiness.update(request);
@@ -50,7 +50,7 @@ public class ScmPropertyController {
 
     @Operation(summary = "删除属性")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:DELETE')")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性，id={}", request.getId());
         propertyBusiness.deleteById(request);
@@ -58,14 +58,14 @@ public class ScmPropertyController {
 
     @Operation(summary = "查询属性详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:DETAIL')")
     public ScmPropertyDetailResponseVo getById(@RequestBody @Valid IdRequest request) {
         return propertyBusiness.getById(request);
     }
 
     @Operation(summary = "分页查询属性（应用于组件弹窗/属性选择器）")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:PAGE_SIMPLE')")
     public PageResponse<ScmPropertySimpleListResponseVo> pageSimple(
             @RequestBody @Validated ScmPropertyQueryPageRequestVo request) {
         return propertyBusiness.pageSimple(request);
@@ -73,7 +73,7 @@ public class ScmPropertyController {
 
     @Operation(summary = "分页查询属性（应用于属性库管理菜单）")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:PROPERTY:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:PAGE_EXPAND')")
     public PageResponse<ScmPropertyListResponseVo> pageExpand(@RequestBody @Validated ScmPropertyQueryPageRequestVo request) {
         return propertyBusiness.pageExpand(request);
     }

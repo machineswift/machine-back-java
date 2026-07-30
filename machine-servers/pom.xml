@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-back-java</artifactId>
-        <version>2026.07.20-RELEASE</version>
+        <version>2026.06.04-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>

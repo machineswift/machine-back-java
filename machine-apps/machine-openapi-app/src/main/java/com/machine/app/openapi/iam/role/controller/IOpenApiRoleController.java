@@ -28,14 +28,14 @@ public class IOpenApiRoleController {
 
     @Operation(summary = "根角色ID")
     @PostMapping("root_id")
-    @PreAuthorize("hasAnyAuthority('iam','iam_role')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ROLE:ROOT_ID')")
     public IdResponse<String> rootId(@RequestBody @Valid OpenApiRoleRootRequestVo request) {
         return new IdResponse<>(roleBusiness.rootId(request));
     }
 
     @Operation(summary = "获取角色详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('iam','iam_role')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ROLE:DETAIL')")
     public OpenApiRoleDetailResponseVo detail(@RequestBody @Valid OpenApiRoleIdRequestVo requestVo) {
         return roleBusiness.detail(requestVo);
     }
@@ -44,7 +44,7 @@ public class IOpenApiRoleController {
             description = "本接口不受授权范围限制。\n" +
                     "本接口只支持获取下一级所有角色ID列表。")
     @PostMapping("list_sub_id")
-    @PreAuthorize("hasAnyAuthority('iam','iam_role')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ROLE:LIST_SUB_ID')")
     public List<String> listSubId(@RequestBody @Valid OpenApiRoleListSubRequestVo request) {
         return roleBusiness.listSubId(request);
     }
@@ -53,14 +53,14 @@ public class IOpenApiRoleController {
             description = "该接口不受通讯录权限范围限制。\n" +
                     "获取的list元素第一个是当前角色ID，最后一个是父角色ID，从左至右角色层级递增。")
     @PostMapping("list_parent_by_target")
-    @PreAuthorize("hasAnyAuthority('iam','iam_role')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ROLE:LIST_PARENT_BY_TARGET')")
     public List<String> listParentByTarget(@RequestBody @Valid OpenApiRoleIdRequestVo requestVo) {
         return roleBusiness.listParentByTarget(requestVo);
     }
 
     @Operation(summary = "获取指定角色的所有权限ID列表")
     @PostMapping("list_permission_by_target")
-    @PreAuthorize("hasAnyAuthority('iam','iam_role')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ROLE:LIST_PERMISSION_BY_TARGET')")
     public OpenApiRolePermissionResponseVo listPermissionByTarget(@RequestBody @Valid OpenApiRoleIdRequestVo requestVo) {
         return roleBusiness.listPermissionByTarget(requestVo);
     }

@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 public class TempTestApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(TempTestApp.class, args);
     }
 

@@ -31,7 +31,7 @@ public class DataBrandController {
 
     @Operation(summary = "创建品牌")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataBrandCreateRequestVo request) {
         log.info("创建品牌，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(brandBusiness.create(request));
@@ -39,7 +39,7 @@ public class DataBrandController {
 
     @Operation(summary = "删除品牌")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.delete(request);
@@ -47,7 +47,7 @@ public class DataBrandController {
 
     @Operation(summary = "修改品牌")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE')")
     public void update(@RequestBody @Validated DataBrandUpdateRequestVo request) {
         log.info("修改品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.update(request);
@@ -55,7 +55,7 @@ public class DataBrandController {
 
     @Operation(summary = "修改品牌状态")
     @PostMapping("update_status")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:UPDATE_STATUS')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE_STATUS')")
     public void updateStatus(@RequestBody @Validated DataBrandUpdateStatusRequestVo request) {
         log.info("修改品牌状态，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.updateStatus(request);
@@ -63,21 +63,21 @@ public class DataBrandController {
 
     @Operation(summary = "品牌详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DETAIL')")
     public DataBrandDetailResponseVo detail(@RequestBody IdRequest request) {
         return brandBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询品牌(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:PAGE_SIMPLE')")
     public PageResponse<DataBrandSimpleListResponseVo> pageSimple(@RequestBody @Validated DataBrandQueryPageRequestVo request) {
         return brandBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询品牌(应用于管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:BRAND:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:PAGE_EXPAND')")
     public PageResponse<DataBrandExpandListResponseVo> pageExpand(@RequestBody @Validated DataBrandQueryPageRequestVo request) {
         return brandBusiness.pageExpand(request);
     }

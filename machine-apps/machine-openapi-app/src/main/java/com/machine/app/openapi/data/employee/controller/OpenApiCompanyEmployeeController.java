@@ -29,14 +29,14 @@ public class OpenApiCompanyEmployeeController {
 
     @Operation(summary = "公司员工详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:COMPANY_EMPLOYEE:DETAIL')")
     public OpenapiCompanyEmployeeDetailResponseVo detail(@RequestBody @Valid OpenApiCompanyEmployeeIdRequestVo request) {
         return companyEmployeeBusiness.detail(request);
     }
 
     @Operation(summary = "获取公司员工列表(基础信息)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:COMPANY_EMPLOYEE:LIST_SIMPLE')")
     public List<OpenApiCompanyEmployeeListSimpleResponseVo> listSimple(@RequestBody @Valid OpenApiCompanyEmployeeListSimpleRequestVo request) {
         return companyEmployeeBusiness.listSimple(request);
     }

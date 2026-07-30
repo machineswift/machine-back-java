@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({CustomerWebMvcConfigurer.class})
 public class HrmServiceApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(HrmServiceApp.class, args);
     }
 

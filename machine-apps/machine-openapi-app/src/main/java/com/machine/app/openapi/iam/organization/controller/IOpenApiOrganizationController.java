@@ -25,42 +25,42 @@ public class IOpenApiOrganizationController {
     @Autowired
     private IOpenApiOrganizationBusiness organizationBusiness;
 
-    @PreAuthorize("hasAnyAuthority('iam','iam_organization')")
     @Operation(summary = "根组织ID")
     @PostMapping("root_id")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:ROOT_ID')")
     public IdResponse<String> rootId(@RequestBody @Valid OpenApiOrganizationRootIdRequestVo request) {
         return new IdResponse<>(organizationBusiness.rootId(request));
     }
 
-    @PreAuthorize("hasAnyAuthority('iam','iam_organization')")
     @Operation(summary = "获取组织详情")
     @PostMapping("detail")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:DETAIL')")
     public OpenApiOrganizationDetailResponseVo detail(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
         return organizationBusiness.detail(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('iam','iam_organization')")
     @Operation(summary = "获取子组织ID列表",
             description = "本接口不受授权范围限制。\n" +
                     "本接口只支持获取下一级所有组织ID列表。")
     @PostMapping("list_sub_id")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:LIST_SUB_ID')")
     public List<String> listSubId(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
         return organizationBusiness.listSubId(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('iam','iam_organization')")
     @Operation(summary = "获取子组织列表",
             description = "本接口只支持获取当前组织的下一级组织基础信息，不支持获取当前组织下所有层级子组织。")
     @PostMapping("list_sub")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:LIST_SUB')")
     public List<IamOrganizationTreeSimpleOutputDto> listSub(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
         return organizationBusiness.listSub(request);
     }
 
-    @PreAuthorize("hasAnyAuthority('iam','iam_organization')")
     @Operation(summary = "获取指定组织的所有父组织ID列表",
             description = "该接口不受通讯录权限范围限制。\n" +
                     "获取的list元素第一个是当前组织ID，最后一个是根组织ID，从左至右组织层级递增。")
     @PostMapping("list_parent_by_target")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:LIST_PARENT_BY_TARGET')")
     public List<String> listParentByTarget(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
         return organizationBusiness.listParentByTarget(request);
     }

@@ -26,7 +26,7 @@ public class IamOrganizationController {
 
     @Operation(summary = "创建组织")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated IamOrganizationCreateRequestVo request) {
         log.info("创建组织，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(organizationBusiness.create(request));
@@ -34,7 +34,7 @@ public class IamOrganizationController {
 
     @Operation(summary = "删除组织")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.delete(request);
@@ -42,7 +42,7 @@ public class IamOrganizationController {
 
     @Operation(summary = "修改组织")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:UPDATE')")
     public void update(@RequestBody @Validated IamOrganizationUpdateRequestVo request) {
         log.info("修改组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.update(request);
@@ -50,7 +50,7 @@ public class IamOrganizationController {
 
     @Operation(summary = "修改父组织ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated IamOrganizationUpdateParentRequestVo request) {
         log.info("修改父组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.updateParent(request);
@@ -58,28 +58,28 @@ public class IamOrganizationController {
 
     @Operation(summary = "组织详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:DETAIL')")
     public IamOrganizationDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return organizationBusiness.detail(request);
     }
 
     @Operation(summary = "组织树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:TREE_SIMPLE')")
     public IamOrganizationTreeSimpleOutputDto treeSimple(@RequestBody @Validated IamOrganizationQueryTreeRequestVo request) {
         return organizationBusiness.treeSimple(request);
     }
 
     @Operation(summary = "组织树(应用于组织管理菜单)")
     @PostMapping("tree_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:TREE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:TREE_EXPAND')")
     public IamOrganizationExpandTreeResponseVo treeExpand(@RequestBody @Validated IamOrganizationQueryTreeRequestVo request) {
         return organizationBusiness.treeExpand(request);
     }
 
     @Operation(summary = "组织树(关联门店信息)")
     @PostMapping("tree_with_shop")
-    @PreAuthorize("hasAuthority('SYSTEM:AUTH:ORGANIZATION:TREE_WITH_SHOP')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:TREE_WITH_SHOP')")
     public IamOrganizationWithShopTreeResponseVo treeWithShop(@RequestBody @Validated IamOrganizationQueryTreeRequestVo request) {
         return organizationBusiness.treeExpandWithShop(request);
     }

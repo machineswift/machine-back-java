@@ -13,8 +13,7 @@ public class SecurityConstant {
     public static final long REFRESH_TOKEN_EXPIRE_TIMESTAMP = 90 * 24 * 60 * 60 * 1000L;
 
     public static final String BEARER_TYPE = "Bearer";
-
-    public static final String AUTH_TOKEN_HEADER_KEY = "Authorization";
+    public static final String BEARER_TYPE_WITH_SPACE = "Bearer ";
 
     public static final String AUTH_TOKEN_ACCESS_TOKEN_ID_KEY = "tokenId";
 

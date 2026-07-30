@@ -1,6 +1,6 @@
 package com.machine.starter.security.config;
 
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
 import com.machine.starter.redis.cache.LocalCacheSystemConfig;
 import com.machine.starter.redis.command.CustomerRedisCommands;

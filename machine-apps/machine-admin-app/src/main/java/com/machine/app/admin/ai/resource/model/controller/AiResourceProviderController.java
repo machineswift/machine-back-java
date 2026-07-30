@@ -32,7 +32,7 @@ public class AiResourceProviderController {
 
     @Operation(summary = "资源中心创建厂商")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated AiResourceProviderCreateRequestVo request) {
         log.info("资源中心新增厂商: {}", request);
         return new IdResponse<>(resourceProviderBusiness.create(request));
@@ -40,7 +40,7 @@ public class AiResourceProviderController {
 
     @Operation(summary = "资源中心删除厂商")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("资源中心删除厂商: {}", request.getId());
         resourceProviderBusiness.delete(request);
@@ -48,7 +48,7 @@ public class AiResourceProviderController {
 
     @Operation(summary = "资源中心修改厂商")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:UPDATE')")
     public void update(@RequestBody @Validated AiResourceProviderUpdateRequestVo request) {
         log.info("资源中心修改厂商: {}", request);
         resourceProviderBusiness.update(request);
@@ -56,7 +56,7 @@ public class AiResourceProviderController {
 
     @Operation(summary = "资源中心修改厂商状态")
     @PostMapping("update_status")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:UPDATE_STATUS')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:UPDATE_STATUS')")
     public void updateStatus(@RequestBody @Validated AiResourceProviderUpdateStatusRequestVo request) {
         log.info("资源中心修改厂商状态: {}", JSONUtil.toJsonStr(request));
         resourceProviderBusiness.updateStatus(request);
@@ -64,21 +64,21 @@ public class AiResourceProviderController {
 
     @Operation(summary = "资源中心厂商详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:DETAIL')")
     public AiResourceProviderDetailResponseVo detail(@RequestBody IdRequest request) {
         return resourceProviderBusiness.detail(request);
     }
 
     @Operation(summary = "资源中心查询厂商列表(用于组件弹窗/下拉选择)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:LIST_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:LIST_SIMPLE')")
     public List<AiResourceProviderSimpleListResponseVo> listSimple(@RequestBody @Validated AiResourceProviderListRequestVo request) {
         return resourceProviderBusiness.listSimple(request);
     }
 
     @Operation(summary = "资源中心查询厂商列表(应用于管理菜单)")
     @PostMapping("list_expand")
-    @PreAuthorize("hasAuthority('AI:RESOURCE_CENTER:PROVIDER:LIST_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:LIST_EXPAND')")
     public List<AiResourceProviderExpandListResponseVo> listExpanded(@RequestBody @Validated AiResourceProviderListRequestVo request) {
         return resourceProviderBusiness.listExpanded(request);
     }

@@ -30,7 +30,7 @@ public class ScmBackCategoryController {
 
     @Operation(summary = "创建后台分类")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated ScmBackCategoryCreateRequestVo request) {
         log.info("创建后台分类，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(backCategoryBusiness.create(request));
@@ -38,7 +38,7 @@ public class ScmBackCategoryController {
 
     @Operation(summary = "删除后台分类")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:DELETE')")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除后台分类，id={}", request.getId());
         backCategoryBusiness.deleteById(request);
@@ -46,7 +46,7 @@ public class ScmBackCategoryController {
 
     @Operation(summary = "修改后台分类")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:UPDATE')")
     public void update(@RequestBody @Validated ScmBackCategoryUpdateRequestVo request) {
         log.info("修改后台分类，request={}", JSONUtil.toJsonStr(request));
         backCategoryBusiness.update(request);
@@ -54,7 +54,7 @@ public class ScmBackCategoryController {
 
     @Operation(summary = "修改父分类ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated ScmBackCategoryUpdateParentRequestVo request) {
         log.info("修改父分类，request={}", JSONUtil.toJsonStr(request));
         backCategoryBusiness.updateParent(request);
@@ -62,21 +62,21 @@ public class ScmBackCategoryController {
 
     @Operation(summary = "查询后台分类详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:DETAIL')")
     public ScmBackCategoryDetailResponseVo getById(@RequestBody @Valid IdRequest request) {
         return backCategoryBusiness.getById(request);
     }
 
     @Operation(summary = "后台分类树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:TREE_SIMPLE')")
     public ScmBackCategoryTreeSimpleOutputDto treeSimple() {
         return backCategoryBusiness.treeSimple();
     }
 
     @Operation(summary = "后台分类树(应用于组织管理菜单)")
     @PostMapping("tree_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:SCM:BACK_CATEGORY:TREE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:BACK_CATEGORY:TREE_EXPAND')")
     public ScmBackCategoryTreeExprandOutputDto treeExpand() {
         return backCategoryBusiness.treeExpand();
     }

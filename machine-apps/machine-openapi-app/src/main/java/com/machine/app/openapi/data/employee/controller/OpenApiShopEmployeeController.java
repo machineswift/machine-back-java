@@ -30,28 +30,28 @@ public class OpenApiShopEmployeeController {
 
     @Operation(summary = "门店员工详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP_EMPLOYEE:DETAIL')")
     public OpenapiShopEmployeeDetailResponseVo detail(@RequestBody @Valid OpenApiShopEmployeeIdRequestVo request) {
         return shopEmployeeBusiness.detail(request);
     }
 
     @Operation(summary = "获取身份证")
     @PostMapping("identity_card")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP_EMPLOYEE:IDENTITY_CARD')")
     public OpenapiShopEmployeeIdentityCardResponseVo identityCard(@RequestBody @Valid OpenApiShopEmployeeIdRequestVo request) {
         return shopEmployeeBusiness.identityCard(request);
     }
 
     @Operation(summary = "获取健康证")
     @PostMapping("health_certificate")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP_EMPLOYEE:HEALTH_CERTIFICATE')")
     public OpenapiShopEmployeeHealthCertificateResponseVo healthCertificate(@RequestBody @Valid OpenApiShopEmployeeIdRequestVo request) {
         return shopEmployeeBusiness.healthCertificate(request);
     }
 
     @Operation(summary = "获取门店员工列表(基础信息)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAnyAuthority('data','data_employee')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:DATA:SHOP_EMPLOYEE:LIST_SIMPLE')")
     public List<OpenApiShopEmployeeListSimpleResponseVo> listSimple(@RequestBody @Valid OpenApiShopEmployeeListSimpleRequestVo request) {
         return shopEmployeeBusiness.listSimple(request);
     }

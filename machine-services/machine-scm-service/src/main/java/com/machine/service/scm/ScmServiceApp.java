@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({CustomerWebMvcConfigurer.class})
 public class ScmServiceApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(ScmServiceApp.class, args);
     }
 

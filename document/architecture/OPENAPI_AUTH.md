@@ -160,7 +160,7 @@ public class OAuth2TokenManager {
             String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Basic " + encodedCredentials);
+            headers.set(HttpHeaders.AUTHORIZATION, "Basic " + encodedCredentials);
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -222,7 +222,7 @@ public class OAuth2RequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         String accessToken = tokenManager.getAccessToken();
-        template.header("Authorization", "Bearer " + accessToken);
+        template.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
     }
 }
 ```

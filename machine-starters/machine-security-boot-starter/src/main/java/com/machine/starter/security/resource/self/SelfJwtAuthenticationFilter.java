@@ -9,6 +9,7 @@ import com.machine.starter.security.CustomerUserDetailsService;
 import com.machine.starter.security.SecurityConstant;
 import com.machine.sdk.base.exception.iam.authentication.JwtTokenBlackException;
 import com.machine.starter.security.util.MachineJwtUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,7 +53,7 @@ public class SelfJwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain chain) throws IOException, ServletException {
         try {
-            String jwt = request.getHeader(SecurityConstant.AUTH_TOKEN_HEADER_KEY);
+            String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (StrUtil.isBlank(jwt) || jwt.length() < 12) {
                 throw new AuthenticationCredentialsNotFoundException("token 为空");
             }

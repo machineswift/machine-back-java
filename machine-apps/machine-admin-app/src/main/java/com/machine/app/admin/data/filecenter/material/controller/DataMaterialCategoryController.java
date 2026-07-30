@@ -28,7 +28,7 @@ public class DataMaterialCategoryController {
 
     @Operation(summary = "新增")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCategoryCreateRequestVo request) {
         log.info("新增素材分类，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(materialCategoryBusiness.create(request));
@@ -36,7 +36,7 @@ public class DataMaterialCategoryController {
 
     @Operation(summary = "删除")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.delete(request);
@@ -44,7 +44,7 @@ public class DataMaterialCategoryController {
 
     @Operation(summary = "修改")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE')")
     public void update(@RequestBody @Validated DataMaterialCategoryUpdateRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.update(request);
@@ -52,7 +52,7 @@ public class DataMaterialCategoryController {
 
     @Operation(summary = "修改父ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE_PARENT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE_PARENT')")
     public void updateParent(@RequestBody @Validated DataMaterialCategoryUpdateParentRequestVo request) {
         log.info("修改父素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.updateParent(request);
@@ -60,14 +60,14 @@ public class DataMaterialCategoryController {
 
     @Operation(summary = "详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DETAIL')")
     public DataMaterialCategoryDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return materialCategoryBusiness.detail(request);
     }
 
     @Operation(summary = "分类树(选择器)", description = "树形结构，用于弹窗选择素材分类")
     @GetMapping("tree_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:TREE_SIMPLE')")
     public DataMaterialCategorySimpleTreeResponseVo treeAllSimple() {
         return materialCategoryBusiness.treeAllSimple();
     }

@@ -67,11 +67,16 @@ INSERT INTO t_iam_permission (id, parent_id, resource_type, code, name,
 VALUES ('machine', 'root', 'APP', 'MACHINE', 'machine', 'machine', 800, 'system', 1729736640000, 'system',
         1729736640000),
 
-       ('manage_app', 'machine', 'APP', 'MANAGE_APP', '后台管理', '后台管理', 800, 'system',
+       ('manage_app', 'machine', 'APP', 'MANAGE_APP', '管理端', '管理端', 800, 'system',
         1729736640000,
         'system', 1729736640000),
-       ('super_app', 'machine', 'APP', 'SUPE_APP', '超级APP', '超级APP', 400, 'system', 1729736640000,
+       ('partner_app', 'machine', 'APP', 'PARTNER_APP', '伙伴端', '伙伴端', 600, 'system', 1729736640000,
         'system', 1729736640000),
+       ('customer_app', 'machine', 'APP', 'CUSTOMER_APP', '消费者端', '消费者端', 400, 'system', 1729736640000,
+        'system', 1729736640000),
+       ('openapi_app', 'machine', 'APP', 'OPENAPI_APP', '开放平台', '开放平台', 200, 'system', 1729736640000,
+        'system', 1729736640000),
+
 
        ('system', 'manage_app', 'MODULE', 'SYSTEM', '系统管理', '系统管理', 9000, 'system',
         1729736640000, 'system', 1729736640000),
@@ -94,7 +99,7 @@ VALUES ('machine', 'root', 'APP', 'MACHINE', 'machine', 'machine', 800, 'system'
        ('system:basic_data', 'system', 'DIRECTORY', 'SYSTEM:BASIC_DATA', '基础数据管理', '基础数据管理',
         8000, 'system',
         1729736640000, 'system', 1729736640000),
-       ('system:auth', 'system', 'DIRECTORY', 'SYSTEM:AUTH', '权限管理', '权限管理', 1000, 'system',
+       ('system:access_control', 'system', 'DIRECTORY', 'SYSTEM:ACCESS_CONTROL', '权限管理', '权限管理', 1000, 'system',
         1729736640000, 'system', 1729736640000),
 
        ('scm:item', 'scm', 'DIRECTORY', 'SCM:ITEM', '商品管理', '商品管理', 2000, 'system',
@@ -125,17 +130,17 @@ VALUES ('system:basic_data:brand', 'system:basic_data', 'MENU', 'SYSTEM:BASIC_DA
 
 INSERT INTO t_iam_permission (id, parent_id, resource_type, code, name,
                               description, sort, create_by, create_time, update_by, update_time)
-VALUES ('system:auth:user', 'system:auth', 'MENU', 'SYSTEM:AUTH:USER', '用户管理', '用户管理', 8000,
+VALUES ('system:access_control:user', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:USER', '用户管理', '用户管理', 8000,
         'root', 1729736640000, 'system', 1729736640000),
-       ('system:auth:role', 'system:auth', 'MENU', 'SYSTEM:AUTH:ROLE', '角色管理', '角色管理', 7000,
+       ('system:access_control:role', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:ROLE', '角色管理', '角色管理', 7000,
         'root', 1729736640000, 'system', 1729736640000),
-       ('system:auth:permission', 'system:auth', 'MENU', 'SYSTEM:AUTH:PERMISSION', '菜单管理',
+       ('system:access_control:permission', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:PERMISSION', '菜单管理',
         '菜单管理', 6000, 'root', 1729736640000, 'system', 1729736640000),
-       ('system:auth:organization', 'system:auth', 'MENU', 'SYSTEM:AUTH:ORGANIZATION', '组织管理',
+       ('system:access_control:organization', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:ORGANIZATION', '组织管理',
         '组织管理', 5000, 'root', 1729736640000, 'system', 1729736640000),
-       ('system:auth:operation_log', 'system:auth', 'MENU', 'SYSTEM:AUTH:OPERATION_LOG', '操作日志',
+       ('system:access_control:operation_log', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:OPERATION_LOG', '操作日志',
         '操作日志', 1200, 'root', 1729736640000, 'system', 1729736640000),
-       ('system:auth:login_log', 'system:auth', 'MENU', 'SYSTEM:AUTH:LOGIN_LOG', '登录日志',
+       ('system:access_control:login_log', 'system:access_control', 'MENU', 'SYSTEM:ACCESS_CONTROL:LOGIN_LOG', '登录日志',
         '登录日志', 1000, 'root', 1729736640000, 'system', 1729736640000)
 ;
 

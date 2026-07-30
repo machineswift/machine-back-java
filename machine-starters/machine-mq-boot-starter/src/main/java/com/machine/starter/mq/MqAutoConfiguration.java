@@ -1,6 +1,6 @@
 package com.machine.starter.mq;
 
-import com.machine.client.iam.auth.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
 import com.machine.starter.mq.function.CustomerStreamBridge;
 import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
 import org.springframework.beans.factory.annotation.Autowired;

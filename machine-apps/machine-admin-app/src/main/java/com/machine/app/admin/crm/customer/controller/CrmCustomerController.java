@@ -33,7 +33,7 @@ public class CrmCustomerController {
 
     @Operation(summary = "创建客户")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated CrmCustomerCreateRequestVo request) {
         log.info("创建客户，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(crmCustomerBusiness.create(request));
@@ -41,7 +41,7 @@ public class CrmCustomerController {
 
     @Operation(summary = "删除客户")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.delete(request);
@@ -49,7 +49,7 @@ public class CrmCustomerController {
 
     @Operation(summary = "修改客户")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:UPDATE')")
     public void update(@RequestBody @Validated CrmCustomerUpdateRequestVo request) {
         log.info("修改客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.update(request);
@@ -57,21 +57,21 @@ public class CrmCustomerController {
 
     @Operation(summary = "客户详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:DETAIL')")
     public CrmCustomerDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return crmCustomerBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询客户(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:PAGE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:PAGE_SIMPLE')")
     public PageResponse<CrmCustomerListResponseVo> pageSimple(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
         return crmCustomerBusiness.pageSimple(request);
     }
 
     @Operation(summary = "分页查询客户(应用于客户管理菜单)")
     @PostMapping("page_expand")
-    @PreAuthorize("hasAuthority('CRM:CUSTOMER:CUSTOMER:PAGE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:PAGE_EXPAND')")
     public PageResponse<CrmCustomerExpandListResponseVo> pageExpand(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
         return crmCustomerBusiness.pageExpand(request);
     }

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-generals</artifactId>
-        <version>2026.07.20-RELEASE</version>
+        <version>2026.06.04-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -39,6 +39,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
 
         <dependency>
@@ -121,6 +126,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>
         </dependency>
 
 

@@ -29,7 +29,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "创建智能标签选项")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:CREATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:CREATE')")
     public IdResponse<String> create(@RequestBody @Validated DataTagOptionCreateRequestVo request) {
         log.info("创建智能标签选项，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(tagOptionBusiness.create(request));
@@ -37,7 +37,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "删除智能标签选项")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:DELETE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:DELETE')")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签选项，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.delete(request);
@@ -45,7 +45,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "修改智能标签选项")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE')")
     public void update(@RequestBody @Validated DataTagOptionUpdateRequestVo request) {
         log.info("修改智能标签选项，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.update(request);
@@ -54,7 +54,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "修改智能标签选项编码")
     @PostMapping("update_code")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_CODE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_CODE')")
     public void updateCode(@RequestBody @Validated DataTagOptionUpdateCodeRequestVo request) {
         log.info("修改智能标签选项编码，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateCode(request);
@@ -62,7 +62,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "修改智能标签选项状态")
     @PostMapping("update_status")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_STATUS')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_STATUS')")
     public void updateStatus(@RequestBody @Validated DataTagOptionUpdateStatusRequestVo request) {
         log.info("修改智能标签选项状态，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateStatus(request);
@@ -70,7 +70,7 @@ public class DataTagOptionController {
 
     @Operation(summary = "修改智能标签选项排序")
     @PostMapping("update_sort")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_SORT')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_SORT')")
     public void updateSort(@RequestBody @Validated DataTagOptionUpdateSortRequestVo request) {
         log.info("修改智能标签选项排序，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateSort(request);
@@ -78,21 +78,21 @@ public class DataTagOptionController {
 
     @Operation(summary = "智能标签选项详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:DETAIL')")
     public DataTagOptionDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return tagOptionBusiness.detail(request);
     }
 
     @Operation(summary = "查询智能标签选项(应用于组件弹窗)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:LIST_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:LIST_SIMPLE')")
     public List<DataTagOptionSimpleListResponseVo> listSimple(@RequestBody @Validated DataTagOptionQueryListRequestVo request) {
         return tagOptionBusiness.listSimple(request);
     }
 
     @Operation(summary = "查询智能标签列表(选项应用于管理菜单)")
     @PostMapping("list_expand")
-    @PreAuthorize("hasAuthority('SYSTEM:BASIC_DATA:TAG_OPTION:LIST_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:LIST_EXPAND')")
     public List<DataTagOptionExpandListResponseVo> listExpand(@RequestBody @Validated DataTagOptionQueryListRequestVo request) {
         return tagOptionBusiness.listExpand(request);
     }

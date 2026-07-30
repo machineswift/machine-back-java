@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 public class MqApp {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(MqApp.class, args);
     }
 

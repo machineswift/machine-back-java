@@ -26,6 +26,7 @@ import com.machine.starter.redis.cache.iam.RedisIamFunctionPermissionCache;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import com.machine.starter.security.util.LoginLogUtil;
 import com.machine.starter.security.util.MachineJwtUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
@@ -49,7 +50,6 @@ import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Iam.LOC
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_SMS_CAPTCHA_FORGET_PASSWORD;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.Auth.IAM_AUTH_TOKEN_ID;
 import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.User.IAM_USER_BASE_KEY;
-import static com.machine.starter.security.SecurityConstant.AUTH_TOKEN_HEADER_KEY;
 import static com.machine.starter.security.SecurityConstant.BEARER_TYPE;
 import static com.machine.starter.security.util.LoginLogUtil.blackAllAvailableToken;
 
@@ -162,7 +162,7 @@ public class IamCurrentBusinessImpl implements IIamCurrentBusiness {
      */
     private void blackAuthToken4SelfUpdatePassword(HttpServletRequest request) {
         String userId = AppContextHolder.getContext().getUserId();
-        String accessToken = request.getHeader(AUTH_TOKEN_HEADER_KEY);
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         Jwt claimHeader = machineJwtUtil.getClaimsByToken(accessToken.substring(BEARER_TYPE.length() + 1));
         String accessTokenId = claimHeader.getId();
 

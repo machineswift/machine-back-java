@@ -28,21 +28,21 @@ public class IOpenApiUserController {
 
     @Operation(summary = "获取用户Id(根据手机号)")
     @PostMapping("userId_by_phone")
-    @PreAuthorize("hasAnyAuthority('iam','iam_user')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:USER:USER_ID_BY_PHONE')")
     public IdResponse<String> userIdByPhone(@RequestBody @Valid OpenApiUserPhoneRequestVo request) {
         return new IdResponse<>(userBusiness.userIdByPhone(request));
     }
 
     @Operation(summary = "详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAnyAuthority('iam','iam_user')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:USER:DETAIL')")
     public OpenapiUserDetailResponseVo detail(@RequestBody @Valid OpenApiUserIdRequestVo request) {
         return userBusiness.detail(request);
     }
 
     @Operation(summary = "获取用户列表(基础信息)")
     @PostMapping("list_simple")
-    @PreAuthorize("hasAnyAuthority('iam','iam_user')")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:USER:LIST_SIMPLE')")
     public List<OpenApiUserListSimpleResponseVo> listSimple(@RequestBody @Valid OpenApiUserListSimpleRequestVo request) {
         return userBusiness.listSimple(request);
     }

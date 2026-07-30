@@ -4,7 +4,7 @@
     <parent>
         <artifactId>machine-starters</artifactId>
         <groupId>com.machine</groupId>
-        <version>2026.06.04-RELEASE</version>
+        <version>2026.08.01-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>machine-base-boot-starter</artifactId>

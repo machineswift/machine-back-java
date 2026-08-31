@@ -1,0 +1,23 @@
+package com.machine.app.iam.biam.userbk.business;
+
+import com.machine.app.iam.biam.userbk.vo.request.IamShopUserCreateRequestVo;
+import com.machine.app.iam.biam.userbk.vo.request.IamShopUserQueryPageExpandRequestVo;
+import com.machine.app.iam.biam.userbk.vo.request.IamShopUserUpdateRequestVo;
+import com.machine.app.iam.biam.userbk.vo.response.IamShopUserDetailResponseVo;
+import com.machine.app.iam.biam.userbk.vo.response.IamShopUserExpandListResponseVo;
+import com.machine.app.iam.biam.userbk.vo.response.IamShopUserExportRequestVo;
+import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.model.response.PageResponse;
+
+public interface IIamShopUserBusiness {
+
+    String create(IamShopUserCreateRequestVo request);
+
+    void update(IamShopUserUpdateRequestVo request);
+
+    IamShopUserDetailResponseVo detail(IdRequest request);
+
+    PageResponse<IamShopUserExpandListResponseVo> pageExpand(IamShopUserQueryPageExpandRequestVo request);
+
+    void export(IamShopUserExportRequestVo request);
+}

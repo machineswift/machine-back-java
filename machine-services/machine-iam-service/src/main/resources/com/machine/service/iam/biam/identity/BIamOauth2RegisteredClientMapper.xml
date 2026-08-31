@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.biam.identity.dao.mapper.BIamOauth2RegisteredClientMapper">
+
+    <select id="allClientId" resultType="java.lang.String">
+        SELECT orc.client_id FROM t_biam_oauth2_registered_client orc
+        <where>
+            <if test="status != null ">
+                AND orc.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPage" resultType="com.machine.service.iam.biam.identity.dao.mapper.entity.BIamOauth2RegisteredClientEntity">
+        SELECT orc.* FROM t_biam_oauth2_registered_client orc
+        <where>
+            <if test="inputDto.authorizationGrantType != null ">
+                AND orc.authorization_grant_type = #{inputDto.authorizationGrantType}
+            </if>
+            <if test="inputDto.clientId != null and inputDto.clientId != '' ">
+                AND orc.client_id = #{inputDto.clientId}
+            </if>
+            <if test="inputDto.clientName != null and inputDto.clientName != '' ">
+                AND orc.client_name LIKE CONCAT('%', #{inputDto.clientName}, '%')
+            </if>
+            <if test="inputDto.status != null ">
+                AND orc.status = #{inputDto.status}
+            </if>
+            <if test="inputDto.updateStartTime != null ">
+                AND orc.update_time > #{inputDto.updateStartTime}
+            </if>
+            <if test="inputDto.updateEndTime != null ">
+                AND orc.update_time <![CDATA[ < ]]> #{inputDto.updateEndTime}
+            </if>
+            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
+                AND orc.create_by IN
+                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
+                AND orc.update_by IN
+                <foreach item="item" collection="inputDto.updateUserIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.createStartTime != null ">
+                AND orc.create_time > #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null ">
+                AND orc.create_time <![CDATA[ < ]]> #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY orc.create_time DESC
+    </select>
+</mapper>

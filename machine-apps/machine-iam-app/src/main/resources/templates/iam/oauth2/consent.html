@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>授权确认</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .consent-card {
+            width: 440px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+            padding: 40px 36px;
+        }
+
+        .consent-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #303133;
+            margin-bottom: 12px;
+        }
+
+        .consent-desc {
+            font-size: 13px;
+            color: #606266;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .consent-desc .highlight {
+            color: #409eff;
+            font-weight: 600;
+        }
+
+        .scope-list {
+            margin-bottom: 8px;
+        }
+
+        .scope-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ebeef5;
+            font-size: 14px;
+            color: #303133;
+        }
+
+        .scope-item input {
+            margin-top: 3px;
+            margin-right: 8px;
+        }
+
+        .scope-desc {
+            font-size: 12px;
+            color: #909399;
+            margin-top: 2px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            height: 40px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-approve {
+            background: #409eff;
+            color: #fff;
+        }
+
+        .btn-approve:hover {
+            background: #66b1ff;
+        }
+
+        .btn-cancel {
+            background: #f5f7fa;
+            color: #606266;
+        }
+
+        .btn-cancel:hover {
+            background: #ebeef5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="consent-card">
+        <div class="consent-title">授权确认</div>
+        <div class="consent-desc">
+            应用 <span class="highlight" th:text="${clientId}"></span> 正在请求访问您的账号
+            <span class="highlight" th:text="${principalName}"></span>。
+        </div>
+        <div class="consent-desc">以下权限将被授权，请确认是否同意：</div>
+        <form name="consent_form" th:action="@{/iam/oauth2/authServer/authorize}" method="post">
+            <input type="hidden" name="client_id" th:value="${clientId}">
+            <input type="hidden" name="state" th:value="${state}">
+            <div class="scope-list">
+                <div th:each="scope: ${scopes}" class="scope-item">
+                    <input type="checkbox" name="scope" th:value="${scope.scope}" th:id="${scope.scope}">
+                    <div>
+                        <label th:for="${scope.scope}" th:text="${scope.scope}"></label>
+                        <div class="scope-desc" th:text="${scope.description}"></div>
+                    </div>
+                </div>
+                <div th:if="${!#lists.isEmpty(previouslyApprovedScopes)}">
+                    <div class="consent-desc" style="margin-top:16px;">您已授权以下权限：</div>
+                    <div th:each="scope: ${previouslyApprovedScopes}" class="scope-item">
+                        <input type="checkbox" name="scope" th:value="${scope.scope}" disabled checked>
+                        <div>
+                            <label th:text="${scope.scope}"></label>
+                            <div class="scope-desc" th:text="${scope.description}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-approve">同意授权</button>
+                <button type="button" class="btn btn-cancel" onclick="cancelConsent()">拒绝</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function cancelConsent() {
+            document.consent_form.reset();
+            document.consent_form.submit();
+        }
+    </script>
+</body>
+
+</html>

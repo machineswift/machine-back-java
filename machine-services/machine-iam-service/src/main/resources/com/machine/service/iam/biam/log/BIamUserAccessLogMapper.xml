@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.biam.log.dao.mapper.BIamUserAccessLogMapper">
+
+    <sql id="base_column_list">
+        id,
+        user_id,
+        username,
+        operate_source,
+        module,
+        module_entity,
+        operate_type,
+        operate_name,
+        trace_id,
+        client_ip,
+        platform,
+        device_id,
+        user_agent,
+        http_method,
+        request_path,
+        http_status,
+        action_status,
+        error_code,
+        error_message,
+        cost_time,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+    </sql>
+
+    <delete id="deleteByCreateTimeBefore">
+        DELETE FROM t_biam_user_access_log
+        WHERE create_time &lt;= #{beforeCreateTime}
+    </delete>
+
+    <select id="selectPage" resultType="com.machine.service.iam.biam.log.dao.mapper.entity.BIamUserAccessLogEntity">
+        select
+        <include refid="base_column_list"/>
+        from t_biam_user_access_log ual
+        <where>
+            <if test="inputDto.userId != null and inputDto.userId != ''">
+                AND ual.user_id = #{inputDto.userId}
+            </if>
+            <if test="inputDto.username != null and inputDto.username != ''">
+                AND ual.username LIKE CONCAT('%', #{inputDto.username}, '%')
+            </if>
+            <if test="inputDto.operateSource != null and inputDto.operateSource != ''">
+                AND ual.operate_source = #{inputDto.operateSource}
+            </if>
+            <if test="inputDto.module != null">
+                AND ual.module = #{inputDto.module}
+            </if>
+            <if test="inputDto.moduleEntity != null">
+                AND ual.module_entity = #{inputDto.moduleEntity}
+            </if>
+            <if test="inputDto.operateType != null">
+                AND ual.operate_type = #{inputDto.operateType}
+            </if>
+            <if test="inputDto.operateName != null and inputDto.operateName != ''">
+                AND ual.operate_name LIKE CONCAT('%', #{inputDto.operateName}, '%')
+            </if>
+            <if test="inputDto.actionStatus != null">
+                AND ual.action_status = #{inputDto.actionStatus}
+            </if>
+            <if test="inputDto.httpStatus != null">
+                AND ual.http_status = #{inputDto.httpStatus}
+            </if>
+            <if test="inputDto.requestPath != null and inputDto.requestPath != ''">
+                AND ual.request_path LIKE CONCAT('%', #{inputDto.requestPath}, '%')
+            </if>
+            <if test="inputDto.clientIp != null and inputDto.clientIp != ''">
+                AND ual.client_ip = #{inputDto.clientIp}
+            </if>
+            <if test="inputDto.traceId != null and inputDto.traceId != ''">
+                AND ual.trace_id = #{inputDto.traceId}
+            </if>
+            <if test="inputDto.createStartTime != null">
+                AND ual.create_time &gt;= #{inputDto.createStartTime}
+            </if>
+            <if test="inputDto.createEndTime != null">
+                AND ual.create_time &lt;= #{inputDto.createEndTime}
+            </if>
+        </where>
+        ORDER BY ual.create_time DESC
+    </select>
+
+
+</mapper>

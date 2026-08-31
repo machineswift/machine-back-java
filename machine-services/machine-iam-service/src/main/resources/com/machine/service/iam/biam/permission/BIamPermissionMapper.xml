@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.iam.biam.permission.dao.mapper.BIamPermissionMapper">
+
+    <select id="selectIdByRoleIds" resultType="java.lang.String">
+        SELECT DISTINCT p.id
+        FROM t_biam_permission p
+        LEFT JOIN t_biam_role_permission_relation urr ON urr.permission_id = p.id
+        WHERE urr.role_id IN
+        <foreach item="item" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listByRoleId" resultType="com.machine.service.iam.biam.permission.dao.mapper.entity.BIamPermissionEntity">
+        SELECT p.*
+        FROM t_biam_permission p
+                 LEFT JOIN t_biam_role_permission_relation rpr ON rpr.permission_id = p.id
+        WHERE rpr.role_id = #{roleId}
+    </select>
+
+    <select id="listByRoleIdSet" resultType="com.machine.service.iam.biam.permission.dao.mapper.entity.BIamPermissionEntity">
+        SELECT DISTINCT p.*
+        FROM t_biam_permission p
+                 LEFT JOIN t_biam_role_permission_relation urr ON urr.permission_id = p.id
+        WHERE urr.role_id IN
+        <foreach item="item" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="selectByUserId" resultType="com.machine.service.iam.biam.permission.dao.mapper.entity.BIamPermissionEntity">
+        SELECT DISTINCT p.*
+        FROM t_biam_permission p
+                 LEFT JOIN t_biam_user_permission_relation upr ON upr.permission_id = p.id
+        WHERE upr.user_id = #{userId}
+    </select>
+
+    <select id="selectByRoleIds" resultType="com.machine.service.iam.biam.permission.dao.mapper.entity.BIamPermissionEntity">
+        SELECT p.*
+        FROM t_biam_permission p
+                 LEFT JOIN t_biam_role_permission_relation urr ON urr.permission_id = p.id
+        WHERE urr.role_id IN
+        <foreach item="item" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

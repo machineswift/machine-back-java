@@ -1,0 +1,61 @@
+package com.machine.app.iam.biam.log.controller.vo.request;
+
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionStatusEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.model.request.PageRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@Schema
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+public class BIamUserAccessLogQueryPageRequestVo extends PageRequest {
+
+    @Schema(description = "用户ID")
+    private String userId;
+
+    @Schema(description = "用户名")
+    private String username;
+
+    @Schema(description = "操作来源")
+    private String operateSource;
+
+    @Schema(description = "操作模块")
+    private ModuleEnum module;
+
+    @Schema(description = "操作模块实体")
+    private ModuleEntityEnum moduleEntity;
+
+    @Schema(description = "操作分类")
+    private ActionTypeEnum operateType;
+
+    @Schema(description = "操作名称（模糊）")
+    private String operateName;
+
+    @Schema(description = "业务状态，对应 ActionStatusEnum")
+    private ActionStatusEnum actionStatus;
+
+    @Schema(description = "HTTP状态码")
+    private Integer httpStatus;
+
+    @Schema(description = "请求路径")
+    private String requestPath;
+
+    @Schema(description = "客户端IP")
+    private String clientIp;
+
+    @Schema(description = "链路追踪ID")
+    private String traceId;
+
+    @Schema(description = "创建开始时间")
+    private Long createStartTime;
+
+    @Schema(description = "创建结束时间")
+    private Long createEndTime;
+
+}

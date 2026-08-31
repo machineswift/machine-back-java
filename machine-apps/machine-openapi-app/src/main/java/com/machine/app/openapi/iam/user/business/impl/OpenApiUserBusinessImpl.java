@@ -11,20 +11,17 @@ import com.machine.app.openapi.iam.user.controller.vo.response.OpenapiUserDetail
 import com.machine.app.openapi.iam.user.controller.vo.response.OpenapiUserRoleInfoResponse;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
-import com.machine.client.iam.role.IIamRoleClient;
-import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserRoleBusinessRelationClient;
-import com.machine.client.iam.user.IIamUserRoleRelationClient;
-import com.machine.client.iam.user.IIamUserTypeClient;
-import com.machine.client.iam.user.dto.IamUserDto;
-import com.machine.client.iam.user.dto.input.IamUserQueryListOffsetInputDto;
-import com.machine.client.iam.user.dto.output.IamUserRoleBusinessRelationListOutputDto;
-import com.machine.client.iam.user.dto.output.IamUserRoleRelationListOutputDto;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
-import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
-import com.machine.sdk.base.envm.iam.role.IamUserRoleBusinessTypeEnum;
-import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
+import com.machine.client.iam.biam.role.IBIamRoleClient;
+import com.machine.client.iam.biam.role.dto.output.BIamRoleDetailOutputDto;
+import com.machine.client.iam.biam.user.*;
+import com.machine.client.iam.biam.user.dto.BIamUserDto;
+import com.machine.client.iam.biam.user.dto.input.BIamUserQueryListOffsetInputDto;
+import com.machine.client.iam.biam.user.dto.output.BIamUserRoleBusinessRelationListOutputDto;
+import com.machine.client.iam.biam.user.dto.output.BIamUserRoleRelationListOutputDto;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.dto.output.BIamUserListOutputDto;
+import com.machine.sdk.base.envm.biam.role.BIamUserRoleBusinessTypeEnum;
+import com.machine.sdk.base.envm.biam.user.BIamUserTypeEnum;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -43,24 +40,24 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
     private IDataShopClient shopClient;
 
     @Autowired
-    private IIamRoleClient roleClient;
+    private IBIamRoleClient roleClient;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
-    private IIamUserTypeClient userTypeClient;
+    private IBIamUserTypeClient userTypeClient;
 
     @Autowired
-    private IIamUserRoleRelationClient userRoleRelationClient;
+    private IBIamUserRoleRelationClient userRoleRelationClient;
 
     @Autowired
-    private IIamUserRoleBusinessRelationClient iamUserRoleBusinessRelationClient;
+    private IBIamUserRoleBusinessRelationClient iamUserRoleBusinessRelationClient;
 
 
     @Override
     public String userIdByPhone(OpenApiUserPhoneRequestVo request) {
-        IamUserDto iamUserDto = userClient.getByPhone(request.getPhone());
+        BIamUserDto iamUserDto = userClient.getByPhone(request.getPhone());
         if (iamUserDto == null) {
             return null;
         }
@@ -69,7 +66,7 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
 
     @Override
     public OpenapiUserDetailResponseVo detail(OpenApiUserIdRequestVo request) {
-        IamUserDetailOutputDto iamUserDetailOutputDto = userClient.detail(new IdRequest(request.getId()));
+        BIamUserDetailOutputDto iamUserDetailOutputDto = userClient.detail(new IdRequest(request.getId()));
         if (null == iamUserDetailOutputDto) {
             return null;
         }
@@ -87,8 +84,8 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
 
     @Override
     public List<OpenApiUserListSimpleResponseVo> listSimple(OpenApiUserListSimpleRequestVo request) {
-        IamUserQueryListOffsetInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), IamUserQueryListOffsetInputDto.class);
-        List<IamUserListOutputDto> outputDtoList = userClient.listByOffset(inputDto);
+        BIamUserQueryListOffsetInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserQueryListOffsetInputDto.class);
+        List<BIamUserListOutputDto> outputDtoList = userClient.listByOffset(inputDto);
         if (CollectionUtil.isEmpty(outputDtoList)) {
             return List.of();
         }
@@ -99,7 +96,7 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
         Set<String> responseUserIdSet = responseVoList.stream().map(OpenApiUserListSimpleResponseVo::getId).collect(Collectors.toSet());
 
         //类型信息
-        Map<String, List<IamUserTypeEnum>> userTypeMap = userTypeClient.mapTypeByUserIdSet(new IdSetRequest(responseUserIdSet));
+        Map<String, List<BIamUserTypeEnum>> userTypeMap = userTypeClient.mapTypeByUserIdSet(new IdSetRequest(responseUserIdSet));
         for (OpenApiUserListSimpleResponseVo responseVo : responseVoList) {
             responseVo.setUserTypeList(userTypeMap.get(responseVo.getId()));
         }
@@ -110,7 +107,7 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
      * 用户角色信息
      */
     private List<OpenapiUserRoleInfoResponse> getUserRoleList(String userId) {
-        List<IamUserRoleRelationListOutputDto> userRoleRelationListOutputDtoList =
+        List<BIamUserRoleRelationListOutputDto> userRoleRelationListOutputDtoList =
                 userRoleRelationClient.listByUserId(new IdRequest(userId));
 
         if (CollectionUtil.isEmpty(userRoleRelationListOutputDtoList)) {
@@ -118,18 +115,18 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
         }
 
         //用户角色关系Map
-        Map<String, IamUserRoleRelationListOutputDto> userRoleRelationMap = userRoleRelationListOutputDtoList.stream()
-                .collect(Collectors.toMap(IamUserRoleRelationListOutputDto::getId, Function.identity()));
+        Map<String, BIamUserRoleRelationListOutputDto> userRoleRelationMap = userRoleRelationListOutputDtoList.stream()
+                .collect(Collectors.toMap(BIamUserRoleRelationListOutputDto::getId, Function.identity()));
 
         //角色信息
         Set<String> roleIdSet = userRoleRelationListOutputDtoList.stream()
-                .map(IamUserRoleRelationListOutputDto::getRoleId).collect(Collectors.toSet());
-        Map<String, IamRoleDetailOutputDto> roleIdInfoMap = roleClient.mapByIdSet(new IdSetRequest(roleIdSet));
+                .map(BIamUserRoleRelationListOutputDto::getRoleId).collect(Collectors.toSet());
+        Map<String, BIamRoleDetailOutputDto> roleIdInfoMap = roleClient.mapByIdSet(new IdSetRequest(roleIdSet));
 
         //角色业务关系
         Set<String> userRoleRelationIdSet = userRoleRelationListOutputDtoList.stream()
-                .map(IamUserRoleRelationListOutputDto::getId).collect(Collectors.toSet());
-        List<IamUserRoleBusinessRelationListOutputDto> userRoleBusinessRelationListOutputDtoList =
+                .map(BIamUserRoleRelationListOutputDto::getId).collect(Collectors.toSet());
+        List<BIamUserRoleBusinessRelationListOutputDto> userRoleBusinessRelationListOutputDtoList =
                 iamUserRoleBusinessRelationClient.listByUserRoleRelationIdSet(new IdSetRequest(userRoleRelationIdSet));
 
         //门店信息
@@ -139,23 +136,23 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
     }
 
 
-    private List<OpenapiUserRoleInfoResponse> assembleUserRoleInfo(List<IamUserRoleBusinessRelationListOutputDto> outputDtoList,
-                                                               Map<String, IamUserRoleRelationListOutputDto> userRoleRelationMap,
-                                                               Map<String, IamRoleDetailOutputDto> roleIdInfoMap,
+    private List<OpenapiUserRoleInfoResponse> assembleUserRoleInfo(List<BIamUserRoleBusinessRelationListOutputDto> outputDtoList,
+                                                               Map<String, BIamUserRoleRelationListOutputDto> userRoleRelationMap,
+                                                               Map<String, BIamRoleDetailOutputDto> roleIdInfoMap,
                                                                Map<String, DataShopDetailOutputDto> shopIdInfoMap) {
         //组装角色信息
         List<OpenapiUserRoleInfoResponse> userRoleList = new ArrayList<>();
         Map<String, OpenapiUserRoleInfoResponse> userRoleMap = new HashMap<>();
-        for (IamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
+        for (BIamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
             //用户角色关系信息
-            IamUserRoleRelationListOutputDto userRoleRelationListOutputDto = userRoleRelationMap
+            BIamUserRoleRelationListOutputDto userRoleRelationListOutputDto = userRoleRelationMap
                     .get(outputDto.getUserRoleRelationId());
 
             String roleId = userRoleRelationListOutputDto.getRoleId();
             OpenapiUserRoleInfoResponse userRoleInfoResponse = userRoleMap.get(roleId);
 
             if (null == userRoleInfoResponse) {
-                IamRoleDetailOutputDto roleDetailOutputDto = roleIdInfoMap.get(roleId);
+                BIamRoleDetailOutputDto roleDetailOutputDto = roleIdInfoMap.get(roleId);
                 userRoleInfoResponse = new OpenapiUserRoleInfoResponse();
                 userRoleInfoResponse.setId(roleDetailOutputDto.getId());
                 userRoleInfoResponse.setType(roleDetailOutputDto.getType());
@@ -165,7 +162,7 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
                 userRoleList.add(userRoleInfoResponse);
             }
 
-            if (IamUserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
+            if (BIamUserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
                 DataShopDetailOutputDto shopDetailOutputDto = shopIdInfoMap.get(outputDto.getBusinessId());
                 List<OpenapiUserRoleInfoResponse.BusinessInfo> shopList = userRoleInfoResponse.getShopList();
                 if (null == shopList) {
@@ -184,10 +181,10 @@ public class OpenApiUserBusinessImpl implements IOpenApiUserBusiness {
         return userRoleList;
     }
 
-    private Map<String, DataShopDetailOutputDto> getShopIdInfoMap(List<IamUserRoleBusinessRelationListOutputDto> outputDtoList) {
+    private Map<String, DataShopDetailOutputDto> getShopIdInfoMap(List<BIamUserRoleBusinessRelationListOutputDto> outputDtoList) {
         Set<String> idSet = new HashSet<>();
-        for (IamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
-            if (IamUserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
+        for (BIamUserRoleBusinessRelationListOutputDto outputDto : outputDtoList) {
+            if (BIamUserRoleBusinessTypeEnum.SHOP == outputDto.getBusinessType()) {
                 idSet.add(outputDto.getBusinessId());
             }
         }

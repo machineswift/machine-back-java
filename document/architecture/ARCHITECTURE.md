@@ -1,6 +1,6 @@
 # 🏗️ 架构规范文档
 
-本文档描述 Machine 微服务后端工程的架构与分层规范，**技术栈版本以根 [pom.xml](../../pom.xml)（当前 2.0.0-RELEASE）为准**。
+本文档描述 Machine 微服务后端工程的架构与分层规范，**技术栈版本以根 [pom.xml](../../pom.xml)（当前 2026.08.02-RELEASE）为准**。
 
 ## 📋 架构概览
 
@@ -11,7 +11,7 @@ Machine 微服务平台采用分层微服务架构设计，基于 Spring Cloud A
 - **🔧 微服务治理**: Nacos 服务注册发现与配置中心 + Spring Cloud Gateway 统一网关 + OpenFeign 服务调用 + 链路追踪
 - **🏗️ 分层架构**: **Generals**（SDK） + **Starters**（启动器） + **Servers**（网关/工作流） + **Apps**（应用入口） + **Clients**（Feign 客户端） + **Services**（业务服务） + **Tests**（测试/示例），职责清晰，易于维护
 - **⚡ 高性能数据架构**: MyBatis-Plus + 多数据源动态切换（dynamic-datasource-spring-boot4），支持事务管理和读写分离
-- **📊 多数据源架构**: MySQL（Nacos/XXL-JOB/Camunda） + PostgreSQL（业务数据） + Redis（缓存/会话/分布式锁） + ClickHouse/Elasticsearch 等
+- **📊 多数据源架构**: MySQL（Nacos/XXL-JOB） + PostgreSQL（业务与工作流数据） + Redis（缓存/会话/分布式锁） + ClickHouse/Elasticsearch 等
 
 ---
 
@@ -21,7 +21,7 @@ Machine 微服务平台采用分层微服务架构设计，基于 Spring Cloud A
 
 ### 📦 Generals / Starters（补充说明）
 
-- **machine-generals**：通用 SDK，如 `machine-self-sdk`（含 AppContext 等）、`machine-common-sdk`、`machine-feishu-sdk`、`machine-huawei-sdk`、`machine-beisen-sdk`，被 Apps/Services/Starters 依赖。
+- **machine-generals**：通用 SDK，如 `machine-base-sdk`（基础枚举/异常/工具）、`machine-self-sdk`（含 AppContext 等）、`machine-feishu-sdk`、`machine-huawei-sdk`、`machine-beisen-sdk`，被 Apps/Services/Starters 依赖。
 - **machine-starters**：各类 Boot Starter（base、nacos、security、mybatis、redis、ai、mq、wechat、obs 等），为 Apps/Services 提供可插拔能力。
 - **machine-tests**：测试与示例模块，如 `machine-flink-test`、`machine-temp-test`，用于集成与演示。
 
@@ -162,7 +162,7 @@ machine-clients/machine-{module}-client/
 
 #### 技术栈
 - **Spring Boot**: 4.0
-- **MyBatis-Plus**: 3.5.15（根 pom 统一管理）
+- **MyBatis-Plus**: 3.5.16（根 pom 统一管理）
 - **多数据源**: dynamic-datasource-spring-boot4，支持事务与读写分离
 
 #### 职责说明
@@ -227,7 +227,7 @@ machine-services/machine-{module}-service/
 | 模块名称                       | 说明                                                           |
 |----------------------------|----------------------------------------------------------------|
 | **machine-gateway-server** | API 网关，基于 Spring Cloud Gateway，统一入口、路由、限流熔断   |
-| **machine-camunda-server** | 工作流服务器，Camunda BPM 控制台，流程设计、监控与管理          |
+| **machine-camunda-server** | 工作流服务器，Cibseven BPM（Camunda 分支）控制台，流程设计、监控与管理 |
 
 ---
 
@@ -241,8 +241,8 @@ machine-services/machine-{module}-service/
 
 | 数据库               | 版本（参考） | 用途说明                                           |
 |-------------------|--------------|----------------------------------------------------|
-| **MySQL**         | 以运行环境为准 | 配置中心(Nacos)、任务调度(XXL-JOB)、工作流(Camunda)  |
-| **PostgreSQL**    | 以运行环境为准 | 业务数据存储，支持 JSON 与复杂查询                   |
+| **MySQL**         | 以运行环境为准 | 配置中心(Nacos)、任务调度(XXL-JOB)                  |
+| **PostgreSQL**    | 以运行环境为准 | 业务数据与工作流引擎(Cibseven BPM)数据，支持 JSON 与复杂查询 |
 | **Redis**         | 以运行环境为准 | 分布式缓存、会话存储、分布式锁(Redisson)             |
 | **ClickHouse**    | -            | 分析型数据库、OLAP 查询（可选）                      |
 | **Elasticsearch** | -            | 全文搜索、日志分析（可选）                          |
@@ -257,20 +257,20 @@ machine-services/machine-{module}-service/
 
 | 分类            | 技术组件                 | 版本（根 pom）   | 说明                |
 |---------------|----------------------|------------------|---------------------|
-| **🏗️ 微服务框架** | Spring Cloud         | 2025.1.0         | 微服务基础框架       |
+| **🏗️ 微服务框架** | Spring Cloud         | 2025.1.2         | 微服务基础框架       |
 |               | Spring Cloud Alibaba | 2025.1.0.0       | 阿里云微服务生态     |
-| **🌐 Web 框架**  | Spring Boot          | 4.0.0            | Web 应用框架        |
-| **🤖 AI 框架**   | Spring AI            | 2.0.0-M2         | Spring AI 集成      |
-|               | Spring Alibaba AI   | 1.1.2.0          | 阿里云 AI 集成       |
+| **🌐 Web 框架**  | Spring Boot          | 4.0.7            | Web 应用框架        |
+| **🤖 AI 框架**   | Spring AI            | 2.0.0            | Spring AI 集成      |
+|               | Spring AI Alibaba    | 2.0.0-M1.1       | 阿里云 AI 集成       |
 | **🔧 服务治理**   | Nacos                | 随 Spring Cloud Alibaba | 服务注册与配置中心 |
 |               | Spring Cloud Gateway | 随 Spring Cloud  | API 网关            |
 |               | OpenFeign            | 随 Spring Cloud  | 服务间调用          |
 | **🔐 安全认证**   | Spring Security      | 随 Spring Boot 4.0 | 认证授权（OAuth2、JWT） |
-| **⏰ 任务调度**   | XXL-JOB              | 3.3.2（xxl-job-core） | 分布式任务调度       |
-| **💾 数据访问**   | MyBatis-Plus         | 3.5.15           | ORM（mybatis-plus-spring-boot4-starter） |
-| **⚙️ 工作流引擎**  | Camunda              | 7.24.0           | 业务流程管理（camunda-bom）         |
-| **🔍 链路追踪**   | SkyWalking           | 9.5.0（apm-toolkit） | 分布式链路追踪       |
-| **📚 API 文档**  | springdoc-openapi   | 3.0.1             | OpenAPI 文档；swagger-annotations 2.2.42 |
+| **⏰ 任务调度**   | XXL-JOB              | 3.4.0（xxl-job-core） | 分布式任务调度       |
+| **💾 数据访问**   | MyBatis-Plus         | 3.5.16           | ORM（mybatis-plus-spring-boot4-starter） |
+| **⚙️ 工作流引擎**  | Cibseven BPM         | 2.2.0            | 业务流程管理（cibseven-bom，Camunda 分支） |
+| **🔍 链路追踪**   | SkyWalking           | 9.6.0（apm-toolkit） | 分布式链路追踪       |
+| **📚 API 文档**  | springdoc-openapi   | 3.0.2             | OpenAPI 文档；swagger-annotations 2.2.46 |
 
 ---
 
@@ -278,20 +278,18 @@ machine-services/machine-{module}-service/
 
 | 分类             | 技术组件                 | 版本                           | 状态     | 用途说明     |
 |----------------|----------------------|------------------------------|--------|----------|
-| **🗄️ 关系型数据库** | MySQL                | 9.4.0                        | ✅ 已集成  | 主数据库     |
-|                | PostgreSQL           | 18.0                         | ✅ 已集成  | 业务数据库    |
-| **⚡ 缓存**       | Redis                | 8.2                          | ✅ 已集成  | 分布式缓存    |
-| **📨 消息队列**    | RabbitMQ             | 4.0.4                        | ✅ 已集成  | 消息中间件    |
-|                | Pulsar               | -                            | 🔄 待集成 | 分布式消息队列  |
-| **📊 列式数据库**   | ClickHouse           | 25.9.3.48                    | ✅ 已集成  | 分析型数据库   |
-|                | Apache Doris         | -                            | 🔄 待集成 | 实时分析数据库  |
-| **🗃️ NoSQL**  | ScyllaDB             | 2025.3                       | ✅ 已集成  | 分布式NoSQL |
-| **🌊 流处理**     | Apache Flink         | 2.1.0                        | ✅ 已集成  | 实时流处理    |
-|                | Apache Spark         | -                            | 🔄 待集成 | 大数据批处理   |
-| **🔍 搜索引擎**    | Elasticsearch        | 8.19.0                       | ✅ 已集成  | 全文搜索引擎   |
-|                | Kibana               | 8.19.0                       | ✅ 已集成  | 日志分析可视化  |
-| **📦 对象存储**    | MinIO                | RELEASE.2025-04-22T22-12-26Z | ✅ 已集成  | 对象存储服务   |
-| **📈 监控可视化**   | Grafana + Prometheus | -                            | 🔄 待集成 | 监控告警系统   |
+| **🗄️ 关系型数据库** | MySQL                | 9.7.2                        | ✅ 已集成  | 基础设施库（Nacos、XXL-Job） |
+|                | PostgreSQL           | 以运行环境为准                  | ✅ 已集成  | 业务与工作流数据库            |
+| **⚡ 缓存**       | Redis                | 8.8                          | ✅ 已集成  | 分布式缓存                 |
+| **📨 消息队列**    | RabbitMQ             | 4.3.4                        | ✅ 已集成  | 消息中间件（Spring Cloud Stream） |
+| **📊 列式数据库**   | ClickHouse           | 26.3.3.20                    | ✅ 已集成  | 分析型数据库               |
+|                | Apache Doris         | 以运行环境为准                  | ✅ 已集成  | 实时分析数据库（部署见 docker/doris） |
+| **🌊 流处理**     | Apache Flink         | 2.1.0                        | ✅ 已集成  | 实时流处理                |
+|                | Apache Spark         | -                            | 🔄 待集成 | 大数据批处理               |
+| **🔍 搜索引擎**    | Elasticsearch        | 8.19.19                      | ✅ 已集成  | 全文搜索引擎               |
+|                | Kibana               | 8.19.19                      | ✅ 已集成  | 日志分析可视化              |
+| **📦 对象存储**    | MinIO                | RELEASE.2025-09-07T16-13-09Z | ✅ 已集成  | 对象存储服务               |
+| **📈 监控可视化**   | Grafana + Prometheus | -                            | 🔄 待集成 | 监控告警系统               |
 
 ---
 
@@ -299,7 +297,7 @@ machine-services/machine-{module}-service/
 
 | 分类          | 技术组件     | 版本      | 状态    | 用途说明           |
 |-------------|----------|---------|-------|----------------|
-| **💬 即时通讯** | 微信生态     | 4.7.8.B | ✅ 已集成 | 微信小程序、公众号、企业微信 |
+| **💬 即时通讯** | 微信生态     | 4.8.3   | ✅ 已集成 | 微信小程序、公众号、企业微信 |
 | **☁️ 云服务**  | 华为云      | 3.2.4   | ✅ 已集成 | 华为云API网关       |
 | **📋 办公协作** | 飞书       | 2.0.2   | ✅ 已集成 | 飞书开放平台         |
 | **🏢 企业服务** | 北森       | -       | ✅ 已集成 | 北森HR系统集成       |

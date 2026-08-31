@@ -3,7 +3,7 @@ package com.machine.client.data.shop;
 import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
@@ -61,7 +61,7 @@ public interface IDataShopOrganizationRelationClient {
 
     @PostMapping("list_by_condition")
     List<DataShopOrganizationRelationListOutputDto> listByCondition(
-            @RequestBody @Validated IamOrganizationShopRelationQueryListInputDto inputDto);
+            @RequestBody @Validated BIamOrganizationShopRelationQueryListInputDto inputDto);
 
 }
 

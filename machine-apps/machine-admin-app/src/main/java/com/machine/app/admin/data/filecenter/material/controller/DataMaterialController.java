@@ -12,6 +12,11 @@ import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.Dat
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +38,12 @@ public class DataMaterialController {
     @Operation(summary = "新增")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "新增素材",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCreateRequestVo request,
                                      HttpServletRequest servletRequest) {
         log.info("新增素材，request={}", JSONUtil.toJsonStr(request));
@@ -42,6 +53,11 @@ public class DataMaterialController {
     @Operation(summary = "修改")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改素材")
     public void update(@RequestBody @Validated DataMaterialUpdateRequestVo request,
                        HttpServletRequest servletRequest) {
         log.info("修改素材，request={}", JSONUtil.toJsonStr(request));
@@ -51,6 +67,11 @@ public class DataMaterialController {
     @Operation(summary = "修改分类")
     @PostMapping("update_category")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE_CATEGORY')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改素材分类")
     public void updateCategory(@RequestBody @Validated DataMaterialUpdateCategoryRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialBusiness.updateCategory(request);
@@ -59,6 +80,11 @@ public class DataMaterialController {
     @Operation(summary = "素材详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:DETAIL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询素材详情")
     public DataMaterialDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return materialBusiness.detail(request);
     }
@@ -66,6 +92,11 @@ public class DataMaterialController {
     @Operation(summary = "获取素材文件预签名 URL（用于图片/视频预览/附件下载）")
     @PostMapping("download_url")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:DOWNLOAD_URL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.DOWNLOAD,
+            operateName = "获取素材文件预签名URL")
     public DataMaterialUrlResponseVo getDownloadUrl(@RequestBody @Validated IdRequest request) {
         String url = materialBusiness.getDownloadUrl(request);
         return new DataMaterialUrlResponseVo(url);
@@ -74,6 +105,11 @@ public class DataMaterialController {
     @Operation(summary = "素材分页列表(管理端)")
     @PostMapping("page_expand")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:PAGE_EXPAND')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "分页查询素材(管理端)")
     public PageResponse<DataMaterialExpandListResponseVo> pageExpand(@RequestBody @Validated DataMaterialQueryPageRequestVo request) {
         return materialBusiness.pageExpand(request);
     }

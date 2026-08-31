@@ -17,7 +17,7 @@ import com.machine.sdk.base.envm.data.DataCertificateStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
@@ -93,7 +93,7 @@ public class DataShopServiceImpl implements IDataShopService {
     public String create(DataShopCreateInputDto inputDto) {
         DataShopEntity entityByName = shopDao.getByName(inputDto.getName());
         if (null != entityByName) {
-            throw new IamBusinessException("iam.shop.service.create.nameAlreadyExists", "门店名称已经存在");
+            throw new BIamBusinessException("iam.shop.service.create.nameAlreadyExists", "门店名称已经存在");
         }
 
         DataShopEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class,true);
@@ -123,7 +123,7 @@ public class DataShopServiceImpl implements IDataShopService {
         //验证名称在同一层级是否存在
         DataShopEntity entityByName = shopDao.getByName(inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
-            throw new IamBusinessException("iam.shop.service.update.nameAlreadyExists", "门店名称已经存在");
+            throw new BIamBusinessException("iam.shop.service.update.nameAlreadyExists", "门店名称已经存在");
         }
 
         DataShopEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class,true);

@@ -9,6 +9,7 @@ import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDt
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.scm.category.service.IScmFrontCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,6 @@ public class ScmFrontCategoryServer implements IScmFrontCategoryClient {
         return frontCategoryService.updateParent(inputDto);
     }
 
-
     @Override
     @PostMapping("detail")
     public ScmFrontCategoryDetailOutputDto getById(@RequestBody @Validated IdRequest request) {
@@ -62,7 +62,7 @@ public class ScmFrontCategoryServer implements IScmFrontCategoryClient {
 
     @Override
     @GetMapping("tree_all_simple")
-    public ScmFrontCategoryTreeOutputDto treeAllSimple() {
+    public Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple() {
         return frontCategoryService.treeAllSimple();
     }
 

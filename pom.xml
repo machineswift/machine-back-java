@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.machine</groupId>
     <artifactId>machine-back-java</artifactId>
-    <version>2026.08.01-RELEASE</version>
+    <version>2026.09.01-RELEASE</version>
 
     <modules>
         <module>machine-generals</module>
@@ -358,6 +358,18 @@
                 <artifactId>weixin-java-cp</artifactId>
                 <version>4.8.3-20260601.221544</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.jedis-lock</groupId>
+                <artifactId>jedis-lock</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.14</version>
+            </dependency>
             <!-- 微信 结束  -->
 
             <!-- 第三方平台 开始-->
@@ -432,19 +444,25 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.8.46</version>
+                <version>5.8.47</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.javers</groupId>
+                <artifactId>javers-core</artifactId>
+                <version>7.5.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.6.0-jre</version>
+                <version>33.7.0-jre</version>
             </dependency>
 
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.22.2</version>
+                <version>1.23.1</version>
             </dependency>
 
             <dependency>
@@ -496,6 +514,7 @@
                 <configuration>
                     <source>25</source>
                     <target>25</target>
+                    <parameters>true</parameters>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

@@ -4,7 +4,7 @@ import com.machine.app.openapi.iam.organization.business.IOpenApiOrganizationBus
 import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrganizationIdRequestVo;
 import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrganizationRootIdRequestVo;
 import com.machine.app.openapi.iam.organization.controller.vo.response.OpenApiOrganizationDetailResponseVo;
-import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.base.model.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,7 +52,7 @@ public class IOpenApiOrganizationController {
             description = "本接口只支持获取当前组织的下一级组织基础信息，不支持获取当前组织下所有层级子组织。")
     @PostMapping("list_sub")
     @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:ORGANIZATION:LIST_SUB')")
-    public List<IamOrganizationTreeSimpleOutputDto> listSub(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
+    public List<BIamOrganizationTreeSimpleOutputDto> listSub(@RequestBody @Valid OpenApiOrganizationIdRequestVo request) {
         return organizationBusiness.listSub(request);
     }
 

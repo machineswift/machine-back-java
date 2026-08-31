@@ -7,6 +7,7 @@ import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDt
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface IScmFrontCategoryService {
 
     ScmFrontCategoryDetailOutputDto getById(IdRequest request);
 
-    ScmFrontCategoryTreeOutputDto treeAllSimple();
+    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
 
     List<ScmFrontCategoryListOutputDto> listAll();
 }

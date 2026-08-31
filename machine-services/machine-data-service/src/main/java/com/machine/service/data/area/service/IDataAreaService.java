@@ -1,13 +1,13 @@
 package com.machine.service.data.area.service;
 
-
 import com.machine.client.data.area.dto.input.DataAreaCreateInputDto;
-import com.machine.client.data.area.dto.input.DataAreaTreeInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateParentInputDto;
 import com.machine.client.data.area.dto.output.DataAreaDetailOutputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
+import com.machine.sdk.base.envm.data.DataCountryEnum;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 public interface IDataAreaService {
 
@@ -21,5 +21,5 @@ public interface IDataAreaService {
 
     DataAreaDetailOutputDto detail(IdRequest request);
 
-    DataAreaTreeOutputDto tree(DataAreaTreeInputDto inputDto);
+    Tuples.Tuple2<String, DataAreaTreeOutputDto> treeAll(DataCountryEnum country);
 }

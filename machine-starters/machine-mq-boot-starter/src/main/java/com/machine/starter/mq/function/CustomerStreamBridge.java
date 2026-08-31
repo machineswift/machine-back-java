@@ -1,15 +1,15 @@
 package com.machine.starter.mq.function;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.biam.identity.IBIamOauth2RegisteredClientClient;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.model.dto.iam.identity.IamOAuth2RegisteredClientDto;
+import com.machine.sdk.base.model.dto.biam.identity.BIamOAuth2RegisteredClientDto;
 import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
 import com.machine.sdk.self.envm.EventTypeEnum;
 import com.machine.starter.mq.constant.MqConstant;
-import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
+import com.machine.starter.redis.caffeine.CaffeineCacheRegisteredClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
@@ -25,16 +25,16 @@ public class CustomerStreamBridge {
 
     private final StreamBridge streamBridge;
 
-    private final LocalCacheRegisteredClient localCacheRegisteredClient;
+    private final CaffeineCacheRegisteredClient caffeineCacheRegisteredClient;
 
-    private final IIamOauth2RegisteredClientClient oauth2RegisteredClientClient;
+    private final IBIamOauth2RegisteredClientClient oauth2RegisteredClientClient;
 
 
     public CustomerStreamBridge(StreamBridge streamBridge,
-                                LocalCacheRegisteredClient localCacheRegisteredClient,
-                                IIamOauth2RegisteredClientClient oauth2RegisteredClientClient) {
+                                CaffeineCacheRegisteredClient caffeineCacheRegisteredClient,
+                                IBIamOauth2RegisteredClientClient oauth2RegisteredClientClient) {
         this.streamBridge = streamBridge;
-        this.localCacheRegisteredClient = localCacheRegisteredClient;
+        this.caffeineCacheRegisteredClient = caffeineCacheRegisteredClient;
         this.oauth2RegisteredClientClient = oauth2RegisteredClientClient;
     }
 
@@ -69,8 +69,8 @@ public class CustomerStreamBridge {
     public <T> void sendWebHookEvent(String clientId,
                                      EventTypeEnum eventType,
                                      T data) {
-        IamOAuth2RegisteredClientDto registeredClient =
-                localCacheRegisteredClient.getByClientId(clientId, oauth2RegisteredClientClient);
+        BIamOAuth2RegisteredClientDto registeredClient =
+                caffeineCacheRegisteredClient.getByClientId(clientId);
         if (registeredClient == null) {
             return;
         }
@@ -102,10 +102,10 @@ public class CustomerStreamBridge {
 
     private <T> void sendWebHookEventPrivate(EventTypeEnum eventType,
                                              T data) {
-        List<String> clientIdList = localCacheRegisteredClient.allRegisteredClientIds(oauth2RegisteredClientClient);
+        List<String> clientIdList = caffeineCacheRegisteredClient.allRegisteredClientIds(oauth2RegisteredClientClient);
         for (String clientId : clientIdList) {
-            IamOAuth2RegisteredClientDto registeredClient =
-                    localCacheRegisteredClient.getByClientId(clientId, oauth2RegisteredClientClient);
+            BIamOAuth2RegisteredClientDto registeredClient =
+                    caffeineCacheRegisteredClient.getByClientId(clientId);
             if (registeredClient == null) {
                 continue;
             }
@@ -113,7 +113,7 @@ public class CustomerStreamBridge {
         }
     }
 
-    private <T> void sendWebHookEventPrivate(IamOAuth2RegisteredClientDto registeredClient,
+    private <T> void sendWebHookEventPrivate(BIamOAuth2RegisteredClientDto registeredClient,
                                              EventTypeEnum eventType,
                                              T data) {
         String producerName = "WebHookFastEventProducer";

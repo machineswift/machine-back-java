@@ -26,8 +26,8 @@ import com.machine.client.data.filecenter.material.dto.input.*;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryRelationOutputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialDetailOutputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
 import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationResultEnum;
@@ -61,7 +61,7 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
     private ObsFileService obsFileService;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataFileTempClient dataFileTempClient;
@@ -232,7 +232,7 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
         Set<String> userIdSet = new HashSet<>();
         userIdSet.add(outputDto.getCreateBy());
         userIdSet.add(outputDto.getUpdateBy());
-        Map<String, IamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         responseVo.setCreateName(userMap.get(responseVo.getCreateBy()).getName());
         responseVo.setUpdateName(userMap.get(responseVo.getUpdateBy()).getName());
     }
@@ -261,7 +261,7 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
             if (vo.getCreateBy() != null) userIdSet.add(vo.getCreateBy());
             if (vo.getUpdateBy() != null) userIdSet.add(vo.getUpdateBy());
         }
-        Map<String, IamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         for (DataMaterialExpandListResponseVo vo : records) {
             vo.setCreateName(userMap.get(vo.getCreateBy()).getName());
             vo.setUpdateName(userMap.get(vo.getUpdateBy()).getName());

@@ -8,6 +8,11 @@ import com.machine.app.admin.scm.property.controller.vo.request.ScmPropertyValue
 import com.machine.app.admin.scm.property.controller.vo.response.ScmPropertyValueListResponseVo;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +38,12 @@ public class ScmPropertyValueController {
     @Operation(summary = "创建属性枚举值")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_PROPERTY_VALUE,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "创建属性值",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyValueCreateRequestVo request) {
         log.info("创建属性值，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(propertyValueBusiness.create(request));
@@ -41,6 +52,11 @@ public class ScmPropertyValueController {
     @Operation(summary = "修改属性枚举值")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_PROPERTY_VALUE,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改属性值")
     public void update(@RequestBody @Validated ScmPropertyValueUpdateRequestVo request) {
         log.info("修改属性值，request={}", JSONUtil.toJsonStr(request));
         propertyValueBusiness.update(request);
@@ -49,6 +65,11 @@ public class ScmPropertyValueController {
     @Operation(summary = "删除属性枚举值")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:DELETE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_PROPERTY_VALUE,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除属性值")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性值，id={}", request.getId());
         propertyValueBusiness.deleteById(request);
@@ -57,6 +78,11 @@ public class ScmPropertyValueController {
     @Operation(summary = "根据属性ID查询枚举值列表")
     @PostMapping("list_by_property_id")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_VALUE:LIST')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_PROPERTY_VALUE,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询属性值列表")
     public List<ScmPropertyValueListResponseVo> listByPropertyId(
             @RequestBody @Validated ScmPropertyValueListByPropertyRequestVo request) {
         return propertyValueBusiness.listByPropertyId(request);

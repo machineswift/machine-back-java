@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-back-java</artifactId>
-        <version>2026.08.01-RELEASE</version>
+        <version>2026.09.01-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,6 +15,7 @@
     <modules>
         <module>machine-base-boot-starter</module>
         <module>machine-nacos-boot-starter</module>
+        <module>machine-web-boot-starter</module>
         <module>machine-security-boot-starter</module>
         <module>machine-ai-boot-starter</module>
         <module>machine-redis-boot-starter</module>

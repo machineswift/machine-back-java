@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.user.controller.vo.response;
 
-import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.biam.role.BIamRoleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class OpenapiUserRoleInfoResponse {
     private String id;
 
     @Schema(description = "角色类型（RoleTypeEnum）")
-    private IamRoleTypeEnum type;
+    private BIamRoleTypeEnum type;
 
     @Schema(description = "角色名称")
     private String name;

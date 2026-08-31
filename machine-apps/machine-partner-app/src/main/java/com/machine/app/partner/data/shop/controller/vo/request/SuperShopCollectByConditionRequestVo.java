@@ -1,6 +1,6 @@
 package com.machine.app.partner.data.shop.controller.vo.request;
 
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class SuperShopCollectByConditionRequestVo {
     private String keyword;
 
     @Schema(description = "组织类型")
-    private IamOrganizationTypeEnum organizationType;
+    private BIamOrganizationTypeEnum organizationType;
 
     @Schema(description = "组织Id集合")
     private Set<String> organizationIdSet;

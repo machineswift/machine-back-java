@@ -2,7 +2,7 @@ package com.machine.service.data.shop.dao.mapper.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.starter.mybatis.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,10 +27,10 @@ public class DataShopOrganizationRelationEntity extends BaseEntity {
     private String organizationId;
 
     /**
-     * {@link IamOrganizationTypeEnum}
+     * {@link BIamOrganizationTypeEnum}
      */
     @TableField("organization_type")
-    private IamOrganizationTypeEnum organizationType;
+    private BIamOrganizationTypeEnum organizationType;
 
     /**
      * 排序

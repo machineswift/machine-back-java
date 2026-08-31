@@ -8,6 +8,7 @@ import com.machine.client.scm.category.dto.output.ScmFrontCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import java.util.List;
 
-@FeignClient(name = "machine-scm-service", path = "machine-scm-service/server/scm/category/front_category",
-        configuration = OpenFeignMinTimeConfig.class)
+@FeignClient(name = "machine-scm-service", path = "machine-scm-service/server/scm/category/front_category", configuration = OpenFeignMinTimeConfig.class)
 public interface IScmFrontCategoryClient {
 
     @PostMapping("create")
@@ -36,7 +36,7 @@ public interface IScmFrontCategoryClient {
     ScmFrontCategoryDetailOutputDto getById(@RequestBody @Valid IdRequest request);
 
     @GetMapping("tree_all_simple")
-    ScmFrontCategoryTreeOutputDto treeAllSimple();
+    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
 
     @GetMapping("list_all")
     List<ScmFrontCategoryListOutputDto> listAll();

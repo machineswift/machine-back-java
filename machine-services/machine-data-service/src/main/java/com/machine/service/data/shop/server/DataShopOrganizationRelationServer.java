@@ -5,7 +5,7 @@ import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.shop.service.IDataShopOrganizationRelationService;
@@ -75,7 +75,7 @@ public class DataShopOrganizationRelationServer implements IDataShopOrganization
     @Override
     @PostMapping("list_by_condition")
     public List<DataShopOrganizationRelationListOutputDto> listByCondition(
-            @RequestBody @Validated IamOrganizationShopRelationQueryListInputDto inputDto) {
+            @RequestBody @Validated BIamOrganizationShopRelationQueryListInputDto inputDto) {
         return shopOrganizationRelationService.listByCondition(inputDto);
     }
 }

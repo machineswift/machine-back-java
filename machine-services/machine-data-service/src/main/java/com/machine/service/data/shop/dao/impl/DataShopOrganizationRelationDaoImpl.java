@@ -3,8 +3,8 @@ package com.machine.service.data.shop.dao.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.domain.data.shop.DataShopUnBindOrganizationDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
-import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserManageDataPermission.IAM_USER_MANAGE_DATA_PERMISSION_KEY;
-import static com.machine.starter.redis.constant.RedisPrefix4IamConstant.UserSuperAppDataPermission.IAM_USER_SUPER_APP_DATA_PERMISSION_KEY;
+import static com.machine.starter.redis.constant.RedisPrefix4BIamConstant.UserManageDataPermission.BIAM_USER_MANAGE_DATA_PERMISSION_KEY;
+import static com.machine.starter.redis.constant.RedisPrefix4BIamConstant.UserSuperAppDataPermission.BIAM_USER_SUPER_APP_DATA_PERMISSION_KEY;
 
 @Repository
 public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizationRelationDao {
@@ -37,8 +37,8 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
     @Override
     public int insert(DataShopOrganizationRelationEntity entity) {
         //缓存
-        customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
-        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(BIAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(BIAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(
@@ -49,14 +49,14 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
 
     @Override
     public int deleteOneByUk(String shopId,
-                             IamOrganizationTypeEnum organizationType) {
+                             BIamOrganizationTypeEnum organizationType) {
         DataShopOrganizationRelationEntity entity = selectOneByUk(shopId, organizationType);
         if (entity == null) {
             return 0;
         } else {
             //缓存
-            customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
-            customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
+            customerRedisCommands.del(BIAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+            customerRedisCommands.del(BIAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
             //事件
             customerStreamBridge.sendWebHookEvent(
@@ -68,8 +68,8 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
     @Override
     public int update(DataShopOrganizationRelationEntity entity) {
         //缓存
-        customerRedisCommands.del(IAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
-        customerRedisCommands.del(IAM_USER_MANAGE_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(BIAM_USER_SUPER_APP_DATA_PERMISSION_KEY);
+        customerRedisCommands.del(BIAM_USER_MANAGE_DATA_PERMISSION_KEY);
 
         //事件
         customerStreamBridge.sendWebHookEvent(
@@ -94,7 +94,7 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
 
     @Override
     public DataShopOrganizationRelationEntity selectOneByUk(String shopId,
-                                                            IamOrganizationTypeEnum organizationType) {
+                                                            BIamOrganizationTypeEnum organizationType) {
         Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getShopId, shopId)
                 .eq(DataShopOrganizationRelationEntity::getOrganizationType, organizationType);
@@ -131,7 +131,7 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
     }
 
     @Override
-    public List<DataShopOrganizationRelationEntity> listByShopIdSet(IamOrganizationTypeEnum organizationType,
+    public List<DataShopOrganizationRelationEntity> listByShopIdSet(BIamOrganizationTypeEnum organizationType,
                                                                     Set<String> shopIdSet) {
         Wrapper<DataShopOrganizationRelationEntity> wrapper = new LambdaQueryWrapper<DataShopOrganizationRelationEntity>()
                 .eq(DataShopOrganizationRelationEntity::getOrganizationType, organizationType)
@@ -140,7 +140,7 @@ public class DataShopOrganizationRelationDaoImpl implements IDataShopOrganizatio
     }
 
     @Override
-    public List<DataShopOrganizationRelationEntity> listByCondition(IamOrganizationShopRelationQueryListInputDto inputDto) {
+    public List<DataShopOrganizationRelationEntity> listByCondition(BIamOrganizationShopRelationQueryListInputDto inputDto) {
         return shopOrganizationRelationMapper.listByCondition(inputDto);
     }
 }

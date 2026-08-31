@@ -2,7 +2,7 @@ package com.machine.service.data.leaf.server;
 
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
 import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.service.data.leaf.service.IDataLeafService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
 
     @Override
     @GetMapping("data_organization_tree")
-    public String dataOrganizationTree(@RequestParam("type") IamOrganizationTypeEnum type) {
+    public String dataOrganizationTree(@RequestParam("type") BIamOrganizationTypeEnum type) {
         return generateTreeKey(
                 REDIS_IAM_ORGANIZATION + type.getName() + "_",
                 "组织树"

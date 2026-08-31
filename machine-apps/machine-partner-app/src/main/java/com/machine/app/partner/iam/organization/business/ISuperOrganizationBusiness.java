@@ -4,11 +4,11 @@ import com.machine.app.partner.iam.organization.controller.vo.request.SupeOrgani
 import com.machine.app.partner.iam.organization.controller.vo.request.SupeOrganizationTreeRequestVo;
 import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrganizationTreeExpandSelfResponseVo;
 import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrganizationTreeSimpleSelfResponseVo;
-import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationTreeSimpleOutputDto;
 
 public interface ISuperOrganizationBusiness {
 
-    IamOrganizationTreeSimpleOutputDto treeAllSimple(SupeOrganizationTreeAllRequestVo request);
+    BIamOrganizationTreeSimpleOutputDto treeAllSimple(SupeOrganizationTreeAllRequestVo request);
 
     SuperOrganizationTreeSimpleSelfResponseVo treeSelfSimple(SupeOrganizationTreeRequestVo request);
 

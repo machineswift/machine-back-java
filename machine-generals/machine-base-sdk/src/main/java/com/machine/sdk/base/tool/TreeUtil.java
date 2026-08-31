@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.*;
 
 import static com.machine.sdk.base.constant.CommonHrmConstant.Department.DEPARTMENT_ROOT_PARENT_ID;
-import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonBIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
 
 
 public class TreeUtil {

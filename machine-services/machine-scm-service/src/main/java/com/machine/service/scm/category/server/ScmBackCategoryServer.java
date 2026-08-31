@@ -9,6 +9,7 @@ import com.machine.client.scm.category.dto.output.ScmBackCategoryDetailOutputDto
 import com.machine.client.scm.category.dto.output.ScmBackCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.scm.category.service.IScmBackCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class ScmBackCategoryServer implements IScmBackCategoryClient {
 
     @Override
     @GetMapping("tree_all_simple")
-    public ScmBackCategoryTreeSimpleOutputDto treeAllSimple() {
+    public Tuples.Tuple2<String, ScmBackCategoryTreeSimpleOutputDto> treeAllSimple() {
         return backCategoryService.treeAllSimple();
     }
 

@@ -10,7 +10,7 @@ import com.machine.client.data.message.dto.input.AppMessageUnreadCountInputDto;
 import com.machine.client.data.message.dto.output.AppMessageGroupCountOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListSuperOutputDto;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.service.data.mesage.dao.IDataAppMessageDao;
 import com.machine.service.data.mesage.dao.mapper.DataAppMessageMapper;
 import com.machine.service.data.mesage.dao.mapper.entity.DataAppMessageEntity;
@@ -34,7 +34,7 @@ public class DataAppMessageDaoImpl implements IDataAppMessageDao {
     @Override
     public Page<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
         if(StringUtils.isBlank(inputDto.getReceiver())){
-            throw new IamBusinessException("client.data.dao.message.groupCount", "当前用户id不能为空");
+            throw new BIamBusinessException("client.data.dao.message.groupCount", "当前用户id不能为空");
         }
         IPage<AppMessageListSuperOutputDto> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
         return dataAppMessageMapper.superPage(inputDto, page);
@@ -60,7 +60,7 @@ public class DataAppMessageDaoImpl implements IDataAppMessageDao {
     @Override
     public List<AppMessageGroupCountOutputDto> groupCount(AppMessageGroupCountInputDto inputDto) {
         if(StringUtils.isBlank(inputDto.getReceiver())){
-            throw new IamBusinessException("client.data.message.groupCount", "当前用户id不能为空");
+            throw new BIamBusinessException("client.data.message.groupCount", "当前用户id不能为空");
         }
         return dataAppMessageMapper.groupCount(inputDto);
     }
@@ -68,7 +68,7 @@ public class DataAppMessageDaoImpl implements IDataAppMessageDao {
     @Override
     public Integer getUnreadCount(AppMessageUnreadCountInputDto inputDto) {
         if(StringUtils.isBlank(inputDto.getReceiver())){
-            throw new IamBusinessException("client.data.message.getUnreadCount", "当前用户id不能为空");
+            throw new BIamBusinessException("client.data.message.getUnreadCount", "当前用户id不能为空");
         }
         return dataAppMessageMapper.getUnreadCount(inputDto);
     }

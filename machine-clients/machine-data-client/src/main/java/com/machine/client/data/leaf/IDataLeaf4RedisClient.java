@@ -2,7 +2,7 @@ package com.machine.client.data.leaf;
 
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +53,7 @@ public interface IDataLeaf4RedisClient {
      * 组织树数据的redis动态key
      */
     @GetMapping("data_organization_tree")
-    String dataOrganizationTree(@RequestParam("type") IamOrganizationTypeEnum type);
+    String dataOrganizationTree(@RequestParam("type") BIamOrganizationTypeEnum type);
 
     /**
      * 智能标签分类树数据的redis动态key

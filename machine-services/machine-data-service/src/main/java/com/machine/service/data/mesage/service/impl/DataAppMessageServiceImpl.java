@@ -9,11 +9,11 @@ import com.machine.client.data.message.dto.output.AppMessageListOutputDto;
 import com.machine.client.data.message.dto.output.AppMessageListSuperOutputDto;
 import com.machine.client.data.message.dto.input.*;
 import com.machine.client.data.message.dto.output.AppMessageTemplateDetailOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.data.message.DataMessageChannelEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.sdk.base.tool.UUIDv7;
@@ -52,7 +52,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
     private DataAppMessageMapper dataAppMessageMapper;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Override
     public PageResponse<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto) {
@@ -100,13 +100,13 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
         log.info("本次存储消息的批次号为：{}", request.getBatchCode());
         Set<String> receiverSet = request.getReceiverSet();
         if (CollectionUtil.isEmpty(receiverSet)) {
-            throw new IamBusinessException("data.message.saveMessageRecord.receiverIsNull", "接收人不能为空");
+            throw new BIamBusinessException("data.message.saveMessageRecord.receiverIsNull", "接收人不能为空");
         }
         AppMessageTemplateDetailByTypeInputDto inputDto = new AppMessageTemplateDetailByTypeInputDto();
         inputDto.setTemplateType(request.getMessageTemplateTypeEnum());
         AppMessageTemplateDetailOutputDto outputDto = appMessageTemplateService.detailByType(inputDto);
         if(outputDto == null || CollectionUtil.isEmpty(outputDto.getChannels())) {
-            throw new IamBusinessException("data.message.sendMessage.channelsIsNull", "根据模板查询渠道失败");
+            throw new BIamBusinessException("data.message.sendMessage.channelsIsNull", "根据模板查询渠道失败");
         }
         Set<DataMessageChannelEnum> channels = outputDto.getChannels();
 
@@ -129,7 +129,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
         inputDto.setTemplateType(appMessageSendInputDto.getMessageTemplateTypeEnum());
         AppMessageTemplateDetailOutputDto outputDto = appMessageTemplateService.detailByType(inputDto);
         if(outputDto == null || CollectionUtil.isEmpty(outputDto.getChannels())) {
-            throw new IamBusinessException("data.message.sendMessage.channelsIsNull", "根据模板查询渠道失败");
+            throw new BIamBusinessException("data.message.sendMessage.channelsIsNull", "根据模板查询渠道失败");
         }
         for (DataMessageChannelEnum channel : outputDto.getChannels()) {
             if(DataMessageChannelEnum.FEI_SHU_ROBOT.equals(channel)){
@@ -156,18 +156,18 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
     private List<String> convertIdToMobiles(Set<String> ids) {
         IdSetRequest request = new IdSetRequest();
         request.setIdSet(ids);
-        Map<String, IamUserDetailOutputDto> map = userClient.mapByIdSet(request);
+        Map<String, BIamUserDetailOutputDto> map = userClient.mapByIdSet(request);
         if (CollectionUtil.isEmpty(map)) {
             return null;
         }
-        return map.values().stream().map(IamUserDetailOutputDto::getPhone).collect(Collectors.toList());
+        return map.values().stream().map(BIamUserDetailOutputDto::getPhone).collect(Collectors.toList());
     }
 
     @Override
     public Boolean readMessage(AppMessageReadInputDto request) {
         String messageId = request.getMessageId();
         if (StringUtils.isBlank(messageId)) {
-            throw new IamBusinessException("data.message.readMessage.messageIdIsNull", "消息id不能为空");
+            throw new BIamBusinessException("data.message.readMessage.messageIdIsNull", "消息id不能为空");
         }
         appMessageDao.readMessage(messageId);
         return true;
@@ -177,7 +177,7 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
     public Boolean disposeMessage(AppMessageReadInputDto request) {
         String messageId = request.getMessageId();
         if (StringUtils.isBlank(messageId)) {
-            throw new IamBusinessException("data.message.disposeMessage.messageIdIsNull", "消息id不能为空");
+            throw new BIamBusinessException("data.message.disposeMessage.messageIdIsNull", "消息id不能为空");
         }
         appMessageDao.disposeMessage(messageId);
         return true;

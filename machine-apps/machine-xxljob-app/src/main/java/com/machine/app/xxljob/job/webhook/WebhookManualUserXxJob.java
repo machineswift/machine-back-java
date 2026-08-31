@@ -2,9 +2,9 @@ package com.machine.app.xxljob.job.webhook;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.input.IamUserQueryListOffsetInputDto;
-import com.machine.client.iam.user.dto.output.IamUserListOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.input.BIamUserQueryListOffsetInputDto;
+import com.machine.client.iam.biam.user.dto.output.BIamUserListOutputDto;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.model.dto.IdDto;
 import com.machine.sdk.self.envm.EventTypeEnum;
@@ -24,7 +24,7 @@ import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 public class WebhookManualUserXxJob {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private CustomerStreamBridge customerStreamBridge;
@@ -38,15 +38,15 @@ public class WebhookManualUserXxJob {
         String offset = null;
 
         while (true) {
-            IamUserQueryListOffsetInputDto inputDto = new IamUserQueryListOffsetInputDto();
+            BIamUserQueryListOffsetInputDto inputDto = new BIamUserQueryListOffsetInputDto();
             inputDto.setOffset(offset);
             inputDto.setSize(100);
-            List<IamUserListOutputDto> outputDtoList = userClient.listByOffset(inputDto);
+            List<BIamUserListOutputDto> outputDtoList = userClient.listByOffset(inputDto);
             if (CollectionUtil.isEmpty(outputDtoList)) {
                 break;
             }
 
-            for (IamUserListOutputDto outputDto : outputDtoList) {
+            for (BIamUserListOutputDto outputDto : outputDtoList) {
                 //判断是否是全部
                 if (StrUtil.isBlank(param)) {
                     return;

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-apps</artifactId>
-        <version>2026.08.01-RELEASE</version>
+        <version>2026.09.01-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>machine-partner-app</artifactId>
@@ -27,8 +27,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <groupId>com.machine</groupId>
+            <artifactId>machine-web-boot-starter</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -41,6 +42,11 @@
             <groupId>com.machine</groupId>
             <artifactId>machine-sdk-boot-starter</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
         <dependency>

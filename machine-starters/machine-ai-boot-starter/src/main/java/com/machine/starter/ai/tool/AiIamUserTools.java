@@ -1,7 +1,7 @@
 package com.machine.starter.ai.tool;
 
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.IamUserDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.BIamUserDto;
 import com.machine.sdk.base.context.AppContextHolder;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 public class AiIamUserTools {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Tool(description = "获取当前用户信息", returnDirect = true)
-    IamUserDto getCurrentUserInfo() {
+    BIamUserDto getCurrentUserInfo() {
         String userId = AppContextHolder.getContext().getUserId();
-        IamUserDto userDto = userClient.getByUserId(userId);
+        BIamUserDto userDto = userClient.getByUserId(userId);
         userDto.setPassword(null);
         return userDto;
     }

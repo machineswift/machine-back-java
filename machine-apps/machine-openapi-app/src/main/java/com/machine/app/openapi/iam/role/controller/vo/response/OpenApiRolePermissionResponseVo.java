@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.role.controller.vo.response;
 
-import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -15,5 +15,5 @@ public class OpenApiRolePermissionResponseVo {
     private Set<String> permissionIdSet;
 
     @Schema(description = "数据权限(只有菜单有)")
-    private Map<String, List<DataPermissionRuleDto>> dataPermissionRuleMap;
+    private Map<String, List<BIamDataPermissionRuleDto>> dataPermissionRuleMap;
 }

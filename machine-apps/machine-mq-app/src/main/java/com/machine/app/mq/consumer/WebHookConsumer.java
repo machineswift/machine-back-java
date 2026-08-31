@@ -1,12 +1,12 @@
 package com.machine.app.mq.consumer;
 
 import cn.hutool.json.JSONUtil;
-import com.machine.client.iam.identity.IIamOauth2RegisteredClientClient;
+import com.machine.client.iam.biam.identity.IBIamOauth2RegisteredClientClient;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.model.dto.iam.identity.IamOAuth2RegisteredClientDto;
+import com.machine.sdk.base.model.dto.biam.identity.BIamOAuth2RegisteredClientDto;
 import com.machine.sdk.self.domain.WebHookEventRequestBody;
-import com.machine.starter.redis.cache.LocalCacheRegisteredClient;
+import com.machine.starter.redis.caffeine.CaffeineCacheRegisteredClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -27,10 +27,10 @@ import static com.machine.sdk.base.constant.ContextConstant.USER_ID_KEY;
 public class WebHookConsumer {
 
     @Autowired
-    private LocalCacheRegisteredClient localCacheRegisteredClient;
+    private CaffeineCacheRegisteredClient caffeineCacheRegisteredClient;
 
     @Autowired
-    private IIamOauth2RegisteredClientClient oauth2RegisteredClientClient;
+    private IBIamOauth2RegisteredClientClient oauth2RegisteredClientClient;
 
     @Resource(name = "selfWebHookSdkHttpClient")
     private OkHttpClient okHttpClient;
@@ -49,8 +49,8 @@ public class WebHookConsumer {
 
     private <T> void processWebHookCallback(WebHookEventRequestBody<T> requestBody) {
         String clientId = requestBody.getClientId();
-        IamOAuth2RegisteredClientDto outputDto = localCacheRegisteredClient
-                .getByClientId(clientId, oauth2RegisteredClientClient);
+        BIamOAuth2RegisteredClientDto outputDto = caffeineCacheRegisteredClient
+                .getByClientId(clientId);
 
         if (StatusEnum.DISABLE == outputDto.getStatus()) {
             log.info("WebHookFastEventConsumer-应用禁用忽略消息， requestBody={}", JSONUtil.toJsonStr(requestBody));

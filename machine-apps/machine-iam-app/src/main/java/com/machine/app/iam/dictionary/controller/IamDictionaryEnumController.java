@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "【字典】枚举模块")
+@Tag(name = "【IAM】枚举模块")
 @Slf4j
 @RestController
 @RequestMapping("iam/dictionary/enum")

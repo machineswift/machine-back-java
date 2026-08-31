@@ -25,10 +25,10 @@ public class ObsAttachmentPathBuilder {
         ModuleEnum module;
 
         switch (entityEnum) {
-            case IAM_USER,
-                 IAM_ROLE,
-                 IAM_PERMISSION,
-                 IAM_ORGANIZATION -> module = ModuleEnum.IAM;
+            case BIAM_USER,
+                 BIAM_ROLE,
+                 BIAM_PERMISSION,
+                 BIAM_ORGANIZATION -> module = ModuleEnum.BIAM;
 
             case DATA_MATERIAL,
                  DATA_DOWNLOAD,

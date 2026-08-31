@@ -1,7 +1,8 @@
 package com.machine.app.admin.data.area.controller.vo.request;
 
+import com.machine.sdk.base.envm.data.DataCountryEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DataAreaTreeRequestVo {
 
-    @NotBlank(message = "国家编码不能为空")
-    @Schema(description = "国家编码，默认:CHINA")
-    private String countryCode;
+    @NotNull(message = "国家不能为空")
+    @Schema(description = "国家(DataCountryEnum)，默认:CHINA")
+    private DataCountryEnum country;
 
-    public DataAreaTreeRequestVo(String countryCode) {
-        this.countryCode = countryCode;
+    public DataAreaTreeRequestVo(DataCountryEnum country) {
+        this.country = country;
     }
 
 }

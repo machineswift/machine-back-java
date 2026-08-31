@@ -12,7 +12,7 @@ import com.machine.client.data.filecenter.download.dto.input.DataDownloadUpdateI
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadListOutputDto;
 import com.machine.sdk.base.envm.data.filecenter.DataDownloadStatusEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.service.data.filecenter.download.dao.IDataDownloadDao;
 import com.machine.service.data.filecenter.download.dao.mapper.entity.DataDownloadEntity;
 import com.machine.service.data.filecenter.download.service.IDataDownloadService;
@@ -73,7 +73,7 @@ public class DataDownloadServiceImpl implements IDataDownloadService {
     public void invoke(String id) {
         DataDownloadEntity dbEntity = downloadDao.getById(id);
         if (dbEntity == null) {
-            throw new IamBusinessException("data.download.service.invoke.taskNotExists", "任务不存在");
+            throw new BIamBusinessException("data.download.service.invoke.taskNotExists", "任务不存在");
         }
 
         if (DataDownloadStatusEnum.READY == dbEntity.getStatus() ||
@@ -82,7 +82,7 @@ public class DataDownloadServiceImpl implements IDataDownloadService {
         }
 
         if (DataDownloadStatusEnum.FINISH == dbEntity.getStatus()) {
-            throw new IamBusinessException("data.download.service.invoke.taskHasFinish", "任务已经完成");
+            throw new BIamBusinessException("data.download.service.invoke.taskHasFinish", "任务已经完成");
         }
 
         DataDownloadEntity updateEntity = new DataDownloadEntity();

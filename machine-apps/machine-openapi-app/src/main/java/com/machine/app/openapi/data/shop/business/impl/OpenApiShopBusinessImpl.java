@@ -14,8 +14,8 @@ import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.IDataShopLabelOptionRelationClient;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.data.DataCountryEnum;
 import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.request.IdRequest;
@@ -36,7 +36,7 @@ public class OpenApiShopBusinessImpl implements IOpenApiShopBusiness {
     private RedisDataAreaCache areaCache;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataShopClient shopClient;
@@ -66,8 +66,8 @@ public class OpenApiShopBusinessImpl implements IOpenApiShopBusiness {
         if (outputDto == null) {
             return null;
         }
-        OpenApiShopDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), OpenApiShopDetailResponseVo.class);
 
+        OpenApiShopDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), OpenApiShopDetailResponseVo.class);
 
         {//门店关联组织
             List<DataShopOrganizationRelationListOutputDto> relationListOutputDtoList = shopOrganizationRelationClient
@@ -89,7 +89,7 @@ public class OpenApiShopBusinessImpl implements IOpenApiShopBusiness {
             String countryCode = outputDto.getCountryCode();
             String provinceCode = outputDto.getProvinceCode();
             if (StrUtil.isNotBlank(countryCode) || StrUtil.isNotBlank(provinceCode)) {
-                DataAreaTreeOutputDto areaTree = areaCache.tree(countryCode);
+                DataAreaTreeOutputDto areaTree = areaCache.treeAll(DataCountryEnum.valueOf(countryCode));
 
                 AddressInfoDto addressInfo = new AddressInfoDto();
                 addressInfo.setCountry(DataCountryEnum.valueOf(countryCode).getMessage());
@@ -131,7 +131,7 @@ public class OpenApiShopBusinessImpl implements IOpenApiShopBusiness {
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
         }

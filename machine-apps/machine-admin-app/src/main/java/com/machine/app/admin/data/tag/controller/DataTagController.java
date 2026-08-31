@@ -9,6 +9,11 @@ import com.machine.app.admin.data.tag.controller.vo.response.DataTagSimpleListRe
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,12 @@ public class DataTagController {
     @Operation(summary = "创建智能标签")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "创建智能标签",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataTagCreateRequestVo request) {
         log.info("创建智能标签，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(tagBusiness.create(request));
@@ -37,6 +48,11 @@ public class DataTagController {
     @Operation(summary = "删除智能标签")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:DELETE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除智能标签")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.delete(request);
@@ -45,6 +61,11 @@ public class DataTagController {
     @Operation(summary = "修改智能标签")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改智能标签")
     public void update(@RequestBody @Validated DataTagUpdateRequestVo request) {
         log.info("修改智能标签，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.update(request);
@@ -53,6 +74,11 @@ public class DataTagController {
     @Operation(summary = "修改智能标签编码")
     @PostMapping("update_code")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_CODE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改智能标签编码")
     public void updateCode(@RequestBody @Validated DataTagUpdateCodeRequestVo request) {
         log.info("修改智能标签编码，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateCode(request);
@@ -61,6 +87,11 @@ public class DataTagController {
     @Operation(summary = "修改智能标签状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_STATUS')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改智能标签状态")
     public void updateStatus(@RequestBody @Validated DataTagUpdateStatusRequestVo request) {
         log.info("修改智能标签状态，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateStatus(request);
@@ -69,6 +100,11 @@ public class DataTagController {
     @Operation(summary = "修改智能标签排序")
     @PostMapping("update_sort")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_SORT')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改智能标签排序")
     public void updateSort(@RequestBody @Validated DataTagUpdateSortRequestVo request) {
         log.info("修改智能标签排序，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateSort(request);
@@ -77,6 +113,11 @@ public class DataTagController {
     @Operation(summary = "修改智能标签关联分类")
     @PostMapping("update_category")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_CATEGORY')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改智能标签关联分类")
     public void updateCategory(@RequestBody @Validated DataTagUpdateCategoryRequestVo request) {
         log.info("修改智能标签关联分类，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateCategory(request);
@@ -85,6 +126,11 @@ public class DataTagController {
     @Operation(summary = "智能标签详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:DETAIL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询智能标签详情")
     public DataTagDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return tagBusiness.detail(request);
     }
@@ -99,6 +145,11 @@ public class DataTagController {
     @Operation(summary = "分页查询智能标签(应用于管理菜单)")
     @PostMapping("page_expand")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:PAGE_EXPAND')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "分页查询智能标签(管理菜单)")
     public PageResponse<DataTagExpandListResponseVo> pageExpand(@RequestBody @Validated DataTagQueryPageRequestVo request) {
         return tagBusiness.pageExpand(request);
     }

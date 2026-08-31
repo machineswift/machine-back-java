@@ -4,6 +4,7 @@ import com.machine.client.hrm.department.dto.input.HrmDepartmentCreateInputDto;
 import com.machine.client.hrm.department.dto.output.*;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public interface IDepartmentService {
 
     List<HrmDepartmentListOutputDto> listAll();
 
-    HrmDepartmentTreeOutputDto treeAllSimple();
+    Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple();
 
     Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest);
 }

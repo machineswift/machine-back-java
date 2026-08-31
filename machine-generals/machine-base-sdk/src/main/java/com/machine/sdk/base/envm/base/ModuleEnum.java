@@ -10,10 +10,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ModuleEnum implements BaseEnum<ModuleEnum, String> {
-    IAM("IAM", "身份管理"),
+    PIAM("PIAM", "平台身份与访问管理"),
+    BIAM("BIAM", "业务身份与访问管理"),
+    CIAM("CIAM", "客户身份与访问管理"),
     DATA("DATA", "数据中心"),
     HRM("HRM", "人力资源"),
-    SCM("SCM", "供应链");
+    SCM("SCM", "供应链"),
+    CRM("CRM", "客户关系管理"),
+    AI("AI", "人工智能");
 
     private final String code;
     private final String message;

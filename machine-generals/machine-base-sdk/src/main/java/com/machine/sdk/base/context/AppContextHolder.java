@@ -1,7 +1,7 @@
 package com.machine.sdk.base.context;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.machine.sdk.base.envm.iam.auth.IamAuthMethodEnum;
+import com.machine.sdk.base.envm.biam.auth.BIamAuthMethodEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +17,7 @@ public class AppContextHolder {
 
     private String dataPermissionCode;
 
-    private IamAuthMethodEnum authMethod;
+    private BIamAuthMethodEnum authMethod;
 
     public static AppContextHolder getContext() {
         AppContextHolder result = THREAD_LOCAL.get();

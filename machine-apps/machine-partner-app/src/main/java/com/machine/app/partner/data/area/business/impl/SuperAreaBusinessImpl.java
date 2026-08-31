@@ -10,11 +10,11 @@ import com.machine.app.partner.data.area.controller.vo.response.SupperAreaTreeSi
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
 import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.output.DataShopDetailOutputDto;
-import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionDto;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.starter.redis.cache.data.RedisDataAreaCache;
-import com.machine.starter.redis.cache.iam.RedisIamDataPermissionCache;
+import com.machine.starter.redis.cache.biam.RedisBIamDataPermissionCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,16 +30,16 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
     private RedisDataAreaCache redisDataAreaCache;
 
     @Autowired
-    private RedisIamDataPermissionCache redisIamDataPermissionCache;
+    private RedisBIamDataPermissionCache redisIamDataPermissionCache;
 
     @Autowired
     private IDataShopClient shopClient;
 
     @Override
     public DataAreaTreeOutputDto treeSelfSimple(SuperAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto allTreeOutput = redisDataAreaCache.tree(request.getCountryCode());
+        DataAreaTreeOutputDto allTreeOutput = redisDataAreaCache.treeAll(request.getCountry());
         //数据权限
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             return allTreeOutput;
@@ -54,9 +54,9 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
 
     @Override
     public SuperAreaTreeExpandSelfResponseVo treeSelfExpand(SuperAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto allTreeOutput = redisDataAreaCache.tree(request.getCountryCode());
+        DataAreaTreeOutputDto allTreeOutput = redisDataAreaCache.treeAll(request.getCountry());
         //数据权限
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             SuperAreaTreeExpandSelfResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(allTreeOutput),
@@ -101,7 +101,7 @@ public class SuperAreaBusinessImpl implements ISuperAreaBusiness {
 
     @Override
     public SupperAreaTreeSimpleResponseVo treeAllSimple(SuperAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto areaTree = redisDataAreaCache.tree(request.getCountryCode());
+        DataAreaTreeOutputDto areaTree = redisDataAreaCache.treeAll(request.getCountry());
         if (areaTree == null) {
             return null;
         }

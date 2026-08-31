@@ -9,6 +9,7 @@ import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 import java.util.List;
 
@@ -28,7 +29,6 @@ public interface IDataTagCategoryService {
 
     List<DataTagCategoryListOutputDto> listAllByType(ProfileSubjectTypeEnum type);
 
-    DataTagCategoryTreeSimpleOutputDto treeAllSimple(ProfileSubjectTypeEnum type);
+    Tuples.Tuple2<String, DataTagCategoryTreeSimpleOutputDto> treeAllSimple(ProfileSubjectTypeEnum type);
 
 }
-

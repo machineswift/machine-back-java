@@ -3,7 +3,7 @@ package com.machine.service.data.shop.service;
 import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 
@@ -26,6 +26,6 @@ public interface IDataShopOrganizationRelationService {
 
     List<DataShopOrganizationRelationListOutputDto> listByOrganizationIdSet(IdSetRequest request);
 
-    List<DataShopOrganizationRelationListOutputDto> listByCondition(IamOrganizationShopRelationQueryListInputDto request);
+    List<DataShopOrganizationRelationListOutputDto> listByCondition(BIamOrganizationShopRelationQueryListInputDto request);
 
 }

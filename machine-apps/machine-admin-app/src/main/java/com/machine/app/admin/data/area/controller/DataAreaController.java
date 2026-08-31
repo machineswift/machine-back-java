@@ -11,6 +11,11 @@ import com.machine.app.admin.data.area.controller.vo.response.DataAreaTreeSimple
 import com.machine.app.admin.data.area.controller.vo.response.DataAreaDetailResponseVo;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +36,12 @@ public class DataAreaController {
     @Operation(summary = "创建区域")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "创建区域",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataAreaCreateRequestVo request) {
         log.info("创建区域，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(areaBusiness.create(request));
@@ -39,6 +50,11 @@ public class DataAreaController {
     @Operation(summary = "删除区域")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:DELETE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除区域")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.delete(request);
@@ -47,6 +63,11 @@ public class DataAreaController {
     @Operation(summary = "修改区域")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改区域")
     public void update(@RequestBody @Validated DataAreaUpdateRequestVo request) {
         log.info("修改区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.update(request);
@@ -55,6 +76,11 @@ public class DataAreaController {
     @Operation(summary = "修改父区域ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE_PARENT')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改父区域ID")
     public void updateParent(@RequestBody @Validated DataAreaUpdateParentRequestVo request) {
         log.info("修改父区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.updateParent(request);
@@ -63,10 +89,15 @@ public class DataAreaController {
     @Operation(summary = "区域详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:DETAIL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询区域详情")
     public DataAreaDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return areaBusiness.detail(request);
     }
-    
+
     @Operation(summary = "区域树(应用于组件弹窗)")
     @PostMapping("tree_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:TREE_SIMPLE')")
@@ -77,6 +108,11 @@ public class DataAreaController {
     @Operation(summary = "区域树(应用于区域管理菜单)")
     @PostMapping("tree_expand")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:TREE_EXPAND')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_AREA,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询区域树(区域管理菜单)")
     public DataAreaTreeExpandResponseVo treeExpand(@RequestBody @Validated DataAreaTreeRequestVo request) {
         return areaBusiness.treeExpand(request);
     }

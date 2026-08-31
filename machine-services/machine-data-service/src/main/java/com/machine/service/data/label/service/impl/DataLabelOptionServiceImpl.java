@@ -7,7 +7,7 @@ import com.machine.client.data.label.dto.output.DataLabelOptionDetailOutputDto;
 import com.machine.client.data.label.dto.output.DataLabelOptionListOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4DataCodeClient;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.label.dao.IDataLabelOptionDao;
@@ -45,7 +45,7 @@ public class DataLabelOptionServiceImpl implements IDataLabelOptionService {
         //验证名称在标签Id下面是否存在
         DataLabelOptionEntity entityByName = labelOptionDao.getByLabelIdAndName(inputDto.getLabelId(), inputDto.getName());
         if (null != entityByName) {
-            throw new IamBusinessException("data.labelOption.service.create.nameAlreadyExists", "标签选项已经存在");
+            throw new BIamBusinessException("data.labelOption.service.create.nameAlreadyExists", "标签选项已经存在");
         }
 
         DataLabelOptionEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataLabelOptionEntity.class);
@@ -64,13 +64,13 @@ public class DataLabelOptionServiceImpl implements IDataLabelOptionService {
         }
 
         if (StatusEnum.ENABLE == dbEntity.getStatus()) {
-            throw new IamBusinessException("data.labelOption.service.delete.enableStatus", "启用状态不能删除");
+            throw new BIamBusinessException("data.labelOption.service.delete.enableStatus", "启用状态不能删除");
         }
 
         //校验标签是否关联门店
         List<DataShopLabelOptionRelationEntity> dataShopLabelOptionRelationEntityList = shopLabelOptionRelationDao.listByLabelOptionId(dbEntity.getId());
         if (CollectionUtil.isNotEmpty(dataShopLabelOptionRelationEntityList)) {
-            throw new IamBusinessException("data.labelOption.service.delete.associationShop", "标签关联门店不能删除");
+            throw new BIamBusinessException("data.labelOption.service.delete.associationShop", "标签关联门店不能删除");
         }
 
         return labelOptionDao.deleteById(request.getId(), dbEntity.getLabelId());
@@ -85,13 +85,13 @@ public class DataLabelOptionServiceImpl implements IDataLabelOptionService {
         }
 
         if (!dbEntity.getCode().startsWith(LABEL_PREFIX)) {
-            throw new IamBusinessException("data.labelOption.service.updateStatus.defaultLabelOption", "默认标签选项，不能修改名称");
+            throw new BIamBusinessException("data.labelOption.service.updateStatus.defaultLabelOption", "默认标签选项，不能修改名称");
         }
 
         //验证名称在标签Id下面是否存在
         DataLabelOptionEntity entityByName = labelOptionDao.getByLabelIdAndName(dbEntity.getLabelId(), inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
-            throw new IamBusinessException("data.labelOption.service.updateStatus.nameAlreadyExists", "标签选项已经存在");
+            throw new BIamBusinessException("data.labelOption.service.updateStatus.nameAlreadyExists", "标签选项已经存在");
         }
 
         DataLabelOptionEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataLabelOptionEntity.class);
@@ -111,7 +111,7 @@ public class DataLabelOptionServiceImpl implements IDataLabelOptionService {
         }
 
         if (!dbEntity.getCode().startsWith(LABEL_PREFIX)) {
-            throw new IamBusinessException("data.labelOption.service.updateStatus.defaultLabelOption", "默认标签选选项，不能修改状态");
+            throw new BIamBusinessException("data.labelOption.service.updateStatus.defaultLabelOption", "默认标签选选项，不能修改状态");
         }
 
         return labelOptionDao.updateStatus(inputDto.getId(), dbEntity.getLabelId(), inputDto.getStatus());

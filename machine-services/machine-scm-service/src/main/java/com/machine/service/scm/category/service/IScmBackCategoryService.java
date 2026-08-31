@@ -7,6 +7,7 @@ import com.machine.client.scm.category.dto.output.ScmBackCategoryDetailOutputDto
 import com.machine.client.scm.category.dto.output.ScmBackCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface IScmBackCategoryService {
 
     ScmBackCategoryDetailOutputDto getById(IdRequest request);
 
-    ScmBackCategoryTreeSimpleOutputDto treeAllSimple();
+    Tuples.Tuple2<String, ScmBackCategoryTreeSimpleOutputDto> treeAllSimple();
 
     List<ScmBackCategoryListOutputDto> listAll();
 }

@@ -8,6 +8,7 @@ import com.machine.client.data.filecenter.material.dto.output.DataMaterialCatego
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/file/material_category",
-        configuration = OpenFeignMinTimeConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/file/material_category", configuration = OpenFeignMinTimeConfig.class)
 public interface IDataMaterialCategoryClient {
 
     @PostMapping("create")
@@ -39,9 +39,6 @@ public interface IDataMaterialCategoryClient {
     List<DataMaterialCategoryListOutputDto> listAll();
 
     @GetMapping("tree_all_simple")
-    DataMaterialCategoryTreeSimpleOutputDto treeAllSimple();
+    Tuples.Tuple2<String, DataMaterialCategoryTreeSimpleOutputDto> treeAllSimple();
 
 }
-
-
-

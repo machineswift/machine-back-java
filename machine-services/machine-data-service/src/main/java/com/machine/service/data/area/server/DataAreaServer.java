@@ -3,12 +3,13 @@ package com.machine.service.data.area.server;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.area.IDataAreaClient;
 import com.machine.client.data.area.dto.input.DataAreaCreateInputDto;
-import com.machine.client.data.area.dto.input.DataAreaTreeInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateParentInputDto;
 import com.machine.client.data.area.dto.output.DataAreaDetailOutputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
+import com.machine.sdk.base.envm.data.DataCountryEnum;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.data.area.service.IDataAreaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,9 @@ public class DataAreaServer implements IDataAreaClient {
     }
 
     @Override
-    @PostMapping("tree")
-    public DataAreaTreeOutputDto tree(@RequestBody @Validated DataAreaTreeInputDto inputDto) {
-        return areaService.tree(inputDto);
+    @GetMapping("tree_all")
+    public Tuples.Tuple2<String, DataAreaTreeOutputDto> treeAll(@RequestParam("country") DataCountryEnum country) {
+        return areaService.treeAll(country);
     }
 
 }

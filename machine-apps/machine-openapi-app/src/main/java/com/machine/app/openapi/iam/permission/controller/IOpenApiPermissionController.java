@@ -4,7 +4,7 @@ import com.machine.app.openapi.iam.permission.business.IOpenApiPermissionBusines
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionIdRequestVo;
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionListSubRequestVo;
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionQueryAppListRequestVo;
-import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
+import com.machine.client.iam.biam.permission.dto.output.BIamPermissionTreeOutputDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,14 +28,14 @@ public class IOpenApiPermissionController {
     @Operation(summary = "应用列表（根节点）")
     @PostMapping("list_app")
     @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_APP')")
-    public List<IamPermissionTreeOutputDto> listApp(@RequestBody @Validated OpenApiPermissionQueryAppListRequestVo request) {
+    public List<BIamPermissionTreeOutputDto> listApp(@RequestBody @Validated OpenApiPermissionQueryAppListRequestVo request) {
         return permissionBusiness.listApp(request);
     }
     
     @Operation(summary = "获取权限详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:DETAIL')")
-    public IamPermissionTreeOutputDto detail(@RequestBody @Valid OpenApiPermissionIdRequestVo requestVo) {
+    public BIamPermissionTreeOutputDto detail(@RequestBody @Valid OpenApiPermissionIdRequestVo requestVo) {
         return permissionBusiness.detail(requestVo);
     }
 
@@ -50,7 +50,7 @@ public class IOpenApiPermissionController {
             description = "本接口只支持获取当前权限的下一级权限基础信息，不支持获取当前权限下所有层级子权限。")
     @PostMapping("list_sub")
     @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_SUB')")
-    public List<IamPermissionTreeOutputDto> listSub(@RequestBody @Valid OpenApiPermissionListSubRequestVo request) {
+    public List<BIamPermissionTreeOutputDto> listSub(@RequestBody @Valid OpenApiPermissionListSubRequestVo request) {
         return permissionBusiness.listSub(request);
     }
 

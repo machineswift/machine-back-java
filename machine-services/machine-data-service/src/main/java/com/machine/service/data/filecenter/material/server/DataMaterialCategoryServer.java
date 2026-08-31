@@ -9,6 +9,7 @@ import com.machine.client.data.filecenter.material.dto.output.DataMaterialCatego
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryListOutputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.data.filecenter.material.service.IDataMaterialCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class DataMaterialCategoryServer implements IDataMaterialCategoryClient {
 
     @Override
     @GetMapping("tree_all_simple")
-    public DataMaterialCategoryTreeSimpleOutputDto treeAllSimple() {
+    public Tuples.Tuple2<String, DataMaterialCategoryTreeSimpleOutputDto> treeAllSimple() {
         return materialCategoryService.treeAllSimple();
     }
 

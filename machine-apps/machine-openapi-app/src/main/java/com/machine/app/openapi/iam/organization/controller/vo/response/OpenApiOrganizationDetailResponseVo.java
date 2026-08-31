@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.organization.controller.vo.response;
 
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class OpenApiOrganizationDetailResponseVo {
     private String name;
 
     @Schema(description = "组织类型(IamOrganizationTypeEnum)")
-    private IamOrganizationTypeEnum type;
+    private BIamOrganizationTypeEnum type;
 
     @Schema(description = "排序")
     private Long sort;

@@ -1,9 +1,6 @@
 package com.machine.starter.base.config;
 
 import com.machine.sdk.base.exception.BusinessException;
-import com.machine.sdk.base.exception.iam.access.OpenApiResourceBlackException;
-import com.machine.sdk.base.exception.iam.access.OpenApiResourceClientException;
-import com.machine.sdk.base.exception.iam.authentication.*;
 import com.machine.sdk.base.model.AppResult;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,58 +23,6 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     /**
-     * AuthToken使用异常
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = AuthTokenInvalidException.class)
-    public AppResult<Objects> errorHandler(AuthTokenInvalidException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.authTokenParsingFailed", exception.getMessage());
-    }
-
-
-    /**
-     * AuthToken使用异常
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = AuthTokenUseException.class)
-    public AppResult<Objects> errorHandler(AuthTokenUseException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.authTokenUseWrong", exception.getMessage());
-    }
-
-    /**
-     * RefreshToken使用异常
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = RefreshTokenUseException.class)
-    public AppResult<Objects> errorHandler(RefreshTokenUseException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.refreshTokenUseWrong", exception.getMessage());
-    }
-
-    /**
-     * JwtToken黑名单异常
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = JwtTokenBlackException.class)
-    public AppResult<Objects> errorHandler(JwtTokenBlackException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.jwtTokenBlack", exception.getMessage());
-    }
-
-    /**
-     * 用户禁用
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = UserStatusDisableException.class)
-    public AppResult<Objects> errorHandler(UserStatusDisableException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.authentication.userStatusDisable", exception.getMessage());
-    }
-
-
-    /**
      * 认证异常
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -85,26 +30,6 @@ public class GlobalExceptionHandler {
     public AppResult<Objects> errorHandler(AuthenticationException exception) {
         log.error(exception.getMessage(), exception);
         return AppResult.fail("iam.auth.authentication", exception.getMessage());
-    }
-
-    /**
-     * OpenApi黑名单异常
-     */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = OpenApiResourceBlackException.class)
-    public AppResult<Objects> errorHandler(OpenApiResourceBlackException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.accessDenied.openApiResourceBlack", exception.getMessage());
-    }
-
-    /**
-     * OpenApi没有带clientId
-     */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = OpenApiResourceClientException.class)
-    public AppResult<Objects> errorHandler(OpenApiResourceClientException exception) {
-        log.error(exception.getMessage(), exception);
-        return AppResult.fail("iam.auth.accessDenied.wrongClientId", exception.getMessage());
     }
 
     /**
@@ -139,13 +64,12 @@ public class GlobalExceptionHandler {
     /**
      * 业务异常处理
      */
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     @org.springframework.web.bind.annotation.ExceptionHandler(value = BusinessException.class)
     public AppResult<Objects> errorHandler(BusinessException exception) {
         log.error(exception.getMessage(), exception);
         return AppResult.fail(exception.getCode(), exception.getMessage());
     }
-
 
     /**
      * 503异常处理

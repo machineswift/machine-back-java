@@ -1,7 +1,7 @@
 package com.machine.service.data.shop.dao;
 
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface IDataShopOrganizationRelationDao {
     int insert(DataShopOrganizationRelationEntity entity);
 
     int deleteOneByUk(String shopId,
-                      IamOrganizationTypeEnum organizationType);
+                      BIamOrganizationTypeEnum organizationType);
 
     int update(DataShopOrganizationRelationEntity entity);
 
@@ -22,7 +22,7 @@ public interface IDataShopOrganizationRelationDao {
                                                      String organizationId);
 
     DataShopOrganizationRelationEntity selectOneByUk(String shopId,
-                                                     IamOrganizationTypeEnum organizationType);
+                                                     BIamOrganizationTypeEnum organizationType);
 
     List<String> listShopIdByOrganizationIdSet(Set<String> organizationIdSet);
 
@@ -32,9 +32,9 @@ public interface IDataShopOrganizationRelationDao {
 
     List<DataShopOrganizationRelationEntity> listByShopIdSet(Set<String> shopIdSet);
 
-    List<DataShopOrganizationRelationEntity> listByShopIdSet(IamOrganizationTypeEnum organizationType,
+    List<DataShopOrganizationRelationEntity> listByShopIdSet(BIamOrganizationTypeEnum organizationType,
                                                              Set<String> shopIdSet);
 
-    List<DataShopOrganizationRelationEntity> listByCondition(IamOrganizationShopRelationQueryListInputDto inputDto);
+    List<DataShopOrganizationRelationEntity> listByCondition(BIamOrganizationShopRelationQueryListInputDto inputDto);
 
 }

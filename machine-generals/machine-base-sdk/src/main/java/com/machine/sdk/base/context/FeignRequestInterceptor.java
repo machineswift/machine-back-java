@@ -2,11 +2,11 @@ package com.machine.sdk.base.context;
 
 import com.machine.sdk.base.annotation.SkipUserIdCheck;
 import com.machine.sdk.base.envm.ai.AiModelNameTypeEnum;
-import com.machine.sdk.base.exception.iam.authentication.AuthFeignUserIdException;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
                 }
                 String feignMethod = template.feignTarget().name() + template.path();
                 log.warn("用户Id丢失，feign method:{}", feignMethod);
-                throw new AuthFeignUserIdException("用户Id丢失");
+                throw new BadCredentialsException("用户Id丢失");
             }
             template.header(USER_ID_KEY, userId);
         }

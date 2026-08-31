@@ -27,3 +27,10 @@ spring:
     import:
       - nacos:machine.yaml?refreshEnabled=true
       - nacos:${spring.application.name}.yaml?refreshEnabled=true
+
+
+machine:
+  iam:
+    identity:
+      auth2:
+        authorization-server-enabled: true

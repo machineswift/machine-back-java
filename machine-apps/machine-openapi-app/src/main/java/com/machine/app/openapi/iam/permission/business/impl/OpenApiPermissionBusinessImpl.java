@@ -1,12 +1,13 @@
 package com.machine.app.openapi.iam.permission.business.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.machine.app.openapi.iam.permission.business.IOpenApiPermissionBusiness;
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionIdRequestVo;
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionListSubRequestVo;
 import com.machine.app.openapi.iam.permission.controller.vo.request.OpenApiPermissionQueryAppListRequestVo;
-import com.machine.client.iam.permission.dto.output.IamPermissionTreeOutputDto;
+import com.machine.client.iam.biam.permission.dto.output.BIamPermissionTreeOutputDto;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisIamPermissionCache;
+import com.machine.starter.redis.cache.biam.RedisBIamPermissionCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,22 +20,22 @@ import java.util.List;
 public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness {
 
     @Autowired
-    private RedisIamPermissionCache permissionCache;
+    private RedisBIamPermissionCache permissionCache;
 
     @Override
-    public List<IamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request) {
-        IamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
-        List<IamPermissionTreeOutputDto> children = treeOutputDto.getChildren();
-        for (IamPermissionTreeOutputDto child : children) {
+    public List<BIamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request) {
+        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
+        List<BIamPermissionTreeOutputDto> children = treeOutputDto.getChildren();
+        for (BIamPermissionTreeOutputDto child : children) {
             child.setChildren(null);
         }
         return children;
     }
 
     @Override
-    public IamPermissionTreeOutputDto detail(OpenApiPermissionIdRequestVo request) {
-        IamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
-        IamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
+    public BIamPermissionTreeOutputDto detail(OpenApiPermissionIdRequestVo request) {
+        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
+        BIamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
         if (null == targetNode) {
             return null;
         }
@@ -44,8 +45,8 @@ public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness
 
     @Override
     public List<String> listParentByTarget(OpenApiPermissionIdRequestVo request) {
-        IamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
-        IamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
+        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
+        BIamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
         if (null == targetNode) {
             return List.of();
         }
@@ -66,9 +67,18 @@ public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness
     }
 
     @Override
-    public List<IamPermissionTreeOutputDto> listSub(OpenApiPermissionListSubRequestVo request) {
-        return permissionCache.listSub(request.getId());
-    }
+    public List<BIamPermissionTreeOutputDto> listSub(OpenApiPermissionListSubRequestVo request) {
+        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
+        BIamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
+        if (null == targetNode || CollectionUtil.isEmpty(targetNode.getChildren())) {
+            return List.of();
+        }
 
+        List<BIamPermissionTreeOutputDto> children = targetNode.getChildren();
+        for (BIamPermissionTreeOutputDto child : children) {
+            child.setChildren(null);
+        }
+        return children;
+    }
 
 }

@@ -15,8 +15,8 @@ import com.machine.client.data.filecenter.download.IDataDownloadClient;
 import com.machine.client.data.filecenter.download.dto.input.DataDownloadQueryPageInputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.data.filecenter.DataDownloadStatusEnum;
 import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataAttachmentClient dataAttachmentClient;
@@ -134,7 +134,7 @@ public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
         {//创建人、修改人姓名
             Set<String> userIdSet = pageResponse.getRecords().stream().map(DataDownloadListResponseVo::getCreateBy).collect(Collectors.toSet());
             userIdSet.addAll(pageResponse.getRecords().stream().map(DataDownloadListResponseVo::getUpdateBy).collect(Collectors.toSet()));
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             for (DataDownloadListResponseVo vo : pageResponse.getRecords()) {
                 vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
                 vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());

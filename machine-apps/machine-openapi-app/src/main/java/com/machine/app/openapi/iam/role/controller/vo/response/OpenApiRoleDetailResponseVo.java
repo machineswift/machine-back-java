@@ -1,8 +1,8 @@
 package com.machine.app.openapi.iam.role.controller.vo.response;
 
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
-import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
+import com.machine.sdk.base.envm.biam.role.BIamRoleTypeEnum;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionRuleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -23,7 +23,7 @@ public class OpenApiRoleDetailResponseVo {
     private String code;
 
     @Schema(description = "类型（RoleTypeEnum）")
-    private IamRoleTypeEnum type;
+    private BIamRoleTypeEnum type;
 
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
@@ -41,6 +41,6 @@ public class OpenApiRoleDetailResponseVo {
     private Set<String> permissionIdSet;
 
     @Schema(description = "数据权限")
-    private Map<String, List<DataPermissionRuleDto>> dataPermissionRuleMap;
+    private Map<String, List<BIamDataPermissionRuleDto>> dataPermissionRuleMap;
 
 }

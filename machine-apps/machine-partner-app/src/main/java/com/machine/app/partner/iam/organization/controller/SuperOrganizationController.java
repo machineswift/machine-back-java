@@ -5,7 +5,7 @@ import com.machine.app.partner.iam.organization.controller.vo.request.SupeOrgani
 import com.machine.app.partner.iam.organization.controller.vo.request.SupeOrganizationTreeRequestVo;
 import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrganizationTreeExpandSelfResponseVo;
 import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrganizationTreeSimpleSelfResponseVo;
-import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationTreeSimpleOutputDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class SuperOrganizationController {
 
     @Operation(summary = "树(所有的组织基础信息)")
     @PostMapping("tree_all_simple")
-    public IamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestBody @Validated SupeOrganizationTreeAllRequestVo request) {
+    public BIamOrganizationTreeSimpleOutputDto treeAllSimple(@RequestBody @Validated SupeOrganizationTreeAllRequestVo request) {
         return organizationBusiness.treeAllSimple(request);
     }
 }

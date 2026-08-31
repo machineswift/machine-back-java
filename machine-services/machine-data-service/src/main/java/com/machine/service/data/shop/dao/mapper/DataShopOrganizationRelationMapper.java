@@ -1,7 +1,7 @@
 package com.machine.service.data.shop.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
 import com.machine.service.data.shop.dao.mapper.entity.DataShopOrganizationRelationEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,5 +16,5 @@ public interface DataShopOrganizationRelationMapper extends BaseMapper<DataShopO
 
     List<String> listShopIdByOrganizationIdSet(@Param("organizationIdSet") Set<String> organizationIdSet);
 
-    List<DataShopOrganizationRelationEntity> listByCondition(@Param("inputDto") IamOrganizationShopRelationQueryListInputDto inputDto);
+    List<DataShopOrganizationRelationEntity> listByCondition(@Param("inputDto") BIamOrganizationShopRelationQueryListInputDto inputDto);
 }

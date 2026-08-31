@@ -14,6 +14,7 @@ import com.machine.client.data.filecenter.material.dto.output.DataMaterialCatego
 import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.tool.TreeUtil;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.data.filecenter.material.dao.IDataMaterialCategoryDao;
 import com.machine.service.data.filecenter.material.dao.IDataMaterialCategoryRelationDao;
 import com.machine.service.data.filecenter.material.dao.mapper.entity.DataMaterialCategoryEntity;
@@ -72,19 +73,20 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             throw new DataBusinessException("data.materialCategory.service.create.virtualNode", "不能选择【未分类】");
         }
 
-        //验证 parentId 是否存在
+        // 验证 parentId 是否存在
         DataMaterialCategoryEntity entityById = materialCategoryDao.getById(parentId);
         if (null == entityById) {
             throw new DataBusinessException("data.materialCategory.service.create.parentIdNotExists", "父ID不存在");
         }
 
-        //验证名称在同一层级是否存在
-        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(parentId, inputDto.getName());
+        // 验证名称在同一层级是否存在
+        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(parentId,
+                inputDto.getName());
         if (null != entityByName) {
             throw new DataBusinessException("data.materialCategory.service.create.nameAlreadyExists", "名称已经存在");
         }
 
-        //验证父级分类是否棒定了素材
+        // 验证父级分类是否棒定了素材
         Long count = materialCategoryRelationDao.selectCountByCategoryId(parentId);
         if (count.intValue() > 0) {
             throw new DataBusinessException("data.materialCategory.service.create.parentHasBindMaterial",
@@ -95,7 +97,7 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
         insertEntity.setParentId(parentId);
         insertEntity.setName(inputDto.getName());
 
-        //生成编码
+        // 生成编码
         insertEntity.setCode(leaf4DataCodeClient.materialCategoryCode());
         insertEntity.setSort(inputDto.getSort());
         return materialCategoryDao.insert(insertEntity);
@@ -114,12 +116,12 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             throw new DataBusinessException("data.materialCategory.service.delete.rootMaterialCategory", "根分类不能删除");
         }
 
-        //递归获取所有的子节点
+        // 递归获取所有的子节点
         Set<String> idSet = new HashSet<>();
         idSet.add(entity.getId());
         idSet.addAll(materialCategoryCache.recursionListSubId(entity.getId()));
 
-        //是否关联的素材信息
+        // 是否关联的素材信息
         Long count = materialCategoryRelationDao.selectCountByCategoryIdSet(idSet);
         if (count.intValue() > 0) {
             throw new DataBusinessException("data.materialCategory.service.delete.associationMaterial",
@@ -147,8 +149,9 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             throw new DataBusinessException("data.materialCategory.service.update.rootMaterialCategory", "根分类不能修改");
         }
 
-        //验证名称在同一层级是否存在
-        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(entity.getParentId(), inputDto.getName());
+        // 验证名称在同一层级是否存在
+        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(entity.getParentId(),
+                inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
             throw new DataBusinessException("data.materialCategory.service.update.nameAlreadyExists", "分类名称已经存在");
         }
@@ -174,25 +177,28 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
 
         if (DATA_MATERIAL_CATEGORY_ROOT_PARENT_ID.equals(entity.getParentId()) ||
                 DATA_MATERIAL_CATEGORY_ROOT_PARENT_ID.equals(entity.getId())) {
-            throw new DataBusinessException("data.materialCategory.service.updateParent.rootMaterialCategory", "根分类不能修改");
+            throw new DataBusinessException("data.materialCategory.service.updateParent.rootMaterialCategory",
+                    "根分类不能修改");
         }
 
-        //验证名称在同一层级是否存在
-        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(inputDto.getParentId(), entity.getName());
+        // 验证名称在同一层级是否存在
+        DataMaterialCategoryEntity entityByName = materialCategoryDao.getByParentIdAndName(inputDto.getParentId(),
+                entity.getName());
         if (null != entityByName) {
             throw new DataBusinessException("data.materialCategory.service.updateParent.nameAlreadyExists", "分类名称已经存在");
         }
 
-        //验证父节点是否存在
+        // 验证父节点是否存在
         DataMaterialCategoryEntity parentEntity = materialCategoryDao.getById(inputDto.getId());
         if (null == parentEntity) {
             throw new DataBusinessException("data.materialCategory.service.updateParent.parentNotExists", "父分类不存在");
         }
 
-        //验证父Id是否在当前节点下面
+        // 验证父Id是否在当前节点下面
         Set<String> recursionIdSet = materialCategoryCache.recursionListSubId(inputDto.getId());
         if (recursionIdSet.contains(inputDto.getParentId())) {
-            throw new DataBusinessException("data.materialCategory.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
+            throw new DataBusinessException("data.materialCategory.service.updateParent.parentHasInCurrent",
+                    "父节点在当前节点下面");
         }
 
         DataMaterialCategoryEntity updateEntity = new DataMaterialCategoryEntity();
@@ -220,19 +226,19 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
     }
 
     @Override
-    public DataMaterialCategoryTreeSimpleOutputDto treeAllSimple() {
-        //获取树的动态key
+    public Tuples.Tuple2<String, DataMaterialCategoryTreeSimpleOutputDto> treeAllSimple() {
+        // 获取树的动态key
         String keyCode = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_KEY);
 
-        //如果存在则直接返回数据
+        // 如果存在则直接返回数据
         if (StrUtil.isNotBlank(keyCode)) {
             String treeJson = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_DATA + keyCode);
             if (StrUtil.isNotBlank(treeJson)) {
-                return JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class);
+                return Tuples.of(keyCode, JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class));
             }
         }
 
-        //缓存击穿
+        // 缓存击穿
         RLock lock = redissonClient.getLock(LOCK_DATA_MATERIAL_CATEGORY_TREE);
         try {
             lock.lock();
@@ -241,30 +247,27 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             if (StrUtil.isNotBlank(keyCode)) {
                 String treeJson = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_DATA + keyCode);
                 if (StrUtil.isNotBlank(treeJson)) {
-                    return JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class);
+                    return Tuples.of(keyCode, JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class));
                 }
             }
 
-            //重新生成树的动态key
+            // 重新生成树的动态key
             keyCode = leaf4RedisClient.dataMaterialCategoryTree();
-            customerRedisCommands.set(DATA_MATERIAL_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
+            customerRedisCommands.setex(DATA_MATERIAL_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
 
-            //查询DB组装树
+            // 查询DB组装树
             List<DataMaterialCategoryEntity> entityList = materialCategoryDao.listAll();
-            if (CollectionUtil.isEmpty(entityList)) {
-                return null;
-            }
-            List<DataMaterialCategoryTreeSimpleOutputDto> outputDtoList =
-                    JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataMaterialCategoryTreeSimpleOutputDto.class);
+            List<DataMaterialCategoryTreeSimpleOutputDto> outputDtoList = JSONUtil
+                    .toList(JSONUtil.toJsonStr(entityList), DataMaterialCategoryTreeSimpleOutputDto.class);
             DataMaterialCategoryTreeSimpleOutputDto treeOutputDto = TreeUtil.buildTree(outputDtoList).getFirst();
 
-            //Tree 数据缓存到redis
-            customerRedisCommands.set(
+            // Tree 数据缓存到redis
+            customerRedisCommands.setex(
                     DATA_MATERIAL_CATEGORY_TREE_DATA + keyCode,
                     JSONUtil.toJsonStr(treeOutputDto),
                     24 * 60 * 60 + 60);
 
-            return treeOutputDto;
+            return Tuples.of(keyCode, treeOutputDto);
         } finally {
             lock.unlock();
         }

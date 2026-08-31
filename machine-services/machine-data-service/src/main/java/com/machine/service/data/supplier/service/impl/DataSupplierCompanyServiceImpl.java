@@ -10,7 +10,7 @@ import com.machine.client.data.supplier.dto.output.DataSupplierCompanyDetailOutp
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyListOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.service.data.supplier.dao.IDataSupplierCompanyDao;
@@ -42,13 +42,13 @@ public class DataSupplierCompanyServiceImpl implements IDataSupplierCompanyServi
         DataSupplierCompanyEntity entityByName = supplierCompanyDao.getByName(inputDto.getName());
         if (null != entityByName) {
             log.error("新增供应商公司名称已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new IamBusinessException("data.supplier.service.create.nameAlreadyExists", "名称已经存在");
+            throw new BIamBusinessException("data.supplier.service.create.nameAlreadyExists", "名称已经存在");
         }
 
         DataSupplierCompanyEntity entityByContactPhone = supplierCompanyDao.getByByContactPhone(inputDto.getContactPhone());
         if (null != entityByContactPhone) {
             log.error("新增供应商公司联系人手机号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new IamBusinessException("data.supplier.service.create.contactPhoneAlreadyExists", "系人手机号已经存在");
+            throw new BIamBusinessException("data.supplier.service.create.contactPhoneAlreadyExists", "系人手机号已经存在");
         }
 
         //创建用户
@@ -81,14 +81,14 @@ public class DataSupplierCompanyServiceImpl implements IDataSupplierCompanyServi
         DataSupplierCompanyEntity nameEntity = supplierCompanyDao.getByName(inputDto.getName());
         if (null != nameEntity && !nameEntity.getId().equals(inputDto.getId())) {
             log.error(" 修改供应商公司名称已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new IamBusinessException("data.supplier.service.update.nameAlreadyExists", "名称已经存在");
+            throw new BIamBusinessException("data.supplier.service.update.nameAlreadyExists", "名称已经存在");
         }
 
         //验证手机号是否存在
         DataSupplierCompanyEntity entityByContactPhone = supplierCompanyDao.getByByContactPhone(inputDto.getContactPhone());
         if (null != entityByContactPhone && !entityByContactPhone.getId().equals(inputDto.getId())) {
             log.error("修改供应商公司联系人手机号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new IamBusinessException("data.supplier.service.update.contactPhoneAlreadyExists", "系人手机号已经存在");
+            throw new BIamBusinessException("data.supplier.service.update.contactPhoneAlreadyExists", "系人手机号已经存在");
         }
 
         return supplierCompanyDao.update(JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataSupplierCompanyEntity.class));

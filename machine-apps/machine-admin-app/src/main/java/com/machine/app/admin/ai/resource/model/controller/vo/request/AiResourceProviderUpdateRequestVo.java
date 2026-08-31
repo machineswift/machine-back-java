@@ -20,7 +20,7 @@ public class AiResourceProviderUpdateRequestVo {
 
     @ToString.Exclude
     @Schema(description = "API密钥")
-    private String apiKey;
+    private String c;
 
     @Schema(description = "描述")
     private String description;

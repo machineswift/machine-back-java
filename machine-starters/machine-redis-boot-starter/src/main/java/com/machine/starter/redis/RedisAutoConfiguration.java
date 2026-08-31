@@ -1,7 +1,5 @@
 package com.machine.starter.redis;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -19,7 +17,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import redis.clients.jedis.*;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
 
@@ -133,28 +130,6 @@ public class RedisAutoConfiguration {
                 .setPingConnectionInterval(30000);
         config.setCodec(new JsonJacksonCodec());
         return Redisson.create(config);
-    }
-
-    /**
-     * 缓存 t_oauth2_registered_client 数据
-     */
-    @Bean(name = "oauth2RegisteredClientCaffeine")
-    public Cache<String, Object> oauth2RegisteredClientCaffeine() {
-        return Caffeine.newBuilder()
-                .expireAfterWrite(8, TimeUnit.MINUTES)
-                .maximumSize(64)
-                .build();
-    }
-
-    /**
-     * 缓存 system_config 数据
-     */
-    @Bean(name = "systemConfigCaffeine")
-    public Cache<String, Object> systemConfigCaffeine() {
-        return Caffeine.newBuilder()
-                .expireAfterWrite(8, TimeUnit.MINUTES)
-                .maximumSize(640)
-                .build();
     }
 
     /**

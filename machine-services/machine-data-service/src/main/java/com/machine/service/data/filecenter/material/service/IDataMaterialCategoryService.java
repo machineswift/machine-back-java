@@ -7,6 +7,7 @@ import com.machine.client.data.filecenter.material.dto.output.DataMaterialCatego
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryListOutputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 
 import java.util.List;
 
@@ -24,6 +25,6 @@ public interface IDataMaterialCategoryService {
 
     List<DataMaterialCategoryListOutputDto> listAll();
 
-    DataMaterialCategoryTreeSimpleOutputDto treeAllSimple();
+    Tuples.Tuple2<String, DataMaterialCategoryTreeSimpleOutputDto> treeAllSimple();
 
 }

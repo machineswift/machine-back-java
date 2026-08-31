@@ -7,6 +7,7 @@ import com.machine.client.hrm.department.dto.output.HrmDepartmentListOutputDto;
 import com.machine.client.hrm.department.dto.output.HrmDepartmentTreeOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.hrm.department.service.IDepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,13 @@ public class HrmDepartmentServer implements IHrmDepartmentClient {
 
     @Override
     @GetMapping("tree_all_simple")
-    public HrmDepartmentTreeOutputDto treeAllSimple() {
+    public Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple() {
         return departmentService.treeAllSimple();
     }
 
     @Override
-    public Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest) {
+    public Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(
+            IdSetRequest idSetRequest) {
         return departmentService.mapDepartmentExpansionByDepartmentIdSet(idSetRequest);
     }
 }

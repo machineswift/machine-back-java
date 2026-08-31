@@ -15,8 +15,8 @@ import com.machine.client.data.supplier.dto.input.*;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyDetailOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanyListOutputDto;
 import com.machine.client.data.supplier.dto.output.DataSupplierCompanySimpleListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class DataSupplierCompanyBusinessImpl implements IDataSupplierCompanyBusiness {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataSupplierCompanyClient supplierCompanyClient;
@@ -108,7 +108,7 @@ public class DataSupplierCompanyBusinessImpl implements IDataSupplierCompanyBusi
         Set<String> userIdSet = new HashSet<>();
         userIdSet.add(responseVo.getCreateBy());
         userIdSet.add(responseVo.getUpdateBy());
-        Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
         responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
 
@@ -160,7 +160,7 @@ public class DataSupplierCompanyBusinessImpl implements IDataSupplierCompanyBusi
         //创建人、修改文姓名
         Set<String> userIdSet = pageResponse.getRecords().stream().map(DataSupplierCompanyExpandListResponseVo::getCreateBy).collect(Collectors.toSet());
         userIdSet.addAll(pageResponse.getRecords().stream().map(DataSupplierCompanyExpandListResponseVo::getUpdateBy).collect(Collectors.toSet()));
-        Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         for (DataSupplierCompanyExpandListResponseVo vo : pageResponse.getRecords()) {
             vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
             vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());

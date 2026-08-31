@@ -1,7 +1,7 @@
 package com.machine.app.openapi.iam.user.controller.vo.request;
 
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
+import com.machine.sdk.base.envm.biam.user.BIamUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,7 +17,7 @@ public class OpenApiUserListSimpleRequestVo {
     private StatusEnum status;
 
     @Schema(description = "类型（UserTypeEnum）")
-    private IamUserTypeEnum userType;
+    private BIamUserTypeEnum userType;
 
     @Schema(description = "偏移量，不传的话取默认值。下一次请求取当前结果集最后一条数据的ID。")
     private String offset;

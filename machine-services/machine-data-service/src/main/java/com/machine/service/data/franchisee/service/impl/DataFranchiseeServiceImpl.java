@@ -8,15 +8,15 @@ import com.machine.client.data.franchisee.dto.output.DataFranchiseeListOutputDto
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeHealthCertificateOutputDto;
 import com.machine.client.data.franchisee.dto.output.OpenapiFranchiseeIdentityCardOutputDto;
 import com.machine.client.data.supplier.dto.input.DataFranchiseeListUserIdInputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.IIamUserRoleBusinessRelationClient;
-import com.machine.client.iam.userbk.IIamUserBkClient;
-import com.machine.client.iam.userbk.dto.input.IamFranchiseeUserCreateInputDto;
-import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeBindShopInputDto;
-import com.machine.client.iam.userbk.dto.input.IamUserRoleInfoFranchiseeUnBindShopInputDto;
-import com.machine.client.iam.user.dto.input.IamUserUpdatePhoneInputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.IBIamUserRoleBusinessRelationClient;
+import com.machine.client.iam.biam.userbk.IBIamUserBkClient;
+import com.machine.client.iam.biam.userbk.dto.input.IamFranchiseeUserCreateInputDto;
+import com.machine.client.iam.biam.userbk.dto.input.IamUserRoleInfoFranchiseeBindShopInputDto;
+import com.machine.client.iam.biam.userbk.dto.input.IamUserRoleInfoFranchiseeUnBindShopInputDto;
+import com.machine.client.iam.biam.user.dto.input.BIamUserUpdatePhoneInputDto;
 import com.machine.sdk.base.envm.base.StorageTypeEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.franchisee.dao.IDataFranchiseeDao;
 import com.machine.service.data.franchisee.dao.IDataFranchiseeShopRelationDao;
@@ -48,13 +48,13 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
     private IDataFranchiseeShopRelationDao franchiseeShopRelationDao;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
-    private IIamUserBkClient userBkClient;
+    private IBIamUserBkClient userBkClient;
 
     @Autowired
-    private IIamUserRoleBusinessRelationClient userRoleBusinessRelationClient;
+    private IBIamUserRoleBusinessRelationClient userRoleBusinessRelationClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -62,13 +62,13 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
         //验证编码是否存在
         DataFranchiseeEntity codeEntity = franchiseeDao.getByCode(inputDto.getCode());
         if (null != codeEntity) {
-            throw new IamBusinessException("data.franchisee.service.create.codeAlreadyExists", "编码已经存在");
+            throw new BIamBusinessException("data.franchisee.service.create.codeAlreadyExists", "编码已经存在");
         }
 
         //验证证件号是否存在
         DataFranchiseeEntity certificateEntity = franchiseeDao.getByCertificate(inputDto.getCertificateType(), inputDto.getCertificateNumber());
         if (null != certificateEntity) {
-            throw new IamBusinessException("data.franchisee.service.create.certificateAlreadyExists", "证件号已经存在");
+            throw new BIamBusinessException("data.franchisee.service.create.certificateAlreadyExists", "证件号已经存在");
         }
 
         //根据手机号创建加盟商用户
@@ -77,7 +77,7 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
         //验证是否存在加盟商
         DataFranchiseeEntity userIdEntity = franchiseeDao.getByUserId(userId);
         if (null != userIdEntity) {
-            throw new IamBusinessException("data.franchisee.service.create.franchiseeAlreadyExists", "加盟商已经存在");
+            throw new BIamBusinessException("data.franchisee.service.create.franchiseeAlreadyExists", "加盟商已经存在");
         }
 
         //创建加盟商
@@ -97,12 +97,12 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
     public boolean bindShop(DataFranchiseeBindShopInputDto inputDto) {
         DataFranchiseeEntity entity = franchiseeDao.getById(inputDto.getId());
         if (null == entity) {
-            throw new IamBusinessException("data.franchisee.service.bindShop.franchiseeNotExists", "加盟商不存在");
+            throw new BIamBusinessException("data.franchisee.service.bindShop.franchiseeNotExists", "加盟商不存在");
         }
 
         DataShopEntity dbDataShopEntity = shopDao.getByCode(inputDto.getShopCode());
         if (null == dbDataShopEntity) {
-            throw new IamBusinessException("data.franchisee.service.bindShop.shopCodeNotExists", "门店编码不存在");
+            throw new BIamBusinessException("data.franchisee.service.bindShop.shopCodeNotExists", "门店编码不存在");
         }
 
         //加盟商角色绑定的门店
@@ -115,7 +115,7 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
             if (dbRelationEntity.getFranchiseeId().equals(inputDto.getId())) {
                 return Boolean.TRUE;
             } else {
-                throw new IamBusinessException("data.franchisee.service.bindShop.bindOtherFranchisee", "门店绑定其他加盟商");
+                throw new BIamBusinessException("data.franchisee.service.bindShop.bindOtherFranchisee", "门店绑定其他加盟商");
             }
         }
 
@@ -132,12 +132,12 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
     public boolean unbindShop(DataFranchiseeUnbindShopInputDto inputDto) {
         DataFranchiseeEntity entity = franchiseeDao.getById(inputDto.getId());
         if (null == entity) {
-            throw new IamBusinessException("data.franchisee.service.unbindShop.franchiseeNotExists", "加盟商不存在");
+            throw new BIamBusinessException("data.franchisee.service.unbindShop.franchiseeNotExists", "加盟商不存在");
         }
 
         DataShopEntity dbDataShopEntity = shopDao.getByCode(inputDto.getShopCode());
         if (null == dbDataShopEntity) {
-            throw new IamBusinessException("data.franchisee.service.unbindShop.shopCodeNotExists", "门店编码不存在");
+            throw new BIamBusinessException("data.franchisee.service.unbindShop.shopCodeNotExists", "门店编码不存在");
         }
 
         //加盟商角色解绑的门店
@@ -154,9 +154,9 @@ public class DataFranchiseeServiceImpl implements IDataFranchiseeService {
     public int updatePhone(OpenApiFranchiseeUpdatePhoneInputDto inputDto) {
         DataFranchiseeEntity entity = franchiseeDao.getById(inputDto.getId());
         if (null == entity) {
-            throw new IamBusinessException("data.franchisee.service.unbindShop.franchiseeNotExists", "加盟商不存在");
+            throw new BIamBusinessException("data.franchisee.service.unbindShop.franchiseeNotExists", "加盟商不存在");
         }
-        return userClient.updatePhone(new IamUserUpdatePhoneInputDto(entity.getUserId(), inputDto.getPhone()));
+        return userClient.updatePhone(new BIamUserUpdatePhoneInputDto(entity.getUserId(), inputDto.getPhone()));
     }
 
     @Override

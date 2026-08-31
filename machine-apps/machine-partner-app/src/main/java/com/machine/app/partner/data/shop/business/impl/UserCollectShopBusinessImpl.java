@@ -14,12 +14,12 @@ import com.machine.client.data.shop.dto.input.DataSuperShopCollectIdInputDto;
 import com.machine.client.data.shop.dto.input.DataSuperShopListCollectShopInputDto;
 import com.machine.client.data.shop.dto.output.DataShopListOutputDto;
 import com.machine.sdk.base.context.AppContextHolder;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionDto;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
-import com.machine.starter.redis.cache.iam.RedisIamDataPermissionCache;
-import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.cache.biam.RedisBIamDataPermissionCache;
+import com.machine.starter.redis.cache.biam.RedisBIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,10 +35,10 @@ import java.util.stream.Collectors;
 public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Autowired
-    private RedisIamOrganizationCache organizationCache;
+    private RedisBIamOrganizationCache organizationCache;
 
     @Autowired
-    private RedisIamDataPermissionCache redisIamDataPermissionCache;
+    private RedisBIamDataPermissionCache redisIamDataPermissionCache;
 
     @Autowired
     private IDataShopClient shopClient;
@@ -78,7 +78,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Override
     public Integer number(SuperShopNumberRequestVo request) {
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (null == dataPermissionDto.getShopIdSet()) {
             return 0;
         }
@@ -88,7 +88,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
     @Override
     public PageResponse<SuperShopListSimpleResponseVo> pageCollectShop(SuperShopListCollectShopRequestVo request) {
         DataSuperShopListCollectShopInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataSuperShopListCollectShopInputDto.class);
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             //数据权限为空，直接返回
             return new PageResponse<>(request.getCurrent(), request.getCurrent(), 0);
@@ -120,7 +120,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
     @Override
     public PageResponse<SuperShopListSimpleResponseVo> pageSelfShop(SuperShopPageSelfShopRequestVo request) {
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             //数据权限为空，直接返回
             return new PageResponse<>(request.getCurrent(), request.getCurrent(), 0);
@@ -130,7 +130,7 @@ public class UserCollectShopBusinessImpl implements IUserCollectShopBusiness {
 
         //处理组织参数
         if (CollectionUtil.isNotEmpty(request.getOrganizationIdSet())) {
-            IamOrganizationTypeEnum organizationType = request.getOrganizationType();
+            BIamOrganizationTypeEnum organizationType = request.getOrganizationType();
             Set<String> organizationIdSet = dataPermissionDto.getOrganizationIdMap().get(organizationType);
             if (CollectionUtil.isNotEmpty(organizationIdSet) &&
                     CollectionUtil.isNotEmpty(request.getOrganizationIdSet())) {

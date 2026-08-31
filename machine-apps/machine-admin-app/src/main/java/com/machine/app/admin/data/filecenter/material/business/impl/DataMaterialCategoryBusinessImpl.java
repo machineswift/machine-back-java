@@ -13,8 +13,8 @@ import com.machine.client.data.filecenter.material.dto.input.DataMaterialCategor
 import com.machine.client.data.filecenter.material.dto.input.DataMaterialCategoryUpdateParentInputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryDetailOutputDto;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.starter.redis.cache.data.RedisDataMaterialCategoryCache;
@@ -38,7 +38,7 @@ public class DataMaterialCategoryBusinessImpl implements IDataMaterialCategoryBu
     private IDataMaterialCategoryClient materialCategoryClient;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Override
     public String create(DataMaterialCategoryCreateRequestVo request) {
@@ -76,7 +76,7 @@ public class DataMaterialCategoryBusinessImpl implements IDataMaterialCategoryBu
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
 
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());

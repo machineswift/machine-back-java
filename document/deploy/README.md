@@ -18,7 +18,6 @@ Docker 部署相关的配置文档和脚本，支持多种环境部署。
 
 ### 本地环境部署
 - [🐳 本地环境Docker部署(Linux)](docker/docker_local_linux.md) - Linux 本地环境部署指南
-- [🐳 本地环境Docker部署(Windows)](docker/docker_local_windows.md) - Windows 本地环境部署指南
 - [🐳 本地环境Docker部署(阿里云)](docker/docker_local_aliyun.md) - 阿里云环境部署指南
 
 ### 测试环境部署
@@ -38,8 +37,10 @@ Docker 部署相关的配置文档和脚本，支持多种环境部署。
 
 ### 📱 应用配置 (Apps) — 仓库内已提供示例
 - [machine-iam-app.yaml](nacos/yml/apps/machine-iam-app.yaml) - 身份认证应用
+- [machine-admin-app.yaml](nacos/yml/apps/machine-admin-app.yaml) - 管理端应用
+- [machine-partner-app.yaml](nacos/yml/apps/machine-partner-app.yaml) - 超级管理端应用
 
-其余应用（manage、super、openapi、mq、xxljob）可在 Nacos 控制台按相同 Data ID 规范新建：`nacos/yml/apps/machine-{module}-app.yaml`。
+其余应用（openapi、mq、xxljob）可在 Nacos 控制台按相同 Data ID 规范新建：`nacos/yml/apps/machine-{module}-app.yaml`。
 
 ### ⚙️ 服务配置 (Services) — 仓库内已提供示例
 - [machine-plugin-service.yaml](nacos/yml/services/machine-plugin-service.yaml) - 插件服务
@@ -166,7 +167,7 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 2. **配置检查**：根据部署环境选择对应配置（本地 / 测试）
 3. **服务启动**：按部署文档顺序启动依赖（如 Nacos、数据库）再启动应用
 
-**首次部署建议**：从 [本地环境 Docker 部署 (Linux)](docker/docker_local_linux.md) 或 [Windows](docker/docker_local_windows.md) 开始；云环境可参考 [阿里云部署](docker/docker_local_aliyun.md)。
+**首次部署建议**：从 [本地环境 Docker 部署 (Linux)](docker/docker_local_linux.md) 开始；云环境可参考 [阿里云部署](docker/docker_local_aliyun.md)。
 
 ### 🔧 配置管理
 

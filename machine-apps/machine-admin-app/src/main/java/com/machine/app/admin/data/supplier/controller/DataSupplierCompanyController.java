@@ -9,6 +9,11 @@ import com.machine.app.admin.data.supplier.controller.vo.response.DataSupplierCo
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +35,12 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "创建")
     @PostMapping("create")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "创建供应商公司",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataSupplierCompanyCreateRequestVo request) {
         log.info("创建供应商公司，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(supplierCompanyBusiness.create(request));
@@ -37,6 +48,11 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "修改状态")
     @PostMapping("update_status")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改供应商公司状态")
     public void updateStatus(@RequestBody @Validated DataSupplierCompanyUpdateStatusRequestVo request) {
         log.info("修改供应商公司状态，request={}", JSONUtil.toJsonStr(request));
         supplierCompanyBusiness.updateStatus(request);
@@ -44,6 +60,11 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "修改")
     @PostMapping("update")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改供应商公司")
     public void update(@RequestBody @Validated DataSupplierCompanyUpdateRequestVo request) {
         log.info("修改供应商公司，request={}", JSONUtil.toJsonStr(request));
         supplierCompanyBusiness.update(request);
@@ -51,12 +72,22 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "详情")
     @PostMapping("detail")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询供应商公司详情")
     public DataSupplierCompanyDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return supplierCompanyBusiness.detail(request);
     }
 
     @Operation(summary = "分页查询(应用于组件弹窗)")
     @PostMapping("page_simple")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "分页查询供应商公司(组件弹窗)")
     public PageResponse<DataSupplierCompanySimpleListResponseVo> pageSimple(
             @RequestBody @Validated DataSupplierCompanyQueryPageSimpleRequestVo request) {
         return supplierCompanyBusiness.pageSimple(request);
@@ -64,6 +95,11 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "分页查询(扩充，应用于加盟商公司管理菜单)")
     @PostMapping("page_expand")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "分页查询供应商公司(加盟商公司管理菜单)")
     public PageResponse<DataSupplierCompanyExpandListResponseVo> pageExpand(
             @RequestBody @Validated DataSupplierCompanyQueryPageExpandRequestVo request) {
         return supplierCompanyBusiness.pageExpand(request);

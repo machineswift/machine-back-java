@@ -1,7 +1,7 @@
 package com.machine.app.openapi.iam.user.controller.vo.response;
 
 import com.machine.sdk.base.envm.StatusEnum;
-import com.machine.sdk.base.envm.iam.user.IamUserTypeEnum;
+import com.machine.sdk.base.envm.biam.user.BIamUserTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -29,7 +29,7 @@ public class OpenapiUserDetailResponseVo {
     private StatusEnum status;
 
     @Schema(description = "类型（UserTypeEnum）")
-    private List<IamUserTypeEnum> userTypeList;
+    private List<BIamUserTypeEnum> userTypeList;
 
     @Schema(description = "用户角色信息")
     private List<OpenapiUserRoleInfoResponse> userRoleList;

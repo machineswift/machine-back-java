@@ -10,6 +10,7 @@ import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/tag/category",
-        configuration = OpenFeignMinTimeConfig.class)
+@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/tag/category", configuration = OpenFeignMinTimeConfig.class)
 public interface IDataTagCategoryClient {
 
     @PostMapping("create")
@@ -46,7 +46,7 @@ public interface IDataTagCategoryClient {
     List<DataTagCategoryListOutputDto> listAllByType(@RequestParam("type") ProfileSubjectTypeEnum type);
 
     @GetMapping("tree_all_simple")
-    DataTagCategoryTreeSimpleOutputDto treeAllSimple(@RequestParam("type") ProfileSubjectTypeEnum type);
+    Tuples.Tuple2<String, DataTagCategoryTreeSimpleOutputDto> treeAllSimple(
+            @RequestParam("type") ProfileSubjectTypeEnum type);
 
 }
-

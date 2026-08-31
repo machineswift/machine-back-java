@@ -8,15 +8,16 @@ import com.machine.app.openapi.iam.role.controller.vo.request.OpenApiRoleListSub
 import com.machine.app.openapi.iam.role.controller.vo.request.OpenApiRoleRootRequestVo;
 import com.machine.app.openapi.iam.role.controller.vo.response.OpenApiRoleDetailResponseVo;
 import com.machine.app.openapi.iam.role.controller.vo.response.OpenApiRolePermissionResponseVo;
-import com.machine.client.iam.role.IIamRoleClient;
-import com.machine.client.iam.role.IIamRolePermissionClient;
-import com.machine.client.iam.role.dto.input.IamRoleListSubInputDto;
-import com.machine.client.iam.role.dto.output.IamRoleDetailOutputDto;
-import com.machine.client.iam.role.dto.output.IamRolePermissionListOutputDto;
-import com.machine.sdk.base.envm.iam.role.IamCompanyDefaultRoleEnum;
-import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
-import com.machine.sdk.base.envm.iam.role.IamShopDefaultRoleEnum;
-import com.machine.sdk.base.model.dto.iam.DataPermissionRuleDto;
+import com.machine.client.iam.biam.role.IBIamRoleClient;
+import com.machine.client.iam.biam.role.IBIamRolePermissionClient;
+import com.machine.client.iam.biam.role.dto.input.BIamRoleListSubInputDto;
+import com.machine.client.iam.biam.role.dto.output.BIamRoleDetailOutputDto;
+import com.machine.client.iam.biam.role.dto.output.BIamRolePermissionListOutputDto;
+import com.machine.sdk.base.envm.biam.role.BIamCompanyDefaultRoleEnum;
+import com.machine.sdk.base.envm.biam.role.BIamOpenApiDefaultRoleEnum;
+import com.machine.sdk.base.envm.biam.role.BIamRoleTypeEnum;
+import com.machine.sdk.base.envm.biam.role.BIamShopDefaultRoleEnum;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionRuleDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,10 @@ import java.util.stream.Collectors;
 public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
 
     @Autowired
-    private IIamRoleClient roleClient;
+    private IBIamRoleClient roleClient;
 
     @Autowired
-    private IIamRolePermissionClient rolePermissionClient;
+    private IBIamRolePermissionClient rolePermissionClient;
 
     @Override
     public String rootId(OpenApiRoleRootRequestVo request) {
@@ -43,7 +44,7 @@ public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
     @Override
     public OpenApiRoleDetailResponseVo detail(OpenApiRoleIdRequestVo request) {
         IdRequest roleIdRequest = new IdRequest(request.getId());
-        IamRoleDetailOutputDto outputDto = roleClient.detail(roleIdRequest);
+        BIamRoleDetailOutputDto outputDto = roleClient.detail(roleIdRequest);
         if (outputDto == null) {
             return null;
         }
@@ -51,10 +52,10 @@ public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
         OpenApiRoleDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), OpenApiRoleDetailResponseVo.class);
 
         //填充权限信息
-        List<IamRolePermissionListOutputDto> outputDtoList = rolePermissionClient.listByRoleId(roleIdRequest);
+        List<BIamRolePermissionListOutputDto> outputDtoList = rolePermissionClient.listByRoleId(roleIdRequest);
         Set<String> permissionIdList = new HashSet<>();
-        Map<String, List<DataPermissionRuleDto>> dataPermissionRuleMap = new HashMap<>();
-        for (IamRolePermissionListOutputDto dto : outputDtoList) {
+        Map<String, List<BIamDataPermissionRuleDto>> dataPermissionRuleMap = new HashMap<>();
+        for (BIamRolePermissionListOutputDto dto : outputDtoList) {
             permissionIdList.add(dto.getPermissionId());
             if (CollectionUtil.isNotEmpty(dto.getDataPermissionRuleList())) {
                 dataPermissionRuleMap.put(dto.getPermissionId(), dto.getDataPermissionRuleList());
@@ -77,7 +78,7 @@ public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
     @Override
     public List<String> listSubId(OpenApiRoleListSubRequestVo request) {
         return roleClient.listSubId(
-                new IamRoleListSubInputDto(request.getId(), request.getStatus()));
+                new BIamRoleListSubInputDto(request.getId(), request.getStatus()));
     }
 
     @Override
@@ -88,16 +89,16 @@ public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
     @Override
     public OpenApiRolePermissionResponseVo listPermissionByTarget(OpenApiRoleIdRequestVo request) {
         IdRequest roleIdRequest = new IdRequest(request.getId());
-        IamRoleDetailOutputDto outputDto = roleClient.detail(roleIdRequest);
+        BIamRoleDetailOutputDto outputDto = roleClient.detail(roleIdRequest);
         if (null == outputDto) {
             return null;
         }
 
         //填充权限信息
-        List<IamRolePermissionListOutputDto> outputDtoList = rolePermissionClient.listByRoleId(roleIdRequest);
+        List<BIamRolePermissionListOutputDto> outputDtoList = rolePermissionClient.listByRoleId(roleIdRequest);
         Set<String> permissionIdList = new HashSet<>();
-        Map<String, List<DataPermissionRuleDto>> dataPermissionRuleMap = new HashMap<>();
-        for (IamRolePermissionListOutputDto dto : outputDtoList) {
+        Map<String, List<BIamDataPermissionRuleDto>> dataPermissionRuleMap = new HashMap<>();
+        for (BIamRolePermissionListOutputDto dto : outputDtoList) {
             permissionIdList.add(dto.getPermissionId());
             if (CollectionUtil.isNotEmpty(dto.getDataPermissionRuleList())) {
                 dataPermissionRuleMap.put(dto.getPermissionId(), dto.getDataPermissionRuleList());
@@ -110,18 +111,22 @@ public class OpenApiRoleBusinessImpl implements IOpenApiRoleBusiness {
         return responseVo;
     }
 
-    private List<String> getDefaultRoleCodeList(IamRoleTypeEnum type) {
-        if (IamRoleTypeEnum.COMPANY == type) {
-            return Arrays.stream(IamCompanyDefaultRoleEnum.values())
-                    .map(IamCompanyDefaultRoleEnum::getCode)
+    private List<String> getDefaultRoleCodeList(BIamRoleTypeEnum type) {
+        if (BIamRoleTypeEnum.COMPANY == type) {
+            return Arrays.stream(BIamCompanyDefaultRoleEnum.values())
+                    .map(BIamCompanyDefaultRoleEnum::getCode)
                     .collect(Collectors.toList());
-        } else if (IamRoleTypeEnum.SHOP == type) {
-            return Arrays.stream(IamShopDefaultRoleEnum.values())
-                    .map(IamShopDefaultRoleEnum::getCode)
+        } else if (BIamRoleTypeEnum.SHOP == type) {
+            return Arrays.stream(BIamShopDefaultRoleEnum.values())
+                    .map(BIamShopDefaultRoleEnum::getCode)
                     .collect(Collectors.toList());
-        } else if (IamRoleTypeEnum.SUPPLIER == type) {
-            return Arrays.stream(IamShopDefaultRoleEnum.values())
-                    .map(IamShopDefaultRoleEnum::getCode)
+        } else if (BIamRoleTypeEnum.SUPPLIER == type) {
+            return Arrays.stream(BIamShopDefaultRoleEnum.values())
+                    .map(BIamShopDefaultRoleEnum::getCode)
+                    .collect(Collectors.toList());
+        } else if (BIamRoleTypeEnum.OPENAPI == type) {
+            return Arrays.stream(BIamOpenApiDefaultRoleEnum.values())
+                    .map(BIamOpenApiDefaultRoleEnum::getCode)
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

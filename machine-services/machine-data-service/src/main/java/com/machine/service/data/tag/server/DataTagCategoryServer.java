@@ -11,6 +11,7 @@ import com.machine.client.data.tag.dto.output.DataTagCategoryListOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.envm.data.tag.ProfileSubjectTypeEnum;
 import com.machine.sdk.base.model.request.IdRequest;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.data.tag.service.IDataTagCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,8 @@ public class DataTagCategoryServer implements IDataTagCategoryClient {
 
     @Override
     @GetMapping("tree_all_simple")
-    public DataTagCategoryTreeSimpleOutputDto treeAllSimple(@RequestParam("type") ProfileSubjectTypeEnum type) {
+    public Tuples.Tuple2<String, DataTagCategoryTreeSimpleOutputDto> treeAllSimple(
+            @RequestParam("type") ProfileSubjectTypeEnum type) {
         return tagCategoryService.treeAllSimple(type);
     }
 }

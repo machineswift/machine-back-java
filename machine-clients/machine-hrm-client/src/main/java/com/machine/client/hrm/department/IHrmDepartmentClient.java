@@ -7,6 +7,7 @@ import com.machine.client.hrm.department.dto.output.HrmDepartmentTreeOutputDto;
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.Tuples;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "machine-hrm-service", path = "machine-hrm-service/server/hrm/department",
-        configuration = OpenFeignMinTimeConfig.class)
+@FeignClient(name = "machine-hrm-service", path = "machine-hrm-service/server/hrm/department", configuration = OpenFeignMinTimeConfig.class)
 public interface IHrmDepartmentClient {
 
     @PostMapping("detail_by_id")
@@ -30,11 +30,9 @@ public interface IHrmDepartmentClient {
     List<HrmDepartmentListOutputDto> listAll();
 
     @GetMapping("tree_all_simple")
-    HrmDepartmentTreeOutputDto treeAllSimple();
+    Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple();
 
     @PostMapping("map_department_expansion_by_departmentIdSet")
-    Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(@RequestBody @Validated IdSetRequest idSetRequest);
+    Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(
+            @RequestBody @Validated IdSetRequest idSetRequest);
 }
-
-
-

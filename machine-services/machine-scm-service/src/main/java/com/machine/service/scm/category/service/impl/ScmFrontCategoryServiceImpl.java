@@ -14,6 +14,7 @@ import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
 import com.machine.sdk.base.exception.scm.ScmBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.tool.TreeUtil;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.scm.category.dao.IScmBackCategoryDao;
 import com.machine.service.scm.category.dao.IScmFrontBackCategoryRelationDao;
 import com.machine.service.scm.category.dao.IScmFrontCategoryDao;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
+import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.sdk.base.constant.CommonScmConstant.BackCategory.SCM_BACK_CATEGORY_ROOT_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Scm.LOCK_SCM_FRONT_CATEGORY_TREE;
 import static com.machine.starter.redis.constant.RedisPrefix4ScmConstant.FrontCategory.SCM_FRONT_CATEGORY_TREE_DATA;
@@ -66,7 +68,6 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
 
     @Autowired
     private IScmFrontBackCategoryRelationDao frontBackCategoryRelationDao;
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -116,7 +117,7 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.delete.rootNode", "根节点不能删除");
         }
 
-        //判断是否有子节点
+        // 判断是否有子节点
         Set<String> recursionSubIdSet = cacheScmFrontCategory.recursionSubId(id);
         if (cacheScmFrontCategory.recursionSubId(id).size() > 1) {
             throw new ScmBusinessException("scm.frontCategory.service.delete.hasChildrenNode", "有子节点不能删除");
@@ -147,7 +148,8 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.update.rootNode", "根节点不能修改");
         }
 
-        ScmFrontCategoryEntity entityByName = frontCategoryDao.getByParentIdAndName(entity.getParentId(), inputDto.getName());
+        ScmFrontCategoryEntity entityByName = frontCategoryDao.getByParentIdAndName(entity.getParentId(),
+                inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
             throw new ScmBusinessException("scm.frontCategory.service.update.nameAlreadyExists", "名称已经存在");
         }
@@ -189,7 +191,8 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.updateParent.rootNode", "根节点不能修改");
         }
 
-        ScmFrontCategoryEntity entityByName = frontCategoryDao.getByParentIdAndName(inputDto.getParentId(), dbEntity.getName());
+        ScmFrontCategoryEntity entityByName = frontCategoryDao.getByParentIdAndName(inputDto.getParentId(),
+                dbEntity.getName());
         if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
             throw new ScmBusinessException("scm.frontCategory.service.updateParent.nameAlreadyExists", "名称已经存在");
         }
@@ -217,19 +220,19 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
     }
 
     @Override
-    public ScmFrontCategoryTreeOutputDto treeAllSimple() {
-        //获取树的动态key
+    public Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple() {
+        // 获取树的动态key
         String keyCode = redisCommands.get(SCM_FRONT_CATEGORY_TREE_KEY);
 
-        //如果存在则直接返回数据
+        // 如果存在则直接返回数据
         if (StrUtil.isNotBlank(keyCode)) {
             String treeJson = redisCommands.get(SCM_FRONT_CATEGORY_TREE_DATA + keyCode);
             if (StrUtil.isNotBlank(treeJson)) {
-                return JSONUtil.toBean(treeJson, ScmFrontCategoryTreeOutputDto.class);
+                return Tuples.of(keyCode, JSONUtil.toBean(treeJson, ScmFrontCategoryTreeOutputDto.class));
             }
         }
 
-        //缓存击穿
+        // 缓存击穿
         RLock lock = redissonClient.getLock(LOCK_SCM_FRONT_CATEGORY_TREE);
         try {
             lock.lock();
@@ -238,35 +241,37 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             if (StrUtil.isNotBlank(keyCode)) {
                 String treeJson = redisCommands.get(SCM_FRONT_CATEGORY_TREE_DATA + keyCode);
                 if (StrUtil.isNotBlank(treeJson)) {
-                    return JSONUtil.toBean(treeJson, ScmFrontCategoryTreeOutputDto.class);
+                    return Tuples.of(keyCode, JSONUtil.toBean(treeJson, ScmFrontCategoryTreeOutputDto.class));
                 }
             }
 
-            //重新生成树的动态key
+            // 重新生成树的动态key
             keyCode = leaf4RedisClient.scmFrontCategoryTree();
-            redisCommands.set(SCM_FRONT_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
+            redisCommands.setex(SCM_FRONT_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
 
-            //查询DB组装树
+            // 查询DB组装树
             List<ScmFrontCategoryEntity> entityList = frontCategoryDao.listAll();
             if (CollectionUtil.isEmpty(entityList)) {
-                //Tree 数据缓存到redis
-                redisCommands.set(SCM_FRONT_CATEGORY_TREE_DATA + keyCode, EMPTY_LIST_STR, 24 * 60 * 60 + 60);
-                return null;
+                // Tree 数据缓存到redis
+                redisCommands.setex(SCM_FRONT_CATEGORY_TREE_DATA + keyCode, EMPTY_OBJECT, 24 * 60 * 60 + 60);
+                return Tuples.of(keyCode, new ScmFrontCategoryTreeOutputDto());
             }
+
             List<ScmFrontCategoryTreeOutputDto> outputDtoList = new ArrayList<>();
             for (ScmFrontCategoryEntity entity : entityList) {
-                ScmFrontCategoryTreeOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity), ScmFrontCategoryTreeOutputDto.class);
-
+                ScmFrontCategoryTreeOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(entity),
+                        ScmFrontCategoryTreeOutputDto.class);
                 outputDtoList.add(outputDto);
             }
 
             ScmFrontCategoryTreeOutputDto treeOutputDto = TreeUtil.buildTree(outputDtoList).getFirst();
 
-            //Tree 数据缓存到redis
-            redisCommands.set(SCM_FRONT_CATEGORY_TREE_DATA + keyCode, JSONUtil.toJsonStr(treeOutputDto), 24 * 60 * 60 + 60);
-            redisCommands.set(SCM_FRONT_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
+            // Tree 数据缓存到redis
+            redisCommands.setex(SCM_FRONT_CATEGORY_TREE_DATA + keyCode, JSONUtil.toJsonStr(treeOutputDto),
+                    24 * 60 * 60 + 60);
+            redisCommands.setex(SCM_FRONT_CATEGORY_TREE_KEY, keyCode, 24 * 60 * 60);
 
-            return treeOutputDto;
+            return Tuples.of(keyCode, treeOutputDto);
         } finally {
             lock.unlock();
         }
@@ -279,7 +284,7 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
     }
 
     private void batchInsertRelation(String frontCategoryId,
-                                     Set<String> backCategoryIdSet) {
+            Set<String> backCategoryIdSet) {
         if (CollectionUtil.isNotEmpty(backCategoryIdSet)) {
             List<ScmFrontBackCategoryRelationEntity> relationEntityList = new ArrayList<>(backCategoryIdSet.size());
             for (String backCategoryId : backCategoryIdSet) {

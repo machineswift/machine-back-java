@@ -11,8 +11,8 @@ import com.machine.client.data.tag.IDataTagOptionClient;
 import com.machine.client.data.tag.dto.input.*;
 import com.machine.client.data.tag.dto.output.DataTagOptionDetailOutputDto;
 import com.machine.client.data.tag.dto.output.DataTagOptionListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataTagOptionClient tagOptionClient;
@@ -79,7 +79,7 @@ public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
 
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
@@ -117,7 +117,7 @@ public class DataTagOptionBusinessImpl implements IDataTagOptionBusiness {
                     .map(DataTagOptionExpandListResponseVo::getUpdateBy)
                     .collect(Collectors.toSet()));
 
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             for (DataTagOptionExpandListResponseVo responseVo : responseVoList) {
                 responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
                 responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());

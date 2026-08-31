@@ -6,10 +6,10 @@ import com.machine.client.data.shop.IDataShopClient;
 import com.machine.client.data.shop.dto.input.DataShopMapByShopIdSetInputDto;
 import com.machine.client.data.shop.dto.input.DataShopBindOrganizationInputDto;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
-import com.machine.client.iam.organization.IIamOrganizationClient;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.client.iam.biam.organization.IBIamOrganizationClient;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationDetailOutputDto;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonBIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 
 @Slf4j
 @Service
@@ -40,7 +40,7 @@ public class DataShopOrganizationRelationServiceImpl implements IDataShopOrganiz
     private IDataShopClient dataShopClient;
 
     @Autowired
-    private IIamOrganizationClient organizationClient;
+    private IBIamOrganizationClient organizationClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -52,12 +52,12 @@ public class DataShopOrganizationRelationServiceImpl implements IDataShopOrganiz
         }
 
         //查询出门店类型
-        IamOrganizationTypeEnum type;
+        BIamOrganizationTypeEnum type;
         if (organizationId.endsWith(DATA_ORGANIZATION_VIRTUAL_NODE)) {
             String typeCode = organizationId.split(String.valueOf(SEPARATOR_COLON))[0];
-            type = IamOrganizationTypeEnum.valueOf(typeCode);
+            type = BIamOrganizationTypeEnum.valueOf(typeCode);
         } else {
-            IamOrganizationDetailOutputDto outputDto = organizationClient.detail(new IdRequest(inputDto.getOrganizationId()));
+            BIamOrganizationDetailOutputDto outputDto = organizationClient.detail(new IdRequest(inputDto.getOrganizationId()));
             if (null == outputDto) {
                 throw new DataBusinessException("data.ShopOrganizationRelation.service.bindOrganization.organizationNotExists", "组织不存在");
             }
@@ -150,7 +150,7 @@ public class DataShopOrganizationRelationServiceImpl implements IDataShopOrganiz
     }
 
     @Override
-    public List<DataShopOrganizationRelationListOutputDto> listByCondition(IamOrganizationShopRelationQueryListInputDto inputDto) {
+    public List<DataShopOrganizationRelationListOutputDto> listByCondition(BIamOrganizationShopRelationQueryListInputDto inputDto) {
         List<DataShopOrganizationRelationEntity> entityList = shopOrganizationRelationDao.listByCondition(inputDto);
         if (CollectionUtil.isEmpty(entityList)) {
             return List.of();

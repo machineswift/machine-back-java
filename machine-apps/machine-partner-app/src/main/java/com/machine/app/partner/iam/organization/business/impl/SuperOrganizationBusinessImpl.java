@@ -10,12 +10,12 @@ import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrga
 import com.machine.app.partner.iam.organization.controller.vo.response.SuperOrganizationTreeSimpleSelfResponseVo;
 import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.dto.output.DataShopOrganizationRelationListOutputDto;
-import com.machine.client.iam.organization.dto.input.IamOrganizationShopRelationQueryListInputDto;
-import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
-import com.machine.sdk.base.model.dto.iam.DataPermissionDto;
+import com.machine.client.iam.biam.organization.dto.input.BIamOrganizationShopRelationQueryListInputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationTreeSimpleOutputDto;
+import com.machine.sdk.base.model.dto.biam.auth.BIamDataPermissionDto;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisIamDataPermissionCache;
-import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.cache.biam.RedisBIamDataPermissionCache;
+import com.machine.starter.redis.cache.biam.RedisBIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,37 +28,37 @@ import java.util.stream.Collectors;
 public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness {
 
     @Autowired
-    private RedisIamOrganizationCache organizationCache;
+    private RedisBIamOrganizationCache organizationCache;
 
     @Autowired
-    private RedisIamDataPermissionCache redisIamDataPermissionCache;
+    private RedisBIamDataPermissionCache redisIamDataPermissionCache;
 
     @Autowired
     private IDataShopOrganizationRelationClient shopOrganizationRelationClient;
 
     @Override
-    public IamOrganizationTreeSimpleOutputDto treeAllSimple(SupeOrganizationTreeAllRequestVo request) {
+    public BIamOrganizationTreeSimpleOutputDto treeAllSimple(SupeOrganizationTreeAllRequestVo request) {
         return organizationCache.treeAllSimple(request.getType());
     }
 
     @Override
     public SuperOrganizationTreeSimpleSelfResponseVo treeSelfSimple(SupeOrganizationTreeRequestVo request) {
-        IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
+        BIamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
             return JSONUtil.toBean(JSONUtil.toJsonStr(allTreeOutput), SuperOrganizationTreeSimpleSelfResponseVo.class);
         }
 
         //获取当前门店关联的组织信息
-        IamOrganizationShopRelationQueryListInputDto queryListInputDto = new IamOrganizationShopRelationQueryListInputDto();
+        BIamOrganizationShopRelationQueryListInputDto queryListInputDto = new BIamOrganizationShopRelationQueryListInputDto();
         queryListInputDto.setOrganizationType(request.getType());
         queryListInputDto.setShopIdSet(dataPermissionDto.getShopIdSet());
         List<DataShopOrganizationRelationListOutputDto> relationListOutputDtoList = shopOrganizationRelationClient.listByCondition(queryListInputDto);
 
         //获取拥有权限的树
-        IamOrganizationTreeSimpleOutputDto filterTreeOutput = TreeUtil.filterTree(allTreeOutput,
+        BIamOrganizationTreeSimpleOutputDto filterTreeOutput = TreeUtil.filterTree(allTreeOutput,
                 relationListOutputDtoList.stream().map(DataShopOrganizationRelationListOutputDto::getOrganizationId).collect(Collectors.toSet()));
         if (null == filterTreeOutput) {
             return null;
@@ -69,9 +69,9 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
 
     @Override
     public SuperOrganizationTreeExpandSelfResponseVo treeSelfExpand(SupeOrganizationTreeRequestVo request) {
-        IamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
+        BIamOrganizationTreeSimpleOutputDto allTreeOutput = organizationCache.treeAllSimple(request.getType());
 
-        DataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
+        BIamDataPermissionDto dataPermissionDto = redisIamDataPermissionCache.dataPermission4SuperApp();
         if (CollectionUtil.isEmpty(dataPermissionDto.getShopIdSet())) {
             allTreeOutput.setChildren(List.of());
 
@@ -82,13 +82,13 @@ public class SuperOrganizationBusinessImpl implements ISuperOrganizationBusiness
         }
 
         //获取当前门店关联的组织信息
-        IamOrganizationShopRelationQueryListInputDto queryListInputDto = new IamOrganizationShopRelationQueryListInputDto();
+        BIamOrganizationShopRelationQueryListInputDto queryListInputDto = new BIamOrganizationShopRelationQueryListInputDto();
         queryListInputDto.setOrganizationType(request.getType());
         queryListInputDto.setShopIdSet(dataPermissionDto.getShopIdSet());
         List<DataShopOrganizationRelationListOutputDto> relationListOutputDtoList = shopOrganizationRelationClient.listByCondition(queryListInputDto);
 
         //获取拥有权限的树
-        IamOrganizationTreeSimpleOutputDto filterTreeOutput = TreeUtil.filterTree(allTreeOutput,
+        BIamOrganizationTreeSimpleOutputDto filterTreeOutput = TreeUtil.filterTree(allTreeOutput,
                 relationListOutputDtoList.stream().map(DataShopOrganizationRelationListOutputDto::getOrganizationId).collect(Collectors.toSet()));
 
         if (null == filterTreeOutput) {

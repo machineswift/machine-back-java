@@ -1,26 +1,23 @@
 package com.machine.starter.security.util;
 
-import com.machine.sdk.base.exception.iam.authentication.AuthTokenInvalidException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.Map;
 
 @Slf4j
 public class MachineJwtUtil {
 
-    private final NimbusJwtDecoder jwtDecoder;
-    private final NimbusJwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
+    private final JwtEncoder jwtEncoder;
 
-    public MachineJwtUtil(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
-        this.jwtDecoder = NimbusJwtDecoder.withPublicKey(publicKey).build();
-        this.jwtEncoder = NimbusJwtEncoder.withKeyPair(publicKey, privateKey)
-                .algorithm(SignatureAlgorithm.RS256)
-                .build();
+    public MachineJwtUtil(JwtDecoder jwtDecoder,
+                          JwtEncoder jwtEncoder) {
+       this.jwtDecoder=jwtDecoder;
+       this.jwtEncoder=jwtEncoder;
     }
 
     /**
@@ -60,8 +57,8 @@ public class MachineJwtUtil {
         try {
             return jwtDecoder.decode(token);
         } catch (JwtException e) {
-            log.error("token解析失败", e);
-            throw new AuthTokenInvalidException("token解析失败");
+            log.error("登录凭证解析失败", e);
+            throw new BadCredentialsException("登录凭证解析失败");
         }
     }
 }

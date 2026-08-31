@@ -10,8 +10,8 @@ import com.machine.app.admin.scm.property.controller.vo.response.ScmPropertyDeta
 import com.machine.app.admin.scm.property.controller.vo.response.ScmPropertyListResponseVo;
 import com.machine.app.admin.scm.property.controller.vo.response.ScmPropertySimpleListResponseVo;
 import com.machine.app.admin.scm.property.controller.vo.response.ScmPropertyValueListResponseVo;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.client.scm.property.IScmPropertyClient;
 import com.machine.client.scm.property.dto.input.ScmPropertyCreateInputDto;
 import com.machine.client.scm.property.dto.input.ScmPropertyQueryPageInputDto;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class ScmPropertyBusinessImpl implements IScmPropertyBusiness {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IScmPropertyClient propertyClient;
@@ -109,7 +109,7 @@ public class ScmPropertyBusinessImpl implements IScmPropertyBusiness {
         Set<String> userIdSet = new HashSet<>();
         userIdSet.add(responseVo.getCreateBy());
         userIdSet.add(responseVo.getUpdateBy());
-        Map<String, IamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         responseVo.setCreateName(userMap.get(responseVo.getCreateBy()).getName());
         responseVo.setUpdateName(userMap.get(responseVo.getUpdateBy()).getName());
     }
@@ -120,7 +120,7 @@ public class ScmPropertyBusinessImpl implements IScmPropertyBusiness {
             userIdSet.add(record.getCreateBy());
             userIdSet.add(record.getUpdateBy());
         }
-        Map<String, IamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+        Map<String, BIamUserDetailOutputDto> userMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
         for (ScmPropertyListResponseVo record : records) {
             record.setCreateName(userMap.get(record.getCreateBy()).getName());
             record.setUpdateName(userMap.get(record.getUpdateBy()).getName());

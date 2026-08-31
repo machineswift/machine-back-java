@@ -1,6 +1,6 @@
 package com.machine.client.data.shop.dto.output;
 
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class DataShopOrganizationRelationListOutputDto {
     private String shopId;
 
     @Schema(description = "组织类型")
-    private IamOrganizationTypeEnum organizationType;
+    private BIamOrganizationTypeEnum organizationType;
 
     @Schema(description = "排序")
     private Long sort;

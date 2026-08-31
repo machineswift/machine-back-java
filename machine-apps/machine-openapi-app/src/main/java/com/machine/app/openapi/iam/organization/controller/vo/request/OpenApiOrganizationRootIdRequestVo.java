@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.organization.controller.vo.request;
 
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,6 +13,6 @@ public class OpenApiOrganizationRootIdRequestVo {
 
     @NotNull(message = "组织类型 不能为空")
     @Schema(description = "组织类型（IamOrganizationTypeEnum）")
-    private IamOrganizationTypeEnum type;
+    private BIamOrganizationTypeEnum type;
 
 }

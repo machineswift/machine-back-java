@@ -1,6 +1,6 @@
 package com.machine.app.openapi.iam.role.controller.vo.request;
 
-import com.machine.sdk.base.envm.iam.role.IamRoleTypeEnum;
+import com.machine.sdk.base.envm.biam.role.BIamRoleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,5 +12,5 @@ public class OpenApiRoleRootRequestVo {
 
     @NotNull(message = "角色类型不能为空")
     @Schema(description = "角色类型 (RoleTypeEnum)")
-    private IamRoleTypeEnum type;
+    private BIamRoleTypeEnum type;
 }

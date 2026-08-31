@@ -17,8 +17,8 @@ import com.machine.client.ai.resource.model.dto.input.AiResourceProviderUpdateIn
 import com.machine.client.ai.resource.model.dto.input.AiResourceProviderUpdateStatusInputDto;
 import com.machine.client.ai.resource.model.dto.output.AiResourceProviderDetailOutputDto;
 import com.machine.client.ai.resource.model.dto.output.AiResourceProviderListOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class AiResourceProviderBusinessImpl implements IAiResourceProviderBusiness {
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IAiResourceProviderClient aiResourceProviderClient;
@@ -78,7 +78,7 @@ public class AiResourceProviderBusinessImpl implements IAiResourceProviderBusine
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
         }
@@ -107,7 +107,7 @@ public class AiResourceProviderBusinessImpl implements IAiResourceProviderBusine
         { //填充修改人创建人信息
             Set<String> userIdSet = responseList.stream().map(AiResourceProviderExpandListResponseVo::getCreateBy).collect(Collectors.toSet());
             userIdSet.addAll(responseList.stream().map(AiResourceProviderExpandListResponseVo::getUpdateBy).collect(Collectors.toSet()));
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             for (AiResourceProviderExpandListResponseVo vo : responseList) {
                 vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
                 vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());

@@ -7,8 +7,8 @@ import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryC
 import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateParentRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.response.ScmBackCategoryDetailResponseVo;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.client.scm.category.IScmBackCategoryClient;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryCreateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateInputDto;
@@ -39,7 +39,7 @@ public class ScmBackCategoryBusinessImpl implements IScmBackCategoryBusiness {
     private RedisScmBackCategoryCache cacheScmBackCategory;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IScmBackCategoryClient backCategoryClient;
@@ -82,7 +82,7 @@ public class ScmBackCategoryBusinessImpl implements IScmBackCategoryBusiness {
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(responseVo.getCreateBy());
             userIdSet.add(responseVo.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
 
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
@@ -118,14 +118,14 @@ public class ScmBackCategoryBusinessImpl implements IScmBackCategoryBusiness {
                     .map(ScmBackCategoryTreeExprandOutputDto::getUpdateBy)
                     .collect(Collectors.toSet()));
 
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
 
             for (ScmBackCategoryTreeExprandOutputDto node : allNodes) {
-                IamUserDetailOutputDto createUser = userSimpleDetailMap.get(node.getCreateBy());
+                BIamUserDetailOutputDto createUser = userSimpleDetailMap.get(node.getCreateBy());
                 if (null != createUser) {
                     node.setCreateName(createUser.getName());
                 }
-                IamUserDetailOutputDto updateUser = userSimpleDetailMap.get(node.getUpdateBy());
+                BIamUserDetailOutputDto updateUser = userSimpleDetailMap.get(node.getUpdateBy());
                 if (null != updateUser) {
                     node.setUpdateName(updateUser.getName());
                 }

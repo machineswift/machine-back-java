@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "machine-data-service", path = "machine-data-service/server/data/brand",
+@FeignClient(name = "machine-data-service",
+        path = "machine-data-service/server/data/brand",
         configuration = OpenFeignMinTimeConfig.class)
 public interface IDataBrandClient {
 

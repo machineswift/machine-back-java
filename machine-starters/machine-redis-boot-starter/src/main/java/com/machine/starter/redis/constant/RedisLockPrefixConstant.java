@@ -57,6 +57,10 @@ public class RedisLockPrefixConstant {
         public static final String LOCK_IAM_AUTH_SMS_CAPTCHA_FORGET_PASSWORD_UPDATE_PASSWORD =
                 "lock:iam:auth:sms_captcha:forget_password_update_password:";
 
+        /**
+         * Auth2.0 客户端信息
+         */
+        public static final String LOCK_IAM_IDENTITY_AUTH2_REGISTERED_CLIENT = "lock:iam:identity:auth2RegisteredClient:";
 
     }
 

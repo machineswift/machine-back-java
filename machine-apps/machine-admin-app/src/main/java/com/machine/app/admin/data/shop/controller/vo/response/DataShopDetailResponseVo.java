@@ -3,7 +3,7 @@ package com.machine.app.admin.data.shop.controller.vo.response;
 import com.machine.sdk.base.envm.data.shop.DataShopBusinessStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopOperationStatusEnum;
 import com.machine.sdk.base.envm.data.shop.DataShopPhysicalStatusEnum;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -88,7 +88,7 @@ public class DataShopDetailResponseVo {
         private String name;
 
         @Schema(description = " 组织类型(IamOrganizationTypeEnum)")
-        private IamOrganizationTypeEnum type;
+        private BIamOrganizationTypeEnum type;
 
     }
 

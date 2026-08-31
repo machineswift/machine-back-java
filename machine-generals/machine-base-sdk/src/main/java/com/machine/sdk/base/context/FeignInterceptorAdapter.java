@@ -3,12 +3,12 @@ package com.machine.sdk.base.context;
 import cn.hutool.core.util.StrUtil;
 import com.machine.sdk.base.annotation.SkipUserIdCheck;
 import com.machine.sdk.base.envm.ai.AiModelNameTypeEnum;
-import com.machine.sdk.base.exception.iam.authentication.AuthInterceptorUserIdException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,7 +43,7 @@ public class FeignInterceptorAdapter implements HandlerInterceptor {
                 }
 
                 log.warn("用户Id丢失，feign method:{}", feignMethod);
-                throw new AuthInterceptorUserIdException("用户Id丢失");
+                throw new BadCredentialsException("用户Id丢失");
             }
             AppContextHolder.getContext().setUserId(userId);
             MDC.put(USER_ID_KEY, AppContextHolder.getContext().getUserId());

@@ -9,6 +9,7 @@ import com.machine.client.hrm.department.dto.output.*;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.hrm.department.dao.IDepartmentDao;
 import com.machine.service.hrm.department.dao.IDepartmentExpansionDao;
 import com.machine.service.hrm.department.dao.mapper.entity.DepartmentEntity;
@@ -48,17 +49,16 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Autowired
     private IDataLeaf4RedisClient leaf4RedisClient;
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String create(HrmDepartmentCreateInputDto inputDto) {
-        //验证 parentId 是否存在
+        // 验证 parentId 是否存在
         DepartmentEntity entityById = departmentDao.getById(inputDto.getParentId());
         if (null == entityById) {
             throw new InvalidParameterException("父 ID 不存在");
         }
 
-        //验证名称在同一层级是否存在
+        // 验证名称在同一层级是否存在
         DepartmentEntity entityByName = departmentDao.getByName(inputDto.getParentId(), inputDto.getName());
         if (null != entityByName) {
             throw new InvalidParameterException("部门名称已经存在");
@@ -90,19 +90,19 @@ public class DepartmentServiceImpl implements IDepartmentService {
     }
 
     @Override
-    public HrmDepartmentTreeOutputDto treeAllSimple() {
-        //获取树的动态key
+    public Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple() {
+        // 获取树的动态key
         String keyCode = customerRedisCommands.get(HRM_DEPARTMENT_TREE_KEY);
 
-        //如果存在则直接返回数据
+        // 如果存在则直接返回数据
         if (StrUtil.isNotEmpty(keyCode)) {
             String treeJson = customerRedisCommands.get(HRM_DEPARTMENT_TREE_DATA + keyCode);
             if (StrUtil.isNotEmpty(treeJson)) {
-                return JSONUtil.toBean(treeJson, HrmDepartmentTreeOutputDto.class);
+                return Tuples.of(keyCode, JSONUtil.toBean(treeJson, HrmDepartmentTreeOutputDto.class));
             }
         }
 
-        //缓存击穿
+        // 缓存击穿
         RLock lock = redissonClient.getLock(LOCK_HRM_DEPARTMENT_TREE);
         try {
             lock.lock();
@@ -111,43 +111,44 @@ public class DepartmentServiceImpl implements IDepartmentService {
             if (StrUtil.isNotEmpty(keyCode)) {
                 String treeJson = customerRedisCommands.get(HRM_DEPARTMENT_TREE_DATA + keyCode);
                 if (StrUtil.isNotEmpty(treeJson)) {
-                    return JSONUtil.toBean(treeJson, HrmDepartmentTreeOutputDto.class);
+                    return Tuples.of(keyCode, JSONUtil.toBean(treeJson, HrmDepartmentTreeOutputDto.class));
                 }
             }
 
-            //重新生成树的动态key
+            // 重新生成树的动态key
             keyCode = leaf4RedisClient.hrmDepartmentTree();
-            customerRedisCommands.set(HRM_DEPARTMENT_TREE_KEY, keyCode,24 * 60 * 60);
+            customerRedisCommands.setex(HRM_DEPARTMENT_TREE_KEY, keyCode, 24 * 60 * 60);
 
-            //查询DB组装树
+            // 查询DB组装树
             List<DepartmentEntity> entityList = departmentDao.listAll();
-            if (CollectionUtil.isEmpty(entityList)) {
-                return null;
-            }
-            List<HrmDepartmentTreeOutputDto> outputDtoList = JSONUtil.toList(JSONUtil.toJsonStr(entityList), HrmDepartmentTreeOutputDto.class);
+            List<HrmDepartmentTreeOutputDto> outputDtoList = JSONUtil.toList(JSONUtil.toJsonStr(entityList),
+                    HrmDepartmentTreeOutputDto.class);
             HrmDepartmentTreeOutputDto treeOutputDto = TreeUtil.buildTree(outputDtoList).getFirst();
 
-            //Tree 数据缓存到redis
-            customerRedisCommands.set(HRM_DEPARTMENT_TREE_DATA + keyCode, JSONUtil.toJsonStr(treeOutputDto),24 * 60 * 60 + 60);
+            // Tree 数据缓存到redis
+            customerRedisCommands.setex(HRM_DEPARTMENT_TREE_DATA + keyCode, JSONUtil.toJsonStr(treeOutputDto),
+                    24 * 60 * 60 + 60);
 
-            return treeOutputDto;
+            return Tuples.of(keyCode, treeOutputDto);
         } finally {
             lock.unlock();
         }
     }
 
-
     @Override
-    public Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(IdSetRequest idSetRequest) {
+    public Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(
+            IdSetRequest idSetRequest) {
 
-        List<DepartmentExpansionEntity> departmentExpansionEntityList = departmentExpansionDao.listDepartmentExpansionByDepartmentIdSet(idSetRequest.getIdSet());
+        List<DepartmentExpansionEntity> departmentExpansionEntityList = departmentExpansionDao
+                .listDepartmentExpansionByDepartmentIdSet(idSetRequest.getIdSet());
         if (CollectionUtil.isEmpty(departmentExpansionEntityList)) {
             return Map.of();
         }
-        //根据DepartmentId拆分Map集合
+        // 根据DepartmentId拆分Map集合
         Map<String, HrmDepartmentExpansionListOutputDto> depMap = new HashMap<>();
         for (DepartmentExpansionEntity entity : departmentExpansionEntityList) {
-            depMap.put(entity.getDepartmentId(), JSONUtil.toBean(JSONUtil.toJsonStr(entity), HrmDepartmentExpansionListOutputDto.class));
+            depMap.put(entity.getDepartmentId(),
+                    JSONUtil.toBean(JSONUtil.toJsonStr(entity), HrmDepartmentExpansionListOutputDto.class));
         }
         return depMap;
     }

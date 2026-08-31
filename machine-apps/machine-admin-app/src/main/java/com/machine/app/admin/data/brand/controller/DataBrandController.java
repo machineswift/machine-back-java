@@ -12,6 +12,11 @@ import com.machine.app.admin.data.brand.controller.vo.response.DataBrandSimpleLi
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
 import com.machine.sdk.base.model.response.PageResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +37,12 @@ public class DataBrandController {
     @Operation(summary = "创建品牌")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "创建品牌",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataBrandCreateRequestVo request) {
         log.info("创建品牌，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(brandBusiness.create(request));
@@ -40,6 +51,11 @@ public class DataBrandController {
     @Operation(summary = "删除品牌")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DELETE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除品牌")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.delete(request);
@@ -48,6 +64,11 @@ public class DataBrandController {
     @Operation(summary = "修改品牌")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改品牌")
     public void update(@RequestBody @Validated DataBrandUpdateRequestVo request) {
         log.info("修改品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.update(request);
@@ -56,6 +77,11 @@ public class DataBrandController {
     @Operation(summary = "修改品牌状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE_STATUS')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改品牌状态")
     public void updateStatus(@RequestBody @Validated DataBrandUpdateStatusRequestVo request) {
         log.info("修改品牌状态，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.updateStatus(request);
@@ -64,6 +90,11 @@ public class DataBrandController {
     @Operation(summary = "品牌详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DETAIL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询品牌详情")
     public DataBrandDetailResponseVo detail(@RequestBody IdRequest request) {
         return brandBusiness.detail(request);
     }
@@ -78,6 +109,11 @@ public class DataBrandController {
     @Operation(summary = "分页查询品牌(应用于管理菜单)")
     @PostMapping("page_expand")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:PAGE_EXPAND')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "分页查询品牌(管理菜单)")
     public PageResponse<DataBrandExpandListResponseVo> pageExpand(@RequestBody @Validated DataBrandQueryPageRequestVo request) {
         return brandBusiness.pageExpand(request);
     }

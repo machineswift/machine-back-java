@@ -15,8 +15,8 @@ import com.machine.client.data.area.dto.input.DataAreaUpdateInputDto;
 import com.machine.client.data.area.dto.input.DataAreaUpdateParentInputDto;
 import com.machine.client.data.area.dto.output.DataAreaDetailOutputDto;
 import com.machine.client.data.area.dto.output.DataAreaTreeOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.tool.TreeUtil;
@@ -39,7 +39,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
     private RedisDataAreaCache redisDataAreaCache;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataAreaClient areaClient;
@@ -79,7 +79,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
         }
@@ -89,7 +89,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
 
     @Override
     public DataAreaTreeSimpleResponseVo treeSimple(DataAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.tree(request.getCountryCode());
+        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.treeAll(request.getCountry());
         if (null == treeOutputDto) {
             return null;
         }
@@ -98,7 +98,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
 
     @Override
     public DataAreaTreeExpandResponseVo treeExpand(DataAreaTreeRequestVo request) {
-        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.tree(request.getCountryCode());
+        DataAreaTreeOutputDto treeOutputDto = redisDataAreaCache.treeAll(request.getCountry());
         if (null == treeOutputDto) {
             return null;
         }
@@ -109,7 +109,7 @@ public class DataAreaBusinessImpl implements IDataAreaBusiness {
             List<DataAreaTreeExpandResponseVo> voList = TreeUtil.collectAllNodes(response);
             Set<String> userIdSet = voList.stream().map(DataAreaTreeExpandResponseVo::getCreateBy).collect(Collectors.toSet());
             userIdSet.addAll(voList.stream().map(DataAreaTreeExpandResponseVo::getUpdateBy).collect(Collectors.toSet()));
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             for (DataAreaTreeExpandResponseVo vo : voList) {
                 vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
                 vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());

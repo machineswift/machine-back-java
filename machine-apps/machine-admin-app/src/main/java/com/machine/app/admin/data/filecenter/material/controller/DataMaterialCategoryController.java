@@ -9,6 +9,11 @@ import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.Dat
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialCategoryUpdateRequestVo;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
+import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
+import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,12 @@ public class DataMaterialCategoryController {
     @Operation(summary = "新增")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:CREATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.CREATE,
+            operateName = "新增素材分类",
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCategoryCreateRequestVo request) {
         log.info("新增素材分类，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(materialCategoryBusiness.create(request));
@@ -37,6 +48,11 @@ public class DataMaterialCategoryController {
     @Operation(summary = "删除")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DELETE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除素材分类")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.delete(request);
@@ -45,6 +61,11 @@ public class DataMaterialCategoryController {
     @Operation(summary = "修改")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改素材分类")
     public void update(@RequestBody @Validated DataMaterialCategoryUpdateRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.update(request);
@@ -53,6 +74,11 @@ public class DataMaterialCategoryController {
     @Operation(summary = "修改父ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE_PARENT')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改素材分类父ID")
     public void updateParent(@RequestBody @Validated DataMaterialCategoryUpdateParentRequestVo request) {
         log.info("修改父素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.updateParent(request);
@@ -61,6 +87,11 @@ public class DataMaterialCategoryController {
     @Operation(summary = "详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DETAIL')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询素材分类详情")
     public DataMaterialCategoryDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return materialCategoryBusiness.detail(request);
     }

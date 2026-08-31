@@ -1,6 +1,6 @@
 package com.machine.client.data.shop.dto.input;
 
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,9 +13,9 @@ public class DataShopNotBindOrganizationInputDto {
 
     @NotNull(message = "组织类型不能为空")
     @Schema(description = "组织类型（OrganizationTypeEnum）")
-    private IamOrganizationTypeEnum organizationType;
+    private BIamOrganizationTypeEnum organizationType;
 
-    public DataShopNotBindOrganizationInputDto(IamOrganizationTypeEnum organizationType) {
+    public DataShopNotBindOrganizationInputDto(BIamOrganizationTypeEnum organizationType) {
         this.organizationType = organizationType;
     }
 }

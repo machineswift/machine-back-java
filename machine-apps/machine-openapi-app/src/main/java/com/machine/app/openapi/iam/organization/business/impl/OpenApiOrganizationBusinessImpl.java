@@ -6,13 +6,13 @@ import com.machine.app.openapi.iam.organization.business.IOpenApiOrganizationBus
 import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrganizationIdRequestVo;
 import com.machine.app.openapi.iam.organization.controller.vo.request.OpenApiOrganizationRootIdRequestVo;
 import com.machine.app.openapi.iam.organization.controller.vo.response.OpenApiOrganizationDetailResponseVo;
-import com.machine.client.iam.organization.IIamOrganizationClient;
-import com.machine.client.iam.organization.dto.output.IamOrganizationDetailOutputDto;
-import com.machine.client.iam.organization.dto.output.IamOrganizationTreeSimpleOutputDto;
+import com.machine.client.iam.biam.organization.IBIamOrganizationClient;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationDetailOutputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.tree.TreeNode;
 import com.machine.sdk.base.tool.TreeUtil;
-import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.cache.biam.RedisBIamOrganizationCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,10 +25,10 @@ import java.util.List;
 public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusiness {
 
     @Autowired
-    private RedisIamOrganizationCache organizationCache;
+    private RedisBIamOrganizationCache organizationCache;
 
     @Autowired
-    private IIamOrganizationClient organizationClient;
+    private IBIamOrganizationClient organizationClient;
 
     @Override
     public String rootId(OpenApiOrganizationRootIdRequestVo request) {
@@ -37,7 +37,7 @@ public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusi
 
     @Override
     public OpenApiOrganizationDetailResponseVo detail(OpenApiOrganizationIdRequestVo request) {
-        IamOrganizationDetailOutputDto outputDto = organizationClient.detail(new IdRequest(request.getId()));
+        BIamOrganizationDetailOutputDto outputDto = organizationClient.detail(new IdRequest(request.getId()));
         return JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), OpenApiOrganizationDetailResponseVo.class);
     }
 
@@ -47,27 +47,27 @@ public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusi
     }
 
     @Override
-    public List<IamOrganizationTreeSimpleOutputDto> listSub(OpenApiOrganizationIdRequestVo request) {
-        IamOrganizationDetailOutputDto detailOutputDto = organizationClient.detail(new IdRequest(request.getId()));
+    public List<BIamOrganizationTreeSimpleOutputDto> listSub(OpenApiOrganizationIdRequestVo request) {
+        BIamOrganizationDetailOutputDto detailOutputDto = organizationClient.detail(new IdRequest(request.getId()));
         if (null == detailOutputDto) {
             return List.of();
         }
 
         //查询组织树
-        IamOrganizationTreeSimpleOutputDto treeOutputDto = organizationCache.treeAllSimple(detailOutputDto.getType());
+        BIamOrganizationTreeSimpleOutputDto treeOutputDto = organizationCache.treeAllSimple(detailOutputDto.getType());
 
         //找到指定的节点
-        IamOrganizationTreeSimpleOutputDto treeNode = TreeUtil.findNode(treeOutputDto, request.getId());
+        BIamOrganizationTreeSimpleOutputDto treeNode = TreeUtil.findNode(treeOutputDto, request.getId());
         if (null == treeNode) {
             return List.of();
         }
 
         //获取对应节点的子节点
-        List<IamOrganizationTreeSimpleOutputDto> outputDtoList = treeNode.getChildren();
+        List<BIamOrganizationTreeSimpleOutputDto> outputDtoList = treeNode.getChildren();
         if (CollectionUtil.isEmpty(outputDtoList)) {
             return List.of();
         }
-        for (IamOrganizationTreeSimpleOutputDto outputDto : outputDtoList) {
+        for (BIamOrganizationTreeSimpleOutputDto outputDto : outputDtoList) {
             outputDto.setChildren(null);
         }
         return outputDtoList;
@@ -75,16 +75,16 @@ public class OpenApiOrganizationBusinessImpl implements IOpenApiOrganizationBusi
 
     @Override
     public List<String> listParentByTarget(OpenApiOrganizationIdRequestVo request) {
-        IamOrganizationDetailOutputDto detailOutputDto = organizationClient.detail(new IdRequest(request.getId()));
+        BIamOrganizationDetailOutputDto detailOutputDto = organizationClient.detail(new IdRequest(request.getId()));
         if (null == detailOutputDto) {
             return List.of();
         }
 
         //查询组织树
-        IamOrganizationTreeSimpleOutputDto treeOutputDto = organizationCache.treeAllSimple(detailOutputDto.getType());
+        BIamOrganizationTreeSimpleOutputDto treeOutputDto = organizationCache.treeAllSimple(detailOutputDto.getType());
 
         //找到指定的节点
-        IamOrganizationTreeSimpleOutputDto treeNode = TreeUtil.findNode(treeOutputDto, request.getId());
+        BIamOrganizationTreeSimpleOutputDto treeNode = TreeUtil.findNode(treeOutputDto, request.getId());
         if (null == treeNode) {
             return List.of();
         }

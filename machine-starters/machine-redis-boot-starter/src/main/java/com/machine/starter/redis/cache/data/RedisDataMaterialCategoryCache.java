@@ -6,12 +6,14 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.data.filecenter.material.IDataMaterialCategoryClient;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.tool.TreeUtil;
+import com.machine.sdk.base.tool.Tuples;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.base.constant.CommonDataConstant.MaterialCategory.DATA_MATERIAL_CATEGORY_VIRTUAL_NODE;
@@ -23,6 +25,9 @@ import static com.machine.starter.redis.constant.RedisPrefix4DataConstant.Materi
 @Component
 public class RedisDataMaterialCategoryCache {
 
+    private final AtomicReference<String> version = new AtomicReference<>();
+    private volatile DataMaterialCategoryTreeSimpleOutputDto cachedData;
+
     @Autowired
     private CustomerRedisCommands customerRedisCommands;
 
@@ -30,16 +35,16 @@ public class RedisDataMaterialCategoryCache {
     private IDataMaterialCategoryClient materialCategoryClient;
 
     public Set<String> recursionListSubId(String categoryId) {
-        //查询组织树
+        // 查询组织树
         DataMaterialCategoryTreeSimpleOutputDto treeOutputDto = treeAllSimple();
 
-        //找到指定的节点
+        // 找到指定的节点
         DataMaterialCategoryTreeSimpleOutputDto treeNode = TreeUtil.findNode(treeOutputDto, categoryId);
         if (null == treeNode) {
             return Set.of();
         }
 
-        //获取节点以及子节点的所有数据
+        // 获取节点以及子节点的所有数据
         List<DataMaterialCategoryTreeSimpleOutputDto> outputDtoList = TreeUtil.collectAllNodes(treeNode);
         for (DataMaterialCategoryTreeSimpleOutputDto outputDto : outputDtoList) {
             outputDto.setChildren(null);
@@ -48,10 +53,10 @@ public class RedisDataMaterialCategoryCache {
     }
 
     public Set<String> recursionListSubId(Set<String> categoryIdSet) {
-        //获取所有节点
+        // 获取所有节点
         List<DataMaterialCategoryTreeSimpleOutputDto> treeOutputDtoList = new ArrayList<>();
 
-        //获取Tree
+        // 获取Tree
         DataMaterialCategoryTreeSimpleOutputDto allTreeOutputDto = treeAllSimple();
         for (String id : categoryIdSet) {
             DataMaterialCategoryTreeSimpleOutputDto node = TreeUtil.findNode(allTreeOutputDto, id);
@@ -60,7 +65,7 @@ public class RedisDataMaterialCategoryCache {
             }
         }
 
-        //循环递归获取所有节点
+        // 循环递归获取所有节点
         Set<String> idSet = new HashSet<>();
         for (DataMaterialCategoryTreeSimpleOutputDto treeOutputDto : treeOutputDtoList) {
             List<DataMaterialCategoryTreeSimpleOutputDto> outputDtoList = TreeUtil.collectAllNodes(treeOutputDto);
@@ -69,46 +74,104 @@ public class RedisDataMaterialCategoryCache {
         return idSet;
     }
 
-
     public DataMaterialCategoryTreeSimpleOutputDto treeAllSimple() {
-        //获取树的动态key
         String keyCode = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_KEY);
 
-        DataMaterialCategoryTreeSimpleOutputDto treeSimpleOutputDto = null;
-        //如果存在则直接返回数据
-        if (StrUtil.isNotEmpty(keyCode)) {
-            String treeJson = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_DATA + keyCode);
-            if (StrUtil.isNotEmpty(treeJson)) {
-                treeSimpleOutputDto = JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class);
+        // 本地缓存命中
+        if (StrUtil.isNotEmpty(keyCode)
+                && keyCode.equals(version.get())
+                && cachedData != null) {
+            return copyTreeWithVirtualNode(cachedData);
+        }
+
+        synchronized (this) {
+            // Double-Check：防止并发情况下重复加载
+            String recheckVersion = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_KEY);
+            if (StrUtil.isNotEmpty(recheckVersion)
+                    && recheckVersion.equals(version.get())
+                    && cachedData != null) {
+                return copyTreeWithVirtualNode(cachedData);
             }
-        }
 
-        //查询树
-        if (null == treeSimpleOutputDto) {
-            treeSimpleOutputDto = materialCategoryClient.treeAllSimple();
-        }
+            DataMaterialCategoryTreeSimpleOutputDto treeSimpleOutputDto = null;
 
-        { //添加【未分配】
-            DataMaterialCategoryTreeSimpleOutputDto virtualSimpleTreeBo = new DataMaterialCategoryTreeSimpleOutputDto();
-            virtualSimpleTreeBo.setId(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE);
-            virtualSimpleTreeBo.setParentId(treeSimpleOutputDto.getId());
-            virtualSimpleTreeBo.setName(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE_NAME);
-            virtualSimpleTreeBo.setSort(Long.MAX_VALUE);
-            virtualSimpleTreeBo.setCode(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE.toUpperCase());
-            if (CollectionUtil.isEmpty(treeSimpleOutputDto.getChildren())) {
-                treeSimpleOutputDto.setChildren(List.of(virtualSimpleTreeBo));
-            } else {
-                treeSimpleOutputDto.getChildren().addFirst(virtualSimpleTreeBo);
+            // Redis加载数据（一级缓存）
+            if (StrUtil.isNotEmpty(recheckVersion)) {
+                String treeJson = customerRedisCommands.get(DATA_MATERIAL_CATEGORY_TREE_DATA + recheckVersion);
+                if (StrUtil.isNotEmpty(treeJson)) {
+                    treeSimpleOutputDto = JSONUtil.toBean(treeJson, DataMaterialCategoryTreeSimpleOutputDto.class);
+                }
             }
+
+            // Redis无数据，从远程加载
+            if (null == treeSimpleOutputDto) {
+                Tuples.Tuple2<String, DataMaterialCategoryTreeSimpleOutputDto> tuple2 = materialCategoryClient
+                        .treeAllSimple();
+                recheckVersion = tuple2._1();
+                treeSimpleOutputDto = tuple2._2();
+            }
+
+            cachedData = treeSimpleOutputDto;
+            version.set(recheckVersion);
+            return copyTreeWithVirtualNode(cachedData);
+        }
+    }
+
+    /**
+     * 深拷贝素材分类树，并为根节点附加【未分配】虚拟节点。
+     */
+    private DataMaterialCategoryTreeSimpleOutputDto copyTreeWithVirtualNode(
+            DataMaterialCategoryTreeSimpleOutputDto source) {
+        DataMaterialCategoryTreeSimpleOutputDto target = copyTree(source);
+        if (null == target) {
+            return null;
         }
 
-        return treeSimpleOutputDto;
+        // 添加【未分配】
+        DataMaterialCategoryTreeSimpleOutputDto virtualSimpleTreeBo = new DataMaterialCategoryTreeSimpleOutputDto();
+        virtualSimpleTreeBo.setId(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE);
+        virtualSimpleTreeBo.setParentId(target.getId());
+        virtualSimpleTreeBo.setName(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE_NAME);
+        virtualSimpleTreeBo.setSort(Long.MAX_VALUE);
+        virtualSimpleTreeBo.setCode(DATA_MATERIAL_CATEGORY_VIRTUAL_NODE.toUpperCase());
+        if (CollectionUtil.isEmpty(target.getChildren())) {
+            target.setChildren(List.of(virtualSimpleTreeBo));
+        } else {
+            target.getChildren().addFirst(virtualSimpleTreeBo);
+        }
+        return target;
+    }
+
+    /**
+     * 递归深拷贝素材分类树，防止调用方修改缓存数据影响业务
+     */
+    private DataMaterialCategoryTreeSimpleOutputDto copyTree(DataMaterialCategoryTreeSimpleOutputDto source) {
+        if (null == source) {
+            return null;
+        }
+        DataMaterialCategoryTreeSimpleOutputDto target = new DataMaterialCategoryTreeSimpleOutputDto();
+        target.setId(source.getId());
+        target.setParentId(source.getParentId());
+        target.setName(source.getName());
+        target.setSort(source.getSort());
+        target.setCode(source.getCode());
+
+        if (CollectionUtil.isNotEmpty(source.getChildren())) {
+            List<DataMaterialCategoryTreeSimpleOutputDto> children = new ArrayList<>(source.getChildren().size());
+            for (DataMaterialCategoryTreeSimpleOutputDto child : source.getChildren()) {
+                children.add(copyTree(child));
+            }
+            target.setChildren(children);
+        } else {
+            target.setChildren(List.of());
+        }
+        return target;
     }
 
     public Map<String, DataMaterialCategoryTreeSimpleOutputDto> mapByIdSet(Set<String> organizationIdSet) {
         Map<String, DataMaterialCategoryTreeSimpleOutputDto> outputDtoMap = new HashMap<>();
 
-        //获取Tree
+        // 获取Tree
         DataMaterialCategoryTreeSimpleOutputDto treeOutputDto = treeAllSimple();
         for (String id : organizationIdSet) {
             DataMaterialCategoryTreeSimpleOutputDto node = TreeUtil.findNode(treeOutputDto, id);

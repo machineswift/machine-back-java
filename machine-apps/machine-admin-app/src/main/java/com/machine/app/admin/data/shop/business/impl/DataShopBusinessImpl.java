@@ -16,15 +16,15 @@ import com.machine.client.data.shop.IDataShopOrganizationRelationClient;
 import com.machine.client.data.shop.IDataShopLabelOptionRelationClient;
 import com.machine.client.data.shop.dto.input.*;
 import com.machine.client.data.shop.dto.output.*;
-import com.machine.client.iam.organization.dto.output.IamOrganizationSimpleOutputDto;
-import com.machine.client.iam.user.IIamUserClient;
-import com.machine.client.iam.user.dto.output.IamUserDetailOutputDto;
+import com.machine.client.iam.biam.organization.dto.output.BIamOrganizationSimpleOutputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.StorageTypeEnum;
 import com.machine.sdk.base.envm.data.DataCountryEnum;
-import com.machine.sdk.base.envm.iam.organization.IamOrganizationTypeEnum;
-import com.machine.sdk.base.exception.iam.IamBusinessException;
+import com.machine.sdk.base.envm.biam.organization.BIamOrganizationTypeEnum;
+import com.machine.sdk.base.exception.biam.BIamBusinessException;
 import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfectingContractDto;
@@ -38,7 +38,7 @@ import com.machine.sdk.base.tool.ClientEnvironmentUtil;
 import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.sdk.base.tool.UUIDv7;
 import com.machine.starter.redis.cache.data.RedisDataAreaCache;
-import com.machine.starter.redis.cache.iam.RedisIamOrganizationCache;
+import com.machine.starter.redis.cache.biam.RedisBIamOrganizationCache;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.base.constant.CommonConstant.SEPARATOR_COLON;
-import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
-import static com.machine.sdk.base.constant.CommonIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
+import static com.machine.sdk.base.constant.CommonBIamConstant.Organization.DATA_ORGANIZATION_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonBIamConstant.Organization.DATA_ORGANIZATION_VIRTUAL_NODE;
 
 @Slf4j
 @Component
@@ -61,10 +61,10 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
     private RedisDataAreaCache areaCache;
 
     @Autowired
-    private RedisIamOrganizationCache organizationCache;
+    private RedisBIamOrganizationCache organizationCache;
 
     @Autowired
-    private IIamUserClient userClient;
+    private IBIamUserClient userClient;
 
     @Autowired
     private IDataShopClient shopClient;
@@ -212,10 +212,10 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
             Set<String> organizationIdSet = relationListOutputDtoList.stream()
                     .map(DataShopOrganizationRelationListOutputDto::getOrganizationId).collect(Collectors.toSet());
 
-            Map<String, IamOrganizationSimpleOutputDto> organizationMap = organizationCache.mapByIdSet(organizationIdSet);
+            Map<String, BIamOrganizationSimpleOutputDto> organizationMap = organizationCache.mapByIdSet(organizationIdSet);
 
             List<DataShopDetailResponseVo.Organization> organizationList = new ArrayList<>();
-            for (IamOrganizationSimpleOutputDto dto : organizationMap.values()) {
+            for (BIamOrganizationSimpleOutputDto dto : organizationMap.values()) {
                 DataShopDetailResponseVo.Organization organization = new DataShopDetailResponseVo.Organization();
                 organization.setId(dto.getId());
                 organization.setCode(dto.getCode());
@@ -230,7 +230,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
             String countryCode = outputDto.getCountryCode();
             String provinceCode = outputDto.getProvinceCode();
             if (StrUtil.isNotBlank(countryCode) || StrUtil.isNotBlank(provinceCode)) {
-                DataAreaTreeOutputDto areaTree = areaCache.tree(countryCode);
+                DataAreaTreeOutputDto areaTree = areaCache.treeAll(DataCountryEnum.valueOf(countryCode));
 
                 AddressInfoDto addressInfo = new AddressInfoDto();
                 addressInfo.setCountry(DataCountryEnum.valueOf(countryCode).getMessage());
@@ -272,7 +272,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
             userIdSet.add(outputDto.getUpdateBy());
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
             responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
         }
@@ -317,7 +317,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         DataShopQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataShopQueryPageInputDto.class);
         {//区域编码处理
             if (StrUtil.isNotBlank(request.getCountryCode()) && CollectionUtil.isNotEmpty(request.getAreaCodeSet())) {
-                DataAreaTreeOutputDto allAreaTree = areaCache.tree(request.getCountryCode());
+                DataAreaTreeOutputDto allAreaTree = areaCache.treeAll(DataCountryEnum.valueOf(request.getCountryCode()));
                 Set<String> recursionIdSet = areaCache.recursionListSubId(request.getAreaCodeSet(), allAreaTree);
                 inputDto.setAreaCodeSet(recursionIdSet);
             }
@@ -347,7 +347,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         DataShopQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataShopQueryPageInputDto.class);
         {//区域编码处理
             if (StrUtil.isNotBlank(request.getCountryCode()) && CollectionUtil.isNotEmpty(request.getAreaCodeSet())) {
-                DataAreaTreeOutputDto allAreaTree = areaCache.tree(request.getCountryCode());
+                DataAreaTreeOutputDto allAreaTree = areaCache.treeAll(DataCountryEnum.valueOf(request.getCountryCode()));
                 Set<String> recursionIdSet = areaCache.recursionListSubId(request.getAreaCodeSet(), allAreaTree);
                 inputDto.setAreaCodeSet(recursionIdSet);
             }
@@ -402,7 +402,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
                 if (StrUtil.isNotBlank(countryCode) || StrUtil.isNotBlank(provinceCode)) {
                     DataAreaTreeOutputDto areaTree = areaTreeMap.get(countryCode);
                     if (areaTree == null) {
-                        areaTree = areaCache.tree(countryCode);
+                        areaTree = areaCache.treeAll(DataCountryEnum.valueOf(countryCode));
                         areaTreeMap.put(countryCode, areaTree);
                     }
 
@@ -434,7 +434,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         {//创建人、修改人姓名
             Set<String> userIdSet = pageResponse.getRecords().stream().map(DataShopExpandListResponseVo::getCreateBy).collect(Collectors.toSet());
             userIdSet.addAll(pageResponse.getRecords().stream().map(DataShopExpandListResponseVo::getUpdateBy).collect(Collectors.toSet()));
-            Map<String, IamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             for (DataShopExpandListResponseVo vo : pageResponse.getRecords()) {
                 vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
                 vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());
@@ -443,8 +443,8 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         return pageResponse;
     }
 
-    private void extractedShopIdByOrganizationIdSet(IamOrganizationTypeEnum organizationType, Set<String> organizationIdSet, Set<String> finallyqueryShopIdSet) {
-        for (IamOrganizationTypeEnum type : IamOrganizationTypeEnum.values()) {
+    private void extractedShopIdByOrganizationIdSet(BIamOrganizationTypeEnum organizationType, Set<String> organizationIdSet, Set<String> finallyqueryShopIdSet) {
+        for (BIamOrganizationTypeEnum type : BIamOrganizationTypeEnum.values()) {
             if (organizationIdSet.contains(type.getName() + SEPARATOR_COLON + DATA_ORGANIZATION_VIRTUAL_NODE)) {
                 //未分配节点
                 List<String> shopIdList = shopClient.listNotBindOrganization(new DataShopNotBindOrganizationInputDto(type));
@@ -464,7 +464,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
     }
 
     private boolean assembleFinallyQueryShopIdSet(Set<String> finallyQueryShopIdSet,
-                                                  IamOrganizationTypeEnum organizationType,
+                                                  BIamOrganizationTypeEnum organizationType,
                                                   Set<String> organizationIdSet,
                                                   Set<String> labelOptionIdSet) {
         boolean compute = false;
@@ -472,7 +472,7 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         //组装ShopId集合(组织)
         if (CollectionUtil.isNotEmpty(organizationIdSet)) {
             boolean containRootId = false;
-            for (IamOrganizationTypeEnum type : IamOrganizationTypeEnum.values()) {
+            for (BIamOrganizationTypeEnum type : BIamOrganizationTypeEnum.values()) {
                 if (organizationIdSet.contains(type.getName().toLowerCase())) {
                     //包含根组织直接返回
                     containRootId = true;
@@ -528,12 +528,12 @@ public class DataShopBusinessImpl implements IDataShopBusiness {
         }
 
         if (compute && CollectionUtil.isEmpty(finallyQueryShopIdSet)) {
-            throw new IamBusinessException("data.shop.business.export.emptyResult", "结果为空");
+            throw new BIamBusinessException("data.shop.business.export.emptyResult", "结果为空");
         }
 
         DataShopExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataShopExportInputDto.class);
         if (StrUtil.isNotBlank(request.getCountryCode()) && CollectionUtil.isNotEmpty(request.getAreaCodeSet())) {
-            DataAreaTreeOutputDto allAreaTree = areaCache.tree(request.getCountryCode());
+            DataAreaTreeOutputDto allAreaTree = areaCache.treeAll(DataCountryEnum.valueOf(request.getCountryCode()));
             Set<String> recursionIdSet = areaCache.recursionListSubId(request.getAreaCodeSet(), allAreaTree);
             inputDto.setAreaCodeSet(recursionIdSet);
         }

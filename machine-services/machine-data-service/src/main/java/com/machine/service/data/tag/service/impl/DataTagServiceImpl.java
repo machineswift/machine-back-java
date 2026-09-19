@@ -208,6 +208,8 @@ public class DataTagServiceImpl implements IDataTagService {
             // 获取分类以及子分类
             Set<String> categoryIdSet = dataTagCategoryCache.recursionListSubIds(inputDto.getType(), inputDto.getCategoryIdSet());
             inputDto.setCategoryIdSet(categoryIdSet);
+        }else {
+                inputDto.setCategoryIdSet(dataTagCategoryCache.recursionSubId(inputDto.getType()));
         }
 
         Page<DataTagEntity> page = tagDao.selectPage(inputDto);

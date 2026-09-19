@@ -8,6 +8,7 @@ import com.machine.sdk.base.model.dto.base.AddressInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -35,10 +36,10 @@ public class OpenApiShopDetailResponseVo {
     private AddressInfoDto addressInfo;
 
     @Schema(description = "经度")
-    private Long latitude;
+    private BigDecimal latitude;
 
     @Schema(description = "纬度")
-    private Long longitude;
+    private BigDecimal longitude;
 
     @Schema(description = "描述")
     private String description;

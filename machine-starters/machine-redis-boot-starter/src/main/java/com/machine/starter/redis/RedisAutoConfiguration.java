@@ -4,7 +4,6 @@ import com.machine.starter.redis.command.CustomerRedisCommands;
 import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
@@ -91,30 +90,6 @@ public class RedisAutoConfiguration {
         return new CustomerRedisCommands(redisCommands);
     }
 
-
-    @Bean
-    public JedisPooled jedisPooled(RedisProperties redisProperties) {
-        // 配置连接池
-        GenericObjectPoolConfig<Connection> poolConfig = new GenericObjectPoolConfig<>();
-        poolConfig.setMaxTotal(10);
-        poolConfig.setMaxIdle(5);
-        poolConfig.setMinIdle(2);
-
-        // 配置 Jedis 客户端
-        JedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
-                .connectionTimeoutMillis(3000)
-                .socketTimeoutMillis(3000)
-                .password(redisProperties.getPassword())
-                .database(redisProperties.getDatabase())
-                .build();
-
-        return new JedisPooled(
-                new HostAndPort(redisProperties.getHost(), redisProperties.getPort()),
-                clientConfig,
-                poolConfig
-        );
-    }
-
     /**
      * 主要用于分布式锁（看门狗）
      */
@@ -123,11 +98,12 @@ public class RedisAutoConfiguration {
         Config config = new Config();
         config.useSingleServer()
                 .setAddress("redis://" + redisProperties.getHost() + SEPARATOR_COLON + redisProperties.getPort())
-                .setPassword(redisProperties.getPassword())
                 .setDatabase(redisProperties.getDatabase())
-                .setKeepAlive(true)
                 .setTimeout(3000)
                 .setPingConnectionInterval(30000);
+
+        config.setPassword(redisProperties.getPassword());
+        config.setTcpKeepAlive(true);
         config.setCodec(new JsonJacksonCodec());
         return Redisson.create(config);
     }
@@ -140,5 +116,6 @@ public class RedisAutoConfiguration {
         var redisCommands = applicationContext.getBean(RedisCommands.class);
         redisCommands.ping();
     }
+
 }
 

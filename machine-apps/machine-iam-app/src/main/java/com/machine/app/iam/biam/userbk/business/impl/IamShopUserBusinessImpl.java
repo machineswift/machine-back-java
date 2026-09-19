@@ -204,7 +204,7 @@ public class IamShopUserBusinessImpl implements IIamShopUserBusiness {
         boolean compute = isCompute(request.getOrganizationType(),request.getOrganizationIdSet(), request.getRoleIdSet(), finallyqueryUserIdSet);
 
         if (compute && CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
-            throw new BIamBusinessException("iam.shopUser.business.export.emptyResult", "结果为空");
+            throw new BIamBusinessException("biam.shopUser.business.export.emptyResult", "结果为空");
         }
 
         BIamUserExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserExportInputDto.class);

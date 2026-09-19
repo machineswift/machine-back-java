@@ -34,6 +34,30 @@
         </dependency>
 
         <dependency>
+            <groupId>com.machine</groupId>
+            <artifactId>machine-data-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.machine</groupId>
+            <artifactId>machine-crm-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.machine</groupId>
+            <artifactId>machine-scm-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.machine</groupId>
+            <artifactId>machine-ai-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.javers</groupId>
             <artifactId>javers-core</artifactId>
         </dependency>

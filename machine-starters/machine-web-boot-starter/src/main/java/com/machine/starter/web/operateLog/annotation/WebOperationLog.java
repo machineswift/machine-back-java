@@ -48,7 +48,7 @@ public @interface WebOperationLog {
     String operateName();
 
     /**
-     * 操作模块实体主键 SpEL，如 "#p0.id"
+     * 操作模块实体主键 SpEL，如 "#request.id"
      */
     String moduleEntityId();
 

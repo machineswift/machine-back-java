@@ -15,6 +15,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,14 @@ public class BIamPermissionController {
     @Operation(summary = "创建权限")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:PERMISSION:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_PERMISSION,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建权限",
+            moduleEntityId = "#request.name",
+            content = "'创建权限：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated BIamPermissionCreateRequestVo request) {
         log.info("创建权限，request={}", JSONUtil.toJsonStr(request));
@@ -49,11 +53,13 @@ public class BIamPermissionController {
     @Operation(summary = "删除权限")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:PERMISSION:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_PERMISSION,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除权限")
+            operateName = "删除权限",
+            moduleEntityId = "#request.id",
+            content = "'删除权限：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除权限，request={}", JSONUtil.toJsonStr(request));
         permissionBusiness.delete(request);
@@ -62,11 +68,13 @@ public class BIamPermissionController {
     @Operation(summary = "修改权限")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:PERMISSION:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_PERMISSION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改权限")
+            operateName = "修改权限",
+            moduleEntityId = "#request.id",
+            content = "'修改权限：' + #request.name")
     public void update(@RequestBody @Validated BIamPermissionUpdateRequestVo request) {
         log.info("修改权限，request={}", JSONUtil.toJsonStr(request));
         permissionBusiness.update(request);
@@ -75,11 +83,13 @@ public class BIamPermissionController {
     @Operation(summary = "修改父权限ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:PERMISSION:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_PERMISSION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改父权限ID")
+            operateName = "修改权限父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改权限父节点：' + #request.id")
     public void updateParent(@RequestBody @Validated BIamPermissionUpdateParentRequestVo request) {
         permissionBusiness.updateParent(request);
     }

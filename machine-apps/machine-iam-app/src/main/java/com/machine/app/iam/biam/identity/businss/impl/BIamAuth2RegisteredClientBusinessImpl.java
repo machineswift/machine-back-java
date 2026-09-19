@@ -99,7 +99,7 @@ public class BIamAuth2RegisteredClientBusinessImpl implements IBIamAuth2Register
     @Override
     public void delete(IdRequest request) {
         if (!ROOT_USER_ID.equals(AppContextHolder.getContext().getUserId())) {
-            throw new BIamBusinessException("iam.identity.business.oauth2RegisteredClient.delete.notRootUser", "只有超级管理员才能执行删除操作");
+            throw new BIamBusinessException("biam.identity.business.oauth2RegisteredClient.delete.notRootUser", "只有超级管理员才能执行删除操作");
         }
         oauth2RegisteredClientClient.delete(request);
     }

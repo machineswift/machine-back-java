@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Schema
 @NoArgsConstructor
@@ -27,10 +29,10 @@ public class DataShopUpdateRequestVo {
     private AddressInfoDto addressInfo;
 
     @Schema(description = "经度")
-    private Long latitude;
+    private BigDecimal latitude;
 
     @Schema(description = "纬度")
-    private Long longitude;
+    private BigDecimal longitude;
 
     @Schema(description = "描述")
     private String description;

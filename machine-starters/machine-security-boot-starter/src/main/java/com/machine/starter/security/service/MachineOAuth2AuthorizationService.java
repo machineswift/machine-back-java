@@ -71,7 +71,7 @@ public class MachineOAuth2AuthorizationService implements OAuth2AuthorizationSer
         BIamOAuth2AuthorizationDto iamOAuth2AuthorizationDto = new BIamOAuth2AuthorizationDto();
 
         if (tokenType == null) {
-            throw new BIamBusinessException("iam.identity.repository.findByToken.nullTokenType", "token类型为空");
+            throw new BIamBusinessException("biam.identity.repository.findByToken.nullTokenType", "token类型为空");
         } else if (OAuth2ParameterNames.STATE.equals(tokenType.getValue())) {
             iamOAuth2AuthorizationDto.setState(token);
         } else if (OAuth2ParameterNames.CODE.equals(tokenType.getValue())) {

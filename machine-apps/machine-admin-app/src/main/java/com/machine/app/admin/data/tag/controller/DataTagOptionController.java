@@ -13,6 +13,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,14 @@ public class DataTagOptionController {
     @Operation(summary = "创建智能标签选项")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建智能标签选项",
+            moduleEntityId = "#request.name",
+            content = "'创建智能标签选项：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataTagOptionCreateRequestVo request) {
         log.info("创建智能标签选项，request={}", JSONUtil.toJsonStr(request));
@@ -49,11 +53,13 @@ public class DataTagOptionController {
     @Operation(summary = "删除智能标签选项")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除智能标签选项")
+            operateName = "删除智能标签选项",
+            moduleEntityId = "#request.id",
+            content = "'删除智能标签选项：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签选项，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.delete(request);
@@ -62,11 +68,13 @@ public class DataTagOptionController {
     @Operation(summary = "修改智能标签选项")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签选项")
+            operateName = "修改智能标签选项",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签选项：' + #request.name")
     public void update(@RequestBody @Validated DataTagOptionUpdateRequestVo request) {
         log.info("修改智能标签选项，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.update(request);
@@ -76,11 +84,14 @@ public class DataTagOptionController {
     @Operation(summary = "修改智能标签选项编码")
     @PostMapping("update_code")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_CODE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签选项编码")
+            operateName = "修改智能标签选项编码",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签选项编码：' + #request.id",
+            diff = false)
     public void updateCode(@RequestBody @Validated DataTagOptionUpdateCodeRequestVo request) {
         log.info("修改智能标签选项编码，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateCode(request);
@@ -89,11 +100,14 @@ public class DataTagOptionController {
     @Operation(summary = "修改智能标签选项状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签选项状态")
+            operateName = "修改智能标签选项状态",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签选项状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated DataTagOptionUpdateStatusRequestVo request) {
         log.info("修改智能标签选项状态，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateStatus(request);
@@ -102,11 +116,14 @@ public class DataTagOptionController {
     @Operation(summary = "修改智能标签选项排序")
     @PostMapping("update_sort")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:UPDATE_SORT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签选项排序")
+            operateName = "修改智能标签选项排序",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签选项排序：' + #request.id",
+            diff = false)
     public void updateSort(@RequestBody @Validated DataTagOptionUpdateSortRequestVo request) {
         log.info("修改智能标签选项排序，request={}", JSONUtil.toJsonStr(request));
         tagOptionBusiness.updateSort(request);
@@ -117,7 +134,7 @@ public class DataTagOptionController {
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:DETAIL')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询智能标签选项详情")
     public DataTagOptionDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
@@ -136,7 +153,7 @@ public class DataTagOptionController {
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_OPTION:LIST_EXPAND')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_OPTION,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询智能标签选项(管理菜单)")
     public List<DataTagOptionExpandListResponseVo> listExpand(@RequestBody @Validated DataTagOptionQueryListRequestVo request) {

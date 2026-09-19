@@ -86,13 +86,13 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         BIamPermissionResourceTypeEnum resourceType = inputDto.getResourceType();
         if (BIamPermissionResourceTypeEnum.APP == resourceType ||
                 BIamPermissionResourceTypeEnum.MODULE == resourceType) {
-            throw new BIamBusinessException("iam.permission.service.create", "暂不支持新增APP和MODULE");
+            throw new BIamBusinessException("biam.permission.service.create", "暂不支持新增APP和MODULE");
         }
 
         // 验证 parentId 是否存在
         BIamPermissionEntity parenEntityById = permissionDao.getById(inputDto.getParentId());
         if (null == parenEntityById) {
-            throw new BIamBusinessException("iam.permission.service.create.parentIdNotExists", "父ID不存在");
+            throw new BIamBusinessException("biam.permission.service.create.parentIdNotExists", "父ID不存在");
         }
         BIamPermissionResourceTypeEnum dbParentResourceType = parenEntityById.getResourceType();
 
@@ -101,7 +101,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
                     BIamPermissionResourceTypeEnum.MODULE == dbParentResourceType ||
                     BIamPermissionResourceTypeEnum.DIRECTORY == dbParentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.create.notSupportedParent", "目录只能在应用、模块、目录下面");
+                throw new BIamBusinessException("biam.permission.service.create.notSupportedParent", "目录只能在应用、模块、目录下面");
             }
         }
 
@@ -109,7 +109,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
             if (BIamPermissionResourceTypeEnum.MODULE == dbParentResourceType ||
                     BIamPermissionResourceTypeEnum.DIRECTORY == dbParentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.create.notSupportedParent", "菜单只能在模块或目录下面");
+                throw new BIamBusinessException("biam.permission.service.create.notSupportedParent", "菜单只能在模块或目录下面");
             }
         }
 
@@ -117,7 +117,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
             if (BIamPermissionResourceTypeEnum.MENU == dbParentResourceType ||
                     BIamPermissionResourceTypeEnum.BUTTON == dbParentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.create.notSupportedParent", "按钮只能在菜单或按钮下面");
+                throw new BIamBusinessException("biam.permission.service.create.notSupportedParent", "按钮只能在菜单或按钮下面");
             }
         }
 
@@ -131,7 +131,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         BIamPermissionEntity entityByName = permissionDao.getByParentIdAndName(inputDto.getParentId(),
                 inputDto.getName());
         if (null != entityByName) {
-            throw new BIamBusinessException("iam.permission.service.create.nameAlreadyExists", "权限名称已经存在");
+            throw new BIamBusinessException("biam.permission.service.create.nameAlreadyExists", "权限名称已经存在");
         }
 
         BIamPermissionEntity insertEntity = new BIamPermissionEntity();
@@ -164,7 +164,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         BIamPermissionTreeOutputDto allTreeOutputDto = treeAll()._2();
         BIamPermissionTreeOutputDto targetNode = TreeUtil.findNode(allTreeOutputDto, entity.getId());
         if (CollectionUtil.isNotEmpty(targetNode.getChildren())) {
-            throw new BIamBusinessException("iam.permission.service.delete.hasSubPermission", "下面有子数据，不能删除");
+            throw new BIamBusinessException("biam.permission.service.delete.hasSubPermission", "下面有子数据，不能删除");
         }
 
         // 是否关联角色
@@ -185,7 +185,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
                     sbRoleName.append(",");
                 }
             }
-            throw new BIamBusinessException("iam.permission.service.delete.associationRole",
+            throw new BIamBusinessException("biam.permission.service.delete.associationRole",
                     "权限关联角色，不能删除! 角色名称:" + sbRoleName);
         }
 
@@ -207,7 +207,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
                     sbUserName.append(",");
                 }
             }
-            throw new BIamBusinessException("iam.permission.service.delete.associationUser",
+            throw new BIamBusinessException("biam.permission.service.delete.associationUser",
                     "权限关联用户，不能删除! 用户名称:" + sbUserName);
         }
 
@@ -219,7 +219,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
     public int update(BIamPermissionUpdateInputDto inputDto) {
         BIamPermissionEntity entity = permissionDao.getById(inputDto.getId());
         if (null == entity) {
-            throw new BIamBusinessException("iam.permission.service.update.notExists", "权限不存在");
+            throw new BIamBusinessException("biam.permission.service.update.notExists", "权限不存在");
         }
 
         // 验证 code 是否存在
@@ -231,7 +231,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         // 验证名称在同一层级是否存在
         BIamPermissionEntity entityByName = permissionDao.getByParentIdAndName(entity.getParentId(), inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
-            throw new BIamBusinessException("iam.permission.service.create.nameAlreadyExists", "权限名称已经存在");
+            throw new BIamBusinessException("biam.permission.service.create.nameAlreadyExists", "权限名称已经存在");
         }
 
         BIamPermissionEntity updateEntity = new BIamPermissionEntity();
@@ -267,14 +267,14 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         BIamPermissionResourceTypeEnum resourceType = dbEntity.getResourceType();
         if (BIamPermissionResourceTypeEnum.APP == resourceType ||
                 BIamPermissionResourceTypeEnum.MODULE == resourceType) {
-            throw new BIamBusinessException("iam.permission.service.updateParent", "暂不支持修改APP和MODULE的父节点");
+            throw new BIamBusinessException("biam.permission.service.updateParent", "暂不支持修改APP和MODULE的父节点");
         }
 
         // 验证名称在同一层级是否存在
         BIamPermissionEntity entityByName = permissionDao.getByParentIdAndName(inputDto.getParentId(),
                 dbEntity.getName());
         if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
-            throw new BIamBusinessException("iam.permission.service.updateParent.nameAlreadyExists", "权限名称已经存在");
+            throw new BIamBusinessException("biam.permission.service.updateParent.nameAlreadyExists", "权限名称已经存在");
         }
 
         // 验证父Id是否在当前节点下面
@@ -283,13 +283,13 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         List<BIamPermissionTreeOutputDto> treeOutputDtoList = TreeUtil.collectAllNodes(targetNode);
         Set<String> recursionIdSet = treeOutputDtoList.stream().map(TreeNode::getId).collect(Collectors.toSet());
         if (recursionIdSet.contains(inputDto.getParentId())) {
-            throw new BIamBusinessException("iam.permission.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
+            throw new BIamBusinessException("biam.permission.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
         }
 
         // 验证父权限是否存在
         BIamPermissionEntity parentEntity = permissionDao.getById(inputDto.getParentId());
         if (null == parentEntity) {
-            throw new BIamBusinessException("iam.permission.service.updateParent.parentNotExists", "父权限不存在");
+            throw new BIamBusinessException("biam.permission.service.updateParent.parentNotExists", "父权限不存在");
         }
 
         BIamPermissionResourceTypeEnum parentResourceType = parentEntity.getResourceType();
@@ -298,7 +298,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
                     BIamPermissionResourceTypeEnum.MODULE == parentResourceType ||
                     BIamPermissionResourceTypeEnum.DIRECTORY == parentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.updateParent.notSupportedParent",
+                throw new BIamBusinessException("biam.permission.service.updateParent.notSupportedParent",
                         "目录只能在应用、目录、模块下面");
             }
         }
@@ -307,7 +307,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
             if (BIamPermissionResourceTypeEnum.MODULE == parentResourceType ||
                     BIamPermissionResourceTypeEnum.DIRECTORY == parentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.updateParent.notSupportedParent", "菜单只能在模块或目录下面");
+                throw new BIamBusinessException("biam.permission.service.updateParent.notSupportedParent", "菜单只能在模块或目录下面");
             }
         }
 
@@ -315,7 +315,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
             if (BIamPermissionResourceTypeEnum.MENU == parentResourceType ||
                     BIamPermissionResourceTypeEnum.BUTTON == parentResourceType) {
             } else {
-                throw new BIamBusinessException("iam.permission.service.updateParent.notSupportedParent", "按钮只能在菜单或按钮下面");
+                throw new BIamBusinessException("biam.permission.service.updateParent.notSupportedParent", "按钮只能在菜单或按钮下面");
             }
         }
 
@@ -489,7 +489,7 @@ public class BIamPermissionServiceImpl implements IBIamPermissionService {
         }
         sbParentName.deleteCharAt(sbParentName.length() - 2);
 
-        throw new BIamBusinessException("iam.permission.service.create.codeAlreadyExists",
+        throw new BIamBusinessException("biam.permission.service.create.codeAlreadyExists",
                 "编码已经存在已被【" + sbParentName + "】占用，请修改后重新配置！");
     }
 }

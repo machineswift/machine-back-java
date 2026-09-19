@@ -17,6 +17,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,14 @@ public class BIamOrganizationController {
     @Operation(summary = "创建组织")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ORGANIZATION,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建组织",
+            moduleEntityId = "#request.name",
+            content = "'创建组织：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated BIamOrganizationCreateRequestVo request) {
         log.info("创建组织，request={}", JSONUtil.toJsonStr(request));
@@ -51,11 +55,13 @@ public class BIamOrganizationController {
     @Operation(summary = "删除组织")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ORGANIZATION,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除组织")
+            operateName = "删除组织",
+            moduleEntityId = "#request.id",
+            content = "'删除组织：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.delete(request);
@@ -64,11 +70,13 @@ public class BIamOrganizationController {
     @Operation(summary = "修改组织")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ORGANIZATION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改组织")
+            operateName = "修改组织",
+            moduleEntityId = "#request.id",
+            content = "'修改组织：' + #request.name")
     public void update(@RequestBody @Validated BIamOrganizationUpdateRequestVo request) {
         log.info("修改组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.update(request);
@@ -77,11 +85,13 @@ public class BIamOrganizationController {
     @Operation(summary = "修改父组织ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ORGANIZATION:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ORGANIZATION,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改父组织ID")
+            operateName = "修改组织父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改组织父节点：' + #request.id")
     public void updateParent(@RequestBody @Validated BIamOrganizationUpdateParentRequestVo request) {
         log.info("修改父组织，request={}", JSONUtil.toJsonStr(request));
         organizationBusiness.updateParent(request);

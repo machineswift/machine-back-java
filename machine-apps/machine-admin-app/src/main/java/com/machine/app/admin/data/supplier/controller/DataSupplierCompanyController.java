@@ -14,6 +14,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,14 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "创建")
     @PostMapping("create")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建供应商公司",
+            moduleEntityId = "#request.name",
+            content = "'创建供应商公司：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataSupplierCompanyCreateRequestVo request) {
         log.info("创建供应商公司，request={}", JSONUtil.toJsonStr(request));
@@ -48,11 +52,14 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "修改状态")
     @PostMapping("update_status")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改供应商公司状态")
+            operateName = "修改供应商公司状态",
+            moduleEntityId = "#request.id",
+            content = "'修改供应商公司状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated DataSupplierCompanyUpdateStatusRequestVo request) {
         log.info("修改供应商公司状态，request={}", JSONUtil.toJsonStr(request));
         supplierCompanyBusiness.updateStatus(request);
@@ -60,11 +67,13 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "修改")
     @PostMapping("update")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改供应商公司")
+            operateName = "修改供应商公司",
+            moduleEntityId = "#request.id",
+            content = "'修改供应商公司：' + #request.name")
     public void update(@RequestBody @Validated DataSupplierCompanyUpdateRequestVo request) {
         log.info("修改供应商公司，request={}", JSONUtil.toJsonStr(request));
         supplierCompanyBusiness.update(request);

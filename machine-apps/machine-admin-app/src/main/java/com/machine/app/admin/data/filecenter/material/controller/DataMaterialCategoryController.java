@@ -14,6 +14,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,14 @@ public class DataMaterialCategoryController {
     @Operation(summary = "新增")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL_CATEGORY,
             operateType = ActionTypeEnum.CREATE,
             operateName = "新增素材分类",
+            moduleEntityId = "#request.name",
+            content = "'新增素材分类：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCategoryCreateRequestVo request) {
         log.info("新增素材分类，request={}", JSONUtil.toJsonStr(request));
@@ -48,11 +52,13 @@ public class DataMaterialCategoryController {
     @Operation(summary = "删除")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL_CATEGORY,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除素材分类")
+            operateName = "删除素材分类",
+            moduleEntityId = "#request.id",
+            content = "'删除素材分类：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.delete(request);
@@ -61,11 +67,13 @@ public class DataMaterialCategoryController {
     @Operation(summary = "修改")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改素材分类")
+            operateName = "修改素材分类",
+            moduleEntityId = "#request.id",
+            content = "'修改素材分类：' + #request.name")
     public void update(@RequestBody @Validated DataMaterialCategoryUpdateRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.update(request);
@@ -74,11 +82,13 @@ public class DataMaterialCategoryController {
     @Operation(summary = "修改父ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改素材分类父ID")
+            operateName = "修改素材分类父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改素材分类父节点：' + #request.id")
     public void updateParent(@RequestBody @Validated DataMaterialCategoryUpdateParentRequestVo request) {
         log.info("修改父素材分类，request={}", JSONUtil.toJsonStr(request));
         materialCategoryBusiness.updateParent(request);
@@ -89,7 +99,7 @@ public class DataMaterialCategoryController {
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL_CATEGORY:DETAIL')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
+            moduleEntity = ModuleEntityEnum.DATA_MATERIAL_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询素材分类详情")
     public DataMaterialCategoryDetailResponseVo detail(@RequestBody @Validated IdRequest request) {

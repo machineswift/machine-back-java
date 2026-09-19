@@ -120,13 +120,13 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
         //验证手机号是否存在
         BIamUserDto iamUserDto = userClient.getByPhone(request.getPhone());
         if (null == iamUserDto) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaPhoneLogin.phoneNotFound",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaPhoneLogin.phoneNotFound",
                     "您的手机号当前无权限登录，请检查账号是否正确或联系客服");
         }
 
         //验证用户状态
         if (!iamUserDto.isEnabled()) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaPhoneLogin.userStatusDisable",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaPhoneLogin.userStatusDisable",
                     "您的账号已被禁用，请联系客服了解详情");
         }
 
@@ -139,7 +139,7 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
                 //验证时间是否过了一分钟
                 Long ttl = customerRedisCommands.ttl(userKey);
                 if (null != ttl && (ttl.compareTo(CAPTCHA_EXPIRATION_TIME - CAPTCHA_LOCK_TIME) > 0)) {
-                    throw new BIamBusinessException("iam.auth.business.smsCaptchaPhoneLogin.captchaAlreadyExistsOneMinute",
+                    throw new BIamBusinessException("biam.auth.business.smsCaptchaPhoneLogin.captchaAlreadyExistsOneMinute",
                             "验证码请求过于频繁，请稍候再试");
                 }
             }
@@ -159,7 +159,7 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
         captchaRecordInputDto.setStartTime(DateUtil.beginOfDay(DateUtil.date()).getTime());
         int count = dataSmsClient.countByCondition(captchaRecordInputDto);
         if (count >= dataIamConfigClient.smsCaptchaPhoneLoginLimit()) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaPhoneLogin.userStatusDisable",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaPhoneLogin.userStatusDisable",
                     "您今天的手机号验证次数已用完。如需继续，请尝试其他验证方式或明日再试。如有疑问，请联系客服");
         }
 
@@ -182,13 +182,13 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
         //验证手机号是否存在
         BIamUserDto iamUserDto = userClient.getByPhone(request.getPhone());
         if (null == iamUserDto) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaForgetPassword.phoneNotFound",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaForgetPassword.phoneNotFound",
                     "您的手机号当前无权限登录，请检查账号是否正确或联系客服");
         }
 
         //验证用户状态
         if (!iamUserDto.isEnabled()) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaForgetPassword.userStatusDisable",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaForgetPassword.userStatusDisable",
                     "您的账号已被禁用，请联系客服了解详情");
         }
 
@@ -201,7 +201,7 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
                 //验证时间是否过了一分钟
                 Long ttl = customerRedisCommands.ttl(userKey);
                 if (null != ttl && (ttl.compareTo(CAPTCHA_EXPIRATION_TIME - CAPTCHA_LOCK_TIME) > 0)) {
-                    throw new BIamBusinessException("iam.auth.business.smsCaptchaForgetPassword.captchaAlreadyExistsOneMinute",
+                    throw new BIamBusinessException("biam.auth.business.smsCaptchaForgetPassword.captchaAlreadyExistsOneMinute",
                             "验证码请求过于频繁，请稍候再试");
                 }
             }
@@ -221,7 +221,7 @@ public class BIamAuthenticationCaptchaBusinessImpl implements IBIamAuthenticatio
         captchaRecordInputDto.setStartTime(DateUtil.beginOfDay(DateUtil.date()).getTime());
         int count = dataSmsClient.countByCondition(captchaRecordInputDto);
         if (count >= dataIamConfigClient.smsCaptchaForgetPasswordLimit()) {
-            throw new BIamBusinessException("iam.auth.business.smsCaptchaForgetPassword.userStatusDisable",
+            throw new BIamBusinessException("biam.auth.business.smsCaptchaForgetPassword.userStatusDisable",
                     "您今天的手机号验证次数已用完。如需继续，请尝试其他验证方式或明日再试。如有疑问，请联系客服");
         }
 

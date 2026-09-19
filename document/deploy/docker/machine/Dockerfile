@@ -5,4 +5,4 @@ FROM openjdk:25-jdk
 RUN mkdir -p /opt/skywalking-agent
 
 # 复制 skywalking-agent
-COPY skywalking-agent1 /opt/skywalking-agent
+COPY skywalking-agent /opt/skywalking-agent

@@ -12,6 +12,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -44,33 +45,42 @@ public class ManageAppMessageTemplateController {
 
     @Operation(summary = "编辑消息模版")
     @PostMapping("update_message_template")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MESSAGE_TEMPLATE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "编辑消息模版")
+            operateName = "编辑消息模版",
+            moduleEntityId = "''",
+            content = "'编辑消息模版'",
+            diff = false)
     void updateMessageTemplate(@RequestBody @Validated ManageAppMessageTemplateUpdateReqVo request){
         messageTemplateBusiness.updateMessageTemplate(request);
     }
 
     @Operation(summary = "编辑消息模版状态")
     @PostMapping("update_message_template_status")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MESSAGE_TEMPLATE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "编辑消息模版状态")
+            operateName = "编辑消息模版状态",
+            moduleEntityId = "''",
+            content = "'编辑消息模版状态'",
+            diff = false)
     void updateMessageTemplateStatus(@RequestBody @Validated ManageAppMessageTemplateUpdateStatusReqVo request){
         messageTemplateBusiness.updateMessageTemplateStatus(request);
     }
 
     @Operation(summary = "编辑消息模版推送渠道")
     @PostMapping("update_message_template_channel")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MESSAGE_TEMPLATE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "编辑消息模版推送渠道")
+            operateName = "编辑消息模版推送渠道",
+            moduleEntityId = "''",
+            content = "'编辑消息模版推送渠道'",
+            diff = false)
     void updateMessageTemplateChannel(@RequestBody @Validated ManageAppMessageTemplateUpdateChannelReqVo request){
         messageTemplateBusiness.updateMessageTemplateChannel(request);
     }

@@ -17,6 +17,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,14 @@ public class DataBrandController {
     @Operation(summary = "创建品牌")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_BRAND,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建品牌",
+            moduleEntityId = "#request.name",
+            content = "'创建品牌：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataBrandCreateRequestVo request) {
         log.info("创建品牌，request={}", JSONUtil.toJsonStr(request));
@@ -51,11 +55,13 @@ public class DataBrandController {
     @Operation(summary = "删除品牌")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_BRAND,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除品牌")
+            operateName = "删除品牌",
+            moduleEntityId = "#request.id",
+            content = "'删除品牌：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.delete(request);
@@ -64,11 +70,13 @@ public class DataBrandController {
     @Operation(summary = "修改品牌")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_BRAND,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改品牌")
+            operateName = "修改品牌",
+            moduleEntityId = "#request.id",
+            content = "'修改品牌：' + #request.name")
     public void update(@RequestBody @Validated DataBrandUpdateRequestVo request) {
         log.info("修改品牌，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.update(request);
@@ -77,11 +85,14 @@ public class DataBrandController {
     @Operation(summary = "修改品牌状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_BRAND,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改品牌状态")
+            operateName = "修改品牌状态",
+            moduleEntityId = "#request.id",
+            content = "'修改品牌状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated DataBrandUpdateStatusRequestVo request) {
         log.info("修改品牌状态，request={}", JSONUtil.toJsonStr(request));
         brandBusiness.updateStatus(request);

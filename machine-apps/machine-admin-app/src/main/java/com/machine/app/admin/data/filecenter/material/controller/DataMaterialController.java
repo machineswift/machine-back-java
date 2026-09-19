@@ -17,6 +17,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,11 +39,14 @@ public class DataMaterialController {
     @Operation(summary = "新增")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
             operateType = ActionTypeEnum.CREATE,
             operateName = "新增素材",
+            moduleEntityId = "#request.title",
+            content = "'新增素材：' + #request.title",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataMaterialCreateRequestVo request,
                                      HttpServletRequest servletRequest) {
@@ -53,11 +57,13 @@ public class DataMaterialController {
     @Operation(summary = "修改")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改素材")
+            operateName = "修改素材",
+            moduleEntityId = "#request.id",
+            content = "'修改素材：' + #request.title")
     public void update(@RequestBody @Validated DataMaterialUpdateRequestVo request,
                        HttpServletRequest servletRequest) {
         log.info("修改素材，request={}", JSONUtil.toJsonStr(request));
@@ -67,11 +73,13 @@ public class DataMaterialController {
     @Operation(summary = "修改分类")
     @PostMapping("update_category")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:UPDATE_CATEGORY')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改素材分类")
+            operateName = "修改素材分类",
+            moduleEntityId = "#request.id",
+            content = "'修改素材分类：' + #request.id")
     public void updateCategory(@RequestBody @Validated DataMaterialUpdateCategoryRequestVo request) {
         log.info("修改素材分类，request={}", JSONUtil.toJsonStr(request));
         materialBusiness.updateCategory(request);

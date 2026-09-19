@@ -98,13 +98,13 @@ public class BIamAuthenticationCurrentBusinessImpl implements IBIamAuthenticatio
         //验证手机号是否存在
         BIamUserDto iamUserDto = userClient.getByPhone(request.getPhone());
         if (null == iamUserDto) {
-            throw new BIamBusinessException("iam.auth.business.changePasswordSmsCaptcha.phoneNotFound",
+            throw new BIamBusinessException("biam.auth.business.changePasswordSmsCaptcha.phoneNotFound",
                     "您的手机号当前无权限登录，请检查账号是否正确或联系客服");
         }
 
         //验证用户状态
         if (!iamUserDto.isEnabled()) {
-            throw new BIamBusinessException("iam.auth.business.changePasswordSmsCaptcha.userStatusDisable",
+            throw new BIamBusinessException("biam.auth.business.changePasswordSmsCaptcha.userStatusDisable",
                     "您的账号已被禁用，请联系客服了解详情");
         }
 
@@ -118,7 +118,7 @@ public class BIamAuthenticationCurrentBusinessImpl implements IBIamAuthenticatio
             if (!request.getCaptcha().equals(redisCaptcha)) {
                 //防止暴力破解验证码
                 Thread.sleep(200L);
-                throw new BIamBusinessException("iam.auth.business.changePasswordSmsCaptcha.wrongCaptcha",
+                throw new BIamBusinessException("biam.auth.business.changePasswordSmsCaptcha.wrongCaptcha",
                         "您输入的验证码有误，请检查后再试");
             } else {
                 customerRedisCommands.del(userKey);

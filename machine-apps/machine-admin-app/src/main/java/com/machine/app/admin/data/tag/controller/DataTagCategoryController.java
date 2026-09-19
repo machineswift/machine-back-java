@@ -12,6 +12,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,14 @@ public class DataTagCategoryController {
     @Operation(summary = "创建智能标签分类")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建智能标签分类",
+            moduleEntityId = "#request.name",
+            content = "'创建智能标签分类：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataTagCategoryCreateRequestVo request) {
         log.info("创建智能标签分类，request={}", JSONUtil.toJsonStr(request));
@@ -49,11 +53,13 @@ public class DataTagCategoryController {
     @Operation(summary = "删除智能标签分类")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除智能标签分类")
+            operateName = "删除智能标签分类",
+            moduleEntityId = "#request.id",
+            content = "'删除智能标签分类：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签分类，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.delete(request);
@@ -62,11 +68,13 @@ public class DataTagCategoryController {
     @Operation(summary = "修改智能标签分类")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签分类")
+            operateName = "修改智能标签分类",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签分类：' + #request.name")
     public void update(@RequestBody @Validated DataTagCategoryUpdateRequestVo request) {
         log.info("修改智能标签分类，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.update(request);
@@ -75,11 +83,14 @@ public class DataTagCategoryController {
     @Operation(summary = "修改智能标签分类排序")
     @PostMapping("update_sort")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_SORT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签分类排序")
+            operateName = "修改智能标签分类排序",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签分类排序：' + #request.id",
+            diff = false)
     public void updateSort(@RequestBody @Validated DataTagCategoryUpdateSortRequestVo request) {
         log.info("修改智能标签分类排序，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.updateSort(request);
@@ -88,11 +99,13 @@ public class DataTagCategoryController {
     @Operation(summary = "修改智能标签分类父ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签分类父ID")
+            operateName = "修改智能标签分类父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签分类父节点：' + #request.id")
     public void updateParent(@RequestBody @Validated DataTagCategoryUpdateParentRequestVo request) {
         log.info("修改智能标签分类父ID，request={}", JSONUtil.toJsonStr(request));
         tagCategoryBusiness.updateParent(request);
@@ -103,7 +116,7 @@ public class DataTagCategoryController {
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG_CATEGORY:DETAIL')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_TAG,
+            moduleEntity = ModuleEntityEnum.DATA_TAG_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询智能标签分类详情")
     public DataTagCategoryDetailResponseVo detail(@RequestBody @Validated IdRequest request) {

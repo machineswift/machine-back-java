@@ -7,11 +7,6 @@ import com.machine.app.iam.biam.authentication.controller.vo.request.BIamAuthSms
 import com.machine.app.iam.biam.authentication.controller.vo.response.BIamAuthenticationCurrentUserFunctionPermissionResponseVo;
 import com.machine.app.iam.biam.authentication.controller.vo.response.BIamAuthenticationCurrentUserResponseVo;
 import com.machine.sdk.base.context.AppContextHolder;
-import com.machine.sdk.base.envm.base.ModuleEntityEnum;
-import com.machine.sdk.base.envm.base.ModuleEnum;
-import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
-import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
-import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +25,6 @@ public class BIamAuthenticationCurrentController {
 
     @Operation(summary = "用户自己修改密码")
     @PostMapping("change_password")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
-            module = ModuleEnum.BIAM,
-            moduleEntity = ModuleEntityEnum.BIAM_USER,
-            operateType = ActionTypeEnum.UPDATE,
-            operateName = "用户自己修改密码",
-            sanitizeKeys = {"oldPassword", "newPassword"})
     public void changePassword(@RequestBody @Validated BIamAuthenticationChangePasswordRequestVo request) {
         log.info("用户自己修改密码，userId={}", AppContextHolder.getContext().getUserId());
         currentBusiness.changePassword(request);
@@ -43,12 +32,6 @@ public class BIamAuthenticationCurrentController {
 
     @Operation(summary = "短信验证码修改密码")
     @PostMapping("change_password_sms_captcha")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
-            module = ModuleEnum.BIAM,
-            moduleEntity = ModuleEntityEnum.BIAM_USER,
-            operateType = ActionTypeEnum.UPDATE,
-            operateName = "短信验证码修改密码",
-            sanitizeKeys = {"newPassword"})
     public void changePasswordSmsCaptcha(@RequestBody @Validated BIamAuthSmsCaptchaChangePasswordRequestVo request) {
         log.info("短信验证码修改密码，request={}", JSONUtil.toJsonStr(request));
         currentBusiness.changePasswordSmsCaptcha(request);

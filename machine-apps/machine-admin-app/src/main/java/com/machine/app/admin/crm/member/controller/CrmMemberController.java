@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,15 @@ public class CrmMemberController {
     @Operation(summary = "创建会员")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:MEMBER:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_MEMBER,
             operateType = ActionTypeEnum.CREATE,
-            operateName = "创建会员")
+            operateName = "创建会员",
+            moduleEntityId = "#request.name",
+            content = "'创建会员：' + #request.name",
+            diff = false,
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated CrmMemberCreateRequestVo request) {
         log.info("创建会员，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(crmMemberBusiness.create(request));
@@ -49,11 +54,13 @@ public class CrmMemberController {
     @Operation(summary = "删除会员")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:MEMBER:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_MEMBER,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除会员")
+            operateName = "删除会员",
+            moduleEntityId = "#request.id",
+            content = "'删除会员：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除会员，request={}", JSONUtil.toJsonStr(request));
         crmMemberBusiness.delete(request);
@@ -62,11 +69,13 @@ public class CrmMemberController {
     @Operation(summary = "修改会员")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:MEMBER:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_MEMBER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改会员")
+            operateName = "修改会员",
+            moduleEntityId = "#request.id",
+            content = "'修改会员：' + #request.id")
     public void update(@RequestBody @Validated CrmMemberUpdateRequestVo request) {
         log.info("修改会员，request={}", JSONUtil.toJsonStr(request));
         crmMemberBusiness.update(request);

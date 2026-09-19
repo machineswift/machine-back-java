@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,14 @@ public class DataAreaController {
     @Operation(summary = "创建区域")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_AREA,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建区域",
+            moduleEntityId = "#request.name",
+            content = "'创建区域：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataAreaCreateRequestVo request) {
         log.info("创建区域，request={}", JSONUtil.toJsonStr(request));
@@ -50,11 +54,13 @@ public class DataAreaController {
     @Operation(summary = "删除区域")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_AREA,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除区域")
+            operateName = "删除区域",
+            moduleEntityId = "#request.id",
+            content = "'删除区域：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.delete(request);
@@ -63,11 +69,13 @@ public class DataAreaController {
     @Operation(summary = "修改区域")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_AREA,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改区域")
+            operateName = "修改区域",
+            moduleEntityId = "#request.id",
+            content = "'修改区域：' + #request.name")
     public void update(@RequestBody @Validated DataAreaUpdateRequestVo request) {
         log.info("修改区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.update(request);
@@ -76,11 +84,14 @@ public class DataAreaController {
     @Operation(summary = "修改父区域ID")
     @PostMapping("update_parent")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:AREA:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_AREA,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改父区域ID")
+            operateName = "修改区域父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改区域父节点：' + #request.id",
+            diff = false)
     public void updateParent(@RequestBody @Validated DataAreaUpdateParentRequestVo request) {
         log.info("修改父区域，request={}", JSONUtil.toJsonStr(request));
         areaBusiness.updateParent(request);

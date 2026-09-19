@@ -4,15 +4,15 @@ import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;
+import org.apache.tika.config.loader.TikaLoader;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.metadata.HttpHeaders;
 import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.ContentHandler;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.io.TikaInputStream;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.config.TikaConfig;
 
 import java.io.*;
 import java.util.*;
@@ -27,7 +27,7 @@ public class TikaFileTypeDetector {
 
     private static volatile TikaFileTypeDetector instance;
     private final Tika tika;
-    private final TikaConfig tikaConfig;
+    private final TikaLoader tikaLoader;
     private final Map<String, DataFileTypeEnum> mimeTypeToCategoryCache;
 
     // MIME 类型到分类的映射
@@ -118,7 +118,7 @@ public class TikaFileTypeDetector {
 
     private TikaFileTypeDetector() {
         this.tika = new Tika();
-        this.tikaConfig = TikaConfig.getDefaultConfig();
+        this.tikaLoader = TikaLoader.loadDefault();
         this.mimeTypeToCategoryCache = new ConcurrentHashMap<>();
     }
 
@@ -175,11 +175,11 @@ public class TikaFileTypeDetector {
     @SneakyThrows
     public Metadata extractMetadata(File file) {
         Metadata metadata = new Metadata();
-        try (InputStream is = TikaInputStream.get(file.toPath())) {
-            Parser parser = new AutoDetectParser(tikaConfig.getDetector());
+        try (TikaInputStream tis = TikaInputStream.get(file.toPath())) {
+            Parser parser = tikaLoader.loadAutoDetectParser();
             ContentHandler handler = new BodyContentHandler(-1);
-            ParseContext context = new ParseContext();
-            parser.parse(is, handler, metadata, context);
+            ParseContext context = tikaLoader.loadParseContext();
+            parser.parse(tis, handler, metadata, context);
         }
         return metadata;
     }
@@ -212,8 +212,6 @@ public class TikaFileTypeDetector {
                 metadata
         );
     }
-
-    // ==================== MultipartFile 相关方法 ====================
 
     /**
      * 检测 MultipartFile 的 MIME 类型
@@ -251,13 +249,13 @@ public class TikaFileTypeDetector {
     @SneakyThrows
     public Metadata extractMetadata(MultipartFile file) {
         Metadata metadata = new Metadata();
-        metadata.set(Metadata.CONTENT_LENGTH, String.valueOf(file.getSize()));
+        metadata.set(HttpHeaders.CONTENT_LENGTH, String.valueOf(file.getSize()));
 
-        try (InputStream is = TikaInputStream.get(file.getInputStream())) {
-            AutoDetectParser parser = new AutoDetectParser(tikaConfig.getDetector());
+        try (TikaInputStream tis = TikaInputStream.get(file.getInputStream())) {
+            Parser parser = tikaLoader.loadAutoDetectParser();
             BodyContentHandler handler = new BodyContentHandler(-1);
-            ParseContext context = new ParseContext();
-            parser.parse(is, handler, metadata, context);
+            ParseContext context = tikaLoader.loadParseContext();
+            parser.parse(tis, handler, metadata, context);
         }
         return metadata;
     }

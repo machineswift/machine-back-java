@@ -36,14 +36,14 @@ public class MachineRegisteredClientRepository implements RegisteredClientReposi
             inputDto.setClientSecret(registeredClient.getClientSecret());
             oauth2RegisteredClient.updateClientSecret(inputDto);
         } else {
-            throw new BIamBusinessException("iam.identity.repository.save.notSupportedSave", "认证中心客户端不支持自动创建");
+            throw new BIamBusinessException("biam.identity.repository.save.notSupportedSave", "认证中心客户端不支持自动创建");
         }
     }
 
     @Override
     public RegisteredClient findById(String id) {
         AppContextHolder.getContext().setUserId(SYSTEM_USER_ID);
-        throw new BIamBusinessException("iam.identity.repository.findById.notSupportedFindById", "认证中心客户端不支持id查询");
+        throw new BIamBusinessException("biam.identity.repository.findById.notSupportedFindById", "认证中心客户端不支持id查询");
     }
 
     @Override

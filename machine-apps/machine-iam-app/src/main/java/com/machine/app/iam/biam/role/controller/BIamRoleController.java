@@ -14,6 +14,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,14 @@ public class BIamRoleController {
     @Operation(summary = "创建角色")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ROLE,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建角色",
+            moduleEntityId = "#request.name",
+            content = "'创建角色：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated BIamRoleCreateRequestVo request) {
         log.info("创建角色，request={}", JSONUtil.toJsonStr(request));
@@ -48,11 +52,13 @@ public class BIamRoleController {
     @Operation(summary = "删除角色")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ROLE,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除角色")
+            operateName = "删除角色",
+            moduleEntityId = "#request.id",
+            content = "'删除角色：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除角色，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.delete(request);
@@ -61,11 +67,13 @@ public class BIamRoleController {
     @Operation(summary = "修改角色")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ROLE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改角色")
+            operateName = "修改角色",
+            moduleEntityId = "#request.id",
+            content = "'修改角色：' + #request.name")
     public void update(@RequestBody @Validated BIamRoleUpdateRequestVo request) {
         log.info("修改角色，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.update(request);
@@ -74,11 +82,14 @@ public class BIamRoleController {
     @Operation(summary = "修改角色状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ROLE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改角色状态")
+            operateName = "修改角色状态",
+            moduleEntityId = "#request.id",
+            content = "'修改角色状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated BIamRoleUpdateStatusRequestVo request) {
         log.info("修改角色状态，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.updateStatus(request);
@@ -87,11 +98,13 @@ public class BIamRoleController {
     @Operation(summary = "修改角色权限")
     @PostMapping("update_permission")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:UPDATE_PERMISSION')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_ROLE,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改角色权限")
+            operateName = "修改角色权限",
+            moduleEntityId = "#request.id",
+            content = "'修改角色权限：' + #request.id")
     public void updatePermission(@RequestBody @Validated BIamRoleUpdatePermissionRequestVo request) {
         log.info("修改角色权限，request={}", JSONUtil.toJsonStr(request));
         roleBusiness.updatePermission(request);

@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -40,11 +41,14 @@ public class ScmPropertyController {
     @Operation(summary = "创建属性")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建属性",
+            moduleEntityId = "#request.name",
+            content = "'创建属性：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyCreateRequestVo request) {
         log.info("创建属性，request={}", JSONUtil.toJsonStr(request));
@@ -54,11 +58,13 @@ public class ScmPropertyController {
     @Operation(summary = "修改属性")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改属性")
+            operateName = "修改属性",
+            moduleEntityId = "#request.id",
+            content = "'修改属性：' + #request.name")
     public void update(@RequestBody @Validated ScmPropertyUpdateRequestVo request) {
         log.info("修改属性，request={}", JSONUtil.toJsonStr(request));
         propertyBusiness.update(request);
@@ -67,11 +73,13 @@ public class ScmPropertyController {
     @Operation(summary = "删除属性")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除属性")
+            operateName = "删除属性",
+            moduleEntityId = "#request.id",
+            content = "'删除属性：' + #request.id")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性，id={}", request.getId());
         propertyBusiness.deleteById(request);

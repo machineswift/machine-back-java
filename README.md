@@ -89,7 +89,7 @@
 |             | 华为云 OBS SDK                    | 3.22.12                |
 |             | 阿里云 OSS SDK                    | 3.16.1                 |
 |             | 腾讯云 COS SDK                    | 5.6.260                |
-| **文档转换**    | Apache Tika                    | 3.3.1                  |
+| **文档转换**    | Apache Tika                    | 4.0.0                  |
 |             | jodconverter                   | 4.4.11                 |
 | **工作流**     | Cibseven BPM（Camunda 分支）       | 2.2.0                  |
 |             | GraalVM JS（脚本引擎）               | 23.0.6                 |
@@ -228,9 +228,6 @@ machine-back-java/
 | [OpenAPI 认证](document/architecture/OPENAPI_AUTH.md)                    | 开放接口的鉴权与签名机制                           |
 | [Webhook 事件](document/architecture/WEBHOOK_EVENT.md)                   | 事件驱动架构中的 Webhook 事件定义与路由               |
 | [部署与配置](document/deploy/README.md)                                     | Docker 部署、Nacos 配置中心、JVM 参数总览          |
-| ├─ [Docker 本地部署 (Linux)](document/deploy/docker/docker_local_linux.md) | Linux 本地环境部署指南                         |
-| ├─ [Docker 本地部署 (阿里云)](document/deploy/docker/docker_local_aliyun.md)  | 阿里云环境部署指南                              |
-| ├─ [Docker 测试环境部署](document/deploy/docker/docker_test_linux.md)        | 测试环境部署指南                               |
 | ├─ [Nacos 配置中心](document/deploy/nacos/yml/)                            | Apps / Services / Servers 的 YAML 配置示例  |
 | └─ [JVM 参数](document/vm_options/)                                      | 本地与测试环境 JVM 启动参数配置                     |
 | [数据库设计](document/database/README.md)                                   | MySQL / PostgreSQL 表结构、初始化数据与脚本说明      |

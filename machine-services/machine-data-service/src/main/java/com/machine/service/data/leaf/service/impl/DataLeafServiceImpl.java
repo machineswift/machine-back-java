@@ -79,8 +79,9 @@ public class DataLeafServiceImpl implements IDataLeafService {
         return id;
     }
 
-    private Long allocateLeafId(LeafData leafData, DataLeafEntity leafAlloc) {
-        Long id;
+    private Long allocateLeafId(LeafData leafData,
+                                DataLeafEntity leafAlloc) {
+        long id;
         if (leafAlloc.getStep() > 1) {
             id = leafAlloc.getMaxId() + 1;
             for (int i = 1; i < leafAlloc.getStep(); i++) {
@@ -122,7 +123,6 @@ public class DataLeafServiceImpl implements IDataLeafService {
         leafMap.entrySet().removeIf(entry -> {
             LeafData leafData = entry.getValue();
             return leafData != null &&
-                    leafData.getExpireTime() != null &&
                     leafData.getExpireTime() != null &&
                     leafData.getExpireTime().compareTo(currentTimeMillis) < 0;
         });

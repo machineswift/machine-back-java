@@ -109,7 +109,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
             response.sendRedirect(redirectUrl);
         } catch (IOException e) {
             log.error("auth2.0 码云重定向报错", e);
-            throw new BIamBusinessException("iam.auth2.business.renderGitee.exception", e.getMessage(), e);
+            throw new BIamBusinessException("biam.auth2.business.renderGitee.exception", e.getMessage(), e);
         }
     }
 
@@ -139,7 +139,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
 
         String userId = customerRedisCommands.get(callback.getState());
         if (StrUtil.isBlank(userId)) {
-            BIamBusinessException businessException = new BIamBusinessException("iam.auth2.business.callbackGitee.notBindUser", "该第三方平台账号尚未绑定系统账号，请先绑定");
+            BIamBusinessException businessException = new BIamBusinessException("biam.auth2.business.callbackGitee.notBindUser", "该第三方平台账号尚未绑定系统账号，请先绑定");
             redirectUrl(null, businessException, response);
         } else {
             customerRedisCommands.del(callback.getState());
@@ -148,7 +148,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
         AppContextHolder.getContext().setUserId(userId);
         userDto = userClient.getByUserId(userId);
         if (null == userDto) {
-            BIamBusinessException businessException = new BIamBusinessException("iam.auth2.business.callbackGitee.userNotExists", "用户不存在，请联系客服");
+            BIamBusinessException businessException = new BIamBusinessException("biam.auth2.business.callbackGitee.userNotExists", "用户不存在，请联系客服");
             redirectUrl(null, businessException, response);
         }
 
@@ -173,7 +173,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
             response.sendRedirect(redirectUrl);
         } catch (IOException e) {
             log.error("auth2.0 飞书重定向报错", e);
-            throw new BIamBusinessException("iam.auth2.business.renderFeiShu.exception", e.getMessage(), e);
+            throw new BIamBusinessException("biam.auth2.business.renderFeiShu.exception", e.getMessage(), e);
         }
     }
 
@@ -202,7 +202,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
 
         String userId = customerRedisCommands.get(callback.getState());
         if (StrUtil.isBlank(userId)) {
-            BIamBusinessException businessException = new BIamBusinessException("iam.auth2.business.callbackFeiShu.notBindUser", "该第三方平台账号尚未绑定系统账号，请先绑定");
+            BIamBusinessException businessException = new BIamBusinessException("biam.auth2.business.callbackFeiShu.notBindUser", "该第三方平台账号尚未绑定系统账号，请先绑定");
             redirectUrl(null, businessException, response);
         } else {
             customerRedisCommands.del(callback.getState());
@@ -211,7 +211,7 @@ public class BIamAuthenticationThirdBusinessImpl implements IBIamAuthenticationT
         AppContextHolder.getContext().setUserId(userId);
         userDto = userClient.getByUserId(userId);
         if (null == userDto) {
-            BIamBusinessException businessException = new BIamBusinessException("iam.auth2.business.callbackFeiShu.userNotExists", "用户不存在，请联系客服");
+            BIamBusinessException businessException = new BIamBusinessException("biam.auth2.business.callbackFeiShu.userNotExists", "用户不存在，请联系客服");
             redirectUrl(null, businessException, response);
         }
 

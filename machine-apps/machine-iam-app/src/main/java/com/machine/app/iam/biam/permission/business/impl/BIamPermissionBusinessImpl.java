@@ -54,7 +54,7 @@ public class BIamPermissionBusinessImpl implements IBIamPermissionBusiness {
         BIamPermissionResourceTypeEnum resourceType = request.getResourceType();
         if (BIamPermissionResourceTypeEnum.APP == resourceType ||
                 BIamPermissionResourceTypeEnum.MODULE == resourceType) {
-            throw new BIamBusinessException("iam.permission.business.create", "暂不支持新增APP和MODULE");
+            throw new BIamBusinessException("biam.permission.business.create", "暂不支持新增APP和MODULE");
         }
 
         BIamPermissionCreateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamPermissionCreateInputDto.class);

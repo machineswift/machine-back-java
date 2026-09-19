@@ -66,14 +66,14 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
         //验证名称是否存在
         BIamRoleEntity entityByName = roleDao.getByName(inputDto.getName());
         if (null != entityByName) {
-            throw new BIamBusinessException("iam.role.service.create.nameAlreadyExists", "角色名称已经存在");
+            throw new BIamBusinessException("biam.role.service.create.nameAlreadyExists", "角色名称已经存在");
         }
 
         //验证数据权限
         BIamDataPermissionRuleDto dataPermissionRule = inputDto.getDataPermissionRule();
         String functionCode = dataPermissionRule.getFunctionCode();
         if (!DATA_PERMISSION_DEFAULT_FUNCTION_CODE.equals(functionCode)) {
-            throw new BIamBusinessException("iam.role.service.create.functionCodeWrong", "数据权限编码错误");
+            throw new BIamBusinessException("biam.role.service.create.functionCodeWrong", "数据权限编码错误");
         }
 
         boolean contains = false;
@@ -85,16 +85,16 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
             }
         }
         if (!contains) {
-            throw new BIamBusinessException("iam.role.service.create.functionScopeCodeWrong", "数据权限范围编码错误");
+            throw new BIamBusinessException("biam.role.service.create.functionScopeCodeWrong", "数据权限范围编码错误");
         }
 
         if (BIamDataPermissionScopeTypeEnum.CUSTOM.getName().equals(scopeCode)) {
             if (CollectionUtil.isEmpty(dataPermissionRule.getOrganizationNodeMap())) {
-                throw new BIamBusinessException("iam.role.service.create.dataPermissionEmpty", "自定义数据权限范围为空");
+                throw new BIamBusinessException("biam.role.service.create.dataPermissionEmpty", "自定义数据权限范围为空");
             }
         } else {
             if (CollectionUtil.isNotEmpty(dataPermissionRule.getOrganizationNodeMap())) {
-                throw new BIamBusinessException("iam.role.service.create.dataPermissionNotEmpty", "数据权限范围不为空");
+                throw new BIamBusinessException("biam.role.service.create.dataPermissionNotEmpty", "数据权限范围不为空");
             }
         }
 
@@ -121,20 +121,20 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
         }
 
         if (isDefaultRole(entity.getCode())) {
-            throw new BIamBusinessException("iam.role.service.delete.defaultRole", "默认角色，不能删除");
+            throw new BIamBusinessException("biam.role.service.delete.defaultRole", "默认角色，不能删除");
         }
 
         //子角色信息
         List<BIamRoleEntity> subList = roleDao.listSub(new BIamRoleListSubInputDto(entity.getId()));
         if (!CollectionUtil.isEmpty(subList)) {
-            throw new BIamBusinessException("iam.role.service.delete.hasSubRole", "下面有子数据，不能删除");
+            throw new BIamBusinessException("biam.role.service.delete.hasSubRole", "下面有子数据，不能删除");
         }
 
         //是否关联用户
         List<BIamUserRoleRelationEntity> iamUserRoleRelationEntityList = userRoleRelationDao
                 .selectByRoleId(request.getId());
         if (!CollectionUtil.isEmpty(iamUserRoleRelationEntityList)) {
-            throw new BIamBusinessException("iam.role.service.delete.associationUser", "角色关联用户，不能删除");
+            throw new BIamBusinessException("biam.role.service.delete.associationUser", "角色关联用户，不能删除");
         }
 
         //删除角色和权限关系
@@ -154,7 +154,7 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
         BIamDataPermissionRuleDto dataPermissionRule = inputDto.getDataPermissionRule();
         String functionCode = dataPermissionRule.getFunctionCode();
         if (!DATA_PERMISSION_DEFAULT_FUNCTION_CODE.equals(functionCode)) {
-            throw new BIamBusinessException("iam.role.service.update.functionCodeWrong", "数据权限编码错误");
+            throw new BIamBusinessException("biam.role.service.update.functionCodeWrong", "数据权限编码错误");
         }
 
         boolean contains = false;
@@ -166,23 +166,23 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
             }
         }
         if (!contains) {
-            throw new BIamBusinessException("iam.role.service.update.functionScopeCodeWrong", "数据权限范围编码错误");
+            throw new BIamBusinessException("biam.role.service.update.functionScopeCodeWrong", "数据权限范围编码错误");
         }
 
         if (BIamDataPermissionScopeTypeEnum.CUSTOM.getName().equals(scopeCode)) {
             if (CollectionUtil.isEmpty(dataPermissionRule.getOrganizationNodeMap())) {
-                throw new BIamBusinessException("iam.role.service.update.dataPermissionEmpty", "自定义数据权限范围为空");
+                throw new BIamBusinessException("biam.role.service.update.dataPermissionEmpty", "自定义数据权限范围为空");
             }
         } else {
             if (CollectionUtil.isNotEmpty(dataPermissionRule.getOrganizationNodeMap())) {
-                throw new BIamBusinessException("iam.role.service.update.dataPermissionNotEmpty", "数据权限范围不为空");
+                throw new BIamBusinessException("biam.role.service.update.dataPermissionNotEmpty", "数据权限范围不为空");
             }
         }
 
         //验证名称在同一层级是否存在
         BIamRoleEntity entityByName = roleDao.getByName(inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
-            throw new BIamBusinessException("iam.role.service.update.nameAlreadyExists", "角色名称已经存在");
+            throw new BIamBusinessException("biam.role.service.update.nameAlreadyExists", "角色名称已经存在");
         }
 
         //修改角色信息
@@ -210,7 +210,7 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
         }
 
         if (isDefaultRole(entity.getCode())) {
-            throw new BIamBusinessException("iam.role.service.updateStatus.defaultRole", "默认角色，不能修改状态");
+            throw new BIamBusinessException("biam.role.service.updateStatus.defaultRole", "默认角色，不能修改状态");
         }
 
         return roleDao.updateStatus(inputDto.getId(), inputDto.getStatus());

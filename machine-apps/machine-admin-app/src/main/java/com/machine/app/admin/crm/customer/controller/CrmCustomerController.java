@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +40,15 @@ public class CrmCustomerController {
     @Operation(summary = "创建客户")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_CUSTOMER,
             operateType = ActionTypeEnum.CREATE,
-            operateName = "创建客户")
+            operateName = "创建客户",
+            moduleEntityId = "#request.name",
+            content = "'创建客户：' + #request.name",
+            diff = false,
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated CrmCustomerCreateRequestVo request) {
         log.info("创建客户，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(crmCustomerBusiness.create(request));
@@ -52,11 +57,13 @@ public class CrmCustomerController {
     @Operation(summary = "删除客户")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_CUSTOMER,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除客户")
+            operateName = "删除客户",
+            moduleEntityId = "#request.id",
+            content = "'删除客户：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.delete(request);
@@ -65,11 +72,13 @@ public class CrmCustomerController {
     @Operation(summary = "修改客户")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.CRM,
             moduleEntity = ModuleEntityEnum.CRM_CUSTOMER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改客户")
+            operateName = "修改客户",
+            moduleEntityId = "#request.id",
+            content = "'修改客户：' + #request.id")
     public void update(@RequestBody @Validated CrmCustomerUpdateRequestVo request) {
         log.info("修改客户，request={}", JSONUtil.toJsonStr(request));
         crmCustomerBusiness.update(request);

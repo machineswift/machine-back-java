@@ -56,17 +56,17 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
         BIamOauth2RegisteredClientEntity entityByClientName = oauth2RegisteredClientDao.findByClientName(inputDto.getClientName());
         if (Objects.nonNull(entityByClientName)) {
             log.error("认证中心客户端名称已存在，clientName={}", inputDto.getClientName());
-            throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.create.clientNameAlreadyExists", "认证中心客户端名称已存在");
+            throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.create.clientNameAlreadyExists", "认证中心客户端名称已存在");
         }
 
         // 校验参数（授权码模式）
         if (BIamAuthorizationGrantTypeEnum.AUTHORIZATION_CODE == inputDto.getAuthorizationGrantType()) {
             if (CollectionUtil.isEmpty(inputDto.getRedirectUris())) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.create.emptyRedirectUris", "重定向URI不能为空");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.create.emptyRedirectUris", "重定向URI不能为空");
             }
 
             if (CollectionUtil.isEmpty(inputDto.getPostLogoutRedirectUris())) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.create.emptyPostLogoutRedirectUris", "登出后重定向URI不能为空");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.create.emptyPostLogoutRedirectUris", "登出后重定向URI不能为空");
             }
         }
 
@@ -74,12 +74,12 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
         if (BIamAuthorizationGrantTypeEnum.CLIENT_CREDENTIALS == inputDto.getAuthorizationGrantType()) {
             List<BIamRoleEntity> roleEntityList = roleDao.selectByIdSet(inputDto.getScopes());
             if (inputDto.getScopes().size() != roleEntityList.size()) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.create.scopesNotExists", "认证中心作用域不存在");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.create.scopesNotExists", "认证中心作用域不存在");
             }
 
             for (BIamRoleEntity roleEntity : roleEntityList) {
                 if (BIamRoleTypeEnum.OPENAPI != roleEntity.getType()) {
-                    throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.create.scopesNotSupport", "认证中心作用域不支持");
+                    throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.create.scopesNotSupport", "认证中心作用域不支持");
                 }
             }
         }
@@ -129,7 +129,7 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
     public int delete(String id) {
         BIamOauth2RegisteredClientEntity entityById = oauth2RegisteredClientDao.findById(id);
         if (StatusEnum.ENABLE == entityById.getStatus()) {
-            throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.delete.enableStatus", "启用状态不能删除");
+            throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.delete.enableStatus", "启用状态不能删除");
         }
 
         return oauth2RegisteredClientDao.deleteById(id);
@@ -140,17 +140,17 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
     public int update(BIamOAuth2RegisteredClientUpdateInputDto inputDto) {
         BIamOauth2RegisteredClientEntity entityById = oauth2RegisteredClientDao.findById(inputDto.getId());
         if (Objects.isNull(entityById)) {
-            throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.clientNotExists", "认证中心客户端不存在");
+            throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.clientNotExists", "认证中心客户端不存在");
         }
 
         // 校验参数（授权码模式）
         if (BIamAuthorizationGrantTypeEnum.AUTHORIZATION_CODE == entityById.getAuthorizationGrantType()) {
             if (CollectionUtil.isEmpty(inputDto.getRedirectUris())) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.emptyRedirectUris", "重定向URI不能为空");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.emptyRedirectUris", "重定向URI不能为空");
             }
 
             if (CollectionUtil.isEmpty(inputDto.getPostLogoutRedirectUris())) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.emptyPostLogoutRedirectUris", "登出后重定向URI不能为空");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.emptyPostLogoutRedirectUris", "登出后重定向URI不能为空");
             }
         }
 
@@ -158,12 +158,12 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
         if (BIamAuthorizationGrantTypeEnum.CLIENT_CREDENTIALS == entityById.getAuthorizationGrantType()) {
             List<BIamRoleEntity> roleEntityList = roleDao.selectByIdSet(inputDto.getScopes());
             if (inputDto.getScopes().size() != roleEntityList.size()) {
-                throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.scopesNotExists", "认证中心作用域不存在");
+                throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.scopesNotExists", "认证中心作用域不存在");
             }
 
             for (BIamRoleEntity roleEntity : roleEntityList) {
                 if (BIamRoleTypeEnum.OPENAPI != roleEntity.getType()) {
-                    throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.scopesNotSupport", "认证中心作用域不支持");
+                    throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.scopesNotSupport", "认证中心作用域不支持");
                 }
             }
         }
@@ -171,7 +171,7 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
         //验证用户名是否存在
         BIamOauth2RegisteredClientEntity entityByClientName = oauth2RegisteredClientDao.findByClientName(inputDto.getClientName());
         if (null != entityByClientName && !entityByClientName.getId().equals(inputDto.getId())) {
-            throw new BIamBusinessException("iam.identity.service.oauth2RegisteredClient.update.clientNameAlreadyExists", "认证中心客户端名称已经存在");
+            throw new BIamBusinessException("biam.identity.service.oauth2RegisteredClient.update.clientNameAlreadyExists", "认证中心客户端名称已经存在");
         }
 
         BIamOauth2RegisteredClientEntity entity = new BIamOauth2RegisteredClientEntity();

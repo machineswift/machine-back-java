@@ -13,6 +13,7 @@ import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,14 @@ public class BIamUserAccessLogController {
     @Operation(summary = "清理访问日志")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:LOG_CENTER:ACCESS_LOG:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_USER_ACCESS_LOG,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "清理访问日志")
+            operateName = "清理访问日志",
+            moduleEntityId = "''",
+            content = "'清理访问日志：' + #request.beforeCreateTime",
+            diff = false)
     public int delete(@RequestBody @Validated BIamUserAccessLogDeleteRequestVo request) {
         log.info("清理指定时间之前的日志,request:{}", JSONUtil.toJsonStr(request));
         return userAccessLogBusiness.delete(request);

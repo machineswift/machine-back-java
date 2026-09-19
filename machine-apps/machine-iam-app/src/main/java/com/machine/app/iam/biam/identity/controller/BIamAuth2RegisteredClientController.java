@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,13 @@ public class BIamAuth2RegisteredClientController {
     @Operation(summary = "清理缓存")
     @GetMapping("clean_cache")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:CLEAN_CACHE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
             operateType = ActionTypeEnum.UNKNOWN,
-            operateName = "清理认证客户端缓存")
+            operateName = "清理认证客户端缓存",
+            moduleEntityId = "''",
+            diff = false)
     public void cleanCache() {
         log.info("清理缓存");
         auth2RegisteredClientBusiness.cleanCache();
@@ -49,11 +52,14 @@ public class BIamAuth2RegisteredClientController {
     @Operation(summary = "创建客户端")
     @PostMapping("create")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建认证客户端",
+            moduleEntityId = "#request.clientName",
+            content = "'创建认证客户端：' + #request.clientName",
+            diff = false,
             responseEnable = true,
             sanitizeKeys = {"clientSecret"})
     public IdResponse<String> create(@RequestBody @Validated BIamAuth2RegisteredClientCreateRequestVo request) {
@@ -64,11 +70,13 @@ public class BIamAuth2RegisteredClientController {
     @Operation(summary = "修改客户端")
     @PostMapping("update")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
             operateType = ActionTypeEnum.UPDATE,
             operateName = "修改认证客户端",
+            moduleEntityId = "#request.id",
+            content = "'修改认证客户端：' + #request.clientName",
             sanitizeKeys = {"clientSecret"})
     public void update(@RequestBody @Validated BIamAuth2RegisteredClientUpdateRequestVo request) {
         log.info("认证中心修改客户端信息，request={}", request);
@@ -78,11 +86,14 @@ public class BIamAuth2RegisteredClientController {
     @Operation(summary = "修改客户端状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改认证客户端状态")
+            operateName = "修改认证客户端状态",
+            moduleEntityId = "#request.id",
+            content = "'修改认证客户端状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated BIamAuth2RegisteredClientUpdateStatusRequestVo request) {
         log.info("认证中心修改客户端状态，request={}", JSONUtil.toJsonStr(request));
         auth2RegisteredClientBusiness.updateStatus(request);
@@ -91,11 +102,13 @@ public class BIamAuth2RegisteredClientController {
     @Operation(summary = "删除客户端")
     @PostMapping("delete")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除认证客户端")
+            operateName = "删除认证客户端",
+            moduleEntityId = "#request.id",
+            content = "'删除认证客户端：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("认证中心删除客户端，request={}", JSONUtil.toJsonStr(request));
         auth2RegisteredClientBusiness.delete(request);

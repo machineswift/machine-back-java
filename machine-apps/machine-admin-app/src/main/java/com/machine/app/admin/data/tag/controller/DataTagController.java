@@ -14,6 +14,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,14 @@ public class DataTagController {
     @Operation(summary = "创建智能标签")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建智能标签",
+            moduleEntityId = "#request.name",
+            content = "'创建智能标签：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataTagCreateRequestVo request) {
         log.info("创建智能标签，request={}", JSONUtil.toJsonStr(request));
@@ -48,11 +52,13 @@ public class DataTagController {
     @Operation(summary = "删除智能标签")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除智能标签")
+            operateName = "删除智能标签",
+            moduleEntityId = "#request.id",
+            content = "'删除智能标签：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("删除智能标签，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.delete(request);
@@ -61,11 +67,13 @@ public class DataTagController {
     @Operation(summary = "修改智能标签")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签")
+            operateName = "修改智能标签",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签：' + #request.name")
     public void update(@RequestBody @Validated DataTagUpdateRequestVo request) {
         log.info("修改智能标签，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.update(request);
@@ -74,11 +82,14 @@ public class DataTagController {
     @Operation(summary = "修改智能标签编码")
     @PostMapping("update_code")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_CODE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签编码")
+            operateName = "修改智能标签编码",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签编码：' + #request.id",
+            diff = false)
     public void updateCode(@RequestBody @Validated DataTagUpdateCodeRequestVo request) {
         log.info("修改智能标签编码，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateCode(request);
@@ -87,11 +98,14 @@ public class DataTagController {
     @Operation(summary = "修改智能标签状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签状态")
+            operateName = "修改智能标签状态",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated DataTagUpdateStatusRequestVo request) {
         log.info("修改智能标签状态，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateStatus(request);
@@ -100,11 +114,14 @@ public class DataTagController {
     @Operation(summary = "修改智能标签排序")
     @PostMapping("update_sort")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_SORT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签排序")
+            operateName = "修改智能标签排序",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签排序：' + #request.id",
+            diff = false)
     public void updateSort(@RequestBody @Validated DataTagUpdateSortRequestVo request) {
         log.info("修改智能标签排序，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateSort(request);
@@ -113,11 +130,13 @@ public class DataTagController {
     @Operation(summary = "修改智能标签关联分类")
     @PostMapping("update_category")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:TAG:UPDATE_CATEGORY')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_TAG,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改智能标签关联分类")
+            operateName = "修改智能标签关联分类",
+            moduleEntityId = "#request.id",
+            content = "'修改智能标签关联分类：' + #request.id")
     public void updateCategory(@RequestBody @Validated DataTagUpdateCategoryRequestVo request) {
         log.info("修改智能标签关联分类，request={}", JSONUtil.toJsonStr(request));
         tagBusiness.updateCategory(request);

@@ -8,23 +8,7 @@
 
 ## 📑 目录概览
 
-- [Docker 部署配置](#-docker-部署配置) · [Nacos 配置管理](#️-nacos-配置管理) · [JVM 参数配置](#-jvm-参数配置) · [Dockerfile 配置](#-dockerfile-配置) · [使用说明](#-使用说明)
-
----
-
-## 🐳 Docker 部署配置
-
-Docker 部署相关的配置文档和脚本，支持多种环境部署。
-
-### 本地环境部署
-- [🐳 本地环境Docker部署(Linux)](docker/docker_local_linux.md) - Linux 本地环境部署指南
-- [🐳 本地环境Docker部署(阿里云)](docker/docker_local_aliyun.md) - 阿里云环境部署指南
-
-### 测试环境部署
-- [🐳 测试环境 Docker 部署](docker/docker_test_linux.md) - Linux 测试环境部署指南
-
-### 其他
-- [🐳 其他 Linux 部署说明](docker/docker_zzz_linux.md) - 补充 Linux 部署说明
+-  [JVM 参数配置](#-jvm-参数配置) · [Dockerfile 配置](#-dockerfile-配置) · [使用说明](#-使用说明)
 
 ---
 
@@ -166,8 +150,6 @@ JVM 启动参数配置，针对不同环境和组件进行性能优化和内存�
 1. **环境准备**：确保已安装 [Docker](https://www.docker.com/) 和 Docker Compose
 2. **配置检查**：根据部署环境选择对应配置（本地 / 测试）
 3. **服务启动**：按部署文档顺序启动依赖（如 Nacos、数据库）再启动应用
-
-**首次部署建议**：从 [本地环境 Docker 部署 (Linux)](docker/docker_local_linux.md) 开始；云环境可参考 [阿里云部署](docker/docker_local_aliyun.md)。
 
 ### 🔧 配置管理
 

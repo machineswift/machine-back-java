@@ -16,6 +16,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +39,14 @@ public class AiResourceProviderController {
     @Operation(summary = "资源中心创建厂商")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_PROVIDER,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建厂商",
+            moduleEntityId = "''",
+            content = "'创建厂商'",
+            diff = false,
             responseEnable = true,
             sanitizeKeys = "apiKey")
     public IdResponse<String> create(@RequestBody @Validated AiResourceProviderCreateRequestVo request) {
@@ -53,11 +57,13 @@ public class AiResourceProviderController {
     @Operation(summary = "资源中心删除厂商")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_PROVIDER,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除厂商")
+            operateName = "删除厂商",
+            moduleEntityId = "#request.id",
+            content = "'删除厂商：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("资源中心删除厂商: {}", request.getId());
         resourceProviderBusiness.delete(request);
@@ -66,11 +72,14 @@ public class AiResourceProviderController {
     @Operation(summary = "资源中心修改厂商")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_PROVIDER,
             operateType = ActionTypeEnum.UPDATE,
             operateName = "修改厂商",
+            moduleEntityId = "#request.id",
+            content = "'修改厂商：' + #request.id",
+            ignoreFields = "apiKey",
             sanitizeKeys = "apiKey")
     public void update(@RequestBody @Validated AiResourceProviderUpdateRequestVo request) {
         log.info("资源中心修改厂商: {}", request);
@@ -80,11 +89,14 @@ public class AiResourceProviderController {
     @Operation(summary = "资源中心修改厂商状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:PROVIDER:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_PROVIDER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改厂商状态")
+            operateName = "修改厂商状态",
+            moduleEntityId = "#request.id",
+            content = "'修改厂商状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated AiResourceProviderUpdateStatusRequestVo request) {
         log.info("资源中心修改厂商状态: {}", JSONUtil.toJsonStr(request));
         resourceProviderBusiness.updateStatus(request);

@@ -72,14 +72,14 @@ public class BIamOrganizationServiceImpl implements IBIamOrganizationService {
         // 验证 parentId 是否存在
         BIamOrganizationEntity entityById = organizationDao.getById(inputDto.getParentId());
         if (null == entityById) {
-            throw new BIamBusinessException("iam.organization.service.create.parentIdNotExists", "父ID不存在");
+            throw new BIamBusinessException("biam.organization.service.create.parentIdNotExists", "父ID不存在");
         }
 
         // 验证名称在同一层级是否存在
         BIamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(inputDto.getParentId(),
                 inputDto.getName());
         if (null != entityByName) {
-            throw new BIamBusinessException("iam.organization.service.create.nameAlreadyExists", "名称已经存在");
+            throw new BIamBusinessException("biam.organization.service.create.nameAlreadyExists", "名称已经存在");
         }
 
         BIamOrganizationEntity insertEntity = new BIamOrganizationEntity();
@@ -104,24 +104,24 @@ public class BIamOrganizationServiceImpl implements IBIamOrganizationService {
 
         if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
                 DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
-            throw new BIamBusinessException("iam.organization.service.delete.rootNode", "根组织不能删除");
+            throw new BIamBusinessException("biam.organization.service.delete.rootNode", "根组织不能删除");
         }
 
         // 判断是否有子节点
         if (organizationCache.recursionListSubId(entity.getType(), entity.getId()).size() > 1) {
-            throw new BIamBusinessException("iam.organization.service.delete.hasChildrenNode", "有子节点不能删除");
+            throw new BIamBusinessException("biam.organization.service.delete.hasChildrenNode", "有子节点不能删除");
         }
 
         // 获取组织是否关联门店信息
         Boolean isAssociationShop = shopOrganizationRelationClient.isAssociationShopByOrganizationId(new IdRequest(id));
         if (isAssociationShop) {
-            throw new BIamBusinessException("iam.organization.service.delete.associationShop", "关联门店不能删除");
+            throw new BIamBusinessException("biam.organization.service.delete.associationShop", "关联门店不能删除");
         }
 
         // 获取组织是否关联用户
         boolean isAssociationRole = userOrganizationRelationDao.isAssociationUserByOrganizationId(id);
         if (isAssociationRole) {
-            throw new BIamBusinessException("iam.organization.service.delete.associationRole", "关联用户不能删除");
+            throw new BIamBusinessException("biam.organization.service.delete.associationRole", "关联用户不能删除");
         }
 
         return organizationDao.delete(id);
@@ -137,14 +137,14 @@ public class BIamOrganizationServiceImpl implements IBIamOrganizationService {
 
         if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getParentId()) ||
                 DATA_ORGANIZATION_ROOT_PARENT_ID.equals(entity.getId())) {
-            throw new BIamBusinessException("iam.organization.service.update.rootNode", "根节点不能修改");
+            throw new BIamBusinessException("biam.organization.service.update.rootNode", "根节点不能修改");
         }
 
         // 验证名称在同一层级是否存在
         BIamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(entity.getParentId(),
                 inputDto.getName());
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
-            throw new BIamBusinessException("iam.organization.service.update.nameAlreadyExists", "名称已经存在");
+            throw new BIamBusinessException("biam.organization.service.update.nameAlreadyExists", "名称已经存在");
         }
 
         BIamOrganizationEntity updateEntity = new BIamOrganizationEntity();
@@ -159,7 +159,7 @@ public class BIamOrganizationServiceImpl implements IBIamOrganizationService {
     @Transactional(rollbackFor = Exception.class)
     public int updateParent(BIamOrganizationUpdateParentInputDto inputDto) {
         if (inputDto.getParentId().endsWith(DATA_ORGANIZATION_VIRTUAL_NODE)) {
-            throw new BIamBusinessException("iam.organization.service.updateParent.virtualNode", "不能选择未分配节点");
+            throw new BIamBusinessException("biam.organization.service.updateParent.virtualNode", "不能选择未分配节点");
         }
 
         BIamOrganizationEntity dbEntity = organizationDao.getById(inputDto.getId());
@@ -174,26 +174,26 @@ public class BIamOrganizationServiceImpl implements IBIamOrganizationService {
 
         if (DATA_ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getParentId()) ||
                 DATA_ORGANIZATION_ROOT_PARENT_ID.equals(dbEntity.getId())) {
-            throw new BIamBusinessException("iam.organization.service.updateParent.rootNode", "根节点不能修改");
+            throw new BIamBusinessException("biam.organization.service.updateParent.rootNode", "根节点不能修改");
         }
 
         // 验证名称在同一层级是否存在
         BIamOrganizationEntity entityByName = organizationDao.getByParentIdAndName(inputDto.getParentId(),
                 dbEntity.getName());
         if (null != entityByName && !entityByName.getId().equals(dbEntity.getId())) {
-            throw new BIamBusinessException("iam.organization.service.updateParent.nameAlreadyExists", "名称已经存在");
+            throw new BIamBusinessException("biam.organization.service.updateParent.nameAlreadyExists", "名称已经存在");
         }
 
         // 验证父部门是否存在
         BIamOrganizationEntity parentEntity = organizationDao.getById(inputDto.getParentId());
         if (null == parentEntity) {
-            throw new BIamBusinessException("iam.organization.service.updateParent.parentNotExists", "父节点不存在");
+            throw new BIamBusinessException("biam.organization.service.updateParent.parentNotExists", "父节点不存在");
         }
 
         // 验证父Id是否在当前节点下面
         Set<String> recursionIdSet = organizationCache.recursionListSubId(dbEntity.getType(), inputDto.getId());
         if (recursionIdSet.contains(inputDto.getParentId())) {
-            throw new BIamBusinessException("iam.organization.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
+            throw new BIamBusinessException("biam.organization.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
         }
         return organizationDao.updateParentId(inputDto.getId(), inputDto.getParentId());
     }

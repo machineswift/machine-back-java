@@ -15,6 +15,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,12 +36,15 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "创建前台分类")
     @PostMapping("create")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:CREATE')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建前台分类",
+            moduleEntityId = "#request.name",
+            content = "'创建前台分类：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated ScmFrontCategoryCreateRequestVo request) {
         log.info("创建前台分类，request={}", JSONUtil.toJsonStr(request));
@@ -49,12 +53,14 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "删除前台分类")
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:DELETE')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除前台分类")
+            operateName = "删除前台分类",
+            moduleEntityId = "#request.id",
+            content = "'删除前台分类：' + #request.id")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除前台分类，id={}", request.getId());
         frontCategoryBusiness.deleteById(request);
@@ -62,12 +68,14 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "修改前台分类")
     @PostMapping("update")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:UPDATE')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改前台分类")
+            operateName = "修改前台分类",
+            moduleEntityId = "#request.id",
+            content = "'修改前台分类：' + #request.name")
     public void update(@RequestBody @Validated ScmFrontCategoryUpdateRequestVo request) {
         log.info("修改前台分类，request={}", JSONUtil.toJsonStr(request));
         frontCategoryBusiness.update(request);
@@ -75,12 +83,15 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "修改父分类ID")
     @PostMapping("update_parent")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:UPDATE_PARENT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:UPDATE_PARENT')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改前台分类父ID")
+            operateName = "修改前台分类父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改前台分类父节点：' + #request.id",
+            diff = false)
     public void updateParent(@RequestBody @Validated ScmFrontCategoryUpdateParentRequestVo request) {
         log.info("修改前台分类父ID，request={}", JSONUtil.toJsonStr(request));
         frontCategoryBusiness.updateParent(request);
@@ -88,10 +99,10 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "查询前台分类详情")
     @PostMapping("detail")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:DETAIL')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:DETAIL')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询前台分类详情")
     public ScmFrontCategoryDetailResponseVo getById(@RequestBody @Valid IdRequest request) {
@@ -100,17 +111,17 @@ public class ScmFrontCategoryController {
 
     @Operation(summary = "前台分类树(应用于组件弹窗)")
     @PostMapping("tree_simple")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:TREE_SIMPLE')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:TREE_SIMPLE')")
     public ScmFrontCategoryTreeOutputDto treeSimple() {
         return frontCategoryBusiness.treeSimple();
     }
 
     @Operation(summary = "前台分类树(应用于组织管理菜单)")
     @PostMapping("tree_expand")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:FRONT_CATEGORY:TREE_EXPAND')")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:TREE_EXPAND')")
     @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
-            moduleEntity = ModuleEntityEnum.SCM_CATEGORY,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询前台分类树(组织管理菜单)")
     public ScmFrontCategoryTreeExpandOutputDto treeExpand() {

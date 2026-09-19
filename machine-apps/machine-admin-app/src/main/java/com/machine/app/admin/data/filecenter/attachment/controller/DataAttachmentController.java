@@ -7,7 +7,7 @@ import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
-import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,15 @@ public class DataAttachmentController {
     private IDataAttachmentBusiness attachmentBusiness;
 
     @PostMapping("upload")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_ATTACHMENT,
             operateType = ActionTypeEnum.UPLOAD,
-            operateName = "上传附件")
+            operateName = "上传附件",
+            moduleEntityId = "''",
+            content = "'上传附件：' + #file.originalFilename",
+            diff = false,
+            responseEnable = true)
     public IdResponse<String> upload(@RequestParam("file") MultipartFile file) {
         log.info("上传附件,  fileName:{} length:{}", file.getOriginalFilename(), file.getSize());
         return new IdResponse<>(attachmentBusiness.uploadTemp(file));

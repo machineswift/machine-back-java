@@ -17,6 +17,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,14 @@ public class AiResourceModelController {
     @Operation(summary = "资源中心创建模型")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:MODEL:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_MODEL,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建模型",
+            moduleEntityId = "#request.name",
+            content = "'创建模型：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated AiResourceModelCreateRequestVo request) {
         log.info("资源中心新增模型: {}", request);
@@ -51,11 +55,13 @@ public class AiResourceModelController {
     @Operation(summary = "资源中心删除模型")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:MODEL:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_MODEL,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除模型")
+            operateName = "删除模型",
+            moduleEntityId = "#request.id",
+            content = "'删除模型：' + #request.id")
     public void delete(@RequestBody @Validated IdRequest request) {
         log.info("资源中心删除模型: {}", request.getId());
         resourceModelBusiness.delete(request);
@@ -64,11 +70,13 @@ public class AiResourceModelController {
     @Operation(summary = "资源中心修改模型")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:MODEL:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_MODEL,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改模型")
+            operateName = "修改模型",
+            moduleEntityId = "#request.id",
+            content = "'修改模型：' + #request.name")
     public void update(@RequestBody @Validated AiResourceModelUpdateRequestVo request) {
         log.info("资源中心修改模型: {}", request);
         resourceModelBusiness.update(request);
@@ -77,11 +85,14 @@ public class AiResourceModelController {
     @Operation(summary = "资源中心修改模型状态")
     @PostMapping("update_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:AI:RESOURCE_CENTER:MODEL:UPDATE_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.AI,
             moduleEntity = ModuleEntityEnum.AI_MODEL,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改模型状态")
+            operateName = "修改模型状态",
+            moduleEntityId = "#request.id",
+            content = "'修改模型状态：' + #request.id",
+            diff = false)
     public void updateStatus(@RequestBody @Validated AiResourceModelUpdateStatusRequestVo request) {
         log.info("资源中心修改模型状态: {}", JSONUtil.toJsonStr(request));
         resourceModelBusiness.updateStatus(request);

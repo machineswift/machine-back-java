@@ -70,20 +70,20 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         BIamUserEntity entityByUserName = userDao.getByUsername(inputDto.getUsername());
         if (null != entityByUserName) {
             log.error("新增公司员工系统账号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new BIamBusinessException("iam.user.createCompanyUser.usernameAlreadyExists", "系统账号已经存在");
+            throw new BIamBusinessException("biam.user.createCompanyUser.usernameAlreadyExists", "系统账号已经存在");
         }
 
         BIamUserEntity entityByCode = userDao.getByCode(inputDto.getCode());
         if (null != entityByCode) {
             log.error("新增公司员工编码已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new BIamBusinessException("iam.user.createCompanyUser.codeAlreadyExists", "编码已经存在");
+            throw new BIamBusinessException("biam.user.createCompanyUser.codeAlreadyExists", "编码已经存在");
         }
 
         if (StrUtil.isNotBlank(inputDto.getPhone())) {
             BIamUserEntity entityByPhone = userDao.getByPhone(inputDto.getPhone());
             if (null != entityByPhone) {
                 log.error("新增公司员工手机号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-                throw new BIamBusinessException("iam.user.createCompanyUser.phoneAlreadyExists", "手机号已经存在");
+                throw new BIamBusinessException("biam.user.createCompanyUser.phoneAlreadyExists", "手机号已经存在");
             }
         }
 
@@ -113,17 +113,17 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         //验证角色是否重复
         List<BIamUserRoleInfoUpdateInputDto> userRoleInputList = inputDto.getUserRoleList();
         if (CollectionUtil.isEmpty(userRoleInputList)) {
-            throw new BIamBusinessException("iam.user.createShopUser.roleIsEmpty", "角色为空");
+            throw new BIamBusinessException("biam.user.createShopUser.roleIsEmpty", "角色为空");
         }
         Set<String> inputRoleIdSet = userRoleInputList.stream().map(BIamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
         if (inputRoleIdSet.size() != userRoleInputList.size()) {
-            throw new BIamBusinessException("iam.user.createShopUser.roleRepeat", "角色重复");
+            throw new BIamBusinessException("biam.user.createShopUser.roleRepeat", "角色重复");
         }
 
         //验证手机号是否存在
         BIamUserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
         if (null != phoneEntity) {
-            throw new BIamBusinessException("iam.user.createShopUser.phoneAlreadyExists", "手机号已经存在");
+            throw new BIamBusinessException("biam.user.createShopUser.phoneAlreadyExists", "手机号已经存在");
         }
 
         //生成编码
@@ -161,17 +161,17 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         //验证角色是否重复
         List<BIamUserRoleInfoUpdateInputDto> userRoleInputList = inputDto.getUserRoleList();
         if (CollectionUtil.isEmpty(userRoleInputList)) {
-            throw new BIamBusinessException("iam.user.createSupplierUser.roleIsEmpty", "角色为空");
+            throw new BIamBusinessException("biam.user.createSupplierUser.roleIsEmpty", "角色为空");
         }
         Set<String> inputRoleIdSet = userRoleInputList.stream().map(BIamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
         if (inputRoleIdSet.size() != userRoleInputList.size()) {
-            throw new BIamBusinessException("iam.user.createSupplierUser.roleRepeat", "角色重复");
+            throw new BIamBusinessException("biam.user.createSupplierUser.roleRepeat", "角色重复");
         }
 
         //验证手机号是否存在
         BIamUserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
         if (null != phoneEntity) {
-            throw new BIamBusinessException("iam.user.createSupplierUser.phoneAlreadyExists", "手机号已经存在");
+            throw new BIamBusinessException("biam.user.createSupplierUser.phoneAlreadyExists", "手机号已经存在");
         }
 
         String code = leaf4CodeClient.supplierCode();
@@ -262,7 +262,7 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         BIamUserEntity entityByPhone = userDao.getByPhone(inputDto.getPhone());
         if (null != entityByPhone && !entityByPhone.getId().equals(inputDto.getId())) {
             log.error("修改公司员工手机号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new BIamBusinessException("iam.user.updateCompanyUser.phoneAlreadyExists", "手机号已经存在");
+            throw new BIamBusinessException("biam.user.updateCompanyUser.phoneAlreadyExists", "手机号已经存在");
         }
 
         //修改手机号
@@ -289,11 +289,11 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         //验证角色是否重复
         List<BIamUserRoleInfoUpdateInputDto> userRoleInputList = inputDto.getUserRoleList();
         if (CollectionUtil.isEmpty(userRoleInputList)) {
-            throw new BIamBusinessException("iam.user.updateShopUser.roleIsEmpty", "角色为空");
+            throw new BIamBusinessException("biam.user.updateShopUser.roleIsEmpty", "角色为空");
         }
         Set<String> inputRoleIdSet = userRoleInputList.stream().map(BIamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
         if (inputRoleIdSet.size() != userRoleInputList.size()) {
-            throw new BIamBusinessException("iam.user.updateShopUser.roleRepeat", "角色重复");
+            throw new BIamBusinessException("biam.user.updateShopUser.roleRepeat", "角色重复");
         }
 
         BIamUserEntity dbEntity = userDao.getById(inputDto.getId());
@@ -303,25 +303,25 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
 
         if (userTypeDao.existsType(new BIamUserTypeExistsTypeInputDto(
                 inputDto.getId(), BIamUserTypeEnum.COMPANY))) {
-            throw new BIamBusinessException("iam.user.updateShopUser.typeIsCompany", "是公司用户不能修改");
+            throw new BIamBusinessException("biam.user.updateShopUser.typeIsCompany", "是公司用户不能修改");
         }
 
         if (!userTypeDao.existsType(new BIamUserTypeExistsTypeInputDto(
                 inputDto.getId(), List.of(BIamUserTypeEnum.SHOP, BIamUserTypeEnum.FRANCHISEE)))) {
-            throw new BIamBusinessException("iam.user.updateShopUser.typeNotShop", "不是门店用户不能修改");
+            throw new BIamBusinessException("biam.user.updateShopUser.typeNotShop", "不是门店用户不能修改");
         }
 
         //验证用户名是否存在
         BIamUserEntity usernameEntity = userDao.getByUsername(dbEntity.getUsername());
         if (null != usernameEntity && !usernameEntity.getId().equals(inputDto.getId())) {
-            throw new BIamBusinessException("iam.user.updateShopUser.nameAlreadyExists", "用户名已经存在");
+            throw new BIamBusinessException("biam.user.updateShopUser.nameAlreadyExists", "用户名已经存在");
         }
 
         //验证手机号是否存在
         if (StrUtil.isNotEmpty(inputDto.getPhone())) {
             BIamUserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
             if (null != phoneEntity && !phoneEntity.getId().equals(inputDto.getId())) {
-                throw new BIamBusinessException("iam.user.updateShopUser.phoneAlreadyExists", "手机号已经存在");
+                throw new BIamBusinessException("biam.user.updateShopUser.phoneAlreadyExists", "手机号已经存在");
             }
         }
 
@@ -351,11 +351,11 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
         //验证角色是否重复
         List<BIamUserRoleInfoUpdateInputDto> userRoleInputList = inputDto.getUserRoleList();
         if (CollectionUtil.isEmpty(userRoleInputList)) {
-            throw new BIamBusinessException("iam.user.updateSupplierUser.roleIsEmpty", "角色为空");
+            throw new BIamBusinessException("biam.user.updateSupplierUser.roleIsEmpty", "角色为空");
         }
         Set<String> inputRoleIdSet = userRoleInputList.stream().map(BIamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
         if (inputRoleIdSet.size() != userRoleInputList.size()) {
-            throw new BIamBusinessException("iam.user.updateSupplierUser.roleRepeat", "角色重复");
+            throw new BIamBusinessException("biam.user.updateSupplierUser.roleRepeat", "角色重复");
         }
 
         BIamUserEntity dbEntity = userDao.getById(inputDto.getId());
@@ -365,24 +365,24 @@ public class BIamUserBkServiceImpl implements IBIamUserBkService {
 
         if (userTypeDao.existsType(new BIamUserTypeExistsTypeInputDto(
                 inputDto.getId(), BIamUserTypeEnum.COMPANY))) {
-            throw new BIamBusinessException("iam.user.updateSupplierUser.typeIsCompany", "是公司用户不能修改");
+            throw new BIamBusinessException("biam.user.updateSupplierUser.typeIsCompany", "是公司用户不能修改");
         }
 
         if (userTypeDao.notExists(inputDto.getId(), BIamUserTypeEnum.SUPPLIER)) {
-            throw new BIamBusinessException("iam.user.updateSupplierUser.typeNotShop", "不是供应商不能修改");
+            throw new BIamBusinessException("biam.user.updateSupplierUser.typeNotShop", "不是供应商不能修改");
         }
 
         //验证用户名是否存在
         BIamUserEntity usernameEntity = userDao.getByUsername(dbEntity.getUsername());
         if (null != usernameEntity && !usernameEntity.getId().equals(inputDto.getId())) {
-            throw new BIamBusinessException("iam.user.updateSupplierUser.usernameAlreadyExists", "用户名已经存在");
+            throw new BIamBusinessException("biam.user.updateSupplierUser.usernameAlreadyExists", "用户名已经存在");
         }
 
         //验证手机号是否存在
         if (StrUtil.isNotEmpty(inputDto.getPhone())) {
             BIamUserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
             if (null != phoneEntity && !phoneEntity.getId().equals(inputDto.getId())) {
-                throw new BIamBusinessException("iam.user.updateSupplierUser.phoneAlreadyExists", "手机号已经存在");
+                throw new BIamBusinessException("biam.user.updateSupplierUser.phoneAlreadyExists", "手机号已经存在");
             }
         }
 

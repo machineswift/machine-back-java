@@ -15,6 +15,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -44,11 +45,14 @@ public class ScmPropertyGroupController {
     @Operation(summary = "创建属性分组")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY_GROUP,
             operateType = ActionTypeEnum.CREATE,
             operateName = "创建属性分组",
+            moduleEntityId = "#request.name",
+            content = "'创建属性分组：' + #request.name",
+            diff = false,
             responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated ScmPropertyGroupCreateRequestVo request) {
         log.info("创建属性分组，request={}", JSONUtil.toJsonStr(request));
@@ -58,11 +62,13 @@ public class ScmPropertyGroupController {
     @Operation(summary = "修改属性分组")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY_GROUP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改属性分组")
+            operateName = "修改属性分组",
+            moduleEntityId = "#request.id",
+            content = "'修改属性分组：' + #request.name")
     public void update(@RequestBody @Validated ScmPropertyGroupUpdateRequestVo request) {
         log.info("修改属性分组，request={}", JSONUtil.toJsonStr(request));
         propertyGroupBusiness.update(request);
@@ -71,11 +77,13 @@ public class ScmPropertyGroupController {
     @Operation(summary = "删除属性分组")
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:DELETE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY_GROUP,
             operateType = ActionTypeEnum.DELETE,
-            operateName = "删除属性分组")
+            operateName = "删除属性分组",
+            moduleEntityId = "#request.id",
+            content = "'删除属性分组：' + #request.id")
     public void deleteById(@RequestBody @Validated IdRequest request) {
         log.info("删除属性分组，id={}", request.getId());
         propertyGroupBusiness.deleteById(request);
@@ -96,11 +104,14 @@ public class ScmPropertyGroupController {
     @Operation(summary = "修改属性分组排序")
     @PostMapping("update_sort")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:SCM:PROPERTY_GROUP:UPDATE_SORT')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.SCM,
             moduleEntity = ModuleEntityEnum.SCM_PROPERTY_GROUP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改属性分组排序")
+            operateName = "修改属性分组排序",
+            moduleEntityId = "#request.id",
+            content = "'修改属性分组排序：' + #request.id",
+            diff = false)
     public void updateSort(@RequestBody @Validated ScmPropertyGroupUpdateSortRequestVo request) {
         log.info("修改属性分组排序，request={}", JSONUtil.toJsonStr(request));
         propertyGroupBusiness.updateSort(request);

@@ -104,7 +104,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
         }
 
         // 判断是否有子节点
-        if (dataTagCategoryCache.recursionListSubId(entity.getType(), entity.getId()).size() > 1) {
+        if (dataTagCategoryCache.recursionSubId(entity.getType(), entity.getId()).size() > 1) {
             throw new DataBusinessException("data.tagCategory.service.delete.hasChildrenNode", "有子节点不能删除");
         }
 
@@ -196,7 +196,7 @@ public class DataTagCategoryServiceImpl implements IDataTagCategoryService {
         }
 
         // 验证父Id是否在当前节点下面
-        Set<String> recursionIdSet = dataTagCategoryCache.recursionListSubId(dbEntity.getType(), inputDto.getId());
+        Set<String> recursionIdSet = dataTagCategoryCache.recursionSubId(dbEntity.getType(), inputDto.getId());
         if (recursionIdSet.contains(inputDto.getParentId())) {
             throw new DataBusinessException("data.tagCategory.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
         }

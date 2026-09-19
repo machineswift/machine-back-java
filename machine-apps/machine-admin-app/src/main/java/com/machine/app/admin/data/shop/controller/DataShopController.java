@@ -15,6 +15,7 @@ import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,11 +37,15 @@ public class DataShopController {
     @Operation(summary = "创建门店")
     @PostMapping("create")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:CREATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.CREATE,
-            operateName = "创建门店")
+            operateName = "创建门店",
+            moduleEntityId = "#request.name",
+            content = "'创建门店：' + #request.name",
+            diff = false,
+            responseEnable = true)
     public IdResponse<String> create(@RequestBody @Validated DataShopCreateRequestVo request) {
         log.info("创建门店，request={}", JSONUtil.toJsonStr(request));
         return new IdResponse<>(shopBusiness.create(request));
@@ -49,11 +54,13 @@ public class DataShopController {
     @Operation(summary = "修改门店")
     @PostMapping("update")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店")
+            operateName = "修改门店",
+            moduleEntityId = "#request.id",
+            content = "'修改门店：' + #request.name")
     public void update(@RequestBody @Validated DataShopUpdateRequestVo request) {
         log.info("修改门店，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.update(request);
@@ -62,11 +69,14 @@ public class DataShopController {
     @Operation(summary = "修改门店经营状态")
     @PostMapping("update_business_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE_BUSINESS_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店经营状态")
+            operateName = "修改门店经营状态",
+            moduleEntityId = "#request.id",
+            content = "'修改门店经营状态：' + #request.id",
+            diff = false)
     public void updateBusinessStatus(@RequestBody @Validated DataShopUpdateShopBusinessStatusRequestVo request) {
         log.info("修改门店经营状态，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.updateBusinessStatus(request);
@@ -75,11 +85,14 @@ public class DataShopController {
     @Operation(summary = "修改门店运营状态")
     @PostMapping("update_operation_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE_OPERATION_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店运营状态")
+            operateName = "修改门店运营状态",
+            moduleEntityId = "#request.id",
+            content = "'修改门店运营状态：' + #request.id",
+            diff = false)
     public void updateOperationStatus(@RequestBody @Validated DataShopUpdateShopOperationStatusRequestVo request) {
         log.info("修改门店运营状态，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.updateOperationStatus(request);
@@ -88,11 +101,14 @@ public class DataShopController {
     @Operation(summary = "修改门店物理状态")
     @PostMapping("update_physical_status")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE_PHYSICAL_STATUS')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店物理状态")
+            operateName = "修改门店物理状态",
+            moduleEntityId = "#request.id",
+            content = "'修改门店物理状态：' + #request.id",
+            diff = false)
     public void updatePhysicalStatus(@RequestBody @Validated DataShopUpdateShopPhysicalStatusRequestVo request) {
         log.info("修改门店物理状态，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.updatePhysicalStatus(request);
@@ -101,11 +117,14 @@ public class DataShopController {
     @Operation(summary = "修改门店证件")
     @PostMapping("update_certificate")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE_CERTIFICATE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店证件")
+            operateName = "修改门店证件",
+            moduleEntityId = "#request.id",
+            content = "'修改门店证件：' + #request.id",
+            diff = false)
     public void updateCertificate(@RequestBody @Validated DataShopUpdateCertificateRequestVo request) {
         log.info("修改门店证件，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.updateCertificate(request);
@@ -114,11 +133,13 @@ public class DataShopController {
     @Operation(summary = "修改门店标签选项")
     @PostMapping("update_label_option")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:UPDATE_LABEL_OPTION')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "修改门店标签选项")
+            operateName = "修改门店标签选项",
+            moduleEntityId = "#request.id",
+            content = "'修改门店标签选项：' + #request.id")
     public void updateLabelOption(@RequestBody @Validated DataShopUpdateShopLabelOptionRequestVo request) {
         log.info("修改门店标签选项，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.updateLabelOption(request);
@@ -127,11 +148,14 @@ public class DataShopController {
     @Operation(summary = "批量修改门店标签选项")
     @PostMapping("batch_update_label_option")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:BATCH_UPDATE_LABEL_OPTION')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "批量修改门店标签选项")
+            operateName = "批量修改门店标签选项",
+            moduleEntityId = "''",
+            content = "'批量修改门店标签选项'",
+            diff = false)
     public void batchUpdateLabelOption(@RequestBody @Validated DataShopBatchUpdateShopLabelOptionRequestVo request) {
         log.info("批量修改门店标签选项，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.batchUpdateLabelOption(request);
@@ -140,11 +164,14 @@ public class DataShopController {
     @Operation(summary = "门店绑定组织")
     @PostMapping("bind_organization")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:BIND_ORGANIZATION')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
             module = ModuleEnum.DATA,
             moduleEntity = ModuleEntityEnum.DATA_SHOP,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "门店绑定组织")
+            operateName = "门店绑定组织",
+            moduleEntityId = "''",
+            content = "'门店绑定组织：' + #request.organizationId",
+            diff = false)
     public void bindOrganization(@RequestBody @Validated DataShopBindOrganizationRequestVo request) {
         log.info("门店绑定组织，request={}", JSONUtil.toJsonStr(request));
         shopBusiness.bindOrganization(request);

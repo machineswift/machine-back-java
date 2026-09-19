@@ -121,14 +121,14 @@ public class BIamUserServiceImpl implements IBIamUserService {
         BIamUserEntity entityByUserName = userDao.getByUsername(inputDto.getUsername());
         if (null != entityByUserName) {
             log.error("新增用户系统账号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-            throw new BIamBusinessException("iam.user.service.create.usernameAlreadyExists", "系统账号已经存在");
+            throw new BIamBusinessException("biam.user.service.create.usernameAlreadyExists", "系统账号已经存在");
         }
 
         if (StrUtil.isNotBlank(inputDto.getPhone())) {
             BIamUserEntity entityByPhone = userDao.getByPhone(inputDto.getPhone());
             if (null != entityByPhone) {
                 log.error("新增用户手机号已经存在，inputDto={}", JSONUtil.toJsonStr(inputDto));
-                throw new BIamBusinessException("iam.user.service.create.phoneAlreadyExists", "手机号已经存在");
+                throw new BIamBusinessException("biam.user.service.create.phoneAlreadyExists", "手机号已经存在");
             }
         }
 
@@ -154,7 +154,7 @@ public class BIamUserServiceImpl implements IBIamUserService {
         //验证用户名是否存在
         BIamUserEntity userNameEntity = userDao.getByUsername(dbEntity.getUsername());
         if (null != userNameEntity && !userNameEntity.getId().equals(inputDto.getId())) {
-            throw new BIamBusinessException("iam.user.service.update.usernameAlreadyExists", "用户名已经存在");
+            throw new BIamBusinessException("biam.user.service.update.usernameAlreadyExists", "用户名已经存在");
         }
 
         //修改基础信息
@@ -177,7 +177,7 @@ public class BIamUserServiceImpl implements IBIamUserService {
     public int updatePhone(BIamUserUpdatePhoneInputDto inputDto) {
         BIamUserEntity phoneEntity = userDao.getByPhone(inputDto.getPhone());
         if (null != phoneEntity && !phoneEntity.getId().equals(inputDto.getId())) {
-            throw new BIamBusinessException("iam.user.service.updatePhone.phoneAlreadyExists", "手机号已经存在");
+            throw new BIamBusinessException("biam.user.service.updatePhone.phoneAlreadyExists", "手机号已经存在");
         }
         return userDao.updatePhone(inputDto.getId(), inputDto.getPhone());
     }
@@ -198,11 +198,11 @@ public class BIamUserServiceImpl implements IBIamUserService {
         //验证角色是否重复
         List<BIamUserRoleInfoUpdateInputDto> inputDtoUserRoleInfoList = inputDto.getUserRoleInfoList();
         if (CollectionUtil.isEmpty(inputDtoUserRoleInfoList)) {
-            throw new BIamBusinessException("iam.user.service.updateUserRole.roleIsEmpty", "角色为空");
+            throw new BIamBusinessException("biam.user.service.updateUserRole.roleIsEmpty", "角色为空");
         }
         Set<String> inputRoleIdSet = inputDtoUserRoleInfoList.stream().map(BIamUserRoleInfoUpdateInputDto::getRoleId).collect(Collectors.toSet());
         if (inputRoleIdSet.size() != inputDtoUserRoleInfoList.size()) {
-            throw new BIamBusinessException("iam.user.service.updateUserRole.roleRepeat", "角色重复");
+            throw new BIamBusinessException("biam.user.service.updateUserRole.roleRepeat", "角色重复");
         }
 
         String userId = inputDto.getId();

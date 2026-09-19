@@ -9,7 +9,7 @@ import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.envm.base.audit.ActionTypeEnum;
 import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
-import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
+import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +31,13 @@ public class BIamUserConfigController {
 
     @Operation(summary = "保存用户配置")
     @PostMapping("save")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
             module = ModuleEnum.BIAM,
             moduleEntity = ModuleEntityEnum.BIAM_USER,
             operateType = ActionTypeEnum.UPDATE,
-            operateName = "保存用户配置")
+            operateName = "保存用户配置",
+            moduleEntityId = "#request.configKey",
+            content = "'保存用户配置：' + #request.configKey")
     public void save(@RequestBody @Validated BIamUserConfigSaveRequestVo request) {
         log.info("保存用户配置，request={}", JSONUtil.toJsonStr(request));
         userConfigBusiness.save(request);

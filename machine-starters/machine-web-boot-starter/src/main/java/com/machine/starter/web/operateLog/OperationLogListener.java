@@ -2,7 +2,9 @@ package com.machine.starter.web.operateLog;
 
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.biam.log.IBIamOperationLogClient;
+import com.machine.client.iam.biam.log.IBIamUserAccessLogClient;
 import com.machine.client.iam.biam.log.dto.input.BIamOperationLogCreateInputDto;
+import com.machine.client.iam.biam.log.dto.input.BIamUserAccessLogCreateInputDto;
 import com.machine.sdk.base.constant.ContextConstant;
 import com.machine.sdk.base.context.AppContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +18,14 @@ import org.springframework.scheduling.annotation.Async;
 @Slf4j
 public class OperationLogListener {
 
-    private final ObjectProvider<IBIamOperationLogClient> clientProvider;
 
-    public OperationLogListener(ObjectProvider<IBIamOperationLogClient> clientProvider) {
-        this.clientProvider = clientProvider;
+    private final ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider;
+    private final ObjectProvider<IBIamOperationLogClient> operationLogClientProvider;
+
+    public OperationLogListener(ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider,
+                                ObjectProvider<IBIamOperationLogClient> operationLogClientProvider) {
+        this.accessLogClientProvider = accessLogClientProvider;
+        this.operationLogClientProvider = operationLogClientProvider;
     }
 
     /**
@@ -33,19 +39,73 @@ public class OperationLogListener {
             return;
         }
         try {
-            IBIamOperationLogClient client = clientProvider.getIfAvailable();
-            if (client == null) {
+            IBIamUserAccessLogClient accessLogClient = accessLogClientProvider.getIfAvailable();
+            IBIamOperationLogClient operationLogClient = operationLogClientProvider.getIfAvailable();
+            if (accessLogClient == null) {
+                log.debug("未配置 IBIamUserAccessLogClient，跳过操作日志落库");
+                return;
+            }
+            if (operationLogClient == null) {
                 log.debug("未配置 IBIamOperationLogClient，跳过操作日志落库");
                 return;
             }
+
             AppContextHolder.getContext().setUserId(resolveAuditUserId(context.getUserId()));
-            client.create(buildInputDto(context));
+            BIamOperationLogCreateInputDto operationLogCreateInputDto = buildInputDto(context);
+
+            operationLogClient.create(operationLogCreateInputDto);
+            accessLogClient.create(toAccessLog(operationLogCreateInputDto));
         } catch (Exception error) {
             log.warn("操作日志落库失败，operateName={}, traceId={}, 原因: {}",
                     context.getOperateName(), context.getTraceId(), error.getMessage());
         } finally {
             AppContextHolder.getContext().clear();
         }
+    }
+
+    public static BIamUserAccessLogCreateInputDto toAccessLog(BIamOperationLogCreateInputDto operationLog) {
+        BIamUserAccessLogCreateInputDto accessLog = new BIamUserAccessLogCreateInputDto();
+
+        // 用户信息
+        accessLog.setUserId(operationLog.getUserId());
+        accessLog.setUsername(operationLog.getUsername());
+
+        // 操作来源与模块
+        accessLog.setOperateSource(operationLog.getOperateSource());
+        accessLog.setModule(operationLog.getModule());
+        accessLog.setModuleEntity(operationLog.getModuleEntity());
+
+        // 操作类型与名称
+        accessLog.setOperateType(operationLog.getOperateType());
+        accessLog.setOperateName(operationLog.getOperateName());
+
+        // 链路与网络信息
+        accessLog.setTraceId(operationLog.getTraceId());
+        accessLog.setClientIp(operationLog.getClientIp());
+        accessLog.setPlatform(operationLog.getPlatform());
+        accessLog.setDeviceId(operationLog.getDeviceId());
+        accessLog.setUserAgent(operationLog.getUserAgent());
+
+        // 请求信息
+        accessLog.setHttpMethod(operationLog.getHttpMethod());
+        accessLog.setRequestPath(operationLog.getRequestPath());
+        accessLog.setQueryString(operationLog.getQueryString());
+        accessLog.setRequestBody(operationLog.getRequestBody());
+
+        // 响应信息
+        accessLog.setHttpStatus(operationLog.getHttpStatus());
+        accessLog.setResponseBody(operationLog.getResponseBody());
+
+        // 业务状态与错误信息
+        accessLog.setActionStatus(operationLog.getActionStatus());
+        accessLog.setErrorCode(operationLog.getErrorCode());
+        accessLog.setErrorMessage(operationLog.getErrorMessage());
+        accessLog.setExceptionStack(operationLog.getExceptionStack());
+
+        // 性能与扩展信息
+        accessLog.setCostTime(operationLog.getCostTime());
+        accessLog.setExtendInfo(operationLog.getExtendInfo());
+        return accessLog;
     }
 
     /**

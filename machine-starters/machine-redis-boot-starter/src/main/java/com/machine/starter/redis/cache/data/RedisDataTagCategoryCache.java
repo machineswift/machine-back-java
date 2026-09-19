@@ -42,8 +42,17 @@ public class RedisDataTagCategoryCache {
     @Autowired
     private IDataTagCategoryClient tagCategoryClient;
 
-    public Set<String> recursionListSubId(ProfileSubjectTypeEnum type,
-            String tagCategoryId) {
+    public Set<String> recursionSubId(ProfileSubjectTypeEnum type) {
+        // 查询智能标签分类树
+        DataTagCategoryTreeSimpleOutputDto treeOutputDto = treeAllSimple(type);
+
+        // 获取节点以及子节点的所有数据
+        List<DataTagCategoryTreeSimpleOutputDto> outputDtoList = TreeUtil.collectAllNodes(treeOutputDto);
+        return outputDtoList.stream().map(DataTagCategoryTreeSimpleOutputDto::getId).collect(Collectors.toSet());
+    }
+
+    public Set<String> recursionSubId(ProfileSubjectTypeEnum type,
+                                      String tagCategoryId) {
         // 查询智能标签分类树
         DataTagCategoryTreeSimpleOutputDto treeOutputDto = treeAllSimple(type);
 

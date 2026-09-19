@@ -119,7 +119,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
         request.setName(request.getName().trim());
 
         if (ROOT_USER_ID.equals(request.getId())) {
-            throw new BIamBusinessException("iam.user.business.update.rootUser", "不能修改超级管理员数据");
+            throw new BIamBusinessException("biam.user.business.update.rootUser", "不能修改超级管理员数据");
         }
         BIamUserUpdateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserUpdateInputDto.class);
         userClient.update(inputDto);
@@ -128,7 +128,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
     @Override
     public void updateStatus(BIamUserUpdateStatusRequestVo request) {
         if (ROOT_USER_ID.equals(request.getId())) {
-            throw new BIamBusinessException("iam.user.business.updateStatus.rootUser", "不能修改超级管理员状态");
+            throw new BIamBusinessException("biam.user.business.updateStatus.rootUser", "不能修改超级管理员状态");
         }
         BIamUserUpdateStatusInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserUpdateStatusInputDto.class);
         userClient.updateStatus(inputDto);
@@ -137,7 +137,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
     @Override
     public void updatePhone(BIamUserUpdatePhoneRequestVo request) {
         if (ROOT_USER_ID.equals(request.getId())) {
-            throw new BIamBusinessException("iam.user.business.updatePhone.rootUser", "不能修超级管理员改手机号");
+            throw new BIamBusinessException("biam.user.business.updatePhone.rootUser", "不能修超级管理员改手机号");
         }
         BIamUserUpdatePhoneInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserUpdatePhoneInputDto.class);
         userClient.updatePhone(inputDto);
@@ -146,7 +146,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
     @Override
     public void updatePassword(BIamUserUpdatePasswordRequestVo request) {
         if (ROOT_USER_ID.equals(request.getId())) {
-            throw new BIamBusinessException("iam.user.business.updatePassword.rootUser", "不能修改超级管理员密码");
+            throw new BIamBusinessException("biam.user.business.updatePassword.rootUser", "不能修改超级管理员密码");
         }
         userClient.updatePassword(new BIamUserUpdatePasswordInputDto(request.getId(),
                 passwordEncoder.encode(request.getNewPassword())));
@@ -157,7 +157,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
     @Override
     public void updatePermission(BIamUserUpdatePermissionRequestVo request) {
         if (ROOT_USER_ID.equals(request.getId())) {
-            throw new BIamBusinessException("iam.user.business.updatePermission.rootUser", "不能修改超级管理员权限");
+            throw new BIamBusinessException("biam.user.business.updatePermission.rootUser", "不能修改超级管理员权限");
         }
         BIamUserUpdatePermissionInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserUpdatePermissionInputDto.class);
         userClient.updatePermission(inputDto);
@@ -499,7 +499,7 @@ public class BIamUserBusinessImpl implements IBIamUserBusiness {
         }
 
         if (compute && CollectionUtil.isEmpty(finallyqueryUserIdSet)) {
-            throw new BIamBusinessException("iam.user.business.export.emptyResult", "结果为空");
+            throw new BIamBusinessException("biam.user.business.export.emptyResult", "结果为空");
         }
 
         BIamUserExportInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserExportInputDto.class);

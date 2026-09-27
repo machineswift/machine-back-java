@@ -13,6 +13,7 @@ import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetail
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadListOutputDto;
 import com.machine.sdk.base.envm.data.filecenter.DataDownloadStatusEnum;
 import com.machine.sdk.base.exception.biam.BIamBusinessException;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.service.data.filecenter.download.dao.IDataDownloadDao;
 import com.machine.service.data.filecenter.download.dao.mapper.entity.DataDownloadEntity;
 import com.machine.service.data.filecenter.download.service.IDataDownloadService;
@@ -90,6 +91,11 @@ public class DataDownloadServiceImpl implements IDataDownloadService {
         updateEntity.setStatus(DataDownloadStatusEnum.READY);
         updateEntity.setFailCause(EMPTY_STR);
         downloadDao.update(updateEntity);
+    }
+
+    @Override
+    public boolean exists(IdRequest request) {
+        return downloadDao.exists(request.getId());
     }
 
     @Override

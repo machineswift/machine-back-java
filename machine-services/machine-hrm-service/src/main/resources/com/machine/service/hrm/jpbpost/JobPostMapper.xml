@@ -18,7 +18,7 @@
                 AND jp.status = #{inputDto.status}
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND jp.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(jp.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
         </where>
         ORDER BY jp.sort

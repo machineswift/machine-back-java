@@ -12,13 +12,13 @@
                 AND provider_id = #{inputDto.providerId}
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
-                AND code like CONCAT('%', #{inputDto.code}, '%')
+                AND LOWER(code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.description != null and inputDto.description !='' ">
-                AND description like CONCAT('%', #{inputDto.description}, '%')
+                AND LOWER(description) like LOWER(CONCAT('%', #{inputDto.description}, '%'))
             </if>
             <if test="inputDto.createStartTime != null ">
                 AND create_time > #{inputDto.createStartTime}

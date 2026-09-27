@@ -2,10 +2,7 @@ package com.machine.app.admin.data.brand.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.data.brand.business.IDataBrandBusiness;
-import com.machine.app.admin.data.brand.controller.vo.request.DataBrandCreateRequestVo;
-import com.machine.app.admin.data.brand.controller.vo.request.DataBrandQueryPageRequestVo;
-import com.machine.app.admin.data.brand.controller.vo.request.DataBrandUpdateRequestVo;
-import com.machine.app.admin.data.brand.controller.vo.request.DataBrandUpdateStatusRequestVo;
+import com.machine.app.admin.data.brand.controller.vo.request.*;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandDetailResponseVo;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandExpandListResponseVo;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandSimpleListResponseVo;
@@ -98,6 +95,20 @@ public class DataBrandController {
         brandBusiness.updateStatus(request);
     }
 
+    @Operation(summary = "修改父品牌ID")
+    @PostMapping("update_parent")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE_PARENT')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改品牌父节点",
+            moduleEntityId = "#request.id",
+            content = "'修改品牌父节点：' + #request.id")
+    public void updateParent(@RequestBody @Validated DataBrandUpdateParentIdRequestVo request) {
+        brandBusiness.updateParent(request);
+    }
+
     @Operation(summary = "品牌详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DETAIL')")
@@ -110,10 +121,34 @@ public class DataBrandController {
         return brandBusiness.detail(request);
     }
 
+    @Operation(summary = "查询子品牌(应用于组件弹窗)")
+    @PostMapping("children_simple")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:CHILDREN_SIMPLE')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询子品牌(组件弹窗)")
+    public PageResponse<DataBrandSimpleListResponseVo> childrenSimple(@RequestBody @Validated DataBrandQueryChildrenRequestVo request) {
+        return brandBusiness.childrenSimple(request);
+    }
+
+    @Operation(summary = "查询子品牌(应用于管理菜单)")
+    @PostMapping("children_expand")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:CHILDREN_EXPAND')")
+    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.QUERY,
+            operateName = "查询子品牌(管理菜单)")
+    public PageResponse<DataBrandExpandListResponseVo> childrenExpand(@RequestBody @Validated DataBrandQueryChildrenRequestVo request) {
+        return brandBusiness.childrenExpand(request);
+    }
+
     @Operation(summary = "分页查询品牌(应用于组件弹窗)")
     @PostMapping("page_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:PAGE_SIMPLE')")
-    public PageResponse<DataBrandSimpleListResponseVo> pageSimple(@RequestBody @Validated DataBrandQueryPageRequestVo request) {
+    public PageResponse<DataBrandSimpleListResponseVo> pageSimple(@RequestBody @Validated DataBrandQuerySimplePageRequestVo request) {
         return brandBusiness.pageSimple(request);
     }
 

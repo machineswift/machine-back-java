@@ -55,7 +55,7 @@
                 AND LOWER(r.code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND r.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(r.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
                 AND r.create_by IN

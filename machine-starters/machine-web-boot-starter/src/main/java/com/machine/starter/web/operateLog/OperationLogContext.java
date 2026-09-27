@@ -15,7 +15,6 @@ public class OperationLogContext {
 
     // ========== 操作主体 ==========
     private String userId;
-    private String username;
 
     // ========== 语义 ==========
     private OperateSourceEnum operateSource;

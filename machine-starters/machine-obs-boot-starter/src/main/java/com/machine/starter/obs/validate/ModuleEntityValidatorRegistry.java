@@ -2,6 +2,7 @@ package com.machine.starter.obs.validate;
 
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.exception.data.DataObsBusinessException;
+import com.machine.sdk.base.model.dto.IdNameDto;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,20 @@ public class ModuleEntityValidatorRegistry {
         }
 
         validate.validateEntityId(entityId);
+    }
+
+    public IdNameDto getNameInfo(ModuleEntityEnum entityEnum,
+                                 String entityId) {
+        if (null == entityEnum) {
+            throw new DataObsBusinessException("data.obs.validate.factory.nullEntityEnum", "模块实体枚举为空");
+        }
+
+        IModuleEntityValidator validate = validatorMap.get(entityEnum);
+        if (null == validate) {
+            throw new DataObsBusinessException("data.obs.validate.factory.notImplValidate", "未实现对应的模块枚举校验");
+        }
+
+        return validate.getNameInfo(entityId);
     }
 
 }

@@ -13,9 +13,12 @@ public interface IDataDownloadDao {
 
     int update(DataDownloadEntity dataDownloadEntity);
 
+    boolean exists(String id);
+
     DataDownloadEntity getById(String id);
 
     List<DataDownloadEntity> queryByLimit(DataDownloadQueryInputDto inputDto);
 
     Page<DataDownloadEntity> selectPage(DataDownloadQueryPageInputDto inputDto);
+
 }

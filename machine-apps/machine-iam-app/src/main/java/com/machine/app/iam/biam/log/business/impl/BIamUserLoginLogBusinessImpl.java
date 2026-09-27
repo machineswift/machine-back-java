@@ -43,13 +43,13 @@ public class BIamUserLoginLogBusinessImpl implements IBIamUserLoginLogBusiness {
 
         BIamUserLoginLogDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), BIamUserLoginLogDetailResponseVo.class);
 
-        { //填充修改人创建人信息
+        {//填充创建人信息
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
-            userIdSet.add(outputDto.getUpdateBy());
             Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
-            responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
-            responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
+            if (userSimpleDetailMap.containsKey(responseVo.getCreateBy())) {
+                responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
+            }
         }
 
         return responseVo;
@@ -70,13 +70,16 @@ public class BIamUserLoginLogBusinessImpl implements IBIamUserLoginLogBusiness {
                 page.getTotal(),
                 JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamUserLoginLogExpandListResponseVo.class));
 
-        {//创建人、修改人姓名
+        {//创建人姓名
             Set<String> userIdSet = page.getRecords().stream().map(BIamUserLoginLogListOutputDto::getCreateBy).collect(Collectors.toSet());
-            userIdSet.addAll(page.getRecords().stream().map(BIamUserLoginLogListOutputDto::getUpdateBy).collect(Collectors.toSet()));
-            Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
-            for (BIamUserLoginLogExpandListResponseVo vo : pageResponse.getRecords()) {
-                vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
-                vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());
+            userIdSet.remove(null);
+            if (CollectionUtil.isNotEmpty(userIdSet)) {
+                Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
+                for (BIamUserLoginLogExpandListResponseVo vo : pageResponse.getRecords()) {
+                    if (userSimpleDetailMap.containsKey(vo.getCreateBy())) {
+                        vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
+                    }
+                }
             }
         }
         return pageResponse;

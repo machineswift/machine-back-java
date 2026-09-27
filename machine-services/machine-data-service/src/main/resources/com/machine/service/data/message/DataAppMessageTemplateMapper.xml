@@ -14,7 +14,7 @@
         <if test="request.channels != null and request.channels.size > 0">
             and ( 0 = 1
             <foreach item="item" collection="request.channels" >
-                or channel like CONCAT('%', #{item}, '%')
+                or LOWER(channel) like LOWER(CONCAT('%', #{item}, '%'))
             </foreach>
             )
         </if>

@@ -32,6 +32,18 @@ public class BIamOperationLogEntity extends BaseEntity {
     private String username;
 
     /**
+     * 姓名
+     */
+    @TableField("real_name")
+    private String realName;
+
+    /**
+     * 手机号
+     */
+    @TableField("phone")
+    private String phone;
+
+    /**
      * 操作来源 {@link OperateSourceEnum}
      */
     @TableField("operate_source")

@@ -19,7 +19,7 @@ import java.util.Date;
 @Service
 public class ObsFileService {
 
-    public static final int URL_DEFAULT_EXPIRE_SECOND = 5 * 60;
+    public static final int URL_DEFAULT_EXPIRE_SECOND = 30;
 
     private static final int URL_MAX_EXPIRE_SECOND = 7 * 24 * 60 * 60;
 

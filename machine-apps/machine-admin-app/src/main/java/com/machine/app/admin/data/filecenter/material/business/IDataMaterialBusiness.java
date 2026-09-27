@@ -24,9 +24,4 @@ public interface IDataMaterialBusiness {
 
     PageResponse<DataMaterialExpandListResponseVo> pageExpand(DataMaterialQueryPageRequestVo request);
 
-    /**
-     * 获取素材附件的预签名下载 URL（用于图片/视频预览）
-     */
-    String getDownloadUrl(IdRequest request);
-
 }

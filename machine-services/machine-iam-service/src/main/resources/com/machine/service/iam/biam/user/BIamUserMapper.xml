@@ -68,10 +68,10 @@
                 </foreach>
             </if>
             <if test="inputDto.username != null and inputDto.username !='' ">
-                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+                AND LOWER(u.username) like LOWER(CONCAT('%', #{inputDto.username}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(u.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
@@ -80,7 +80,7 @@
                 AND u.status = #{inputDto.status}
             </if>
             <if test="inputDto.phone != null and inputDto.phone !='' ">
-                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+                AND LOWER(u.phone) like LOWER(CONCAT('%', #{inputDto.phone}, '%'))
             </if>
             <if test="inputDto.gender != null  ">
                 AND u.gender = #{inputDto.gender}
@@ -113,16 +113,16 @@
                 </foreach>
             </if>
             <if test="inputDto.username != null and inputDto.username !='' ">
-                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+                AND LOWER(u.username) like LOWER(CONCAT('%', #{inputDto.username}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.phone != null and inputDto.phone !='' ">
-                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+                AND LOWER(u.phone) like LOWER(CONCAT('%', #{inputDto.phone}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(u.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND u.status = #{inputDto.status}
@@ -156,16 +156,16 @@
                 </foreach>
             </if>
             <if test="inputDto.username != null and inputDto.username !='' ">
-                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+                AND LOWER(u.username) like LOWER(CONCAT('%', #{inputDto.username}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.phone != null and inputDto.phone !='' ">
-                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+                AND LOWER(u.phone) like LOWER(CONCAT('%', #{inputDto.phone}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(u.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND u.status = #{inputDto.status}
@@ -200,16 +200,16 @@
                 </foreach>
             </if>
             <if test="inputDto.username != null and inputDto.username !='' ">
-                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+                AND LOWER(u.username) like LOWER(CONCAT('%', #{inputDto.username}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.phone != null and inputDto.phone !='' ">
-                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+                AND LOWER(u.phone) like LOWER(CONCAT('%', #{inputDto.phone}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(u.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND u.status = #{inputDto.status}
@@ -241,16 +241,16 @@
                 </foreach>
             </if>
             <if test="inputDto.username != null and inputDto.username !='' ">
-                AND u.username like CONCAT('%', #{inputDto.username}, '%')
+                AND LOWER(u.username) like LOWER(CONCAT('%', #{inputDto.username}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(u.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.phone != null and inputDto.phone !='' ">
-                AND u.phone like CONCAT('%', #{inputDto.phone}, '%')
+                AND LOWER(u.phone) like LOWER(CONCAT('%', #{inputDto.phone}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND u.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(u.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND u.status = #{inputDto.status}

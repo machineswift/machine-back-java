@@ -83,14 +83,14 @@ machine-apps/machine-{module}-app/
 
 #### 服务模块
 
-| 模块名称                    | 说明                                   |
-|-------------------------|--------------------------------------|
+| 模块名称                | 说明                                             |
+|-------------------------|--------------------------------------------------|
 | **machine-iam-app**     | 身份认证与授权应用，基于Spring Security + OAuth2 |
-| **machine-admin-app**   | 管理后台应用，提供统一的管理界面                     |
-| **machine-partner-app**   | 督导、店长、店员、加盟商老板 手机APP端                |
-| **machine-openapi-app** | 开放API应用，提供第三方系统集成接口                  |
-| **machine-mq-app**      | 消息队列应用，处理异步消息和事件                     |
-| **machine-xxljob-app**  | 定时任务应用，集成XXL-JOB分布式调度                |
+| **machine-admin-app**   | 管理后台应用，提供统一的管理界面                 |
+| **machine-partner-app** | 督导、店长、店员、加盟商老板 手机APP端           |
+| **machine-openapi-app** | 开放API应用，提供第三方系统集成接口              |
+| **machine-mq-app**      | 消息队列应用，处理异步消息和事件                 |
+| **machine-xxljob-app**  | 定时任务应用，集成XXL-JOB分布式调度              |
 
 ---
 
@@ -142,17 +142,17 @@ machine-clients/machine-{module}-client/
 
 #### 服务模块
 
-| 模块名称                      | 说明                   |
-|---------------------------|----------------------|
-| **machine-iam-client**    | IAM服务客户端，提供用户认证相关接口  |
-| **machine-data-client**   | 数据服务客户端，提供数据管理相关接口   |
-| **machine-ai-client**     | AI服务客户端，提供AI能力相关接口   |
-| **machine-hrm-client**    | HRM服务客户端，提供人力资源相关接口  |
-| **machine-crm-client**    | CRM服务客户端，提供客户关系相关接口  |
-| **machine-scm-client**    | SCM服务客户端，提供供应链相关接口   |
+| 模块名称                  | 说明                                  |
+|---------------------------|---------------------------------------|
+| **machine-iam-client**    | IAM服务客户端，提供用户认证相关接口   |
+| **machine-data-client**   | 数据服务客户端，提供数据管理相关接口  |
+| **machine-ai-client**     | AI服务客户端，提供AI能力相关接口      |
+| **machine-hrm-client**    | HRM服务客户端，提供人力资源相关接口   |
+| **machine-crm-client**    | CRM服务客户端，提供客户关系相关接口   |
+| **machine-scm-client**    | SCM服务客户端，提供供应链相关接口     |
 | **machine-tpp-client**    | TPP服务客户端，提供第三方平台相关接口 |
-| **machine-doc-client**    | 文档服务客户端，提供文档管理相关接口   |
-| **machine-plugin-client** | 插件服务客户端，提供插件管理相关接口   |
+| **machine-doc-client**    | 文档服务客户端，提供文档管理相关接口  |
+| **machine-plugin-client** | 插件服务客户端，提供插件管理相关接口  |
 
 ---
 
@@ -201,17 +201,17 @@ machine-services/machine-{module}-service/
 
 #### 服务模块
 
-| 模块名称                       | 说明                            |
-|----------------------------|-------------------------------|
-| **machine-iam-service**    | 身份认证服务，用户、角色、权限、组织管理          |
-| **machine-data-service**   | 数据管理服务，智能标签、门店、素材、附件管理        |
+| 模块名称                   | 说明                                            |
+|----------------------------|-------------------------------------------------|
+| **machine-iam-service**    | 身份认证服务，用户、角色、权限、组织管理        |
+| **machine-data-service**   | 数据管理服务，智能标签、门店、素材、附件管理    |
 | **machine-ai-service**     | AI智能服务，集成Spring AI框架，提供智能分析能力 |
-| **machine-hrm-service**    | 人力资源服务，员工、部门、组织架构管理           |
-| **machine-crm-service**    | 客户关系管理服务，客户、会员管理              |
+| **machine-hrm-service**    | 人力资源服务，员工、部门、组织架构管理          |
+| **machine-crm-service**    | 客户关系管理服务，客户、会员管理                |
 | **machine-scm-service**    | 供应链管理服务，供应商、采购流程管理            |
-| **machine-tpp-service**    | 第三方平台服务，微信、飞书、华为云等集成          |
-| **machine-doc-service**    | 文档服务，文档管理和转换                  |
-| **machine-plugin-service** | 插件服务，支持插件化扩展                  |
+| **machine-tpp-service**    | 第三方平台服务，微信、飞书、华为云等集成        |
+| **machine-doc-service**    | 文档服务，文档管理和转换                        |
+| **machine-plugin-service** | 插件服务，支持插件化扩展                        |
 
 ---
 
@@ -224,9 +224,9 @@ machine-services/machine-{module}-service/
 
 #### 服务模块
 
-| 模块名称                       | 说明                                                           |
-|----------------------------|----------------------------------------------------------------|
-| **machine-gateway-server** | API 网关，基于 Spring Cloud Gateway，统一入口、路由、限流熔断   |
+| 模块名称                   | 说明                                                                   |
+|----------------------------|------------------------------------------------------------------------|
+| **machine-gateway-server** | API 网关，基于 Spring Cloud Gateway，统一入口、路由、限流熔断          |
 | **machine-camunda-server** | 工作流服务器，Cibseven BPM（Camunda 分支）控制台，流程设计、监控与管理 |
 
 ---
@@ -239,13 +239,13 @@ machine-services/machine-{module}-service/
 
 #### 数据库选型
 
-| 数据库               | 版本（参考） | 用途说明                                           |
-|-------------------|--------------|----------------------------------------------------|
-| **MySQL**         | 以运行环境为准 | 配置中心(Nacos)、任务调度(XXL-JOB)                  |
+| 数据库            | 版本（参考）   | 用途说明                                                     |
+|-------------------|----------------|--------------------------------------------------------------|
+| **MySQL**         | 以运行环境为准 | 配置中心(Nacos)、任务调度(XXL-JOB)                           |
 | **PostgreSQL**    | 以运行环境为准 | 业务数据与工作流引擎(Cibseven BPM)数据，支持 JSON 与复杂查询 |
-| **Redis**         | 以运行环境为准 | 分布式缓存、会话存储、分布式锁(Redisson)             |
-| **ClickHouse**    | -            | 分析型数据库、OLAP 查询（可选）                      |
-| **Elasticsearch** | -            | 全文搜索、日志分析（可选）                          |
+| **Redis**         | 以运行环境为准 | 分布式缓存、会话存储、分布式锁(Redisson)                     |
+| **ClickHouse**    | -              | 分析型数据库、OLAP 查询（可选）                              |
+| **Elasticsearch** | -              | 全文搜索、日志分析（可选）                                   |
 
 ---
 
@@ -255,53 +255,53 @@ machine-services/machine-{module}-service/
 
 ### 🚀 核心技术栈
 
-| 分类            | 技术组件                 | 版本（根 pom）   | 说明                |
-|---------------|----------------------|------------------|---------------------|
-| **🏗️ 微服务框架** | Spring Cloud         | 2025.1.2         | 微服务基础框架       |
-|               | Spring Cloud Alibaba | 2025.1.0.0       | 阿里云微服务生态     |
-| **🌐 Web 框架**  | Spring Boot          | 4.0.7            | Web 应用框架        |
-| **🤖 AI 框架**   | Spring AI            | 2.0.0            | Spring AI 集成      |
-|               | Spring AI Alibaba    | 2.0.0-M1.1       | 阿里云 AI 集成       |
-| **🔧 服务治理**   | Nacos                | 随 Spring Cloud Alibaba | 服务注册与配置中心 |
-|               | Spring Cloud Gateway | 随 Spring Cloud  | API 网关            |
-|               | OpenFeign            | 随 Spring Cloud  | 服务间调用          |
-| **🔐 安全认证**   | Spring Security      | 随 Spring Boot 4.0 | 认证授权（OAuth2、JWT） |
-| **⏰ 任务调度**   | XXL-JOB              | 3.4.0（xxl-job-core） | 分布式任务调度       |
-| **💾 数据访问**   | MyBatis-Plus         | 3.5.16           | ORM（mybatis-plus-spring-boot4-starter） |
-| **⚙️ 工作流引擎**  | Cibseven BPM         | 2.2.0            | 业务流程管理（cibseven-bom，Camunda 分支） |
-| **🔍 链路追踪**   | SkyWalking           | 9.6.0（apm-toolkit） | 分布式链路追踪       |
-| **📚 API 文档**  | springdoc-openapi   | 3.0.2             | OpenAPI 文档；swagger-annotations 2.2.46 |
+| 分类              | 技术组件             | 版本（根 pom）          | 说明                                       |
+|-------------------|----------------------|-------------------------|--------------------------------------------|
+| **🏗️ 微服务框架** | Spring Cloud         | 2025.1.2                | 微服务基础框架                             |
+|                   | Spring Cloud Alibaba | 2025.1.0.0              | 阿里云微服务生态                           |
+| **🌐 Web 框架**   | Spring Boot          | 4.0.7                   | Web 应用框架                               |
+| **🤖 AI 框架**    | Spring AI            | 2.0.0                   | Spring AI 集成                             |
+|                   | Spring AI Alibaba    | 2.0.0-M1.1              | 阿里云 AI 集成                             |
+| **🔧 服务治理**   | Nacos                | 随 Spring Cloud Alibaba | 服务注册与配置中心                         |
+|                   | Spring Cloud Gateway | 随 Spring Cloud         | API 网关                                   |
+|                   | OpenFeign            | 随 Spring Cloud         | 服务间调用                                 |
+| **🔐 安全认证**   | Spring Security      | 随 Spring Boot 4.0      | 认证授权（OAuth2、JWT）                    |
+| **⏰ 任务调度**   | XXL-JOB              | 3.4.0（xxl-job-core）   | 分布式任务调度                             |
+| **💾 数据访问**   | MyBatis-Plus         | 3.5.16                  | ORM（mybatis-plus-spring-boot4-starter）   |
+| **⚙️ 工作流引擎** | Cibseven BPM         | 2.2.0                   | 业务流程管理（cibseven-bom，Camunda 分支） |
+| **🔍 链路追踪**   | SkyWalking           | 9.7.0（apm-toolkit）    | 分布式链路追踪                             |
+| **📚 API 文档**   | springdoc-openapi    | 3.0.2                   | OpenAPI 文档；swagger-annotations 2.2.46   |
 
 ---
 
 ### 🏗️ 基础设施
 
-| 分类             | 技术组件                 | 版本                           | 状态     | 用途说明     |
-|----------------|----------------------|------------------------------|--------|----------|
-| **🗄️ 关系型数据库** | MySQL                | 9.7.2                        | ✅ 已集成  | 基础设施库（Nacos、XXL-Job） |
-|                | PostgreSQL           | 以运行环境为准                  | ✅ 已集成  | 业务与工作流数据库            |
-| **⚡ 缓存**       | Redis                | 8.8                          | ✅ 已集成  | 分布式缓存                 |
-| **📨 消息队列**    | RabbitMQ             | 4.3.4                        | ✅ 已集成  | 消息中间件（Spring Cloud Stream） |
-| **📊 列式数据库**   | ClickHouse           | 26.3.3.20                    | ✅ 已集成  | 分析型数据库               |
-|                | Apache Doris         | 以运行环境为准                  | ✅ 已集成  | 实时分析数据库（部署见 docker/doris） |
-| **🌊 流处理**     | Apache Flink         | 2.1.0                        | ✅ 已集成  | 实时流处理                |
-|                | Apache Spark         | -                            | 🔄 待集成 | 大数据批处理               |
-| **🔍 搜索引擎**    | Elasticsearch        | 8.19.19                      | ✅ 已集成  | 全文搜索引擎               |
-|                | Kibana               | 8.19.19                      | ✅ 已集成  | 日志分析可视化              |
-| **📦 对象存储**    | MinIO                | RELEASE.2025-09-07T16-13-09Z | ✅ 已集成  | 对象存储服务               |
-| **📈 监控可视化**   | Grafana + Prometheus | -                            | 🔄 待集成 | 监控告警系统               |
+| 分类                | 技术组件             | 版本                         | 状态      | 用途说明                              |
+|---------------------|----------------------|------------------------------|-----------|---------------------------------------|
+| **🗄️ 关系型数据库** | MySQL                | 9.7.2                        | ✅ 已集成 | 基础设施库（Nacos、XXL-Job）          |
+|                     | PostgreSQL           | 以运行环境为准               | ✅ 已集成 | 业务与工作流数据库                    |
+| **⚡ 缓存**         | Redis                | 8.8                          | ✅ 已集成 | 分布式缓存                            |
+| **📨 消息队列**     | RabbitMQ             | 4.3.4                        | ✅ 已集成 | 消息中间件（Spring Cloud Stream）     |
+| **📊 列式数据库**   | ClickHouse           | 26.3.3.20                    | ✅ 已集成 | 分析型数据库                          |
+|                     | Apache Doris         | 以运行环境为准               | ✅ 已集成 | 实时分析数据库（部署见 docker/doris） |
+| **🌊 流处理**       | Apache Flink         | 2.1.0                        | ✅ 已集成 | 实时流处理                            |
+|                     | Apache Spark         | -                            | 🔄 待集成 | 大数据批处理                          |
+| **🔍 搜索引擎**     | Elasticsearch        | 8.19.19                      | ✅ 已集成 | 全文搜索引擎                          |
+|                     | Kibana               | 8.19.19                      | ✅ 已集成 | 日志分析可视化                        |
+| **📦 对象存储**     | MinIO                | RELEASE.2025-09-07T16-13-09Z | ✅ 已集成 | 对象存储服务                          |
+| **📈 监控可视化**   | Grafana + Prometheus | -                            | 🔄 待集成 | 监控告警系统                          |
 
 ---
 
 ### 🔧 第三方集成
 
-| 分类          | 技术组件     | 版本      | 状态    | 用途说明           |
-|-------------|----------|---------|-------|----------------|
-| **💬 即时通讯** | 微信生态     | 4.8.3   | ✅ 已集成 | 微信小程序、公众号、企业微信 |
-| **☁️ 云服务**  | 华为云      | 3.2.4   | ✅ 已集成 | 华为云API网关       |
-| **📋 办公协作** | 飞书       | 2.0.2   | ✅ 已集成 | 飞书开放平台         |
-| **🏢 企业服务** | 北森       | -       | ✅ 已集成 | 北森HR系统集成       |
-| **🔐 身份认证** | JustAuth | 1.16.7  | ✅ 已集成 | 第三方登录集成        |
+| 分类            | 技术组件 | 版本   | 状态      | 用途说明                     |
+|-----------------|----------|--------|-----------|------------------------------|
+| **💬 即时通讯** | 微信生态 | 4.8.3  | ✅ 已集成 | 微信小程序、公众号、企业微信 |
+| **☁️ 云服务**   | 华为云   | 3.2.4  | ✅ 已集成 | 华为云API网关                |
+| **📋 办公协作** | 飞书     | 2.0.2  | ✅ 已集成 | 飞书开放平台                 |
+| **🏢 企业服务** | 北森     | -      | ✅ 已集成 | 北森HR系统集成               |
+| **🔐 身份认证** | JustAuth | 1.16.7 | ✅ 已集成 | 第三方登录集成               |
 
 ---
 
@@ -309,7 +309,7 @@ machine-services/machine-{module}-service/
 
 ### 📝 命名规范
 
-| 层级             | 命名规范                                                           | 示例                       |
+| 层级           | 命名规范                                                       | 示例                     |
 |----------------|----------------------------------------------------------------|--------------------------|
 | **Controller** | `{Business}Controller`                                         | `DataTagController`      |
 | **Business**   | `I{Business}Business` / `I{Business}BusinessImpl`              | `IDataTagBusiness`       |
@@ -345,11 +345,11 @@ machine-services/machine-{module}-service/
 
 #### 权限编码示例
 
-| 权限编码                           | 说明       |
-|--------------------------------|----------|
-| `SYSTEM:BASIC_DATA:TAG:CREATE` | 创建智能标签   |
-| `SYSTEM:BASIC_DATA:TAG:UPDATE` | 修改智能标签   |
-| `SYSTEM:BASIC_DATA:TAG:DELETE` | 删除智能标签   |
+| 权限编码                       | 说明             |
+|--------------------------------|------------------|
+| `SYSTEM:BASIC_DATA:TAG:CREATE` | 创建智能标签     |
+| `SYSTEM:BASIC_DATA:TAG:UPDATE` | 修改智能标签     |
+| `SYSTEM:BASIC_DATA:TAG:DELETE` | 删除智能标签     |
 | `SYSTEM:BASIC_DATA:TAG:DETAIL` | 查看智能标签详情 |
 
 ---

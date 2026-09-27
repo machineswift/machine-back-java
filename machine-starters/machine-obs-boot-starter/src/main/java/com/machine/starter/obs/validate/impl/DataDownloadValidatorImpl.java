@@ -3,7 +3,9 @@ package com.machine.starter.obs.validate.impl;
 import com.machine.client.data.filecenter.download.IDataDownloadClient;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
 import com.machine.sdk.base.exception.data.DataObsBusinessException;
+import com.machine.sdk.base.model.dto.IdNameDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.starter.obs.validate.IModuleEntityValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +42,22 @@ public class DataDownloadValidatorImpl implements IModuleEntityValidator {
 
     @Override
     public void validateEntityId(String entityId) {
-        DataDownloadDetailOutputDto outputDto = dataDownloadClient.getById(new IdRequest(entityId));
-        if (null == outputDto) {
+        boolean exists = dataDownloadClient.exists(new IdRequest(entityId));
+        if (!exists) {
             throw new DataObsBusinessException("data.obs.validate.DATA_DOWNLOAD.entityNotExists", "下载中心文件不存在");
         }
+    }
+
+    @Override
+    public IdNameDto getNameInfo(String entityId) {
+        DataDownloadDetailOutputDto outputDto = dataDownloadClient.getById(new IdRequest(entityId));
+        if (null == outputDto) {
+            return null;
+        }
+
+        ModuleEnum module = outputDto.getModule();
+        ModuleEntityEnum entity = outputDto.getEntity();
+        return new IdNameDto(entityId, module.getMessage() + "-" + entity.getMessage());
     }
 
 }

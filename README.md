@@ -9,7 +9,7 @@
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.1.2-blue.svg)](https://spring.io/projects/spring-cloud)
 [![Spring Cloud Alibaba](https://img.shields.io/badge/Spring%20Cloud%20Alibaba-2025.1.0.0-orange.svg)](https://github.com/alibaba/spring-cloud-alibaba)
 [![Java](https://img.shields.io/badge/Java-25-red.svg)](https://openjdk.java.net/)
-[![Maven](https://img.shields.io/badge/Maven-3.14+-blue.svg)](https://maven.apache.org/)
+[![Maven](https://img.shields.io/badge/Maven-3.9+-blue.svg)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **企业级智能化微服务平台 · 一站式数字化解决方案**
@@ -38,9 +38,10 @@
 - 📄 **文档处理**：Apache Tika + jodconverter，支持文档解析与格式转换。
 - 📊 **可观测性**：SkyWalking APM、p6spy SQL 日志、SpringDoc OpenAPI 接口文档。
 - 📋 **认证中心-客户端管理**：OAuth2 客户端（Registered Client）全生命周期管理（增删改查/启停/密钥重置），内置 Caffeine + Redis 本地缓存，配套授权码模式授权确认页（Consent）。
-- 🏠 **首页程序坞配置**：基于用户配置（UserConfig）的首页程序坞（Dock）个性化配置能力。
-- 🧾 **审计日志中心**：登录 / 访问 / 操作三类日志统一管理，异步落库、全链路可追溯。
-
+- 🏠 **首页程序坞配置**：基于用户配置（UserConfig）的首页程序坞（Dock）个性化配置与用户偏好持久化能力。
+- 🧾 **审计日志中心**：登录 / 访问 / 操作 / 附件操作四类日志统一管理，异步落库、全链路可追溯，支持按模块实体筛选与操作明细审计。
+- 🗂️ **数据管理**：素材 / 附件 / 下载中心统一文件管理，品牌（支持父子层级）、区域、门店、标签（分类 / 选项）、供应商等主数据维护。
+- 🧩 **附件统一管理**：`machine-obs-boot-starter` 提供模块实体校验注册表（`ModuleEntityValidatorRegistry`），统一素材 / 附件 / 下载的归属校验与附件操作日志采集。
 ---
 
 ### 🎮 在线演示
@@ -65,25 +66,25 @@
 |             | Spring Cloud Alibaba           | 2025.1.0.0             |
 |             | Spring Cloud Gateway           | 随 Spring Cloud         |
 | **语言**      | Java                           | 25                     |
-| **构建**      | Maven                          | 3.14+                  |
+| **构建**      | Maven                          | 3.9+                   |
 |             | Lombok                         | 1.18.46                |
 | **AI**      | Spring AI                      | 2.0.0                  |
 |             | Spring AI Alibaba              | 2.0.0-M1.1             |
 | **安全**      | Spring Security + OAuth2 + JWT | 随 Spring Boot          |
 |             | JustAuth（三方登录）                 | 1.16.7                 |
 |             | Kaptcha（验证码）                   | 2.3.2                  |
-|             | Nimbus JOSE JWT                | 10.9                   |
-| **持久化**     | MyBatis-Plus                   | 3.5.16                 |
+|             | Nimbus JOSE JWT                | 10.9.1                 |
+| **持久化**     | MyBatis-Plus                   | 3.5.17                 |
 |             | MyBatis                        | 3.5.19                 |
 |             | dynamic-datasource（多数据源）       | 4.5.0                  |
 |             | p6spy（SQL 日志）                  | 2.0.1                  |
-| **缓存**      | Redisson                       | 4.4.0                  |
-|             | Jedis                          | 7.5.2                  |
+| **缓存**      | Redisson                       | 4.7.0                  |
+|             | Jedis                          | 8.0.1                  |
 |             | Caffeine                       | 3.2.4                  |
 | **数据库**     | PostgreSQL / MySQL             | —                      |
 | **服务发现**    | Nacos                          | 随 Spring Cloud Alibaba |
-| **API 文档**  | SpringDoc OpenAPI (Swagger UI) | 3.0.2                  |
-|             | Swagger Annotations Jakarta    | 2.2.46                 |
+| **API 文档**  | SpringDoc OpenAPI (Swagger UI) | 3.1.0                  |
+|             | Swagger Annotations Jakarta    | 2.2.52                 |
 | **对象存储**    | x-file-storage                 | 2.3.0                  |
 |             | MinIO SDK                      | 8.5.2                  |
 |             | 华为云 OBS SDK                    | 3.22.12                |
@@ -93,28 +94,28 @@
 |             | jodconverter                   | 4.4.11                 |
 | **工作流**     | Cibseven BPM（Camunda 分支）       | 2.2.0                  |
 |             | GraalVM JS（脚本引擎）               | 23.0.6                 |
-| **调度**      | XXL-Job                        | 3.4.0                  |
-| **APM**     | Apache SkyWalking              | 9.6.0                  |
-| **流处理**     | Apache Flink                   | 2.2.1                  |
-|             | Flink Connector Kafka          | 4.0.1-2.0              |
-| **微信 SDK**  | 小程序 / 公众号 / 企业微信 / 开放平台 / 支付   | 4.8.3                  |
+| **调度**      | XXL-Job                        | 3.4.2                  |
+| **APM**     | Apache SkyWalking              | 9.7.0                  |
+| **流处理**     | Apache Flink                   | 2.3.0                  |
+|             | Flink Connector Kafka          | 5.0.0-2.2              |
+| **微信 SDK**  | 小程序 / 公众号 / 企业微信 / 开放平台 / 支付   | 4.8.6.B                |
 | **飞书 SDK**  | Lark OAPI SDK                  | 2.0.2                  |
 | **华为云**     | API Gateway SDK                | 3.2.4                  |
-| **HTTP**    | OkHttp 5                       | 5.3.2                  |
-|             | HttpClient 5                   | 5.6.1                  |
-|             | HttpCore 5                     | 5.4.2                  |
-| **字节码**     | ByteBuddy + ByteBuddy Agent    | 1.18.9                 |
-|             | Javassist                      | 3.31.0-GA              |
+| **HTTP**    | OkHttp 5                       | 5.5.0                  |
+|             | HttpClient 5                   | 5.6.4                  |
+|             | HttpCore 5                     | 5.4.3                  |
+| **字节码**     | ByteBuddy + ByteBuddy Agent    | 1.18.12                |
+|             | Javassist                      | 3.33.0-GA              |
 | **AOP**     | AspectJ Weaver + Runtime       | 1.9.25.1               |
 | **工具库**     | Hutool                         | 5.8.47                 |
-|             | Guava                          | 33.7.0-jre             |
+|             | Guava                          | 33.7.1-jre             |
 |             | Gson                           | 2.14.0                 |
 |             | FastExcel                      | 1.3.0                  |
-|             | jsoup（HTML 解析）                 | 1.23.1                 |
-|             | commons-compress               | 1.26.2                 |
+|             | jsoup（HTML 解析）                 | 1.23.2                 |
+|             | commons-compress               | 1.28.0                 |
 |             | TransmittableThreadLocal       | 2.14.5                 |
-|             | Bouncy Castle                  | 1.84                   |
-| **对象变更对比**  | JaVers                         | 7.5.0                  |
+|             | Bouncy Castle                  | 1.85.2                 |
+| **对象变更对比**  | JaVers                         | 7.11.8                 |
 | **Jakarta** | Jakarta EE Platform            | 11.0.0                 |
 
 ---
@@ -128,7 +129,7 @@
 | 依赖         | 说明                                 |
 |------------|------------------------------------|
 | JDK        | 25                                 |
-| Maven      | 3.14+                              |
+| Maven      | 3.9+                               |
 | MySQL      | 基础设施库（Nacos、XXL-Job）               |
 | PostgreSQL | 业务与工作流库（与 `machine-services` 对应）   |
 | Redis      | 缓存 / Redisson 分布式锁                 |

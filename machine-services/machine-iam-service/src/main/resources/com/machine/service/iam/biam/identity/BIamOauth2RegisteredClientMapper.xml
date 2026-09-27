@@ -21,7 +21,7 @@
                 AND orc.client_id = #{inputDto.clientId}
             </if>
             <if test="inputDto.clientName != null and inputDto.clientName != '' ">
-                AND orc.client_name LIKE CONCAT('%', #{inputDto.clientName}, '%')
+                AND LOWER(orc.client_name) LIKE LOWER(CONCAT('%', #{inputDto.clientName}, '%'))
             </if>
             <if test="inputDto.status != null ">
                 AND orc.status = #{inputDto.status}

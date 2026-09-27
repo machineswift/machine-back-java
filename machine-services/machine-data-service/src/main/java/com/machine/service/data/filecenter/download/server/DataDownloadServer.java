@@ -43,6 +43,12 @@ public class DataDownloadServer implements IDataDownloadClient {
     }
 
     @Override
+    @PostMapping("exists")
+    public boolean exists(@RequestBody @Validated IdRequest request) {
+        return downloadService.exists(request);
+    }
+
+    @Override
     @PostMapping("update")
     public int update(@RequestBody @Validated DataDownloadUpdateInputDto inputDto) {
         log.info("下载中心修改文件，inputDto={}", JSONUtil.toJsonStr(inputDto));

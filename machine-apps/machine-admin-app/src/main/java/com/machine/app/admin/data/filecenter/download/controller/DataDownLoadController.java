@@ -15,7 +15,6 @@ import com.machine.starter.web.accessLog.annotation.WebApiAccessLog;
 import com.machine.starter.web.operateLog.annotation.WebOperationLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,23 +56,6 @@ public class DataDownLoadController {
             operateName = "查询下载中心详情")
     public DataDownloadDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return downLoadBusiness.detail(request);
-    }
-
-    @Operation(summary = "下载文件")
-    @PostMapping("download_file")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:DATA:DOWNLOAD:DOWNLOAD_FILE')")
-    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
-            module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_DOWNLOAD,
-            operateType = ActionTypeEnum.DOWNLOAD,
-            operateName = "下载文件",
-            moduleEntityId = "#request.id",
-            content = "'下载文件：' + #request.id",
-            diff = false)
-    public void downloadFile(@RequestBody @Validated IdRequest request,
-                             HttpServletResponse response) {
-        log.info("下载中心下载文件，request={}", JSONUtil.toJsonStr(request));
-        downLoadBusiness.downloadFile(request, response);
     }
 
     @Operation(summary = "分页查询(应用于角色管理菜单)")

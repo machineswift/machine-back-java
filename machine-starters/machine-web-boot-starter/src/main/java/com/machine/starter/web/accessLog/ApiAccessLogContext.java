@@ -24,7 +24,6 @@ public class ApiAccessLogContext {
 
     // ========== 用户 & 链路 ==========
     private String userId;
-    private String username;
     private String traceId;
 
     // ========== 客户端环境 ==========

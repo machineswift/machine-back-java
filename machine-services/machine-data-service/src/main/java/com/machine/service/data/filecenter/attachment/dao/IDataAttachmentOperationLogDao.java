@@ -1,7 +1,7 @@
 package com.machine.service.data.filecenter.attachment.dao;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogQueryPageInputDto;
 import com.machine.service.data.filecenter.attachment.dao.mapper.entity.DataAttachmentOperationLogEntity;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public interface IDataAttachmentOperationLogDao {
 
     List<DataAttachmentOperationLogEntity> selectByIdSet(Set<String> idSet);
 
-    Page<DataAttachmentOperationLogEntity> selectPage(DataAttachmentOperationLogPageInputDto inputDto);
+    Page<DataAttachmentOperationLogEntity> selectPage(DataAttachmentOperationLogQueryPageInputDto inputDto);
 }

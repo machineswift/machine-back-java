@@ -20,6 +20,12 @@ public class BIamOperationLogCreateInputDto {
     @Schema(description = "操作人用户名")
     private String username;
 
+    @Schema(description = "姓名")
+    private String realName;
+
+    @Schema(description = "手机号")
+    private String phone;
+
     @Schema(description = "操作来源，对应 OperateSourceEnum")
     private OperateSourceEnum operateSource;
 

@@ -32,6 +32,13 @@ public class DataDownloadDaoImpl implements IDataDownloadDao {
     }
 
     @Override
+    public boolean exists(String id) {
+        Wrapper<DataDownloadEntity> wrapper = new LambdaQueryWrapper<DataDownloadEntity>()
+                .eq(DataDownloadEntity::getId, id);
+        return dataDownloadMapper.exists(wrapper);
+    }
+
+    @Override
     public DataDownloadEntity getById(String id) {
         return dataDownloadMapper.selectById(id);
     }

@@ -2,6 +2,7 @@ package com.machine.starter.web.config;
 
 import com.machine.client.iam.biam.log.IBIamOperationLogClient;
 import com.machine.client.iam.biam.log.IBIamUserAccessLogClient;
+import com.machine.client.iam.biam.user.IBIamUserClient;
 import com.machine.starter.web.WebProperties;
 import com.machine.starter.web.operateLog.OperationLogAspect;
 import com.machine.starter.web.operateLog.OperationLogListener;
@@ -55,9 +56,10 @@ public class OperationLogConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public OperationLogListener operationLogListener(ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider,
+    public OperationLogListener operationLogListener(ObjectProvider<IBIamUserClient> biamUserProvider,
+                                                     ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider,
                                                      ObjectProvider<IBIamOperationLogClient> operationLogClientProvider) {
-        return new OperationLogListener(accessLogClientProvider, operationLogClientProvider);
+        return new OperationLogListener(biamUserProvider, accessLogClientProvider, operationLogClientProvider);
     }
 
     /**

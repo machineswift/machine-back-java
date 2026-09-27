@@ -6,6 +6,8 @@
         id,
         user_id,
         username,
+        real_name,
+        phone,
         operate_source,
         module,
         module_entity,
@@ -36,11 +38,17 @@
         <include refid="base_column_list"/>
         from t_biam_operation_log ol
         <where>
-            <if test="inputDto.userId != null and inputDto.userId != ''">
-                AND ol.user_id = #{inputDto.userId}
+            <if test="inputDto.userIdSet != null and inputDto.userIdSet.size > 0">
+                AND ol.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
-            <if test="inputDto.username != null and inputDto.username != ''">
-                AND ol.username LIKE CONCAT('%', #{inputDto.username}, '%')
+            <if test="inputDto.phone != null and inputDto.phone != ''">
+                AND ol.phone = #{inputDto.phone}
+            </if>
+            <if test="inputDto.realName != null and inputDto.realName != ''">
+                AND LOWER(ol.real_name) LIKE LOWER(CONCAT('%', #{inputDto.realName}, '%'))
             </if>
             <if test="inputDto.module != null">
                 AND ol.module = #{inputDto.module}
@@ -52,7 +60,7 @@
                 AND ol.operate_type = #{inputDto.operateType}
             </if>
             <if test="inputDto.operateName != null and inputDto.operateName != ''">
-                AND ol.operate_name LIKE CONCAT('%', #{inputDto.operateName}, '%')
+                AND LOWER(ol.operate_name) LIKE LOWER(CONCAT('%', #{inputDto.operateName}, '%'))
             </if>
             <if test="inputDto.operateSource != null">
                 AND ol.operate_source = #{inputDto.operateSource}
@@ -64,7 +72,7 @@
                 AND ol.http_status = #{inputDto.httpStatus}
             </if>
             <if test="inputDto.requestPath != null and inputDto.requestPath != ''">
-                AND ol.request_path LIKE CONCAT('%', #{inputDto.requestPath}, '%')
+                AND LOWER(ol.request_path) LIKE LOWER(CONCAT('%', #{inputDto.requestPath}, '%'))
             </if>
             <if test="inputDto.actionStatus != null">
                 AND ol.action_status = #{inputDto.actionStatus}

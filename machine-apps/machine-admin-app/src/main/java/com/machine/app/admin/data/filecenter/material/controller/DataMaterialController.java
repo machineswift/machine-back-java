@@ -4,7 +4,6 @@ import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.data.filecenter.material.business.IDataMaterialBusiness;
 import com.machine.app.admin.data.filecenter.material.controller.vo.response.DataMaterialDetailResponseVo;
 import com.machine.app.admin.data.filecenter.material.controller.vo.response.DataMaterialExpandListResponseVo;
-import com.machine.app.admin.data.filecenter.material.controller.vo.response.DataMaterialUrlResponseVo;
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialCreateRequestVo;
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialQueryPageRequestVo;
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialUpdateCategoryRequestVo;
@@ -95,19 +94,6 @@ public class DataMaterialController {
             operateName = "查询素材详情")
     public DataMaterialDetailResponseVo detail(@RequestBody @Validated IdRequest request) {
         return materialBusiness.detail(request);
-    }
-
-    @Operation(summary = "获取素材文件预签名 URL（用于图片/视频预览/附件下载）")
-    @PostMapping("download_url")
-    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:MATERIAL:DOWNLOAD_URL')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
-            module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_MATERIAL,
-            operateType = ActionTypeEnum.DOWNLOAD,
-            operateName = "获取素材文件预签名URL")
-    public DataMaterialUrlResponseVo getDownloadUrl(@RequestBody @Validated IdRequest request) {
-        String url = materialBusiness.getDownloadUrl(request);
-        return new DataMaterialUrlResponseVo(url);
     }
 
     @Operation(summary = "素材分页列表(管理端)")

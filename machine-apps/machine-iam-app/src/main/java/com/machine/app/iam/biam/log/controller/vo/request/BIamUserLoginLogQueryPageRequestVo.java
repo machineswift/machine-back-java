@@ -23,9 +23,6 @@ public class BIamUserLoginLogQueryPageRequestVo extends PageRequest {
     @Schema(description = "手机号")
     private String phone;
 
-    @Schema(description = "用户名")
-    private String username;
-
     @Schema(description = "IP地址")
     private String ipAddress;
 

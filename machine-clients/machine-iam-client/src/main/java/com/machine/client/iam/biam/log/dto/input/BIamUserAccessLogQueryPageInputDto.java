@@ -10,16 +10,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BIamUserAccessLogQueryPageInputDto extends PageRequest {
 
-    @Schema(description = "用户ID")
-    private String userId;
+    @Schema(description = "操作人用户ID集合")
+    private Set<String> userIdSet;
 
-    @Schema(description = "用户名")
-    private String username;
+    @Schema(description = "手机号")
+    private String phone;
+
+    @Schema(description = "姓名（模糊）")
+    private String realName;
 
     @Schema(description = "操作来源")
     private String operateSource;

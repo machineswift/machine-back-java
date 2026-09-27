@@ -6,13 +6,10 @@ import cn.hutool.json.JSONUtil;
 import cn.idev.excel.FastExcel;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.filecenter.attachment.IDataAttachmentClient;
-import com.machine.client.data.filecenter.attachment.IDataAttachmentOperationLogClient;
 import com.machine.client.data.filecenter.attachment.IDataFileTempClient;
 import com.machine.client.data.filecenter.attachment.dto.DataFileTempCreateDto;
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
 import com.machine.client.data.filecenter.attachment.dto.input.DataFileTempCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentDetailOutputDto;
 import com.machine.client.data.filecenter.download.IDataDownloadClient;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4IamCodeClient;
@@ -25,8 +22,9 @@ import com.machine.client.iam.biam.user.dto.output.BIamUserListOutputDto;
 import com.machine.sdk.base.context.AppContextHolder;
 import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
-import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationResultEnum;
 import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationTypeEnum;
 import com.machine.sdk.base.envm.biam.role.BIamUserRoleBusinessTypeEnum;
 import com.machine.sdk.base.envm.biam.auth.BIamAuth2SourceEnum;
@@ -53,6 +51,7 @@ import com.machine.service.iam.biam.user.dao.mapper.entity.BIamUserRoleBusinessR
 import com.machine.service.iam.biam.user.dao.mapper.entity.BIamUserRoleRelationEntity;
 import com.machine.service.iam.biam.user.service.IBIamUserService;
 import com.machine.service.iam.biam.user.service.bo.BIamShopUserExportBo;
+import com.machine.starter.obs.operateLog.AttachmentOperationLogPublisher;
 import com.machine.starter.obs.service.ObsFileService;
 import com.machine.starter.obs.tool.AttachmentExpireTimeUtil;
 import com.machine.starter.redis.cache.biam.RedisBIamPermissionCache;
@@ -74,6 +73,9 @@ import static com.machine.starter.obs.constant.ObsFileConstant.ATTACHMENT_DEFAUL
 @Slf4j
 @Service
 public class BIamUserServiceImpl implements IBIamUserService {
+
+    @Autowired
+    private AttachmentOperationLogPublisher attachmentOperationLogPublisher;
 
     @Autowired
     private RedisBIamPermissionCache permissionCache;
@@ -104,9 +106,6 @@ public class BIamUserServiceImpl implements IBIamUserService {
 
     @Autowired
     private IDataAttachmentClient dataAttachmentClient;
-
-    @Autowired
-    private IDataAttachmentOperationLogClient dataAttachmentOperationLogClient;
 
     @Autowired
     private IDataDownloadClient dataDownloadClient;
@@ -516,16 +515,8 @@ public class BIamUserServiceImpl implements IBIamUserService {
         String attachmentId = dataAttachmentClient.create(attachmentCreateInputDto);
 
         // 记录日志
-        DataAttachmentDetailOutputDto attachmentDetailOutputDto = dataAttachmentClient.getById(new IdRequest(attachmentId));
-        DataAttachmentOperationLogCreateInputDto logCreateInputDto = new DataAttachmentOperationLogCreateInputDto();
-        logCreateInputDto.setAttachmentId(attachmentId);
-        logCreateInputDto.setVersionId(attachmentDetailOutputDto.getCurrentVersionId());
-        logCreateInputDto.setOperationType(DataAttachmentOperationTypeEnum.UPLOAD);
-        logCreateInputDto.setOperationResult(DataAttachmentOperationResultEnum.SUCCESS);
-        logCreateInputDto.setIpAddress(environmentInfo.getIpAddress());
-        logCreateInputDto.setPlatform(environmentInfo.getPlatform());
-        logCreateInputDto.setUserAgent(environmentInfo.getUserAgent());
-        dataAttachmentOperationLogClient.create(logCreateInputDto);
+        attachmentOperationLogPublisher.publish(attachmentId,DataAttachmentOperationTypeEnum.UPLOAD,
+                OperateSourceEnum.IAM_APP, ModuleEnum.BIAM);
 
         return attachmentId;
     }

@@ -1,6 +1,7 @@
 package com.machine.starter.web.config;
 
 import com.machine.client.iam.biam.log.IBIamUserAccessLogClient;
+import com.machine.client.iam.biam.user.IBIamUserClient;
 import com.machine.starter.redis.RedisAutoConfiguration;
 import com.machine.starter.web.WebProperties;
 import com.machine.starter.web.accessLog.ApiAccessLogAspect;
@@ -48,8 +49,9 @@ public class WebAccessLogConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public ApiAccessLogListener apiAccessLogListener(ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider) {
-        return new ApiAccessLogListener(accessLogClientProvider);
+    public ApiAccessLogListener apiAccessLogListener(ObjectProvider<IBIamUserClient> biamUserProvider,
+                                                     ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider) {
+        return new ApiAccessLogListener(biamUserProvider, accessLogClientProvider);
     }
 
     /**

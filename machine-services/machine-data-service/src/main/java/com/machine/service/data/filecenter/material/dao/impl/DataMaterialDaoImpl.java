@@ -1,5 +1,7 @@
 package com.machine.service.data.filecenter.material.dao.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.filecenter.material.dto.input.DataMaterialQueryPageInputDto;
@@ -29,6 +31,13 @@ public class DataMaterialDaoImpl implements IDataMaterialDao {
     public void update(DataMaterialEntity entity) {
 
         materialMapper.updateById(entity);
+    }
+
+    @Override
+    public boolean exists(String id) {
+        Wrapper<DataMaterialEntity> wrapper = new LambdaQueryWrapper<DataMaterialEntity>()
+                .eq(DataMaterialEntity::getId, id);
+        return materialMapper.exists(wrapper);
     }
 
     @Override

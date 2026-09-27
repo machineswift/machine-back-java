@@ -27,9 +27,6 @@ import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -48,8 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-
-import static com.machine.sdk.base.constant.ContextConstant.SYSTEM_USER_ID;
 
 /**
  * 业务操作日志切面（只在 controller 层加注解）。
@@ -122,7 +117,6 @@ public class OperationLogAspect {
         context.setModuleEntityId(asString(evaluateSpel(operationLog.moduleEntityId(), joinPoint, null)));
 
         context.setUserId(AppContextHolder.getContext().getUserId());
-        context.setUsername(resolveUsername());
         context.setTraceId(resolveTraceId());
 
         if (request != null) {
@@ -418,21 +412,6 @@ public class OperationLogAspect {
  */
 private Expression parseExpression(String expression) {
     return expressionCache.computeIfAbsent(expression, spelParser::parseExpression);
-}
-
-
-/**
- * 从 Spring Security 安全上下文解析当前登录用户名（best effort）。
- */
-private String resolveUsername() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null) {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails userDetails) {
-            return userDetails.getUsername();
-        }
-    }
-    return SYSTEM_USER_ID;
 }
 
 private String resolveTraceId() {

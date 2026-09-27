@@ -23,9 +23,6 @@ public class DataMaterialQueryPageRequestVo extends PageRequest {
     @Schema(description = "素材标题，模糊匹配")
     private String title;
 
-    @Schema(description = "素材名称，模糊匹配")
-    private String name;
-
     @Schema(description = "系统处理状态")
     private DataMaterialProcessStatusEnum processStatus;
 

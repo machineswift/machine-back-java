@@ -69,14 +69,11 @@
             <if test="inputDto.phone != null and inputDto.phone != ''">
                 AND ull.phone = #{inputDto.phone}
             </if>
-            <if test="inputDto.username != null and inputDto.username != ''">
-                AND ull.username = #{inputDto.username}
-            </if>
             <if test="inputDto.ipAddress != null and inputDto.ipAddress != ''">
                 AND ull.ip_address = #{inputDto.ipAddress}
             </if>
             <if test="inputDto.realName != null and inputDto.realName != ''">
-                AND ull.real_name LIKE CONCAT('%', #{inputDto.realName}, '%')
+                AND LOWER(ull.real_name) LIKE LOWER(CONCAT('%', #{inputDto.realName}, '%'))
             </if>
             <if test="inputDto.authAction != null  ">
                 AND ull.auth_action = #{inputDto.authAction}

@@ -9,7 +9,7 @@
         </if>
         <where>
             <if test="inputDto.fileName != null and inputDto.fileName !='' ">
-                AND a.name like CONCAT('%', #{inputDto.fileName}, '%')
+                AND LOWER(a.name) like LOWER(CONCAT('%', #{inputDto.fileName}, '%'))
             </if>
             <if test="inputDto.statusList != null  and inputDto.statusList.size > 0">
                 AND d.status IN

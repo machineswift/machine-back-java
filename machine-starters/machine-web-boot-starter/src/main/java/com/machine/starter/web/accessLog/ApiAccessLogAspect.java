@@ -19,9 +19,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -106,7 +103,6 @@ public class ApiAccessLogAspect {
 
         // 用户 & 链路
         context.setUserId(AppContextHolder.getContext().getUserId());
-        context.setUsername(resolveUsername());
         context.setTraceId(resolveTraceId());
 
         // 客户端环境
@@ -278,23 +274,6 @@ public class ApiAccessLogAspect {
         } catch (Throwable error) {
             return "";
         }
-    }
-
-    /**
-     * 从 Spring Security 安全上下文解析当前登录用户名。
-     */
-    private String resolveUsername() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            assert authentication != null;
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails userDetails) {
-                return userDetails.getUsername();
-            }
-        } catch (Throwable error) {
-            log.debug("从安全上下文解析用户名失败: {}", error.getMessage());
-        }
-        return null;
     }
 
     private String resolveHeaderOrParam(HttpServletRequest request,

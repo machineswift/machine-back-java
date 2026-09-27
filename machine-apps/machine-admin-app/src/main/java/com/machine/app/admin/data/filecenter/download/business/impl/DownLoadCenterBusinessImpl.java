@@ -2,7 +2,6 @@ package com.machine.app.admin.data.filecenter.download.business.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.data.filecenter.download.business.IDownLoadCenterBusiness;
@@ -18,21 +17,13 @@ import com.machine.client.data.filecenter.download.dto.output.DataDownloadListOu
 import com.machine.client.iam.biam.user.IBIamUserClient;
 import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.data.filecenter.DataDownloadStatusEnum;
-import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
-import com.machine.starter.obs.service.ObsFileService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.x.file.storage.core.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,9 +39,6 @@ public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
 
     @Autowired
     private IDataDownloadClient dataDownloadClient;
-
-    @Autowired
-    private ObsFileService obsFileService;
 
     @Override
     public void retry(IdRequest request) {
@@ -142,49 +130,5 @@ public class DownLoadCenterBusinessImpl implements IDownLoadCenterBusiness {
         }
 
         return pageResponse;
-    }
-
-    @Override
-    public void downloadFile(IdRequest request, HttpServletResponse response) {
-        // 查询下载记录
-        DataDownloadDetailOutputDto downloadDetail = dataDownloadClient.getById(request);
-        if (downloadDetail == null) {
-            throw new DataBusinessException("data.download.business.downloadFile.notFound", "下载记录不存在");
-        }
-        String attachmentId = downloadDetail.getAttachmentId();
-        if (StrUtil.isBlank(attachmentId)) {
-            throw new DataBusinessException("data.download.business.downloadFile.attachmentNotFound", "附件ID不存在");
-        }
-
-        // 查询附件文件信息
-        DataAttachmentWithCurrentFileInfoOutputDto attachment = dataAttachmentClient.getCurrentByAttachmentId(new IdRequest(attachmentId));
-        if (attachment == null) {
-            throw new DataBusinessException("data.download.business.downloadFile.attachmentNotFound", "附件不存在");
-        }
-        if (CollectionUtil.isEmpty(attachment.getFileInfoList())) {
-            throw new DataBusinessException("data.download.business.downloadFile.fileNotFound", "附件文件不存在");
-        }
-
-        DataAttachmentWithCurrentFileInfoOutputDto.DataFileInfo dataFileInfo = attachment.getFileInfoList().getFirst();
-        FileInfo fileInfo = dataFileInfo.getFileInfo();
-        String originalName = dataFileInfo.getOriginalName();
-        Long fileSize = dataFileInfo.getSize();
-
-        // 从 MinIO 下载并返回文件流
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(originalName, StandardCharsets.UTF_8));
-        if (fileSize != null) {
-            response.setContentLengthLong(fileSize);
-        }
-
-        try (InputStream inputStream = obsFileService.downloadToStream(fileInfo);
-             OutputStream outputStream = response.getOutputStream()) {
-            IoUtil.copy(inputStream, outputStream);
-            outputStream.flush();
-        } catch (Exception e) {
-            log.error("下载文件异常，downloadId={}, attachmentId={}", request.getId(), attachmentId, e);
-            throw new DataBusinessException("data.download.business.downloadFile.failed", "文件下载失败");
-        }
     }
 }

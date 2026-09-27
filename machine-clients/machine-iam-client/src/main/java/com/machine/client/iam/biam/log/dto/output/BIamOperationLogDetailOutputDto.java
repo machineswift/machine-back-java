@@ -22,6 +22,12 @@ public class BIamOperationLogDetailOutputDto {
     @Schema(description = "操作人用户名")
     private String username;
 
+    @Schema(description = "姓名")
+    private String realName;
+
+    @Schema(description = "手机号")
+    private String phone;
+
     @Schema(description = "操作来源，对应 OperateSourceEnum")
     private OperateSourceEnum operateSource;
 
@@ -103,9 +109,4 @@ public class BIamOperationLogDetailOutputDto {
     @Schema(description = "创建时间（Unix 时间戳）")
     private Long createTime;
 
-    @Schema(description = "修改人ID")
-    private String updateBy;
-
-    @Schema(description = "修改时间（Unix 时间戳）")
-    private Long updateTime;
 }

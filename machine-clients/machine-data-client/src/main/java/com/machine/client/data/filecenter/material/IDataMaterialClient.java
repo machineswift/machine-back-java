@@ -31,6 +31,9 @@ public interface IDataMaterialClient {
     @PostMapping("update_attachmentId")
     void updateAttachmentId(@RequestBody @Validated DataMaterialUpdateAttachmentIdInputDto inputDto);
 
+    @PostMapping("exists")
+    boolean exists(@RequestBody @Validated IdRequest request);
+
     @PostMapping("get_by_id")
     DataMaterialDetailOutputDto getById(@RequestBody @Validated IdRequest request);
 
@@ -39,6 +42,7 @@ public interface IDataMaterialClient {
 
     @PostMapping("select_page")
     PageResponse<DataMaterialListOutputDto> selectPage(@RequestBody @Validated DataMaterialQueryPageInputDto inputDto);
+
 }
 
 

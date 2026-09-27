@@ -1,38 +1,3 @@
-DROP TABLE IF EXISTS t_data_file;
-CREATE TABLE t_data_file
-(
-    id            VARCHAR(32)   NOT NULL,
-    file_type     VARCHAR(16)   NOT NULL,
-    original_name VARCHAR(128)  NOT NULL,
-    storage_name  VARCHAR(128)  NOT NULL,
-    storage_path  VARCHAR(256)  NOT NULL,
-    hash_sha256   VARCHAR(64),
-    file_info     VARCHAR(4096) NOT NULL,
-    size          BIGINT        NOT NULL,
-    create_by     VARCHAR(32)   NOT NULL,
-    create_time   BIGINT        NOT NULL,
-    update_by     VARCHAR(32)   NOT NULL,
-    update_time   BIGINT        NOT NULL,
-    CONSTRAINT pk_t_data_file PRIMARY KEY (id)
-);
-
-CREATE INDEX idx_t_data_file_01 ON t_data_file (hash_sha256);
-
-COMMENT ON TABLE t_data_file IS 'ERP文件主表';
-COMMENT ON COLUMN t_data_file.id IS '文件ID';
-COMMENT ON COLUMN t_data_file.file_type IS '文件类型（扩展名）';
-COMMENT ON COLUMN t_data_file.original_name IS '原始名称';
-COMMENT ON COLUMN t_data_file.storage_name IS '存储名称';
-COMMENT ON COLUMN t_data_file.storage_path IS '存储路径（bucket/路径）';
-COMMENT ON COLUMN t_data_file.hash_sha256 IS '文件SHA-256哈希值-用于去重和秒传';
-COMMENT ON COLUMN t_data_file.file_info IS '文件存储信息（JSON格式）';
-COMMENT ON COLUMN t_data_file.size IS '文件大小（字节）';
-COMMENT ON COLUMN t_data_file.create_by IS '创建人';
-COMMENT ON COLUMN t_data_file.create_time IS '创建时间（时间戳）';
-COMMENT ON COLUMN t_data_file.update_by IS '更新人';
-COMMENT ON COLUMN t_data_file.update_time IS '更新时间（时间戳）';
-
-
 DROP TABLE IF EXISTS t_data_file_temp;
 CREATE TABLE t_data_file_temp
 (
@@ -66,6 +31,43 @@ COMMENT ON COLUMN t_data_file_temp.create_by IS '创建人';
 COMMENT ON COLUMN t_data_file_temp.create_time IS '创建时间（时间戳）';
 COMMENT ON COLUMN t_data_file_temp.update_by IS '更新人';
 COMMENT ON COLUMN t_data_file_temp.update_time IS '更新时间（时间戳）';
+
+
+
+
+DROP TABLE IF EXISTS t_data_file;
+CREATE TABLE t_data_file
+(
+    id            VARCHAR(32)   NOT NULL,
+    file_type     VARCHAR(16)   NOT NULL,
+    original_name VARCHAR(128)  NOT NULL,
+    storage_name  VARCHAR(128)  NOT NULL,
+    storage_path  VARCHAR(256)  NOT NULL,
+    hash_sha256   VARCHAR(64),
+    file_info     VARCHAR(4096) NOT NULL,
+    size          BIGINT        NOT NULL,
+    create_by     VARCHAR(32)   NOT NULL,
+    create_time   BIGINT        NOT NULL,
+    update_by     VARCHAR(32)   NOT NULL,
+    update_time   BIGINT        NOT NULL,
+    CONSTRAINT pk_t_data_file PRIMARY KEY (id)
+);
+
+CREATE INDEX idx_t_data_file_01 ON t_data_file (hash_sha256);
+
+COMMENT ON TABLE t_data_file IS 'ERP文件主表';
+COMMENT ON COLUMN t_data_file.id IS '文件ID';
+COMMENT ON COLUMN t_data_file.file_type IS '文件类型（扩展名）';
+COMMENT ON COLUMN t_data_file.original_name IS '原始名称';
+COMMENT ON COLUMN t_data_file.storage_name IS '存储名称';
+COMMENT ON COLUMN t_data_file.storage_path IS '存储路径（bucket/路径）';
+COMMENT ON COLUMN t_data_file.hash_sha256 IS '文件SHA-256哈希值-用于去重和秒传';
+COMMENT ON COLUMN t_data_file.file_info IS '文件存储信息（JSON格式）';
+COMMENT ON COLUMN t_data_file.size IS '文件大小（字节）';
+COMMENT ON COLUMN t_data_file.create_by IS '创建人';
+COMMENT ON COLUMN t_data_file.create_time IS '创建时间（时间戳）';
+COMMENT ON COLUMN t_data_file.update_by IS '更新人';
+COMMENT ON COLUMN t_data_file.update_time IS '更新时间（时间戳）';
 
 
 DROP TABLE IF EXISTS t_data_attachment;
@@ -354,15 +356,38 @@ COMMENT ON COLUMN t_data_download.update_time IS '更新时间';
 DROP TABLE IF EXISTS t_data_attachment_operation_log;
 CREATE TABLE t_data_attachment_operation_log
 (
+    -- 基础标识
     id                 VARCHAR(32) NOT NULL,
+
+    -- 操作主体
+    user_id            VARCHAR(32) NOT NULL,
+    username           VARCHAR(32) NOT NULL,
+    real_name          VARCHAR(64) NOT NULL DEFAULT '',
+    phone              VARCHAR(16) NOT NULL DEFAULT '',
+
+    -- 附件信息
     attachment_id      VARCHAR(32) NOT NULL,
     version_id         VARCHAR(32),
+    attachment_group   VARCHAR(32) NOT NULL,
+
+    -- 操作信息
+    operate_source     VARCHAR(32) NOT NULL,
+    module             VARCHAR(32) NOT NULL,
+    module_entity      VARCHAR(32) NOT NULL,
+    module_entity_id   VARCHAR(32) NOT NULL,
     operation_type     VARCHAR(32) NOT NULL,
-    operation_result   VARCHAR(16) NOT NULL,
-    ip_address         VARCHAR(64) NOT NULL DEFAULT '',
+
+    -- 请求链路
+    trace_id           VARCHAR(64) NOT NULL DEFAULT '',
+    client_ip          VARCHAR(64) NOT NULL,
     platform           VARCHAR(32) NOT NULL DEFAULT '',
-    user_agent         VARCHAR(512) NOT NULL DEFAULT '',
-    error_msg          VARCHAR(1024),
+    user_agent         VARCHAR(4096) NOT NULL DEFAULT '',
+
+    -- 操作结果
+    operation_result   VARCHAR(16) NOT NULL,
+    error_message      TEXT,
+
+    -- 审计字段
     create_by          VARCHAR(32) NOT NULL,
     create_time        BIGINT NOT NULL,
     update_by          VARCHAR(32) NOT NULL,
@@ -371,26 +396,37 @@ CREATE TABLE t_data_attachment_operation_log
 );
 
 -- 索引优化
-CREATE INDEX idx_t_attachment_op_log_01 ON t_data_attachment_operation_log (attachment_id, create_time DESC);
-CREATE INDEX idx_t_attachment_op_log_02 ON t_data_attachment_operation_log (version_id);
-CREATE INDEX idx_t_attachment_op_log_03 ON t_data_attachment_operation_log (operation_type, create_time DESC);
-CREATE INDEX idx_t_attachment_op_log_04 ON t_data_attachment_operation_log (operation_result, create_time DESC);
-CREATE INDEX idx_t_attachment_op_log_05 ON t_data_attachment_operation_log (create_by, create_time DESC);
-CREATE INDEX idx_t_attachment_op_log_06 ON t_data_attachment_operation_log (create_time DESC);
-CREATE INDEX idx_t_attachment_op_log_09 ON t_data_attachment_operation_log (attachment_id, operation_type, operation_result);
+CREATE INDEX idx_t_attachment_op_log_01 ON t_data_attachment_operation_log (user_id);
+CREATE INDEX idx_t_attachment_op_log_02 ON t_data_attachment_operation_log (phone);
+CREATE INDEX idx_t_attachment_op_log_03 ON t_data_attachment_operation_log (attachment_id);
+CREATE INDEX idx_t_attachment_op_log_04 ON t_data_attachment_operation_log (module_entity_id);
+CREATE INDEX idx_t_attachment_op_log_05 ON t_data_attachment_operation_log (trace_id);
+CREATE INDEX idx_t_attachment_op_log_06 ON t_data_attachment_operation_log (client_ip);
+CREATE INDEX idx_t_attachment_op_log_07 ON t_data_attachment_operation_log (create_time);
 
-COMMENT ON TABLE t_data_attachment_operation_log IS '附件操作日志表）';
+
+COMMENT ON TABLE t_data_attachment_operation_log IS '附件操作日志表';
 
 COMMENT ON COLUMN t_data_attachment_operation_log.id IS '日志ID';
+COMMENT ON COLUMN t_data_attachment_operation_log.user_id IS '用户id';
+COMMENT ON COLUMN t_data_attachment_operation_log.username IS '用户名（系统账号）';
+COMMENT ON COLUMN t_data_attachment_operation_log.real_name IS '姓名';
+COMMENT ON COLUMN t_data_attachment_operation_log.phone IS '手机号';
 COMMENT ON COLUMN t_data_attachment_operation_log.attachment_id IS '附件ID';
 COMMENT ON COLUMN t_data_attachment_operation_log.version_id IS '版本ID';
-COMMENT ON COLUMN t_data_attachment_operation_log.operation_type IS '操作类型定';
-COMMENT ON COLUMN t_data_attachment_operation_log.operation_result IS '操作结果';
-COMMENT ON COLUMN t_data_attachment_operation_log.ip_address IS '客户端IP地址';
+COMMENT ON COLUMN t_data_attachment_operation_log.attachment_group IS '附件分组（同一分组所有版本共享）';
+COMMENT ON COLUMN t_data_attachment_operation_log.operate_source IS '操作来源，对应 OperateSourceEnum';
+COMMENT ON COLUMN t_data_attachment_operation_log.module IS '操作模块，对应 ModuleEnum';
+COMMENT ON COLUMN t_data_attachment_operation_log.module_entity IS '操作模块实体，对应 ModuleEntityEnum';
+COMMENT ON COLUMN t_data_attachment_operation_log.module_entity_id IS '操作模块实体主键ID';
+COMMENT ON COLUMN t_data_attachment_operation_log.operation_type IS '操作类型';
+COMMENT ON COLUMN t_data_attachment_operation_log.trace_id IS '分布式链路追踪ID';
+COMMENT ON COLUMN t_data_attachment_operation_log.client_ip IS '客户端IP地址';
 COMMENT ON COLUMN t_data_attachment_operation_log.platform IS '客户端平台';
-COMMENT ON COLUMN t_data_attachment_operation_log.user_agent IS '用户代理（浏览器/客户端标识）';
-COMMENT ON COLUMN t_data_attachment_operation_log.error_msg IS '错误信息';
-COMMENT ON COLUMN t_data_attachment_operation_log.create_by IS '操作人';
-COMMENT ON COLUMN t_data_attachment_operation_log.create_time IS '操作时间';
-COMMENT ON COLUMN t_data_attachment_operation_log.update_by IS '更新人';
-COMMENT ON COLUMN t_data_attachment_operation_log.update_time IS '更新时间';
+COMMENT ON COLUMN t_data_attachment_operation_log.user_agent IS 'User-Agent（浏览器/客户端标识）';
+COMMENT ON COLUMN t_data_attachment_operation_log.operation_result IS '操作结果';
+COMMENT ON COLUMN t_data_attachment_operation_log.error_message IS '错误信息';
+COMMENT ON COLUMN t_data_attachment_operation_log.create_by IS '创建人';
+COMMENT ON COLUMN t_data_attachment_operation_log.create_time IS '记录创建时间（入库时间戳）';
+COMMENT ON COLUMN t_data_attachment_operation_log.update_by IS '修改人';
+COMMENT ON COLUMN t_data_attachment_operation_log.update_time IS '修改时间';

@@ -50,10 +50,4 @@ public class BIamUserLoginLogListOutputDto {
     @Schema(description = "创建时间（Unix 时间戳）")
     private Long createTime;
 
-    @Schema(description = "操作人ID")
-    private String updateBy;
-
-    @Schema(description = "更新时间（Unix 时间戳）")
-    private Long updateTime;
-
 }

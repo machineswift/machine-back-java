@@ -16,6 +16,12 @@ import lombok.NoArgsConstructor;
 public class DataBrandEntity extends BaseEntity {
 
     /**
+     * 父品牌ID
+     */
+    @TableField("parent_id")
+    private String parentId;
+
+    /**
      * 编码
      */
     @TableField("code")
@@ -35,10 +41,16 @@ public class DataBrandEntity extends BaseEntity {
     private StatusEnum status;
 
     /**
-     * LOGO 素材Id
+     * 排序
      */
-    @TableField("logo_material_id")
-    private String logoMaterialId;
+    @TableField("sort")
+    private Long sort;
+
+    /**
+     * LOGO 附件Id
+     */
+    @TableField("logo_attachment_id")
+    private String logoAttachmentId;
 
 
     /**

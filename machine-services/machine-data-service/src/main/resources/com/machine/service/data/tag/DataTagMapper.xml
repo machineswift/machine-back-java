@@ -13,10 +13,10 @@
                 </foreach>
             </if>
             <if test="inputDto.name != null and inputDto.name != ''">
-                AND tdt.name LIKE CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(tdt.name) LIKE LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.code != null and inputDto.code != ''">
-                AND tdt.code LIKE CONCAT('%', #{inputDto.code}, '%')
+                AND LOWER(tdt.code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.status != null">
                 AND tdt.status = #{inputDto.status}

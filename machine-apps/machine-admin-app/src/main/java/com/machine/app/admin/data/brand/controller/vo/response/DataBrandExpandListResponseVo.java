@@ -1,32 +1,29 @@
 package com.machine.app.admin.data.brand.controller.vo.response;
 
 import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.model.tree.TreeNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Schema
 @NoArgsConstructor
-public class DataBrandExpandListResponseVo {
+@EqualsAndHashCode(callSuper = true)
+public class DataBrandExpandListResponseVo  extends TreeNode<DataBrandExpandListResponseVo> {
 
-    @Schema(description = "ID")
-    private String id;
+    @Schema(description = "是否有子节点")
+    private Boolean hasChildren;
 
     @Schema(description = "编码")
     private String code;
 
-    @Schema(description = "名称")
-    private String name;
-
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
 
-    @Schema(description = "LOGO 素材Id")
-    private String logoMaterialId;
-
-    @Schema(description = "LOGO地址")
-    private String logoUrl;
+    @Schema(description = "LOGO 附件Id")
+    private String logoAttachmentId;
 
     @Schema(description = "描述")
     private String description;

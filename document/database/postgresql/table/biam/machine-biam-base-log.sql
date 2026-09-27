@@ -41,12 +41,11 @@ CREATE TABLE t_biam_user_login_log
 
 CREATE INDEX idx_t_biam_user_login_log_01 ON t_biam_user_login_log (user_id, access_token_id);
 CREATE INDEX idx_t_biam_user_login_log_02 ON t_biam_user_login_log (user_id, refresh_token_id);
-CREATE INDEX idx_t_biam_user_login_log_03 ON t_biam_user_login_log (username);
-CREATE INDEX idx_t_biam_user_login_log_04 ON t_biam_user_login_log (phone);
-CREATE INDEX idx_t_biam_user_login_log_05 ON t_biam_user_login_log (ip_address);
-CREATE INDEX idx_t_biam_user_login_log_06 ON t_biam_user_login_log (access_token_id);
-CREATE INDEX idx_t_biam_user_login_log_07 ON t_biam_user_login_log (refresh_token_id);
-CREATE INDEX idx_t_biam_user_login_log_08 ON t_biam_user_login_log (create_time);
+CREATE INDEX idx_t_biam_user_login_log_03 ON t_biam_user_login_log (phone);
+CREATE INDEX idx_t_biam_user_login_log_04 ON t_biam_user_login_log (ip_address);
+CREATE INDEX idx_t_biam_user_login_log_05 ON t_biam_user_login_log (access_token_id);
+CREATE INDEX idx_t_biam_user_login_log_06 ON t_biam_user_login_log (refresh_token_id);
+CREATE INDEX idx_t_biam_user_login_log_07 ON t_biam_user_login_log (create_time);
 
 COMMENT ON TABLE t_biam_user_login_log IS '登录日志表';
 COMMENT ON COLUMN t_biam_user_login_log.id IS 'ID';
@@ -80,7 +79,9 @@ CREATE TABLE t_biam_user_access_log
 
     -- 操作主体
     user_id               VARCHAR(32)   NOT NULL,
-    username              VARCHAR(64)   NOT NULL,
+    username              VARCHAR(32)   NOT NULL,
+    real_name             VARCHAR(64)   NOT NULL DEFAULT '',
+    phone                 VARCHAR(16)   NOT NULL DEFAULT '',
 
     -- 操作信息
     operate_source        VARCHAR(32)   NOT NULL,
@@ -127,23 +128,19 @@ CREATE TABLE t_biam_user_access_log
 );
 
 CREATE INDEX idx_t_biam_user_access_log_01 ON t_biam_user_access_log (user_id);
-CREATE INDEX idx_t_biam_user_access_log_02 ON t_biam_user_access_log (module);
-CREATE INDEX idx_t_biam_user_access_log_03 ON t_biam_user_access_log (operate_type);
-CREATE INDEX idx_t_biam_user_access_log_04 ON t_biam_user_access_log (trace_id);
-CREATE INDEX idx_t_biam_user_access_log_05 ON t_biam_user_access_log (client_ip);
-CREATE INDEX idx_t_biam_user_access_log_06 ON t_biam_user_access_log (request_path);
-CREATE INDEX idx_t_biam_user_access_log_07 ON t_biam_user_access_log (http_status);
-CREATE INDEX idx_t_biam_user_access_log_08 ON t_biam_user_access_log (create_time);
-CREATE INDEX idx_t_biam_user_access_log_09 ON t_biam_user_access_log (user_id, module, create_time);
-CREATE INDEX idx_t_biam_user_access_log_10 ON t_biam_user_access_log (module, operate_type, create_time);
-
-CREATE INDEX idx_t_biam_user_access_log_fail ON t_biam_user_access_log (create_time) WHERE action_status = 'FAIL';
+CREATE INDEX idx_t_biam_user_access_log_02 ON t_biam_user_access_log (phone);
+CREATE INDEX idx_t_biam_user_access_log_03 ON t_biam_user_access_log (trace_id);
+CREATE INDEX idx_t_biam_user_access_log_04 ON t_biam_user_access_log (client_ip);
+CREATE INDEX idx_t_biam_user_access_log_05 ON t_biam_user_access_log (request_path);
+CREATE INDEX idx_t_biam_user_access_log_06 ON t_biam_user_access_log (create_time);
 
 COMMENT ON TABLE t_biam_user_access_log IS '用户访问日志表';
 
 COMMENT ON COLUMN t_biam_user_access_log.id IS 'ID';
-COMMENT ON COLUMN t_biam_user_access_log.user_id IS '用户ID';
-COMMENT ON COLUMN t_biam_user_access_log.username IS '用户名';
+COMMENT ON COLUMN t_biam_user_access_log.user_id IS '用户id';
+COMMENT ON COLUMN t_biam_user_access_log.username IS '用户名（系统账号）';
+COMMENT ON COLUMN t_biam_user_access_log.real_name IS '姓名';
+COMMENT ON COLUMN t_biam_user_access_log.phone IS '手机号';
 COMMENT ON COLUMN t_biam_user_access_log.operate_source IS '操作来源，对应 OperateSourceEnum';
 COMMENT ON COLUMN t_biam_user_access_log.module IS '操作模块，对应 ModuleEnum';
 COMMENT ON COLUMN t_biam_user_access_log.module_entity IS '操作模块实体，对应 ModuleEntityEnum';
@@ -180,7 +177,9 @@ CREATE TABLE t_biam_operation_log
 
     -- 操作主体
     user_id               VARCHAR(32)   NOT NULL,
-    username              VARCHAR(64)   NOT NULL,
+    username              VARCHAR(32)   NOT NULL,
+    real_name             VARCHAR(64)   NOT NULL DEFAULT '',
+    phone                 VARCHAR(16)   NOT NULL DEFAULT '',
 
     -- 操作信息
     operate_source        VARCHAR(32)   NOT NULL,
@@ -233,17 +232,19 @@ CREATE TABLE t_biam_operation_log
 );
 
 CREATE INDEX idx_t_biam_operation_log_01 ON t_biam_operation_log (user_id);
-CREATE INDEX idx_t_biam_operation_log_02 ON t_biam_operation_log (module);
-CREATE INDEX idx_t_biam_operation_log_03 ON t_biam_operation_log (module_entity, module_entity_id);
-CREATE INDEX idx_t_biam_operation_log_04 ON t_biam_operation_log (operate_type);
-CREATE INDEX idx_t_biam_operation_log_05 ON t_biam_operation_log (action_status);
-CREATE INDEX idx_t_biam_operation_log_06 ON t_biam_operation_log (trace_id);
+CREATE INDEX idx_t_biam_operation_log_02 ON t_biam_operation_log (phone);
+CREATE INDEX idx_t_biam_operation_log_03 ON t_biam_operation_log (module_entity_id);
+CREATE INDEX idx_t_biam_operation_log_04 ON t_biam_operation_log (trace_id);
+CREATE INDEX idx_t_biam_operation_log_05 ON t_biam_operation_log (client_ip);
+CREATE INDEX idx_t_biam_operation_log_06 ON t_biam_operation_log (request_path);
 CREATE INDEX idx_t_biam_operation_log_07 ON t_biam_operation_log (create_time);
 
 COMMENT ON TABLE t_biam_operation_log IS '操作日志表（平台级通用业务操作日志）';
 COMMENT ON COLUMN t_biam_operation_log.id IS 'ID';
-COMMENT ON COLUMN t_biam_operation_log.user_id IS '操作人用户ID';
-COMMENT ON COLUMN t_biam_operation_log.username IS '操作人用户名';
+COMMENT ON COLUMN t_biam_operation_log.user_id IS '用户id';
+COMMENT ON COLUMN t_biam_operation_log.username IS '用户名（系统账号）';
+COMMENT ON COLUMN t_biam_operation_log.real_name IS '姓名';
+COMMENT ON COLUMN t_biam_operation_log.phone IS '手机号';
 COMMENT ON COLUMN t_biam_operation_log.operate_source IS '操作来源，对应 OperateSourceEnum';
 COMMENT ON COLUMN t_biam_operation_log.module IS '操作模块，对应 ModuleEnum';
 COMMENT ON COLUMN t_biam_operation_log.module_entity IS '操作模块实体，对应 ModuleEntityEnum';

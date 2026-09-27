@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.brand.IDataBrandClient;
 import com.machine.client.data.brand.dto.input.DataBrandCreateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateStatusInputDto;
 import com.machine.client.data.brand.dto.output.DataBrandDetailOutputDto;
 import com.machine.client.data.brand.dto.output.DataBrandListOutputDto;
@@ -18,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -57,9 +62,47 @@ public class DataBrandServer implements IDataBrandClient {
     }
 
     @Override
+    @PostMapping("update_logo_attachmentId")
+    public int updateLogoAttachmentId(@RequestBody @Validated DataBrandUpdateLogoAttachmentIdInputDto inputDto) {
+        log.info("修改品牌LOGO附件， inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return brandService.updateLogoAttachmentId(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_parent")
+    public int updateParent(@RequestBody @Validated DataBrandUpdateParentIdInputDto inputDto) {
+        log.info("修改品牌父节， inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return brandService.updateParent(inputDto);
+    }
+
+    @Override
+    @PostMapping("exists")
+    public boolean exists(@RequestBody @Validated IdRequest request) {
+        return brandService.exists(request);
+    }
+
+    @Override
+    @PostMapping("list_ancestor")
+    public List<DataBrandDetailOutputDto> listAncestorById(@RequestBody @Validated IdRequest request) {
+        return brandService.listAncestorById(request);
+    }
+
+    @Override
     @PostMapping("detail")
     public DataBrandDetailOutputDto detail(@RequestBody @Validated IdRequest request) {
         return brandService.detail(request);
+    }
+
+    @Override
+    @PostMapping("list_has_children_idSet")
+    public Set<String> listHasChildrenIdSet(@RequestBody @Validated IdSetRequest request) {
+        return brandService.listHasChildrenIdSet(request);
+    }
+
+    @Override
+    @PostMapping("map_by_idSet")
+    public Map<String, DataBrandDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
+        return brandService.mapByIdSet(request);
     }
 
     @Override
@@ -74,8 +117,25 @@ public class DataBrandServer implements IDataBrandClient {
     }
 
     @Override
-    @PostMapping("map_by_idSet")
-    public Map<String, DataBrandDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
-        return brandService.mapByIdSet(request);
+    @PostMapping("children_page")
+    public PageResponse<DataBrandListOutputDto> childrenPage(@RequestBody @Validated DataBrandQueryPageInputDto inputDto) {
+        Page<DataBrandListOutputDto> pageResult = brandService.childrenPage(inputDto);
+        return new PageResponse<>(
+                pageResult.getCurrent(),
+                pageResult.getSize(),
+                pageResult.getTotal(),
+                pageResult.getRecords());
     }
+
+    @Override
+    @PostMapping("simple_page")
+    public PageResponse<DataBrandListOutputDto> simplePage(@RequestBody @Validated DataBrandQuerySimplePageInputDto inputDto) {
+        Page<DataBrandListOutputDto> pageResult = brandService.simplePage(inputDto);
+        return new PageResponse<>(
+                pageResult.getCurrent(),
+                pageResult.getSize(),
+                pageResult.getTotal(),
+                pageResult.getRecords());
+    }
+
 }

@@ -102,14 +102,14 @@
                 </foreach>
             </if>
             <if test="inputDto.keyword != null and inputDto.keyword !='' ">
-                AND (s.name like CONCAT('%', #{inputDto.keyword}, '%') OR
+                AND (LOWER(s.name) like LOWER(CONCAT('%', #{inputDto.keyword}, '%')) OR
                 LOWER(s.code) like LOWER(CONCAT('%', #{inputDto.keyword}, '%')))
             </if>
             <if test="inputDto.code != null and inputDto.code !='' ">
                 AND LOWER(s.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(s.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.businessStatusSet != null and inputDto.businessStatusSet.size > 0">
                 AND s.business_status IN
@@ -164,7 +164,7 @@
                 AND LOWER(s.code) like LOWER(CONCAT('%', #{inputDto.code}, '%'))
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND s.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(s.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.businessStatusSet != null and inputDto.businessStatusSet.size > 0">
                 AND s.business_status IN
@@ -212,8 +212,8 @@
         <where>
             ucs.user_id = #{inputDto.userId}
             <if test="inputDto.keyword != null and inputDto.keyword !='' ">
-                AND (s.name like CONCAT('%', #{inputDto.keyword}, '%') OR
-                s.code like CONCAT('%', #{inputDto.keyword}, '%'))
+                AND (LOWER(s.name) like LOWER(CONCAT('%', #{inputDto.keyword}, '%')) OR
+                LOWER(s.code) like LOWER(CONCAT('%', #{inputDto.keyword}, '%')))
             </if>
             <if test="inputDto.shopIdSet != null  and inputDto.shopIdSet.size > 0">
                 AND s.id IN

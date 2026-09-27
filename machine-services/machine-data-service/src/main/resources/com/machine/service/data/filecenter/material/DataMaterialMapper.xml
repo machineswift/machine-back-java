@@ -19,10 +19,7 @@
             AND m.audit_status = #{inputDto.auditStatus}
         </if>
         <if test="inputDto.title != null and inputDto.title !=''">
-            AND m.title LIKE CONCAT('%', #{inputDto.title}, '%')
-        </if>
-        <if test="inputDto.name != null and inputDto.name !=''">
-            AND m.name LIKE CONCAT('%', #{inputDto.name}, '%')
+            AND LOWER(m.title) LIKE LOWER(CONCAT('%', #{inputDto.title}, '%'))
         </if>
         <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0">
             AND m.create_by IN

@@ -15,6 +15,9 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class DataBrandQueryPageInputDto extends PageRequest {
 
+    @Schema(description = "父品牌ID（查询子品牌时使用，根节点为 root）")
+    private String parentId;
+
     @Schema(description = "名称")
     private String name;
 
@@ -40,7 +43,7 @@ public class DataBrandQueryPageInputDto extends PageRequest {
     private Long updateStartTime;
 
     @Schema(description = "更新结束时间")
-    private String updateEndTime;
+    private Long updateEndTime;
 }
 
 

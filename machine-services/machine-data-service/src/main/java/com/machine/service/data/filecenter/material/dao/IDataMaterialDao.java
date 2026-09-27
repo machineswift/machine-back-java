@@ -13,9 +13,12 @@ public interface IDataMaterialDao {
 
     void update(DataMaterialEntity entity);
 
+    boolean exists(String id);
+
     DataMaterialEntity getById(String id);
 
     List<DataMaterialEntity> selectByIdSet(Set<String> idSet);
 
     Page<DataMaterialEntity> selectPage(DataMaterialQueryPageInputDto inputDto);
+
 }

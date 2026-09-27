@@ -35,7 +35,7 @@
             AND tam.dispose = #{inputDto.dispose}
         </if>
         <if test="inputDto.informContent != null and inputDto.informContent !='' ">
-            AND tam.content like CONCAT(CONCAT('%', #{inputDto.informContent}), '%')
+            AND LOWER(tam.content) like LOWER(CONCAT(CONCAT('%', #{inputDto.informContent}), '%'))
         </if>
         <if test="inputDto.updateUserIdSet != null and inputDto.updateUserIdSet.size > 0  ">
             AND tam.update_by IN
@@ -85,7 +85,7 @@
             AND tam.readed = #{inputDto.readed}
         </if>
         <if test="inputDto.informContent != null and inputDto.informContent !='' ">
-            AND tam.content like CONCAT(CONCAT('%', #{request.informContent}), '%')
+            AND LOWER(tam.content) like LOWER(CONCAT(CONCAT('%', #{inputDto.informContent}), '%'))
         </if>
         <if test="inputDto.updateStartTime != null">
             and tam.update_time &gt;= #{inputDto.updateStartTime}

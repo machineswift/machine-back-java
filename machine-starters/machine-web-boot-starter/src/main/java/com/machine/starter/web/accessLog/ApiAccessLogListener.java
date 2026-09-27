@@ -3,8 +3,11 @@ package com.machine.starter.web.accessLog;
 import cn.hutool.core.util.StrUtil;
 import com.machine.client.iam.biam.log.IBIamUserAccessLogClient;
 import com.machine.client.iam.biam.log.dto.input.BIamUserAccessLogCreateInputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.constant.ContextConstant;
 import com.machine.sdk.base.context.AppContextHolder;
+import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.event.EventListener;
@@ -16,9 +19,12 @@ import org.springframework.scheduling.annotation.Async;
 @Slf4j
 public class ApiAccessLogListener {
 
+    private final ObjectProvider<IBIamUserClient> biamUserProvider;
     private final ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider;
 
-    public ApiAccessLogListener(ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider) {
+    public ApiAccessLogListener(ObjectProvider<IBIamUserClient> biamUserProvider,
+                                ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider) {
+        this.biamUserProvider = biamUserProvider;
         this.accessLogClientProvider = accessLogClientProvider;
     }
 
@@ -32,14 +38,21 @@ public class ApiAccessLogListener {
         if (context == null) {
             return;
         }
-        IBIamUserAccessLogClient client = accessLogClientProvider.getIfAvailable();
-        if (client == null) {
+
+        IBIamUserClient userClient = biamUserProvider.getIfAvailable();
+        IBIamUserAccessLogClient accessLogClient = accessLogClientProvider.getIfAvailable();
+        if (userClient == null) {
+            log.debug("未配置 IBIamUserClient，跳过访问日志落库");
+            return;
+        }
+        if (accessLogClient == null) {
             log.debug("未配置 IBIamUserAccessLogClient，跳过访问日志落库");
             return;
         }
+
         try {
             AppContextHolder.getContext().setUserId(resolveAuditUserId(context.getUserId()));
-            client.create(buildInputDto(context));
+            accessLogClient.create(buildInputDto(userClient, context));
         } catch (Exception error) {
             log.warn("访问日志落库失败，operateName={}, traceId={}, 原因: {}",
                     context.getOperateName(), context.getTraceId(), error.getMessage());
@@ -51,7 +64,8 @@ public class ApiAccessLogListener {
     /**
      * 组装落库入参
      */
-    private BIamUserAccessLogCreateInputDto buildInputDto(ApiAccessLogContext context) {
+    private BIamUserAccessLogCreateInputDto buildInputDto(IBIamUserClient userClient,
+                                                          ApiAccessLogContext context) {
         BIamUserAccessLogCreateInputDto inputDto = new BIamUserAccessLogCreateInputDto();
         inputDto.setOperateSource(context.getOperateSource());
         inputDto.setModule(context.getModule());
@@ -60,9 +74,14 @@ public class ApiAccessLogListener {
         inputDto.setOperateName(context.getOperateName());
 
         inputDto.setUserId(resolveAuditUserId(context.getUserId()));
-        inputDto.setUsername(context.getUsername());
-        inputDto.setTraceId(context.getTraceId());
+        BIamUserDetailOutputDto userDetail = userClient.detail(new IdRequest(context.getUserId()));
+        if (null != userDetail) {
+            inputDto.setUsername(userDetail.getUsername());
+            inputDto.setRealName(userDetail.getName());
+            inputDto.setPhone(userDetail.getPhone());
+        }
 
+        inputDto.setTraceId(context.getTraceId());
         inputDto.setClientIp(context.getClientIp());
         inputDto.setPlatform(context.getPlatform());
         inputDto.setUserAgent(context.getUserAgent());

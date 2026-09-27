@@ -10,12 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DataBrandCreateInputDto {
 
+    @Schema(description = "父品牌ID，为空时挂载到根节点")
+    private String parentId;
+
     @NotBlank(message = "名称不能为空")
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "LOGO 素材Id")
-    private String logoMaterialId;
+    @Schema(description = "排序")
+    private Long sort;
 
     @Schema(description = "描述")
     private String description;

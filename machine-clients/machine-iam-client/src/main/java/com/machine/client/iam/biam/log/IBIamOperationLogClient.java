@@ -12,9 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
- * 操作日志 Feign 客户端（统一存放 iam）。
- */
 @FeignClient(name = "machine-iam-service",
         path = "machine-iam-service/server/iam/biam/operation_log",
         configuration = OpenFeignMinTimeConfig.class)
@@ -26,7 +23,7 @@ public interface IBIamOperationLogClient {
     @PostMapping("detail")
     BIamOperationLogDetailOutputDto detail(@RequestBody @Validated IdRequest request);
 
-    @PostMapping("page_expand")
-    PageResponse<BIamOperationLogListOutputDto> pageExpand(@RequestBody @Validated BIamOperationLogQueryPageInputDto inputDto);
+    @PostMapping("page")
+    PageResponse<BIamOperationLogListOutputDto> page(@RequestBody @Validated BIamOperationLogQueryPageInputDto inputDto);
 
 }

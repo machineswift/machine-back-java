@@ -7,6 +7,7 @@ import com.machine.client.data.filecenter.download.dto.input.DataDownloadQueryPa
 import com.machine.client.data.filecenter.download.dto.input.DataDownloadUpdateInputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadListOutputDto;
+import com.machine.sdk.base.model.request.IdRequest;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface IDataDownloadService {
     int updateById(DataDownloadUpdateInputDto inputDto);
 
     void invoke(String id);
+
+    boolean exists(IdRequest request);
 
     DataDownloadDetailOutputDto getById(String id);
 

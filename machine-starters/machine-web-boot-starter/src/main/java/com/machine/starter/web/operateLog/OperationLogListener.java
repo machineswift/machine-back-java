@@ -5,8 +5,11 @@ import com.machine.client.iam.biam.log.IBIamOperationLogClient;
 import com.machine.client.iam.biam.log.IBIamUserAccessLogClient;
 import com.machine.client.iam.biam.log.dto.input.BIamOperationLogCreateInputDto;
 import com.machine.client.iam.biam.log.dto.input.BIamUserAccessLogCreateInputDto;
+import com.machine.client.iam.biam.user.IBIamUserClient;
+import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.constant.ContextConstant;
 import com.machine.sdk.base.context.AppContextHolder;
+import com.machine.sdk.base.model.request.IdRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.event.EventListener;
@@ -18,12 +21,14 @@ import org.springframework.scheduling.annotation.Async;
 @Slf4j
 public class OperationLogListener {
 
-
+    private final ObjectProvider<IBIamUserClient> biamUserProvider;
     private final ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider;
     private final ObjectProvider<IBIamOperationLogClient> operationLogClientProvider;
 
-    public OperationLogListener(ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider,
+    public OperationLogListener(ObjectProvider<IBIamUserClient> biamUserProvider,
+                                ObjectProvider<IBIamUserAccessLogClient> accessLogClientProvider,
                                 ObjectProvider<IBIamOperationLogClient> operationLogClientProvider) {
+        this.biamUserProvider = biamUserProvider;
         this.accessLogClientProvider = accessLogClientProvider;
         this.operationLogClientProvider = operationLogClientProvider;
     }
@@ -38,20 +43,26 @@ public class OperationLogListener {
         if (context == null) {
             return;
         }
-        try {
-            IBIamUserAccessLogClient accessLogClient = accessLogClientProvider.getIfAvailable();
-            IBIamOperationLogClient operationLogClient = operationLogClientProvider.getIfAvailable();
-            if (accessLogClient == null) {
-                log.debug("未配置 IBIamUserAccessLogClient，跳过操作日志落库");
-                return;
-            }
-            if (operationLogClient == null) {
-                log.debug("未配置 IBIamOperationLogClient，跳过操作日志落库");
-                return;
-            }
 
+        IBIamUserClient userClient = biamUserProvider.getIfAvailable();
+        IBIamUserAccessLogClient accessLogClient = accessLogClientProvider.getIfAvailable();
+        IBIamOperationLogClient operationLogClient = operationLogClientProvider.getIfAvailable();
+        if (userClient == null) {
+            log.debug("未配置 IBIamUserClient，跳过操作日志落库");
+            return;
+        }
+        if (accessLogClient == null) {
+            log.debug("未配置 IBIamUserAccessLogClient，跳过操作日志落库");
+            return;
+        }
+        if (operationLogClient == null) {
+            log.debug("未配置 IBIamOperationLogClient，跳过操作日志落库");
+            return;
+        }
+
+        try {
             AppContextHolder.getContext().setUserId(resolveAuditUserId(context.getUserId()));
-            BIamOperationLogCreateInputDto operationLogCreateInputDto = buildInputDto(context);
+            BIamOperationLogCreateInputDto operationLogCreateInputDto = buildInputDto(userClient,context);
 
             operationLogClient.create(operationLogCreateInputDto);
             accessLogClient.create(toAccessLog(operationLogCreateInputDto));
@@ -69,6 +80,8 @@ public class OperationLogListener {
         // 用户信息
         accessLog.setUserId(operationLog.getUserId());
         accessLog.setUsername(operationLog.getUsername());
+        accessLog.setRealName(operationLog.getRealName());
+        accessLog.setPhone(operationLog.getPhone());
 
         // 操作来源与模块
         accessLog.setOperateSource(operationLog.getOperateSource());
@@ -111,10 +124,16 @@ public class OperationLogListener {
     /**
      * 组装落库入参
      */
-    private BIamOperationLogCreateInputDto buildInputDto(OperationLogContext context) {
+    private BIamOperationLogCreateInputDto buildInputDto(IBIamUserClient userClient,
+                                                         OperationLogContext context) {
         BIamOperationLogCreateInputDto inputDto = new BIamOperationLogCreateInputDto();
         inputDto.setUserId(resolveAuditUserId(context.getUserId()));
-        inputDto.setUsername(context.getUsername());
+        BIamUserDetailOutputDto userDetail = userClient.detail(new IdRequest(context.getUserId()));
+        if (null != userDetail) {
+            inputDto.setUsername(userDetail.getUsername());
+            inputDto.setRealName(userDetail.getName());
+            inputDto.setPhone(userDetail.getPhone());
+        }
 
         inputDto.setOperateSource(context.getOperateSource());
         inputDto.setModule(context.getModule());

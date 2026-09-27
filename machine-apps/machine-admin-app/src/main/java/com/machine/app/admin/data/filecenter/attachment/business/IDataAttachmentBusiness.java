@@ -2,14 +2,21 @@ package com.machine.app.admin.data.filecenter.attachment.business;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface IDataAttachmentBusiness {
 
-    /**
-     * 先上传文件到临时存储
-     */
     String uploadTemp(MultipartFile file);
 
-    String getThumbnailUrl(String attachmentId,
-                           int expireSecond);
+    String thumbnail(String attachmentId);
 
+    List<String> batchThumbnail(String attachmentId);
+
+    String preview(String attachmentId);
+
+    List<String> batchPreview(String attachmentId);
+    
+    String download(String attachmentId);
+
+    List<String> batchDownload(String attachmentId);
 }

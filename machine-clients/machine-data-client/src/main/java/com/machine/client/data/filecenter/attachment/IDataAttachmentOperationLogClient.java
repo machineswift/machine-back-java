@@ -1,9 +1,11 @@
 package com.machine.client.data.filecenter.attachment;
 
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogQueryPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentOperationLogDetailOutputDto;
 import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentOperationLogListOutputDto;
 import com.machine.sdk.base.config.OpenFeignMinTimeConfig;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +19,9 @@ public interface IDataAttachmentOperationLogClient {
     @PostMapping("create")
     void create(@RequestBody @Validated DataAttachmentOperationLogCreateInputDto inputDto);
 
+    @PostMapping("detail")
+    DataAttachmentOperationLogDetailOutputDto detail(@RequestBody @Validated IdRequest request);
+
     @PostMapping("select_page")
-    PageResponse<DataAttachmentOperationLogListOutputDto> selectPage(@RequestBody @Validated DataAttachmentOperationLogPageInputDto inputDto);
+    PageResponse<DataAttachmentOperationLogListOutputDto> selectPage(@RequestBody @Validated DataAttachmentOperationLogQueryPageInputDto inputDto);
 }

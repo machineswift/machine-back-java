@@ -40,8 +40,8 @@ public class BIamOperationLogServer implements IBIamOperationLogClient {
     }
 
     @Override
-    @PostMapping("page_expand")
-    public PageResponse<BIamOperationLogListOutputDto> pageExpand(@RequestBody @Validated BIamOperationLogQueryPageInputDto inputDto) {
+    @PostMapping("page")
+    public PageResponse<BIamOperationLogListOutputDto> page(@RequestBody @Validated BIamOperationLogQueryPageInputDto inputDto) {
         Page<BIamOperationLogListOutputDto> pageResult = operationLogService.page(inputDto);
         return new PageResponse<>(
                 pageResult.getCurrent(),

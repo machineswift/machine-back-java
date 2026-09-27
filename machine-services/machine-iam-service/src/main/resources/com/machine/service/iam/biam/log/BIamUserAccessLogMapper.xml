@@ -6,6 +6,8 @@
         id,
         user_id,
         username,
+        real_name,
+        phone,
         operate_source,
         module,
         module_entity,
@@ -39,11 +41,17 @@
         <include refid="base_column_list"/>
         from t_biam_user_access_log ual
         <where>
-            <if test="inputDto.userId != null and inputDto.userId != ''">
-                AND ual.user_id = #{inputDto.userId}
+            <if test="inputDto.userIdSet != null and inputDto.userIdSet.size > 0">
+                AND ual.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
-            <if test="inputDto.username != null and inputDto.username != ''">
-                AND ual.username LIKE CONCAT('%', #{inputDto.username}, '%')
+            <if test="inputDto.phone != null and inputDto.phone != ''">
+                AND ual.phone = #{inputDto.phone}
+            </if>
+            <if test="inputDto.realName != null and inputDto.realName != ''">
+                AND LOWER(ual.real_name) LIKE LOWER(CONCAT('%', #{inputDto.realName}, '%'))
             </if>
             <if test="inputDto.operateSource != null and inputDto.operateSource != ''">
                 AND ual.operate_source = #{inputDto.operateSource}
@@ -58,7 +66,7 @@
                 AND ual.operate_type = #{inputDto.operateType}
             </if>
             <if test="inputDto.operateName != null and inputDto.operateName != ''">
-                AND ual.operate_name LIKE CONCAT('%', #{inputDto.operateName}, '%')
+                AND LOWER(ual.operate_name) LIKE LOWER(CONCAT('%', #{inputDto.operateName}, '%'))
             </if>
             <if test="inputDto.actionStatus != null">
                 AND ual.action_status = #{inputDto.actionStatus}
@@ -67,7 +75,7 @@
                 AND ual.http_status = #{inputDto.httpStatus}
             </if>
             <if test="inputDto.requestPath != null and inputDto.requestPath != ''">
-                AND ual.request_path LIKE CONCAT('%', #{inputDto.requestPath}, '%')
+                AND LOWER(ual.request_path) LIKE LOWER(CONCAT('%', #{inputDto.requestPath}, '%'))
             </if>
             <if test="inputDto.clientIp != null and inputDto.clientIp != ''">
                 AND ual.client_ip = #{inputDto.clientIp}

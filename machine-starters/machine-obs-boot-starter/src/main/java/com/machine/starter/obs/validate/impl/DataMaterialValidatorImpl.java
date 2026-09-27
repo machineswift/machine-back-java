@@ -4,6 +4,7 @@ import com.machine.client.data.filecenter.material.IDataMaterialClient;
 import com.machine.client.data.filecenter.material.dto.output.DataMaterialDetailOutputDto;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
 import com.machine.sdk.base.exception.data.DataObsBusinessException;
+import com.machine.sdk.base.model.dto.IdNameDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.starter.obs.validate.IModuleEntityValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +41,20 @@ public class DataMaterialValidatorImpl implements IModuleEntityValidator {
 
     @Override
     public void validateEntityId(String entityId) {
-        DataMaterialDetailOutputDto outputDto = dataMaterialClient.getById(new IdRequest(entityId));
-        if (null == outputDto) {
+        boolean exists = dataMaterialClient.exists(new IdRequest(entityId));
+        if (!exists) {
             throw new DataObsBusinessException("data.obs.validate.DATA_MATERIAL.entityNotExists", "素材不存在");
         }
+    }
+
+    @Override
+    public IdNameDto getNameInfo(String entityId) {
+        DataMaterialDetailOutputDto outputDto = dataMaterialClient.getById(new IdRequest(entityId));
+        if(null == outputDto){
+            return null;
+        }
+
+        return new IdNameDto(entityId,outputDto.getTitle());
     }
 
 }

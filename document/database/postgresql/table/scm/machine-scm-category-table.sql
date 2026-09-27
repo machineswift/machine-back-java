@@ -226,31 +226,61 @@ COMMENT ON COLUMN t_scm_back_category_property_relation.update_time IS '更新�
 DROP TABLE IF EXISTS t_scm_property_group;
 CREATE TABLE t_scm_property_group
 (
-    id               VARCHAR(32) NOT NULL,
-    back_category_id VARCHAR(32) NOT NULL,
-    name             VARCHAR(64) NOT NULL,
-    sort             BIGINT NOT NULL DEFAULT 0,
-    create_by        VARCHAR(32) NOT NULL,
-    create_time      BIGINT NOT NULL,
-    update_by        VARCHAR(32) NOT NULL,
-    update_time      BIGINT NOT NULL,
+    id          VARCHAR(32) NOT NULL,
+    name        VARCHAR(64) NOT NULL,
+    sort        BIGINT NOT NULL DEFAULT 0,
+    create_by   VARCHAR(32) NOT NULL,
+    create_time BIGINT NOT NULL,
+    update_by   VARCHAR(32) NOT NULL,
+    update_time BIGINT NOT NULL,
     CONSTRAINT pk_t_scm_property_group PRIMARY KEY (id),
-    CONSTRAINT uk_t_scm_property_group_01 UNIQUE (back_category_id, name)
+    CONSTRAINT uk_t_scm_property_group_01 UNIQUE (name)
 );
-
-ALTER TABLE t_scm_property_group
-    ADD CONSTRAINT fk_t_scm_property_group_01
-        FOREIGN KEY (back_category_id) REFERENCES t_scm_back_category(id) ON DELETE CASCADE;
 
 COMMENT ON TABLE t_scm_property_group IS '商品属性组表';
 COMMENT ON COLUMN t_scm_property_group.id IS 'ID';
-COMMENT ON COLUMN t_scm_property_group.back_category_id IS '后台分类ID';
 COMMENT ON COLUMN t_scm_property_group.name IS '名称';
 COMMENT ON COLUMN t_scm_property_group.sort IS '排序，sort值大的排序靠前';
 COMMENT ON COLUMN t_scm_property_group.create_by IS '创建人';
 COMMENT ON COLUMN t_scm_property_group.create_time IS '创建时间';
 COMMENT ON COLUMN t_scm_property_group.update_by IS '修改人';
 COMMENT ON COLUMN t_scm_property_group.update_time IS '更新时间';
+
+DROP TABLE IF EXISTS t_scm_property_group_category_relation;
+CREATE TABLE t_scm_property_group_category_relation
+(
+    id               VARCHAR(32) NOT NULL,
+    group_id         VARCHAR(32) NOT NULL,
+    back_category_id VARCHAR(32) NOT NULL,
+    sort             BIGINT NOT NULL DEFAULT 0,
+    create_by        VARCHAR(32) NOT NULL,
+    create_time      BIGINT NOT NULL,
+    update_by        VARCHAR(32) NOT NULL,
+    update_time      BIGINT NOT NULL,
+    CONSTRAINT pk_t_scm_property_group_category_relation PRIMARY KEY (id),
+    CONSTRAINT uk_t_scm_property_group_category_relation_01 UNIQUE (group_id, back_category_id)
+);
+
+ALTER TABLE t_scm_property_group_category_relation
+    ADD CONSTRAINT fk_t_scm_property_group_category_relation_01
+        FOREIGN KEY (group_id) REFERENCES t_scm_property_group(id) ON DELETE CASCADE;
+
+ALTER TABLE t_scm_property_group_category_relation
+    ADD CONSTRAINT fk_t_scm_property_group_category_relation_02
+        FOREIGN KEY (back_category_id) REFERENCES t_scm_back_category(id) ON DELETE CASCADE;
+
+CREATE INDEX idx_t_scm_property_group_category_relation_01
+    ON t_scm_property_group_category_relation (back_category_id);
+
+COMMENT ON TABLE t_scm_property_group_category_relation IS '商品属性组与后台类目关联表';
+COMMENT ON COLUMN t_scm_property_group_category_relation.id IS 'ID';
+COMMENT ON COLUMN t_scm_property_group_category_relation.group_id IS '属性组ID';
+COMMENT ON COLUMN t_scm_property_group_category_relation.back_category_id IS '后台分类ID';
+COMMENT ON COLUMN t_scm_property_group_category_relation.sort IS '排序，sort值大的排序靠前';
+COMMENT ON COLUMN t_scm_property_group_category_relation.create_by IS '创建人';
+COMMENT ON COLUMN t_scm_property_group_category_relation.create_time IS '创建时间';
+COMMENT ON COLUMN t_scm_property_group_category_relation.update_by IS '修改人';
+COMMENT ON COLUMN t_scm_property_group_category_relation.update_time IS '更新时间';
 
 DROP TABLE IF EXISTS t_scm_property_group_relation;
 CREATE TABLE t_scm_property_group_relation

@@ -4,8 +4,10 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.filecenter.attachment.IDataAttachmentOperationLogClient;
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogQueryPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentOperationLogDetailOutputDto;
 import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentOperationLogListOutputDto;
+import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.PageResponse;
 import com.machine.service.data.filecenter.attachment.service.IDataAttachmentOperationLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +34,14 @@ public class DataAttachmentOperationLogServer implements IDataAttachmentOperatio
     }
 
     @Override
+    @PostMapping("detail")
+    public DataAttachmentOperationLogDetailOutputDto detail(@RequestBody @Validated IdRequest request) {
+        return attachmentOperationLogService.detail(request);
+    }
+
+    @Override
     @PostMapping("select_page")
-    public PageResponse<DataAttachmentOperationLogListOutputDto> selectPage(@RequestBody @Validated DataAttachmentOperationLogPageInputDto inputDto) {
+    public PageResponse<DataAttachmentOperationLogListOutputDto> selectPage(@RequestBody @Validated DataAttachmentOperationLogQueryPageInputDto inputDto) {
         Page<DataAttachmentOperationLogListOutputDto> pageResult = attachmentOperationLogService.selectPage(inputDto);
         return new PageResponse<>(
                 pageResult.getCurrent(),

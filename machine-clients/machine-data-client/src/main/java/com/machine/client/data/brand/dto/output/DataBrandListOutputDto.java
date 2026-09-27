@@ -13,6 +13,9 @@ public class DataBrandListOutputDto {
     @Schema(description = "ID")
     private String id;
 
+    @Schema(description = "父品牌ID")
+    private String parentId;
+
     @Schema(description = "编码")
     private String code;
 
@@ -22,8 +25,11 @@ public class DataBrandListOutputDto {
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
 
-    @Schema(description = "LOGO 素材Id")
-    private String logoMaterialId;
+    @Schema(description = "排序")
+    private Long sort;
+
+    @Schema(description = "LOGO 附件Id")
+    private String logoAttachmentId;
 
     @Schema(description = "描述")
     private String description;

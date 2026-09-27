@@ -2,7 +2,7 @@ package com.machine.service.data.filecenter.attachment.dao.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogPageInputDto;
+import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogQueryPageInputDto;
 import com.machine.service.data.filecenter.attachment.dao.IDataAttachmentOperationLogDao;
 import com.machine.service.data.filecenter.attachment.dao.mapper.DataAttachmentOperationLogMapper;
 import com.machine.service.data.filecenter.attachment.dao.mapper.entity.DataAttachmentOperationLogEntity;
@@ -40,7 +40,7 @@ public class DataAttachmentOperationLogDaoImpl implements IDataAttachmentOperati
     }
 
     @Override
-    public Page<DataAttachmentOperationLogEntity> selectPage(DataAttachmentOperationLogPageInputDto inputDto) {
+    public Page<DataAttachmentOperationLogEntity> selectPage(DataAttachmentOperationLogQueryPageInputDto inputDto) {
         IPage<DataAttachmentOperationLogEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
         return attachmentOperationLogMapper.selectPage(inputDto, page);
     }

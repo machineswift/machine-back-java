@@ -45,16 +45,12 @@ public class BIamUserAccessLogBusinessImpl implements IBIamUserAccessLogBusiness
 
         BIamUserAccessLogDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), BIamUserAccessLogDetailResponseVo.class);
 
-        {//填充修改人创建人信息
+        {//填充创建人信息
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
-            userIdSet.add(outputDto.getUpdateBy());
             Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             if (userSimpleDetailMap.containsKey(responseVo.getCreateBy())) {
                 responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
-            }
-            if (userSimpleDetailMap.containsKey(responseVo.getUpdateBy())) {
-                responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
             }
         }
 
@@ -76,18 +72,14 @@ public class BIamUserAccessLogBusinessImpl implements IBIamUserAccessLogBusiness
                 page.getTotal(),
                 JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamUserAccessLogExpandListResponseVo.class));
 
-        {//创建人、修改人姓名
+        {//创建人姓名
             Set<String> userIdSet = page.getRecords().stream().map(BIamUserAccessLogListOutputDto::getCreateBy).collect(Collectors.toSet());
-            userIdSet.addAll(page.getRecords().stream().map(BIamUserAccessLogListOutputDto::getUpdateBy).collect(Collectors.toSet()));
             userIdSet.remove(null);
             if (CollectionUtil.isNotEmpty(userIdSet)) {
                 Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
                 for (BIamUserAccessLogExpandListResponseVo vo : pageResponse.getRecords()) {
                     if (userSimpleDetailMap.containsKey(vo.getCreateBy())) {
                         vo.setCreateName(userSimpleDetailMap.get(vo.getCreateBy()).getName());
-                    }
-                    if (userSimpleDetailMap.containsKey(vo.getUpdateBy())) {
-                        vo.setUpdateName(userSimpleDetailMap.get(vo.getUpdateBy()).getName());
                     }
                 }
             }

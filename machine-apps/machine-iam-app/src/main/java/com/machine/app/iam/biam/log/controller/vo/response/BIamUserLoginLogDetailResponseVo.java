@@ -57,13 +57,4 @@ public class BIamUserLoginLogDetailResponseVo {
 
     @Schema(description = "创建时间（Unix 时间戳）")
     private Long createTime;
-
-    @Schema(description = "操作人ID")
-    private String updateBy;
-
-    @Schema(description = "操作人姓名")
-    private String updateName;
-
-    @Schema(description = "更新时间（Unix 时间戳）")
-    private Long updateTime;
 }

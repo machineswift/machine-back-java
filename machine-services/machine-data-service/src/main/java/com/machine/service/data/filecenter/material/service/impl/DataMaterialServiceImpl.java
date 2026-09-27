@@ -104,6 +104,11 @@ public class DataMaterialServiceImpl implements IDataMaterialService {
     }
 
     @Override
+    public boolean exists(IdRequest request) {
+        return dataMaterialDao.exists(request.getId());
+    }
+
+    @Override
     public DataMaterialDetailOutputDto getById(IdRequest request) {
         DataMaterialEntity dbEntity = dataMaterialDao.getById(request.getId());
         if (dbEntity == null) {

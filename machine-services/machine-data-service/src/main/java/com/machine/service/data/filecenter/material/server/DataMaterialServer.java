@@ -59,6 +59,12 @@ public class DataMaterialServer implements IDataMaterialClient {
     }
 
     @Override
+    @PostMapping("exists")
+    public boolean exists(@RequestBody @Validated IdRequest request) {
+        return materialService.exists(request);
+    }
+
+    @Override
     @PostMapping("get_by_id")
     public DataMaterialDetailOutputDto getById(@RequestBody @Validated IdRequest request) {
         return materialService.getById(request);

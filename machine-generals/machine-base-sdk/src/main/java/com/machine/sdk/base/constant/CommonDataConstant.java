@@ -44,4 +44,13 @@ public class CommonDataConstant {
 
     }
 
+    public static class Brand {
+
+        /**
+         * 根节点父Id
+         */
+        public static final String DATA_BRAND_ROOT_PARENT_ID = "root";
+
+    }
+
 }

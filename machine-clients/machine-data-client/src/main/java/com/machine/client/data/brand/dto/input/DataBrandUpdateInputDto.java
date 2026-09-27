@@ -18,8 +18,8 @@ public class DataBrandUpdateInputDto {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "LOGO 素材Id")
-    private String logoMaterialId;
+    @Schema(description = "排序")
+    private Long sort;
 
     @Schema(description = "描述")
     private String description;

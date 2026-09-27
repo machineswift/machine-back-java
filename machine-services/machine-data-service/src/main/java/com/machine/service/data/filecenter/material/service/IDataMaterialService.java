@@ -19,6 +19,8 @@ public interface IDataMaterialService {
 
     void updateAttachmentId(DataMaterialUpdateAttachmentIdInputDto inputDto);
 
+    boolean exists(IdRequest request);
+
     DataMaterialDetailOutputDto getById(IdRequest request);
 
     List<DataMaterialDetailOutputDto> listByIdSet(IdSetRequest request);

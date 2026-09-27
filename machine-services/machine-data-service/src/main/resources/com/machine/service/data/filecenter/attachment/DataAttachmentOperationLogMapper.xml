@@ -2,15 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.machine.service.data.filecenter.attachment.dao.mapper.DataAttachmentOperationLogMapper">
 
+    <!-- 列表只查询轻量字段（user_agent/error_message 等大字段仅在详情返回） -->
+    <sql id="list_column_list">
+        l.id,
+        l.user_id,
+        l.username,
+        l.real_name,
+        l.phone,
+        l.attachment_id,
+        l.version_id,
+        l.attachment_group,
+        l.operate_source,
+        l.module,
+        l.module_entity,
+        l.module_entity_id,
+        l.operation_type,
+        l.trace_id,
+        l.client_ip,
+        l.platform,
+        l.operation_result,
+        l.create_by,
+        l.create_time
+    </sql>
+
     <select id="selectPage" resultType="com.machine.service.data.filecenter.attachment.dao.mapper.entity.DataAttachmentOperationLogEntity">
-        select l.*
+        select
+        <include refid="list_column_list"/>
         from t_data_attachment_operation_log l
         <where>
-            <if test="inputDto.attachmentId != null and inputDto.attachmentId != '' ">
-                AND l.attachment_id = #{inputDto.attachmentId}
+            <if test="inputDto.userIdSet != null and inputDto.userIdSet.size > 0 ">
+                AND l.user_id IN
+                <foreach item="item" collection="inputDto.userIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
-            <if test="inputDto.versionId != null and inputDto.versionId != '' ">
-                AND l.version_id = #{inputDto.versionId}
+            <if test="inputDto.phone != null and inputDto.phone != '' ">
+                AND l.phone = #{inputDto.phone}
+            </if>
+            <if test="inputDto.realName != null and inputDto.realName != '' ">
+                AND LOWER(l.real_name) LIKE LOWER(CONCAT('%', #{inputDto.realName}, '%'))
+            </if>
+            <if test="inputDto.operateSource != null ">
+                AND l.operate_source = #{inputDto.operateSource}
+            </if>
+            <if test="inputDto.module != null ">
+                AND l.module = #{inputDto.module}
+            </if>
+            <if test="inputDto.moduleEntity != null ">
+                AND l.module_entity = #{inputDto.moduleEntity}
+            </if>
+            <if test="inputDto.moduleEntityId != null and inputDto.moduleEntityId != '' ">
+                AND l.module_entity_id = #{inputDto.moduleEntityId}
+            </if>
+            <if test="inputDto.attachmentGroup != null and inputDto.attachmentGroup != '' ">
+                AND l.attachment_group = #{inputDto.attachmentGroup}
             </if>
             <if test="inputDto.operationTypeSet != null and inputDto.operationTypeSet.size > 0 ">
                 AND l.operation_type IN
@@ -21,17 +66,14 @@
             <if test="inputDto.operationResult != null ">
                 AND l.operation_result = #{inputDto.operationResult}
             </if>
-            <if test="inputDto.ipAddress != null and inputDto.ipAddress != '' ">
-                AND l.ip_address #{inputDto.ipAddress}
+            <if test="inputDto.clientIp != null and inputDto.clientIp != '' ">
+                AND l.client_ip = #{inputDto.clientIp}
+            </if>
+            <if test="inputDto.traceId != null and inputDto.traceId != '' ">
+                AND l.trace_id = #{inputDto.traceId}
             </if>
             <if test="inputDto.platform != null and inputDto.platform != '' ">
                 AND l.platform = #{inputDto.platform}
-            </if>
-            <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0 ">
-                AND l.create_by IN
-                <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
             </if>
             <if test="inputDto.createStartTime != null ">
                 AND l.create_time >= #{inputDto.createStartTime}

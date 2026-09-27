@@ -1,6 +1,8 @@
 package com.machine.app.admin.data.brand.controller.vo.request;
 
+import com.machine.client.data.filecenter.attachment.dto.DataFileTempCreateDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,12 @@ public class DataBrandUpdateRequestVo {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "LOGO 素材Id")
-    private String logoMaterialId;
+    @Valid
+    @Schema(description = "LOGO图片文件（不传则不修改LOGO）")
+    private DataFileTempCreateDto logoFile;
+
+    @Schema(description = "排序")
+    private Long sort;
 
     @Schema(description = "描述")
     private String description;

@@ -31,6 +31,9 @@ public interface IDataDownloadClient {
     @GetMapping("retry")
     void retry(@RequestParam("id") String id);
 
+    @PostMapping("exists")
+    boolean exists(@RequestBody @Validated IdRequest request);
+
     @PostMapping("get_by_id")
     DataDownloadDetailOutputDto getById(@RequestBody @Validated IdRequest request);
 

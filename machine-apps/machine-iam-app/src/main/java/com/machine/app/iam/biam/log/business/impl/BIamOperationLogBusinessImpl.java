@@ -43,16 +43,12 @@ public class BIamOperationLogBusinessImpl implements IBIamOperationLogBusiness {
 
         BIamOperationLogDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), BIamOperationLogDetailResponseVo.class);
 
-        {//填充修改人创建人信息
+        {//填充创建人信息
             Set<String> userIdSet = new HashSet<>();
             userIdSet.add(outputDto.getCreateBy());
-            userIdSet.add(outputDto.getUpdateBy());
             Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
             if (userSimpleDetailMap.containsKey(responseVo.getCreateBy())) {
                 responseVo.setCreateName(userSimpleDetailMap.get(responseVo.getCreateBy()).getName());
-            }
-            if (userSimpleDetailMap.containsKey(responseVo.getUpdateBy())) {
-                responseVo.setUpdateName(userSimpleDetailMap.get(responseVo.getUpdateBy()).getName());
             }
         }
 
@@ -62,7 +58,7 @@ public class BIamOperationLogBusinessImpl implements IBIamOperationLogBusiness {
     @Override
     public PageResponse<BIamOperationLogExpandListResponseVo> pageExpand(BIamOperationLogQueryPageRequestVo request) {
         BIamOperationLogQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamOperationLogQueryPageInputDto.class);
-        PageResponse<BIamOperationLogListOutputDto> page = operationLogClient.pageExpand(inputDto);
+        PageResponse<BIamOperationLogListOutputDto> page = operationLogClient.page(inputDto);
 
         if (CollectionUtil.isEmpty(page.getRecords())) {
             return new PageResponse<>(page.getCurrent(), page.getSize(), page.getTotal());

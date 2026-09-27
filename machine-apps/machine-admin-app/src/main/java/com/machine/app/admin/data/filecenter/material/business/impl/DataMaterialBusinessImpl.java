@@ -1,7 +1,6 @@
 package com.machine.app.admin.data.filecenter.material.business.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.data.filecenter.material.business.IDataMaterialBusiness;
 import com.machine.app.admin.data.filecenter.material.controller.vo.response.DataMaterialDetailResponseVo;
@@ -11,14 +10,10 @@ import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.Dat
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialUpdateCategoryRequestVo;
 import com.machine.app.admin.data.filecenter.material.controller.vo.resquest.DataMaterialUpdateRequestVo;
 import com.machine.client.data.filecenter.attachment.IDataAttachmentClient;
-import com.machine.client.data.filecenter.attachment.IDataAttachmentOperationLogClient;
 import com.machine.client.data.filecenter.attachment.IDataAttachmentVersionClient;
 import com.machine.client.data.filecenter.attachment.IDataFileTempClient;
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentVersionUpdateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentDetailOutputDto;
-import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentWithCurrentFileInfoOutputDto;
 import com.machine.client.data.filecenter.attachment.dto.output.DataFileTempDetailOutputDto;
 import com.machine.client.data.filecenter.material.IDataMaterialCategoryRelationClient;
 import com.machine.client.data.filecenter.material.IDataMaterialClient;
@@ -29,16 +24,14 @@ import com.machine.client.data.filecenter.material.dto.output.DataMaterialListOu
 import com.machine.client.iam.biam.user.IBIamUserClient;
 import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
-import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
-import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationResultEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationTypeEnum;
 import com.machine.sdk.base.exception.data.DataBusinessException;
-import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.model.response.PageResponse;
-import com.machine.sdk.base.tool.ClientEnvironmentUtil;
-import com.machine.starter.obs.service.ObsFileService;
+import com.machine.starter.obs.operateLog.AttachmentOperationLogPublisher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +51,7 @@ import static com.machine.starter.obs.constant.ObsFileConstant.ATTACHMENT_DEFAUL
 public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
 
     @Autowired
-    private ObsFileService obsFileService;
+    private AttachmentOperationLogPublisher attachmentOperationLogPublisher;
 
     @Autowired
     private IBIamUserClient userClient;
@@ -74,9 +67,6 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
 
     @Autowired
     private IDataAttachmentVersionClient dataAttachmentVersionClient;
-
-    @Autowired
-    private IDataAttachmentOperationLogClient dataAttachmentOperationLogClient;
 
     @Autowired
     private IDataMaterialCategoryRelationClient materialCategoryRelationClient;
@@ -108,18 +98,8 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
         String attachmentId = dataAttachmentClient.create(attachmentCreateInputDto);
 
         // 记录操作日志
-        ClientEnvironmentInfo environmentInfo = ClientEnvironmentUtil.buildInfo(servletRequest);
-        DataAttachmentDetailOutputDto attachmentDetail = dataAttachmentClient.getById(new IdRequest(attachmentId));
-        DataAttachmentOperationLogCreateInputDto logCreateInputDto = new DataAttachmentOperationLogCreateInputDto();
-        logCreateInputDto.setAttachmentId(attachmentId);
-        logCreateInputDto.setVersionId(attachmentDetail.getCurrentVersionId());
-        logCreateInputDto.setOperationType(DataAttachmentOperationTypeEnum.UPLOAD);
-        logCreateInputDto.setOperationResult(DataAttachmentOperationResultEnum.SUCCESS);
-        logCreateInputDto.setIpAddress(environmentInfo.getIpAddress());
-        logCreateInputDto.setPlatform(environmentInfo.getPlatform());
-        logCreateInputDto.setUserAgent(environmentInfo.getUserAgent());
-        dataAttachmentOperationLogClient.create(logCreateInputDto);
-
+        attachmentOperationLogPublisher.publish(attachmentId, DataAttachmentOperationTypeEnum.UPLOAD,
+                OperateSourceEnum.ADMIN_APP, ModuleEnum.DATA);
         // 修改关联的附件id
         dataMaterialClient.updateAttachmentId(new DataMaterialUpdateAttachmentIdInputDto(materialId, attachmentId));
         return materialId;
@@ -144,6 +124,7 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
         dataMaterialClient.update(inputDto);
 
         // 修改附件
+        String attachmentId = materialOutputDto.getAttachmentId();
         if (null != request.getFileTemp()) {
             DataAttachmentVersionUpdateInputDto versionUpdateInputDto = new DataAttachmentVersionUpdateInputDto();
             versionUpdateInputDto.setEntity(ModuleEntityEnum.DATA_MATERIAL);
@@ -154,18 +135,8 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
             dataAttachmentVersionClient.update(versionUpdateInputDto);
 
             // 记录操作日志
-            ClientEnvironmentInfo environmentInfo = ClientEnvironmentUtil.buildInfo(servletRequest);
-            DataAttachmentDetailOutputDto attachmentDetail = dataAttachmentClient.getById(new IdRequest(materialOutputDto.getAttachmentId()));
-
-            DataAttachmentOperationLogCreateInputDto logCreateInputDto = new DataAttachmentOperationLogCreateInputDto();
-            logCreateInputDto.setAttachmentId(materialOutputDto.getAttachmentId());
-            logCreateInputDto.setVersionId(attachmentDetail.getCurrentVersionId());
-            logCreateInputDto.setOperationType(DataAttachmentOperationTypeEnum.UPDATE);
-            logCreateInputDto.setOperationResult(DataAttachmentOperationResultEnum.SUCCESS);
-            logCreateInputDto.setIpAddress(environmentInfo.getIpAddress());
-            logCreateInputDto.setPlatform(environmentInfo.getPlatform());
-            logCreateInputDto.setUserAgent(environmentInfo.getUserAgent());
-            dataAttachmentOperationLogClient.create(logCreateInputDto);
+            attachmentOperationLogPublisher.publish(attachmentId,DataAttachmentOperationTypeEnum.UPDATE,
+                    OperateSourceEnum.ADMIN_APP, ModuleEnum.DATA);
         }
     }
 
@@ -266,40 +237,6 @@ public class DataMaterialBusinessImpl implements IDataMaterialBusiness {
             vo.setCreateName(userMap.get(vo.getCreateBy()).getName());
             vo.setUpdateName(userMap.get(vo.getUpdateBy()).getName());
         }
-    }
-
-    @Override
-    public String getDownloadUrl(IdRequest request) {
-        DataMaterialDetailOutputDto materialDetail = dataMaterialClient.getById(request);
-        if (materialDetail == null) {
-            throw new DataBusinessException("data.material.business.getPresignedDownloadUrl.notFound", "素材不存在");
-        }
-        String attachmentId = materialDetail.getAttachmentId();
-        if (StrUtil.isBlank(attachmentId)) {
-            throw new DataBusinessException("data.material.business.getPresignedDownloadUrl.attachmentNotFound", "附件ID不存在");
-        }
-
-        // 查询附件文件信息
-        DataAttachmentWithCurrentFileInfoOutputDto attachment = dataAttachmentClient.getCurrentByAttachmentId(new IdRequest(attachmentId));
-        if (attachment == null) {
-            throw new DataBusinessException("data.material.business.getPresignedDownloadUrl.attachmentNotFound", "附件不存在");
-        }
-        if (CollectionUtil.isEmpty(attachment.getFileInfoList())) {
-            throw new DataBusinessException("data.material.business.getPresignedDownloadUrl.fileNotFound", "附件文件不存在");
-        }
-
-        DataAttachmentWithCurrentFileInfoOutputDto.DataFileInfo dataFileInfo = attachment.getFileInfoList().getFirst();
-
-        // 生成预签名 URL
-        // 图片/视频 → inline 预览；其他类型（PDF 等）→ 强制下载
-        boolean forceDownload = materialDetail.getFileType() != DataFileTypeEnum.IMAGE
-                && materialDetail.getFileType() != DataFileTypeEnum.VIDEO;
-        String presignedUrl = obsFileService.generatePresignedUrl(dataFileInfo.getFileInfo(), 300, forceDownload);
-        if (StrUtil.isBlank(presignedUrl)) {
-            throw new DataBusinessException("data.material.business.getPresignedDownloadUrl.urlGenerateFailed", "生成访问地址失败");
-        }
-
-        return presignedUrl;
     }
 
 }

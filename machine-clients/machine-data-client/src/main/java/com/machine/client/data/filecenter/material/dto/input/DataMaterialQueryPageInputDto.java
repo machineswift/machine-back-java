@@ -24,9 +24,6 @@ public class DataMaterialQueryPageInputDto extends PageRequest {
     @Schema(description = "素材标题")
     private String title;
 
-    @Schema(description = "名称")
-    private String name;
-
     @Schema(description = "系统处理状态")
     private DataMaterialProcessStatusEnum processStatus;
 

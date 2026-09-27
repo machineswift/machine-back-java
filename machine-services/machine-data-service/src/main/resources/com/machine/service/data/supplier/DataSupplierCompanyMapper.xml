@@ -36,7 +36,7 @@
                 AND sc.code = #{inputDto.code}
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND sc.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(sc.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND sc.status = #{inputDto.status}
@@ -52,7 +52,7 @@
                 AND sc.code = #{inputDto.code}
             </if>
             <if test="inputDto.name != null and inputDto.name !='' ">
-                AND sc.name like CONCAT('%', #{inputDto.name}, '%')
+                AND LOWER(sc.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
             </if>
             <if test="inputDto.status != null  ">
                 AND sc.status = #{inputDto.status}

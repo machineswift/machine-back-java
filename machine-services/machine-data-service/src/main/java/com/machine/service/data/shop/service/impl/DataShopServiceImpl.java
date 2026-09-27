@@ -6,7 +6,6 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.filecenter.attachment.dto.DataFileTempCreateDto;
 import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentCreateInputDto;
-import com.machine.client.data.filecenter.attachment.dto.input.DataAttachmentOperationLogCreateInputDto;
 import com.machine.client.data.filecenter.attachment.dto.input.DataFileTempCreateInputDto;
 import com.machine.client.data.filecenter.download.dto.output.DataDownloadDetailOutputDto;
 import com.machine.client.data.leaf.IDataLeaf4DataCodeClient;
@@ -23,15 +22,15 @@ import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopDisinfecting
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFoodBusinessLicenseDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopBusinessLicenseDto;
 import com.machine.sdk.base.model.dto.data.certificate.shop.DataShopFrontPhotoDto;
-import com.machine.client.data.filecenter.attachment.dto.output.DataAttachmentDetailOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
 import com.machine.sdk.base.envm.base.ModuleEntityEnum;
+import com.machine.sdk.base.envm.base.ModuleEnum;
+import com.machine.sdk.base.envm.base.audit.OperateSourceEnum;
 import com.machine.sdk.base.envm.data.filecenter.DataFileTypeEnum;
 import com.machine.sdk.base.model.response.IdCodeResponse;
 import com.machine.sdk.base.tool.DateUtil;
 import com.machine.sdk.base.tool.UUIDv7;
-import com.machine.service.data.filecenter.attachment.service.IDataAttachmentOperationLogService;
 import com.machine.service.data.filecenter.attachment.service.IDataAttachmentService;
 import com.machine.service.data.filecenter.attachment.service.IDataFileTempService;
 import com.machine.service.data.filecenter.download.service.IDataDownloadService;
@@ -42,14 +41,15 @@ import com.machine.service.data.shop.dao.mapper.entity.DataShopLabelOptionRelati
 import com.machine.service.data.shop.service.IDataShopService;
 import com.machine.service.data.shop.service.bo.DataShopExportBo;
 import com.machine.sdk.base.context.AppContextHolder;
-import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationResultEnum;
 import com.machine.sdk.base.envm.data.filecenter.attachment.DataAttachmentOperationTypeEnum;
 import com.machine.sdk.base.model.dto.base.ClientEnvironmentInfo;
+import com.machine.starter.obs.operateLog.AttachmentOperationLogPublisher;
 import com.machine.starter.obs.service.ObsFileService;
 import org.dromara.x.file.storage.core.FileInfo;
 import com.machine.starter.obs.tool.AttachmentExpireTimeUtil;
 
 import static com.machine.starter.obs.constant.ObsFileConstant.ATTACHMENT_DEFAULT_GROUP;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +63,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class DataShopServiceImpl implements IDataShopService {
+
+    @Autowired
+    private AttachmentOperationLogPublisher attachmentOperationLogPublisher;
+
+    @Autowired
+    private ObsFileService obsFileService;
 
     @Autowired
     private IDataLeaf4DataCodeClient leaf4DataCodeClient;
@@ -82,12 +88,6 @@ public class DataShopServiceImpl implements IDataShopService {
     @Autowired
     private IDataFileTempService dataFileTempService;
 
-    @Autowired
-    private IDataAttachmentOperationLogService attachmentOperationLogService;
-
-    @Autowired
-    private ObsFileService obsFileService;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String create(DataShopCreateInputDto inputDto) {
@@ -96,13 +96,13 @@ public class DataShopServiceImpl implements IDataShopService {
             throw new BIamBusinessException("biam.shop.service.create.nameAlreadyExists", "门店名称已经存在");
         }
 
-        DataShopEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class,true);
+        DataShopEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class, true);
         insertEntity.setCode(leaf4DataCodeClient.shopCode());
         insertEntity.setBusinessStatus(DataShopBusinessStatusEnum.MARKET_RESEARCH);
         insertEntity.setOperationStatus(DataShopOperationStatusEnum.CLOSED);
         insertEntity.setPhysicalStatus(DataShopPhysicalStatusEnum.IDLE);
 
-        AddressInfoDto addressInfo=inputDto.getAddressInfo();
+        AddressInfoDto addressInfo = inputDto.getAddressInfo();
         if (addressInfo != null) {
             insertEntity.setCountryCode(addressInfo.getCountryCode());
             insertEntity.setProvinceCode(addressInfo.getProvinceCode());
@@ -126,8 +126,8 @@ public class DataShopServiceImpl implements IDataShopService {
             throw new BIamBusinessException("biam.shop.service.update.nameAlreadyExists", "门店名称已经存在");
         }
 
-        DataShopEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class,true);
-        AddressInfoDto addressInfo=inputDto.getAddressInfo();
+        DataShopEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataShopEntity.class, true);
+        AddressInfoDto addressInfo = inputDto.getAddressInfo();
         if (addressInfo != null) {
             updateEntity.setCountryCode(addressInfo.getCountryCode());
             updateEntity.setProvinceCode(addressInfo.getProvinceCode());
@@ -152,7 +152,7 @@ public class DataShopServiceImpl implements IDataShopService {
 
         //todo machine 门店状态逻辑校验
 
-        return shopDao.updateBusinessStatus(inputDto.getId(),inputDto.getBusinessStatus());
+        return shopDao.updateBusinessStatus(inputDto.getId(), inputDto.getBusinessStatus());
     }
 
     @Override
@@ -169,7 +169,7 @@ public class DataShopServiceImpl implements IDataShopService {
 
         //todo machine 门店状态逻辑校验
 
-        return shopDao.updateOperationStatus(inputDto.getId(),inputDto.getOperationStatus());
+        return shopDao.updateOperationStatus(inputDto.getId(), inputDto.getOperationStatus());
     }
 
     @Override
@@ -186,7 +186,7 @@ public class DataShopServiceImpl implements IDataShopService {
 
         //todo machine 门店状态逻辑校验
 
-        return shopDao.updatePhysicalStatus(inputDto.getId(),inputDto.getPhysicalStatus());
+        return shopDao.updatePhysicalStatus(inputDto.getId(), inputDto.getPhysicalStatus());
     }
 
     @Override
@@ -530,18 +530,9 @@ public class DataShopServiceImpl implements IDataShopService {
         attachmentCreateInputDto.setFileTempList(List.of(tempFileItem));
         String attachmentId = attachmentService.create(attachmentCreateInputDto);
 
-        // 记录操作日志
-        DataAttachmentDetailOutputDto attachmentDetail =
-                attachmentService.getById(new IdRequest(attachmentId));
-        DataAttachmentOperationLogCreateInputDto logCreateInputDto = new DataAttachmentOperationLogCreateInputDto();
-        logCreateInputDto.setAttachmentId(attachmentId);
-        logCreateInputDto.setVersionId(attachmentDetail.getCurrentVersionId());
-        logCreateInputDto.setOperationType(DataAttachmentOperationTypeEnum.UPLOAD);
-        logCreateInputDto.setOperationResult(DataAttachmentOperationResultEnum.SUCCESS);
-        logCreateInputDto.setIpAddress(environmentInfo.getIpAddress());
-        logCreateInputDto.setPlatform(environmentInfo.getPlatform());
-        logCreateInputDto.setUserAgent(environmentInfo.getUserAgent());
-        attachmentOperationLogService.create(logCreateInputDto);
+        // 记录日志
+        attachmentOperationLogPublisher.publish(attachmentId,DataAttachmentOperationTypeEnum.UPLOAD,
+                OperateSourceEnum.ADMIN_APP, ModuleEnum.DATA);
 
         return attachmentId;
     }

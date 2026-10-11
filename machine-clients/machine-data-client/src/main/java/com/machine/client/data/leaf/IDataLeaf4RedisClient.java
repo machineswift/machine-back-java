@@ -50,6 +50,12 @@ public interface IDataLeaf4RedisClient {
     String dataMaterialCategoryTree();
 
     /**
+     * 品牌分类树数据的redis动态key
+     */
+    @GetMapping("data_brand_category_tree")
+    String dataBrandCategoryTree();
+
+    /**
      * 组织树数据的redis动态key
      */
     @GetMapping("data_organization_tree")
@@ -73,6 +79,5 @@ public interface IDataLeaf4RedisClient {
     @GetMapping("scm_frontCategory_tree")
     String scmFrontCategoryTree();
 }
-
 
 

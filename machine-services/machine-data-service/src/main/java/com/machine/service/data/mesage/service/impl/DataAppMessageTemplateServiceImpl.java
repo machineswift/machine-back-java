@@ -29,6 +29,51 @@ public class DataAppMessageTemplateServiceImpl implements IDataAppMessageTemplat
     private IDataAppMessageTemplateDao appMessageTemplateDao;
 
     @Override
+    public void updateMessageTemplate(AppMessageTemplateUpdateInputDto inputDto) {
+        AppMessageTemplateDetailByTypeInputDto detailByTypeInputDto = new AppMessageTemplateDetailByTypeInputDto();
+        detailByTypeInputDto.setTemplateType(inputDto.getTemplateType());
+        DataAppMessageTemplateEntity dataAppMessageTemplateEntity = appMessageTemplateDao.detailByType(detailByTypeInputDto);
+        if(CollectionUtil.isNotEmpty(inputDto.getChannels())){
+            dataAppMessageTemplateEntity.setChannel(String.join(",", inputDto.getChannels()));
+        }
+        if(inputDto.getTemplateInfoDto() != null){
+            dataAppMessageTemplateEntity.setTemplateInfo(JSONUtil.toJsonStr(inputDto.getTemplateInfoDto()));
+        }
+        if(StringUtils.isNotBlank(inputDto.getInformTitle())){
+            dataAppMessageTemplateEntity.setInformTitle(inputDto.getInformTitle());
+        }
+        if(CollectionUtil.isNotEmpty(inputDto.getInformContentDto())){
+            dataAppMessageTemplateEntity.setInformContent(JSONUtil.toJsonStr(inputDto.getInformContentDto()));
+        }
+        dataAppMessageTemplateEntity.setSmsContent(inputDto.getSmsContent());
+        appMessageTemplateDao.update(dataAppMessageTemplateEntity);
+    }
+
+    @Override
+    public void updateMessageTemplateStatus(AppMessageTemplateUpdateStatusInputDto inputDto) {
+        appMessageTemplateDao.updateMessageTemplateStatus(inputDto);
+    }
+
+    @Override
+    public void updateMessageTemplateChannel(AppMessageTemplateUpdateChannelInput inputDto) {
+        appMessageTemplateDao.updateMessageTemplateChannel(inputDto);
+    }
+
+    @Override
+    public AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto request) {
+        DataAppMessageTemplateEntity dataAppMessageTemplateEntity = appMessageTemplateDao.detailByType(request);
+        if(dataAppMessageTemplateEntity == null){
+            return null;
+        }
+        AppMessageTemplateDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(dataAppMessageTemplateEntity), AppMessageTemplateDetailOutputDto.class);
+        AppMessageTemplateInfoDto infoDto = JSONUtil.toBean(JSONUtil.toJsonStr(dataAppMessageTemplateEntity.getTemplateInfo()), AppMessageTemplateInfoDto.class);
+        outputDto.setTemplateInfoDto(infoDto);
+        Set<DataMessageChannelEnum> messageChannelEnumsByStr = getMessageChannelEnumsByStr(dataAppMessageTemplateEntity.getChannel());
+        outputDto.setChannels(messageChannelEnumsByStr);
+        return outputDto;
+    }
+
+    @Override
     public PageResponse<AppMessageTemplateListOutPutDto> page(AppMessageTemplateQueryPageInputDto inputDto) {
         Page<DataAppMessageTemplateEntity> messageTemplatePage = appMessageTemplateDao.page(inputDto);
         List<DataAppMessageTemplateEntity> records = messageTemplatePage.getRecords();
@@ -68,50 +113,5 @@ public class DataAppMessageTemplateServiceImpl implements IDataAppMessageTemplat
             channelEnums.add(enumByCode);
         }
         return channelEnums;
-    }
-
-    @Override
-    public AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto request) {
-        DataAppMessageTemplateEntity dataAppMessageTemplateEntity = appMessageTemplateDao.detailByType(request);
-        if(dataAppMessageTemplateEntity == null){
-            return null;
-        }
-        AppMessageTemplateDetailOutputDto outputDto = JSONUtil.toBean(JSONUtil.toJsonStr(dataAppMessageTemplateEntity), AppMessageTemplateDetailOutputDto.class);
-        AppMessageTemplateInfoDto infoDto = JSONUtil.toBean(JSONUtil.toJsonStr(dataAppMessageTemplateEntity.getTemplateInfo()), AppMessageTemplateInfoDto.class);
-        outputDto.setTemplateInfoDto(infoDto);
-        Set<DataMessageChannelEnum> messageChannelEnumsByStr = getMessageChannelEnumsByStr(dataAppMessageTemplateEntity.getChannel());
-        outputDto.setChannels(messageChannelEnumsByStr);
-        return outputDto;
-    }
-
-    @Override
-    public void updateMessageTemplate(AppMessageTemplateUpdateInputDto inputDto) {
-        AppMessageTemplateDetailByTypeInputDto detailByTypeInputDto = new AppMessageTemplateDetailByTypeInputDto();
-        detailByTypeInputDto.setTemplateType(inputDto.getTemplateType());
-        DataAppMessageTemplateEntity dataAppMessageTemplateEntity = appMessageTemplateDao.detailByType(detailByTypeInputDto);
-        if(CollectionUtil.isNotEmpty(inputDto.getChannels())){
-            dataAppMessageTemplateEntity.setChannel(String.join(",", inputDto.getChannels()));
-        }
-        if(inputDto.getTemplateInfoDto() != null){
-            dataAppMessageTemplateEntity.setTemplateInfo(JSONUtil.toJsonStr(inputDto.getTemplateInfoDto()));
-        }
-        if(StringUtils.isNotBlank(inputDto.getInformTitle())){
-            dataAppMessageTemplateEntity.setInformTitle(inputDto.getInformTitle());
-        }
-        if(CollectionUtil.isNotEmpty(inputDto.getInformContentDto())){
-            dataAppMessageTemplateEntity.setInformContent(JSONUtil.toJsonStr(inputDto.getInformContentDto()));
-        }
-        dataAppMessageTemplateEntity.setSmsContent(inputDto.getSmsContent());
-        appMessageTemplateDao.update(dataAppMessageTemplateEntity);
-    }
-
-    @Override
-    public void updateMessageTemplateStatus(AppMessageTemplateUpdateStatusInputDto inputDto) {
-        appMessageTemplateDao.updateMessageTemplateStatus(inputDto);
-    }
-
-    @Override
-    public void updateMessageTemplateChannel(AppMessageTemplateUpdateChannelInput inputDto) {
-        appMessageTemplateDao.updateMessageTemplateChannel(inputDto);
     }
 }

@@ -26,6 +26,24 @@ public class SuperMessageController {
     @Autowired
     private ISuperMessageBusiness messageBusiness;
 
+    @Operation(summary = "消息改成已读")
+    @PostMapping("read")
+    Boolean readMessage(@RequestBody @Validated SuperReadMessageRequestVo request){
+        return messageBusiness.read(request);
+    }
+
+    @Operation(summary = "查询当前用户未读信息的数量")
+    @PostMapping("get_unread_count")
+    Integer getUnreadCount(@RequestBody SuperMessageUnreadCountRequestVo request){
+        return messageBusiness.getUnreadCount(request);
+    }
+
+    @Operation(summary = "消息分类数量统计")
+    @PostMapping("group_count")
+    List<SuperAppMessageGroupCountResponseVo> groupCount(@RequestBody @Validated SuperAppMessageGroupCountRequestVo request){
+        return messageBusiness.groupCount(request);
+    }
+
     @Operation(summary = "分页查询")
     @PostMapping("page")
     PageResponse<SuperAppMessageListResponseVo> page(@RequestBody @Validated SuperMessagePageRequestVo request){
@@ -42,24 +60,5 @@ public class SuperMessageController {
     @PostMapping("task_page")
     PageResponse<SuperAppMessageListResponseVo> taskPage(@RequestBody @Validated SuperMessageTaskCategoryPageRequestVo request){
         return messageBusiness.customCategoryPage(request.getChannel(),request.getTaskCategory(),request.getCurrent(),request.getSize());
-    }
-
-
-    @Operation(summary = "消息改成已读")
-    @PostMapping("read")
-    Boolean readMessage(@RequestBody @Validated SuperReadMessageRequestVo request){
-        return messageBusiness.read(request);
-    }
-
-    @Operation(summary = "消息分类数量统计")
-    @PostMapping("group_count")
-    List<SuperAppMessageGroupCountResponseVo> groupCount(@RequestBody @Validated SuperAppMessageGroupCountRequestVo request){
-        return messageBusiness.groupCount(request);
-    }
-
-    @Operation(summary = "查询当前用户未读信息的数量")
-    @PostMapping("get_unread_count")
-    Integer getUnreadCount(@RequestBody SuperMessageUnreadCountRequestVo request){
-        return messageBusiness.getUnreadCount(request);
     }
 }

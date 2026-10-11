@@ -48,13 +48,14 @@ PostgreSQL 由 [schema.sql](postgresql/table/schema.sql) 建库，当前定义�
 
 以下为仓库中已有的表结构脚本，与代码模块一致：
 
-| 服务 | 脚本位置 | 说明 |
-|------|----------|------|
-| 建库 | [schema.sql](postgresql/table/schema.sql) | 创建上述所有 PostgreSQL 数据库 |
-| IAM | [machine-biam-base-table.sql](postgresql/table/biam/machine-biam-base-table.sql) | 用户、角色、权限、组织 |
-| HRM | [machine-hrm-table.sql](postgresql/table/machine-hrm-table.sql) | 员工、部门、组织架构 |
-| Data | [table/data/](postgresql/table/data/) | 门店、标签、素材、附件：`machine-data-base-table.sql`、`machine-data-tag-table.sql`、`machine-data-file-table.sql`、`machine-scm-product-table.sql` |
-| CRM | [table/crm/](postgresql/table/crm/) | [身份标识](postgresql/table/crm/machine-crm-identity-table.sql)、[业务数据](postgresql/table/crm/machine-crm-business-table.sql) |
+| 服务 | 脚本位置                                                                         | 说明                                                                                                                             |
+|------|----------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| 建库 | [schema.sql](postgresql/table/schema.sql)                                        | 创建上述所有 PostgreSQL 数据库                                                                                                   |
+| IAM  | [machine-biam-base-table.sql](postgresql/table/biam/machine-biam-base-table.sql) | 用户、角色、权限、组织                                                                                                           |
+| HRM  | [machine-hrm-table.sql](postgresql/table/machine-hrm-table.sql)                  | 员工、部门、组织架构                                                                                                             |
+| Data | [table/data/](postgresql/table/data/)                                            | 门店、标签、素材、附件：`machine-data-base-table.sql`、`machine-data-tag-table.sql`、`machine-data-file-table.sql`               |
+| CRM  | [table/crm/](postgresql/table/crm/)                                              | [身份标识](postgresql/table/crm/machine-crm-identity-table.sql)、[业务数据](postgresql/table/crm/machine-crm-business-table.sql) |
+| SCM  | [table/scm/](postgresql/table/scm/)                                              | 分类 / 属性：`machine-scm-base-table.sql`、`machine-scm-category-table.sql`、`machine-scm-product-table.sql`                     |
 
 **其他库**（machine_camunda、machine_ai、machine_scm、machine_tpp 等）：建库已在 schema 中完成，表结构可由框架自动创建或后续在 `postgresql/table/` 下补充脚本。
 
@@ -64,6 +65,7 @@ PostgreSQL 由 [schema.sql](postgresql/table/schema.sql) 建库，当前定义�
 
 - [📊 machine-iam 初始化数据](postgresql/data/machine-biam-data.sql) - 身份认证服务初始化数据
 - [📊 machine-data 初始化数据](postgresql/data/machine-data-data.sql) - 数据服务初始化数据
+- [📊 machine-scm 初始化数据](postgresql/data/machine-scm-data.sql) - 供应链服务初始化数据
 
 ### ⚡ 脚本执行顺序
 
@@ -72,6 +74,7 @@ PostgreSQL 由 [schema.sql](postgresql/table/schema.sql) 建库，当前定义�
 1. **schema.sql** — 创建数据库
 2. **table/*.sql** — 执行各服务表结构脚本
 3. **data/*.sql** — 执行初始化数据脚本
+4. **migration/*.sql** — 仅存量库升级时执行（全新库跳过）
 
 ## 📊 文件结构总览
 
@@ -95,14 +98,18 @@ document/database/
     │   ├── data/                                # 数据管理服务（门店/标签/素材/附件）
     │   │   ├── machine-data-base-table.sql           # 主表
     │   │   ├── machine-data-tag-table.sql       # 标签
-    │   │   ├── machine-data-file-table.sql      # 文件
-    │   │   └── machine-scm-product-table.sql      # 条目
-    │   └── crm/                                 # 客户关系管理服务
-    │       ├── machine-crm-identity-table.sql    # 客户身份标识
-    │       └── machine-crm-business-table.sql   # 客户业务数据
-    └── data/                                    # 初始化数据
-        ├── machine-biam-data.sql                 # IAM 初始化数据
-        └── machine-data-data.sql                # Data 服务初始化数据
+    │   │   └── machine-data-file-table.sql      # 文件
+    │   ├── crm/                                 # 客户关系管理服务
+    │   │   ├── machine-crm-identity-table.sql    # 客户身份标识
+    │   │   └── machine-crm-business-table.sql   # 客户业务数据
+    │   └── scm/                                 # 供应链服务（分类 / 属性）
+    │       ├── machine-scm-base-table.sql        # 基础表
+    │       ├── machine-scm-category-table.sql    # 前后台分类、属性、属性组、属性值
+    │       └── machine-scm-product-table.sql     # 商品 / SPU / SKU
+    ├── data/                                    # 初始化数据
+    │   ├── machine-biam-data.sql                 # IAM 初始化数据
+    │   ├── machine-data-data.sql                # Data 服务初始化数据
+    │   └── machine-scm-data.sql                 # SCM 服务初始化数据
 ```
 
 ---

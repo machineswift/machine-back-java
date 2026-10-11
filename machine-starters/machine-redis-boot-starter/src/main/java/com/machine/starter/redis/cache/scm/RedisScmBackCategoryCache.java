@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.scm.category.IScmBackCategoryClient;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
+import com.machine.sdk.base.model.tree.TreeNode;
 import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.sdk.base.tool.Tuples;
 import com.machine.starter.redis.command.CustomerRedisCommands;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static com.machine.starter.redis.constant.RedisPrefix4ScmConstant.BackCategory.SCM_BACK_CATEGORY_TREE_DATA;
 import static com.machine.starter.redis.constant.RedisPrefix4ScmConstant.BackCategory.SCM_BACK_CATEGORY_TREE_KEY;
@@ -31,19 +33,26 @@ public class RedisScmBackCategoryCache {
     @Autowired
     private IScmBackCategoryClient backCategoryClient;
 
+    public boolean isLeaf(String id) {
+        ScmBackCategoryTreeSimpleOutputDto treeOutputDto = treeSimple();
+        ScmBackCategoryTreeSimpleOutputDto targetNode = TreeUtil.findNode(treeOutputDto, id);
+        if (null == targetNode) {
+            return false;
+        }
+
+        return !CollectionUtil.isNotEmpty(targetNode.getChildren());
+    }
+
     public Set<String> recursionSubId(String id) {
         ScmBackCategoryTreeSimpleOutputDto treeOutputDto = treeSimple();
         ScmBackCategoryTreeSimpleOutputDto targetNode = TreeUtil.findNode(treeOutputDto, id);
-        if (null == targetNode || CollectionUtil.isEmpty(targetNode.getChildren())) {
+        if (null == targetNode) {
             return Set.of();
         }
 
-        Set<String> childIdList = new HashSet<>();
-        for (ScmBackCategoryTreeSimpleOutputDto child : targetNode.getChildren()) {
-            childIdList.add(child.getId());
-        }
-        return childIdList;
+        return TreeUtil.collectAllNodes(targetNode).stream().map(TreeNode::getId).collect(Collectors.toSet());
     }
+
 
     public List<ScmBackCategoryTreeSimpleOutputDto> recursionSub(String id) {
         ScmBackCategoryTreeSimpleOutputDto treeOutputDto = treeSimple();

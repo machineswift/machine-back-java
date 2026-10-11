@@ -26,21 +26,21 @@ public interface IDataBrandDao {
     int updateParent(String id,
                      String parentId);
 
-    DataBrandEntity getById(String id);
-
     boolean exists(String id);
-
-    DataBrandEntity getByName(String name);
 
     boolean existsByParentId(String parentId);
 
     boolean existsEnabledByParentId(String parentId);
 
-    Set<String> selectHasChildrenIdSet(Set<String> idSet);
+    DataBrandEntity getById(String id);
+
+    DataBrandEntity getByName(String name);
 
     List<DataBrandEntity> selectAncestorList(String id);
 
     List<DataBrandEntity> selectByIdSet(Set<String> idSet);
+
+    Set<String> selectHasChildrenIdSet(Set<String> idSet);
 
     Page<DataBrandEntity> selectPage(DataBrandQueryPageInputDto inputDto);
 

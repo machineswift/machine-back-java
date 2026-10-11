@@ -125,11 +125,6 @@ public class BIamRoleController {
     @Operation(summary = "分页查询角色(应用于组件弹窗)")
     @PostMapping("page_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:ROLE:PAGE_SIMPLE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
-            module = ModuleEnum.BIAM,
-            moduleEntity = ModuleEntityEnum.BIAM_ROLE,
-            operateType = ActionTypeEnum.QUERY,
-            operateName = "分页查询角色(组件弹窗)")
     public PageResponse<BIamRoleSimpleListResponseVo> pageSimple(
             @RequestBody @Validated BIamRoleQueryPageRequestVo request) {
         return roleBusiness.pageSimple(request);

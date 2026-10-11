@@ -18,6 +18,15 @@ public class DataBrandUpdateInputDto {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "拼音全拼")
+    private String namePinyinFull;
+
+    @Schema(description = "拼音首字母")
+    private String namePinyinInitial;
+
+    @Schema(description = "英文名称")
+    private String nameEn;
+
     @Schema(description = "排序")
     private Long sort;
 

@@ -86,6 +86,12 @@ public class BIamRoleServer implements IBIamRoleClient {
     }
 
     @Override
+    @PostMapping("map_by_idSet")
+    public Map<String, BIamRoleDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
+        return roleService.mapByIdSet(request);
+    }
+
+    @Override
     @PostMapping("select_page")
     public PageResponse<BIamRoleListOutputDto> selectPage(@RequestBody @Validated BIamRoleQueryPageInputDto inputDto) {
         Page<BIamRoleListOutputDto> pageResult = roleService.selectPage(inputDto);
@@ -94,12 +100,6 @@ public class BIamRoleServer implements IBIamRoleClient {
                 pageResult.getSize(),
                 pageResult.getTotal(),
                 pageResult.getRecords());
-    }
-
-    @Override
-    @PostMapping("map_by_idSet")
-    public Map<String, BIamRoleDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
-        return roleService.mapByIdSet(request);
     }
 
 }

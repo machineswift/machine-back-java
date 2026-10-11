@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface IBIamUserRoleRelationService {
 
+    Map<String, Integer> countUserByRoleIdSet(IdSetRequest request);
+
     List<BIamUserRoleRelationListOutputDto> listByUserId(IdRequest request);
     
     List<BIamUserRoleRelationListOutputDto> listByIdSet(IdSetRequest request);
@@ -16,6 +18,4 @@ public interface IBIamUserRoleRelationService {
     List<BIamUserRoleRelationListOutputDto> listByRoleIdSet(IdSetRequest request);
 
     List<BIamUserRoleRelationListOutputDto> listByUserIdSet(IdSetRequest request);
-
-    Map<String, Integer> countUserByRoleIdSet(IdSetRequest request);
 }

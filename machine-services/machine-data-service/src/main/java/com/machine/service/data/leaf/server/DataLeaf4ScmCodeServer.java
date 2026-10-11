@@ -43,6 +43,18 @@ public class DataLeaf4ScmCodeServer implements IDataLeaf4ScmCodeClient {
         return generateCode(CodePrefix.FRANCHISEE_CODE);
     }
 
+    @Override
+    @GetMapping("attribute_code")
+    public String attributeCode() {
+        return generateCode(CodePrefix.ATTRIBUTE_CODE);
+    }
+
+    @Override
+    @GetMapping("attribute_group_code")
+    public String attributeGroupCode() {
+        return generateCode(CodePrefix.ATTRIBUTE_GROUP_CODE);
+    }
+
     private String generateCode(CodePrefix codePrefix) {
         return leafService.getKqBatchNo(
                 codePrefix.code,
@@ -57,7 +69,9 @@ public class DataLeaf4ScmCodeServer implements IDataLeaf4ScmCodeClient {
         BACK_CATEGORY_CODE("BACK_CATEGORY_CODE_", "BC", "后台分类编码"),
         FRONT_CATEGORY_CODE("FRONT_CATEGORY_CODE_", "FC", "前台分类编码"),
         SUPPLIER_CODE("SCM_SUPPLIER_CODE_", "GYS", "供应商编码"),
-        FRANCHISEE_CODE("SCM_FRANCHISEE_CODE_", "JMS", "加盟商编码");
+        FRANCHISEE_CODE("SCM_FRANCHISEE_CODE_", "JMS", "加盟商编码"),
+        ATTRIBUTE_CODE("SCM_ATTRIBUTE_CODE_", "AT", "属性编码"),
+        ATTRIBUTE_GROUP_CODE("SCM_ATTRIBUTE_GROUP_CODE_", "PG", "属性分组编码");
 
         private final String code;
         private final String prefix;

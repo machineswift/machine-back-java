@@ -42,12 +42,6 @@ public class DataShopOrganizationRelationServer implements IDataShopOrganization
     }
 
     @Override
-    @PostMapping("map_by_shopIdSet")
-    public Map<String, String> mapByShopIdSet(@RequestBody @Validated DataShopMapByShopIdSetInputDto inputDto) {
-        return shopOrganizationRelationService.mapByShopIdSet(inputDto);
-    }
-
-    @Override
     @PostMapping("list_shopId_by_organizationIdSet")
     public List<String> listShopIdByOrganizationIdSet(@RequestBody @Validated IdSetRequest request) {
         return shopOrganizationRelationService.listShopIdByOrganizationIdSet(request);
@@ -77,5 +71,11 @@ public class DataShopOrganizationRelationServer implements IDataShopOrganization
     public List<DataShopOrganizationRelationListOutputDto> listByCondition(
             @RequestBody @Validated BIamOrganizationShopRelationQueryListInputDto inputDto) {
         return shopOrganizationRelationService.listByCondition(inputDto);
+    }
+
+    @Override
+    @PostMapping("map_by_shopIdSet")
+    public Map<String, String> mapByShopIdSet(@RequestBody @Validated DataShopMapByShopIdSetInputDto inputDto) {
+        return shopOrganizationRelationService.mapByShopIdSet(inputDto);
     }
 }

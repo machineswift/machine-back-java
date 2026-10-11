@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.scm.attribute.dao.mapper.ScmAttributeGroupMapper">
+
+    <select id="selectPage" resultType="com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeGroupEntity">
+        SELECT * FROM t_scm_attribute_group
+        <where>
+            <if test="groupIdIn != null and groupIdIn.size > 0">
+                AND id IN
+                <foreach item="item" collection="groupIdIn" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="inputDto.code != null and inputDto.code != ''">
+                AND LOWER(code) LIKE LOWER(CONCAT('%', #{inputDto.code}, '%'))
+            </if>
+            <if test="inputDto.name != null and inputDto.name != ''">
+                AND LOWER(name) LIKE LOWER(CONCAT('%', #{inputDto.name}, '%'))
+            </if>
+            <if test="inputDto.groupType != null">
+                AND group_type = #{inputDto.groupType}
+            </if>
+            <if test="inputDto.status != null">
+                AND status = #{inputDto.status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

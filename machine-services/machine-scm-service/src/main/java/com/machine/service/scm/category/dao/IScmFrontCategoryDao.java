@@ -8,12 +8,12 @@ public interface IScmFrontCategoryDao {
 
     String insert(ScmFrontCategoryEntity entity);
 
+    int deleteById(String id);
+
     int update(ScmFrontCategoryEntity entity);
 
     int updateParentId(String id,
                        String parentId);
-
-    int deleteById(String id);
 
     long countByParentIdAndName(String parentId,
                                 String name);

@@ -29,10 +29,10 @@ public interface IHrmDepartmentClient {
     @GetMapping("list_all")
     List<HrmDepartmentListOutputDto> listAll();
 
-    @GetMapping("tree_all_simple")
-    Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple();
-
     @PostMapping("map_department_expansion_by_departmentIdSet")
     Map<String, HrmDepartmentExpansionListOutputDto> mapDepartmentExpansionByDepartmentIdSet(
             @RequestBody @Validated IdSetRequest idSetRequest);
+
+    @GetMapping("tree_all_simple")
+    Tuples.Tuple2<String, HrmDepartmentTreeOutputDto> treeAllSimple();
 }

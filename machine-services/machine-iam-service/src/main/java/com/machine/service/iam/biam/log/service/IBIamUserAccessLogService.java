@@ -16,6 +16,11 @@ public interface IBIamUserAccessLogService {
     String create(BIamUserAccessLogCreateInputDto inputDto);
 
     /**
+     * 清理指定时间之前的日志（日志保留策略）
+     */
+    int deleteByCreateTimeBefore(BIamUserAccessLogDeleteInputDto inputDto);
+
+    /**
      * 详情
      */
     BIamUserAccessLogDetailOutputDto detail(IdRequest request);
@@ -24,10 +29,5 @@ public interface IBIamUserAccessLogService {
      * 分页查询
      */
     Page<BIamUserAccessLogListOutputDto> page(BIamUserAccessLogQueryPageInputDto inputDto);
-
-    /**
-     * 清理指定时间之前的日志（日志保留策略）
-     */
-    int deleteByCreateTimeBefore(BIamUserAccessLogDeleteInputDto inputDto);
 
 }

@@ -23,6 +23,11 @@ public class BIamUserRoleRelationServiceImpl implements IBIamUserRoleRelationSer
     private IBIamUserRoleRelationDao userRoleRelationDao;
 
     @Override
+    public Map<String, Integer> countUserByRoleIdSet(IdSetRequest request) {
+        return userRoleRelationDao.countUserByRoleIdSet(request.getIdSet());
+    }
+
+    @Override
     public List<BIamUserRoleRelationListOutputDto> listByUserId(IdRequest request) {
         List<BIamUserRoleRelationEntity> entityList = userRoleRelationDao.listByUserId(request.getId());
         if (CollectionUtil.isEmpty(entityList)) {
@@ -56,10 +61,5 @@ public class BIamUserRoleRelationServiceImpl implements IBIamUserRoleRelationSer
             return List.of();
         }
         return JSONUtil.toList(JSONUtil.toJsonStr(entityList), BIamUserRoleRelationListOutputDto.class);
-    }
-
-    @Override
-    public Map<String, Integer> countUserByRoleIdSet(IdSetRequest request) {
-        return userRoleRelationDao.countUserByRoleIdSet(request.getIdSet());
     }
 }

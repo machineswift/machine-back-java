@@ -45,24 +45,15 @@ public class SuperMessageBusinessImpl implements ISuperMessageBusiness {
     private IDataSystemConfigClient systemConfigClient;
 
     @Override
-    public PageResponse<SuperAppMessageListResponseVo> page(SuperMessagePageRequestVo request) {
-        AppMessagePageSuperInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), AppMessagePageSuperInputDto.class);
-        PageResponse<AppMessageListSuperOutputDto> page = appMessageClient.superPage(inputDto);
-        if (CollectionUtil.isEmpty(page.getRecords())) {
-            return new PageResponse<>(page.getCurrent(), page.getSize(), page.getTotal());
-        }
-
-        return new PageResponse<>(
-                page.getCurrent(),
-                page.getSize(),
-                page.getTotal(),
-                JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), SuperAppMessageListResponseVo.class));
-    }
-
-    @Override
     public Boolean read(SuperReadMessageRequestVo request) {
         AppMessageReadInputDto messageReadInputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), AppMessageReadInputDto.class);
         return appMessageClient.readMessage(messageReadInputDto);
+    }
+
+    @Override
+    public Integer getUnreadCount(SuperMessageUnreadCountRequestVo request) {
+        AppMessageUnreadCountInputDto countInputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), AppMessageUnreadCountInputDto.class);
+        return appMessageClient.getUnreadCount(countInputDto);
     }
 
     @Override
@@ -76,9 +67,18 @@ public class SuperMessageBusinessImpl implements ISuperMessageBusiness {
     }
 
     @Override
-    public Integer getUnreadCount(SuperMessageUnreadCountRequestVo request) {
-        AppMessageUnreadCountInputDto countInputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), AppMessageUnreadCountInputDto.class);
-        return appMessageClient.getUnreadCount(countInputDto);
+    public PageResponse<SuperAppMessageListResponseVo> page(SuperMessagePageRequestVo request) {
+        AppMessagePageSuperInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), AppMessagePageSuperInputDto.class);
+        PageResponse<AppMessageListSuperOutputDto> page = appMessageClient.superPage(inputDto);
+        if (CollectionUtil.isEmpty(page.getRecords())) {
+            return new PageResponse<>(page.getCurrent(), page.getSize(), page.getTotal());
+        }
+
+        return new PageResponse<>(
+                page.getCurrent(),
+                page.getSize(),
+                page.getTotal(),
+                JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), SuperAppMessageListResponseVo.class));
     }
 
     private Set<DataMessageTemplateTypeEnum> getTemplateTypesByCustomCategory(BaseEnum baseEnum){

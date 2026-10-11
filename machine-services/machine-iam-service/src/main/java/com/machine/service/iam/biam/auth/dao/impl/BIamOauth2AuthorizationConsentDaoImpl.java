@@ -19,6 +19,18 @@ public class BIamOauth2AuthorizationConsentDaoImpl implements IBIamOauth2Authori
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void save(BIamOauth2AuthorizationConsentEntity entity) {
+        authorizationConsentMapper.insert(entity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void remove(BIamOauth2AuthorizationConsentEntity entity) {
+        authorizationConsentMapper.deleteById(entity.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(BIamOauth2AuthorizationConsentEntity entity) {
         UpdateWrapper<BIamOauth2AuthorizationConsentEntity> oauth2AuthorizationConsentEntityUpdateWrapper = new UpdateWrapper<>();
         if (StringUtils.isNotBlank(entity.getPrincipalName())) {
@@ -29,18 +41,6 @@ public class BIamOauth2AuthorizationConsentDaoImpl implements IBIamOauth2Authori
         }
         authorizationConsentMapper.update(entity, oauth2AuthorizationConsentEntityUpdateWrapper);
 
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void save(BIamOauth2AuthorizationConsentEntity entity) {
-        authorizationConsentMapper.insert(entity);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void remove(BIamOauth2AuthorizationConsentEntity entity) {
-        authorizationConsentMapper.deleteById(entity.getId());
     }
 
     @Override

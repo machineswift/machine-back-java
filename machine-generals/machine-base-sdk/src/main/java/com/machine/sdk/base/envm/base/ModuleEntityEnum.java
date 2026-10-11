@@ -29,6 +29,7 @@ public enum ModuleEntityEnum implements BaseEnum<ModuleEntityEnum, String> {
     DATA_MATERIAL_CATEGORY("DATA_MATERIAL_CATEGORY", "素材分类"),
     DATA_DOWNLOAD("DATA_DOWNLOAD", "下载中心"),
     DATA_BRAND("DATA_BRAND", "品牌"),
+    DATA_BRAND_CATEGORY("DATA_BRAND_CATEGORY", "品牌分类"),
     DATA_SHOP("DATA_SHOP", "门店"),
     DATA_AREA("DATA_AREA", "区域"),
     DATA_TAG("DATA_TAG", "标签"),
@@ -53,9 +54,9 @@ public enum ModuleEntityEnum implements BaseEnum<ModuleEntityEnum, String> {
     SCM_CATEGORY("SCM_CATEGORY", "商品分类"),
     SCM_BACK_CATEGORY("SCM_BACK_CATEGORY", "后台分类"),
     SCM_FRONT_CATEGORY("SCM_FRONT_CATEGORY", "前台分类"),
-    SCM_PROPERTY("SCM_PROPERTY", "属性"),
-    SCM_PROPERTY_GROUP("SCM_PROPERTY_GROUP", "属性分组"),
-    SCM_PROPERTY_VALUE("SCM_PROPERTY_VALUE", "属性值"),
+    SCM_ATTRIBUTE("SCM_ATTRIBUTE", "属性"),
+    SCM_ATTRIBUTE_GROUP("SCM_ATTRIBUTE_GROUP", "属性分组"),
+    SCM_ATTRIBUTE_VALUE("SCM_ATTRIBUTE_VALUE", "属性值"),
 
     /**
      * CRM

@@ -3,6 +3,7 @@ package com.machine.app.admin.scm.category.controller.vo.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -14,6 +15,7 @@ public class ScmBackCategoryUpdateRequestVo {
     private String id;
 
     @NotBlank(message = "名称不能为空")
+    @Size(max = 32, message = "名称长度不能超过32个字符")
     @Schema(description = "名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 

@@ -16,6 +16,8 @@ public interface IBIamUserRoleRelationDao {
 
     void deleteByUserId(String userId);
 
+    Map<String, Integer> countUserByRoleIdSet(Set<String> roleIdSet);
+
     BIamUserRoleRelationEntity detail(String id);
 
     BIamUserRoleRelationEntity getByUk(String userId,
@@ -32,7 +34,5 @@ public interface IBIamUserRoleRelationDao {
     List<BIamUserRoleRelationEntity> listByRoleIdSet(Set<String> roleIdSet);
 
     List<BIamUserRoleRelationEntity> listByUserIdSet(Set<String> userIdSet);
-
-    Map<String, Integer> countUserByRoleIdSet(Set<String> roleIdSet);
 
 }

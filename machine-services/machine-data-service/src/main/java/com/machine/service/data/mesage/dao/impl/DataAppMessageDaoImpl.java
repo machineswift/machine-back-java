@@ -26,21 +26,6 @@ public class DataAppMessageDaoImpl implements IDataAppMessageDao {
     private DataAppMessageMapper dataAppMessageMapper;
 
     @Override
-    public Page<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto) {
-        IPage<AppMessageListOutputDto> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
-        return dataAppMessageMapper.managePage(inputDto, page);
-    }
-
-    @Override
-    public Page<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
-        if(StringUtils.isBlank(inputDto.getReceiver())){
-            throw new BIamBusinessException("client.data.dao.message.groupCount", "当前用户id不能为空");
-        }
-        IPage<AppMessageListSuperOutputDto> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
-        return dataAppMessageMapper.superPage(inputDto, page);
-    }
-
-    @Override
     public void insert(DataAppMessageEntity dataAppMessageEntity) {
         dataAppMessageMapper.insert(dataAppMessageEntity);
     }
@@ -71,5 +56,20 @@ public class DataAppMessageDaoImpl implements IDataAppMessageDao {
             throw new BIamBusinessException("client.data.message.getUnreadCount", "当前用户id不能为空");
         }
         return dataAppMessageMapper.getUnreadCount(inputDto);
+    }
+
+    @Override
+    public Page<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto) {
+        IPage<AppMessageListOutputDto> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
+        return dataAppMessageMapper.managePage(inputDto, page);
+    }
+
+    @Override
+    public Page<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
+        if(StringUtils.isBlank(inputDto.getReceiver())){
+            throw new BIamBusinessException("client.data.dao.message.groupCount", "当前用户id不能为空");
+        }
+        IPage<AppMessageListSuperOutputDto> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
+        return dataAppMessageMapper.superPage(inputDto, page);
     }
 }

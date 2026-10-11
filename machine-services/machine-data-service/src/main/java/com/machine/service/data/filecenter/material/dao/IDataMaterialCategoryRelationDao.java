@@ -7,13 +7,13 @@ import java.util.Set;
 
 public interface IDataMaterialCategoryRelationDao {
 
-    Long selectCountByCategoryId(String categoryId);
-
-    Long selectCountByCategoryIdSet(Set<String> categoryIdSet);
-
     void insert(DataMaterialCategoryRelationEntity entity);
 
     void deleteByMaterialId(String materialId);
+
+    Long selectCountByCategoryId(String categoryId);
+
+    Long selectCountByCategoryIdSet(Set<String> categoryIdSet);
 
     List<DataMaterialCategoryRelationEntity> listByMaterialId(String materialId);
 

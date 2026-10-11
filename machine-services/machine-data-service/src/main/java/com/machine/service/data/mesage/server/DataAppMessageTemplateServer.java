@@ -22,20 +22,6 @@ public class DataAppMessageTemplateServer implements IDataAppMessageTemplateClie
     private IDataAppMessageTemplateService messageTemplateService;
 
     @Override
-    @PostMapping("detail_by_type")
-    public AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto inputDto) {
-        log.info("通过模版类型查询消息模版，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return messageTemplateService.detailByType(inputDto);
-    }
-
-    @Override
-    @PostMapping("page")
-    public PageResponse<AppMessageTemplateListOutPutDto> page(AppMessageTemplateQueryPageInputDto inputDto) {
-        log.info("分页查询消息模版列表，inputDto={}", JSONUtil.toJsonStr(inputDto));
-        return messageTemplateService.page(inputDto);
-    }
-
-    @Override
     @PostMapping("update_message_template")
     public void updateMessageTemplate(AppMessageTemplateUpdateInputDto inputDto) {
         log.info("修改消息模版，inputDto={}", JSONUtil.toJsonStr(inputDto));
@@ -54,6 +40,20 @@ public class DataAppMessageTemplateServer implements IDataAppMessageTemplateClie
     public void updateMessageTemplateChannel(AppMessageTemplateUpdateChannelInput inputDto) {
         log.info("修改消息模版渠道，inputDto={}", JSONUtil.toJsonStr(inputDto));
         messageTemplateService.updateMessageTemplateChannel(inputDto);
+    }
+
+    @Override
+    @PostMapping("detail_by_type")
+    public AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto inputDto) {
+        log.info("通过模版类型查询消息模版，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return messageTemplateService.detailByType(inputDto);
+    }
+
+    @Override
+    @PostMapping("page")
+    public PageResponse<AppMessageTemplateListOutPutDto> page(AppMessageTemplateQueryPageInputDto inputDto) {
+        log.info("分页查询消息模版列表，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return messageTemplateService.page(inputDto);
     }
 
 }

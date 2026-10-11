@@ -44,6 +44,18 @@ public class DataMaterialReferenceDaoImpl implements IDataMaterialReferenceDao {
     }
 
     @Override
+    public Long selectCountByEntity(String entity,
+                                    String entityId) {
+        if (StrUtil.isBlank(entity) || StrUtil.isBlank(entityId)) {
+            return 0L;
+        }
+        Wrapper<DataMaterialReferenceEntity> wrapper = new LambdaQueryWrapper<DataMaterialReferenceEntity>()
+                .eq(DataMaterialReferenceEntity::getEntity, entity)
+                .eq(DataMaterialReferenceEntity::getEntityId, entityId);
+        return materialReferenceMapper.selectCount(wrapper);
+    }
+
+    @Override
     public DataMaterialReferenceEntity getById(String id) {
         if (StrUtil.isBlank(id)) {
             return null;
@@ -95,17 +107,5 @@ public class DataMaterialReferenceDaoImpl implements IDataMaterialReferenceDao {
                 .eq(DataMaterialReferenceEntity::getEntity, entity)
                 .eq(DataMaterialReferenceEntity::getEntityId, entityId);
         return materialReferenceMapper.selectList(wrapper);
-    }
-
-    @Override
-    public Long selectCountByEntity(String entity,
-                                    String entityId) {
-        if (StrUtil.isBlank(entity) || StrUtil.isBlank(entityId)) {
-            return 0L;
-        }
-        Wrapper<DataMaterialReferenceEntity> wrapper = new LambdaQueryWrapper<DataMaterialReferenceEntity>()
-                .eq(DataMaterialReferenceEntity::getEntity, entity)
-                .eq(DataMaterialReferenceEntity::getEntityId, entityId);
-        return materialReferenceMapper.selectCount(wrapper);
     }
 }

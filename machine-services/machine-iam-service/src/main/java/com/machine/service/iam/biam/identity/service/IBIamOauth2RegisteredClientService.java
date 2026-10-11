@@ -20,11 +20,11 @@ public interface IBIamOauth2RegisteredClientService {
 
     int updateClientSecret(BIamOAuth2RegisteredClientUpdateClientSecretInputDto inputDto);
 
-    List<String> allEnableClientId();
-
     BIamOAuth2RegisteredClientDto findByClientId(String clientId);
 
     BIamOAuth2RegisteredClientDetailOutputDto detail(String id);
+
+    List<String> allEnableClientId();
 
     Page<BIamOAuth2RegisteredClientListOutputDto> selectPage(BIamOAuth2RegisteredClientPageQueryInputDto inputDto);
 

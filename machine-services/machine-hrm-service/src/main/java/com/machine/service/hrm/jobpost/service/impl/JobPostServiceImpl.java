@@ -133,18 +133,18 @@ public class JobPostServiceImpl implements IJobPostService {
     }
 
     @Override
-    public Page<HrmJobPostListSimpleOutputDto> pageSimple(HrmJobPostListSimpleInputDto inputDto) {
-        Page<JobPostEntity> page = jobPostDao.pageSimple(inputDto);
-        Page<HrmJobPostListSimpleOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), HrmJobPostListSimpleOutputDto.class));
-        return pageResult;
-    }
-
-    @Override
     public Map<String, HrmJobPostDetailOutputDto> mapByIdSet(IdSetRequest request) {
         List<JobPostEntity> userEntityList = jobPostDao.selectByIdSet(request.getIdSet());
         return userEntityList.stream()
                 .collect(Collectors.toMap(JobPostEntity::getId, user ->
                         JSONUtil.toBean(JSONUtil.toJsonStr(user), HrmJobPostDetailOutputDto.class)));
+    }
+
+    @Override
+    public Page<HrmJobPostListSimpleOutputDto> pageSimple(HrmJobPostListSimpleInputDto inputDto) {
+        Page<JobPostEntity> page = jobPostDao.pageSimple(inputDto);
+        Page<HrmJobPostListSimpleOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), HrmJobPostListSimpleOutputDto.class));
+        return pageResult;
     }
 }

@@ -291,16 +291,40 @@ public class OperationLogAspect {
         context.setActionStatus(ActionStatusEnum.SUCCESS);
         context.setHttpStatus(resolveHttpStatus(getResponse(), null));
 
+        // 日志采集异常不能影响业务接口
         Object after = null;
         if (operationLog.diff()) {
-            after = resolveAfter(joinPoint, operationLog, result, context.getModuleEntityId());
-            Map<String, Object> diffMap = OperationLogDiffHelper.diff(before, after, operationLog.ignoreFields());
-            context.setDiff(diffMap == null ? null : JSONUtil.toJsonStr(diffMap));
+            try {
+                after = resolveAfter(joinPoint, operationLog, result, context.getModuleEntityId());
+                Map<String, Object> diffMap = OperationLogDiffHelper.diff(before, after, operationLog.ignoreFields());
+                context.setDiff(diffMap == null ? null : JSONUtil.toJsonStr(diffMap));
+            } catch (Throwable error) {
+                log.warn("操作日志 diff 采集失败，moduleEntity={}，method={}，原因: {}",
+                        operationLog.moduleEntity(), joinPoint.getSignature().toShortString(), error.getMessage());
+            }
         }
         if (operationLog.responseEnable()) {
-            context.setResponseBody(resolveResponseBody(result, operationLog));
+            try {
+                context.setResponseBody(resolveResponseBody(result, operationLog));
+            } catch (Throwable error) {
+                log.warn("操作日志响应体采集失败，moduleEntity={}，原因: {}",
+                        operationLog.moduleEntity(), error.getMessage());
+            }
         }
-        context.setContent(resolveContent(joinPoint, operationLog, context, before, after, result));
+        try {
+            context.setContent(resolveContent(joinPoint, operationLog, context, before, after, result));
+        } catch (Throwable error) {
+            log.warn("操作日志内容解析失败，moduleEntity={}，原因: {}",
+                    operationLog.moduleEntity(), error.getMessage());
+            context.setContent(fallbackContent(operationLog, context));
+        }
+    }
+
+    private String fallbackContent(WebOperationLog operationLog,
+                                   OperationLogContext context) {
+        return StrUtil.isBlank(context.getModuleEntityId())
+                ? operationLog.operateName()
+                : operationLog.operateName() + "，实体ID=" + context.getModuleEntityId();
     }
 
     private void fillException(OperationLogContext context,
@@ -333,9 +357,7 @@ public class OperationLogAspect {
                 return asString(value);
             }
         }
-        return StrUtil.isBlank(context.getModuleEntityId())
-                ? operationLog.operateName()
-                : operationLog.operateName() + "，实体ID=" + context.getModuleEntityId();
+        return fallbackContent(operationLog, context);
     }
 
     /**

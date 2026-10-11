@@ -25,18 +25,18 @@ public class IOpenApiPermissionController {
     @Autowired
     private IOpenApiPermissionBusiness permissionBusiness;
 
-    @Operation(summary = "应用列表（根节点）")
-    @PostMapping("list_app")
-    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_APP')")
-    public List<BIamPermissionTreeOutputDto> listApp(@RequestBody @Validated OpenApiPermissionQueryAppListRequestVo request) {
-        return permissionBusiness.listApp(request);
-    }
-    
     @Operation(summary = "获取权限详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:DETAIL')")
     public BIamPermissionTreeOutputDto detail(@RequestBody @Valid OpenApiPermissionIdRequestVo requestVo) {
         return permissionBusiness.detail(requestVo);
+    }
+
+    @Operation(summary = "应用列表（根节点）")
+    @PostMapping("list_app")
+    @PreAuthorize("hasAuthority('OPENAPI_APP:IAM:PERMISSION:LIST_APP')")
+    public List<BIamPermissionTreeOutputDto> listApp(@RequestBody @Validated OpenApiPermissionQueryAppListRequestVo request) {
+        return permissionBusiness.listApp(request);
     }
 
     @Operation(summary = "获取子权限ID列表")

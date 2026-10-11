@@ -117,9 +117,9 @@ public class DataShopServer implements IDataShopClient {
     }
 
     @Override
-    @PostMapping("list_not_bind_Organization")
-    public List<String> listNotBindOrganization(@RequestBody @Validated DataShopNotBindOrganizationInputDto inputDto) {
-        return shopService.listNotBindOrganization(inputDto);
+    @PostMapping("get_by_id")
+    public DataShopDetailOutputDto getById(@RequestBody @Validated IdRequest idRequest) {
+        return shopService.getById(idRequest);
     }
 
     @Override
@@ -147,9 +147,9 @@ public class DataShopServer implements IDataShopClient {
     }
 
     @Override
-    @PostMapping("get_by_id")
-    public DataShopDetailOutputDto getById(@RequestBody @Validated IdRequest idRequest) {
-        return shopService.getById(idRequest);
+    @PostMapping("list_not_bind_Organization")
+    public List<String> listNotBindOrganization(@RequestBody @Validated DataShopNotBindOrganizationInputDto inputDto) {
+        return shopService.listNotBindOrganization(inputDto);
     }
 
     @Override
@@ -183,18 +183,6 @@ public class DataShopServer implements IDataShopClient {
     }
 
     @Override
-    @PostMapping("id_by_codeSet")
-    public Map<String, String> idByCodeSet(@RequestBody @Validated  OpenApiShopCodeSetInputDto inputDto) {
-        return shopService.idByCodeSet(inputDto);
-    }
-
-    @Override
-    @PostMapping("map_by_idSet")
-    public Map<String, DataShopDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
-        return shopService.mapByIdSet(request);
-    }
-
-    @Override
     @PostMapping("list_by_offset")
     public List<DataShopListOutputDto> listByOffset(@RequestBody @Validated DataShopQueryListOffsetInputDto inputDto) {
         return shopService.listByOffset(inputDto);
@@ -204,6 +192,18 @@ public class DataShopServer implements IDataShopClient {
     @PostMapping("list_all")
     public List<DataShopListSimpleOutputDto> listAll(@RequestBody @Validated DataShopQueryListAllInputDto inputDto) {
         return shopService.listAll(inputDto);
+    }
+
+    @Override
+    @PostMapping("id_by_codeSet")
+    public Map<String, String> idByCodeSet(@RequestBody @Validated  OpenApiShopCodeSetInputDto inputDto) {
+        return shopService.idByCodeSet(inputDto);
+    }
+
+    @Override
+    @PostMapping("map_by_idSet")
+    public Map<String, DataShopDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
+        return shopService.mapByIdSet(request);
     }
 
     @Override

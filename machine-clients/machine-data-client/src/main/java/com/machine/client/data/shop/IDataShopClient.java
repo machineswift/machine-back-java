@@ -57,6 +57,9 @@ public interface IDataShopClient {
     @PostMapping("get_id_by_code")
     String getIdByCode(@RequestBody @Validated DataShopCodeInoutDto inoutDto);
 
+    @PostMapping("get_by_id")
+    DataShopDetailOutputDto getById(@RequestBody @Validated IdRequest request);
+
     @PostMapping("get_shop_business_license")
     DataShopBusinessLicenseOutputDto getShopBusinessLicense(@RequestBody @Validated IdRequest inoutDto);
 
@@ -68,9 +71,6 @@ public interface IDataShopClient {
 
     @PostMapping("get_shop_front_photo")
     DataOpenApiShopFrontPhotoOutputDto getShopFrontPhoto(@RequestBody @Validated IdRequest inoutDto);
-
-    @PostMapping("get_by_id")
-    DataShopDetailOutputDto getById(@RequestBody @Validated IdRequest request);
 
     @PostMapping("list_not_bind_Organization")
     List<String> listNotBindOrganization(@RequestBody @Validated DataShopNotBindOrganizationInputDto inputDto);
@@ -90,17 +90,17 @@ public interface IDataShopClient {
     @PostMapping("list_by_idSet")
     List<DataShopDetailOutputDto> listByIdSet(@RequestBody @Validated IdSetRequest request);
 
-    @PostMapping("id_by_codeSet")
-    Map<String, String> idByCodeSet(@RequestBody @Validated OpenApiShopCodeSetInputDto inputDto);
-
-    @PostMapping("map_by_idSet")
-    Map<String, DataShopDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
-
     @PostMapping("list_by_offset")
     List<DataShopListOutputDto> listByOffset(@RequestBody @Validated DataShopQueryListOffsetInputDto inputDto);
 
     @PostMapping("list_all")
     List<DataShopListSimpleOutputDto> listAll(@RequestBody @Validated DataShopQueryListAllInputDto inputDto);
+
+    @PostMapping("id_by_codeSet")
+    Map<String, String> idByCodeSet(@RequestBody @Validated OpenApiShopCodeSetInputDto inputDto);
+
+    @PostMapping("map_by_idSet")
+    Map<String, DataShopDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
     @PostMapping("select_page")
     PageResponse<DataShopListOutputDto> selectPage(@RequestBody @Validated DataShopQueryPageInputDto inputDto);

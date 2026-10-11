@@ -291,14 +291,6 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
     }
 
     @Override
-    public Page<BIamRoleListOutputDto> selectPage(BIamRoleQueryPageInputDto inputDto) {
-        Page<BIamRoleEntity> page = roleDao.selectPage(inputDto);
-        Page<BIamRoleListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamRoleListOutputDto.class));
-        return pageResult;
-    }
-
-    @Override
     public Map<String, BIamRoleDetailOutputDto> mapByIdSet(IdSetRequest request) {
         List<BIamRoleEntity> userEntityList = roleDao.selectByIdSet(request.getIdSet());
         return userEntityList.stream()
@@ -310,6 +302,14 @@ public class BIamRoleServiceImpl implements IBIamRoleService {
                     }
                     return outputDto;
                 }));
+    }
+
+    @Override
+    public Page<BIamRoleListOutputDto> selectPage(BIamRoleQueryPageInputDto inputDto) {
+        Page<BIamRoleEntity> page = roleDao.selectPage(inputDto);
+        Page<BIamRoleListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamRoleListOutputDto.class));
+        return pageResult;
     }
 
 

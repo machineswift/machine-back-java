@@ -22,13 +22,13 @@ public class BIamOperationLogDaoImpl implements IBIamOperationLogDao {
     }
 
     @Override
-    public Page<BIamOperationLogEntity> page(BIamOperationLogQueryPageInputDto inputDto) {
-        IPage<BIamOperationLogEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
-        return operationLogMapper.selectPage(inputDto, page);
+    public BIamOperationLogEntity getById(String id) {
+        return operationLogMapper.selectById(id);
     }
 
     @Override
-    public BIamOperationLogEntity getById(String id) {
-        return operationLogMapper.selectById(id);
+    public Page<BIamOperationLogEntity> page(BIamOperationLogQueryPageInputDto inputDto) {
+        IPage<BIamOperationLogEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
+        return operationLogMapper.selectPage(inputDto, page);
     }
 }

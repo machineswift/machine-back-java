@@ -13,6 +13,9 @@ public interface IDataMaterialReferenceDao {
 
     int deleteByMaterialId(String materialId);
 
+    Long selectCountByEntity(String entity,
+                             String entityId);
+
     DataMaterialReferenceEntity getById(String id);
 
     DataMaterialReferenceEntity getByMaterialIdAndEntity(String materialId,
@@ -25,7 +28,4 @@ public interface IDataMaterialReferenceDao {
 
     List<DataMaterialReferenceEntity> listByEntity(String entity,
                                                    String entityId);
-
-    Long selectCountByEntity(String entity,
-                             String entityId);
 }

@@ -5,9 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
 import com.machine.client.data.leaf.IDataLeaf4ScmCodeClient;
+import com.machine.client.scm.category.dto.ScmBackCategoryAttributeGroupItemDto;
+import com.machine.client.scm.category.dto.ScmBackCategoryAttributeItemDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryCreateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateParentInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeGroupInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeInputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryDetailOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
@@ -16,9 +20,17 @@ import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.scm.category.dao.IScmBackCategoryDao;
-import com.machine.service.scm.category.dao.IScmFrontBackCategoryRelationDao;
+import com.machine.service.scm.category.dao.IScmBackCategoryFrontRelationDao;
 import com.machine.service.scm.category.dao.mapper.entity.ScmBackCategoryEntity;
 import com.machine.service.scm.category.service.IScmBackCategoryService;
+import com.machine.service.scm.attribute.dao.IScmBackCategoryAttributeGroupRelationDao;
+import com.machine.service.scm.attribute.dao.IScmBackCategoryAttributeRelationDao;
+import com.machine.service.scm.attribute.dao.IScmAttributeDao;
+import com.machine.service.scm.attribute.dao.IScmAttributeGroupDao;
+import com.machine.service.scm.attribute.dao.mapper.entity.ScmBackCategoryAttributeGroupRelationEntity;
+import com.machine.service.scm.attribute.dao.mapper.entity.ScmBackCategoryAttributeRelationEntity;
+import com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeEntity;
+import com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeGroupEntity;
 import com.machine.starter.redis.cache.scm.RedisScmBackCategoryCache;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +41,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
 import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.sdk.base.constant.CommonScmConstant.BackCategory.SCM_BACK_CATEGORY_ROOT_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Scm.LOCK_SCM_BACK_CATEGORY_TREE;
@@ -62,7 +77,19 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
     private IScmBackCategoryDao backCategoryDao;
 
     @Autowired
-    private IScmFrontBackCategoryRelationDao frontBackCategoryRelationDao;
+    private IScmBackCategoryFrontRelationDao backCategoryFrontRelationDao;
+
+    @Autowired
+    private IScmBackCategoryAttributeGroupRelationDao backCategoryAttributeGroupRelationDao;
+
+    @Autowired
+    private IScmBackCategoryAttributeRelationDao backCategoryAttributeRelationDao;
+
+    @Autowired
+    private IScmAttributeGroupDao attributeGroupDao;
+
+    @Autowired
+    private IScmAttributeDao attributeDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -77,6 +104,11 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
         long countByName = backCategoryDao.countByNameAndParentId(inputDto.getParentId(), inputDto.getName());
         if (countByName > 0) {
             throw new ScmBusinessException("scm.backCategory.service.create.nameAlreadyExists", "名称已经存在");
+        }
+
+        if (backCategoryFrontRelationDao.countByBackCategoryIdSet(Set.of(inputDto.getParentId())) > 0) {
+            throw new ScmBusinessException("scm.backCategory.service.create.parentHasFrontCategory",
+                    "父节点已关联前台分类，不能再新增子分类");
         }
 
         ScmBackCategoryEntity insertEntity = new ScmBackCategoryEntity();
@@ -109,12 +141,20 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
         }
 
         // 判断是否关联前端分类
-        long countByBackIdSet = frontBackCategoryRelationDao.countByBackCategoryIdSet(recursionSubIdSet);
+        long countByBackIdSet = backCategoryFrontRelationDao.countByBackCategoryIdSet(recursionSubIdSet);
         if (countByBackIdSet > 0) {
             throw new ScmBusinessException("scm.backCategory.service.delete.associationFrontCategory", "关联前台分类不能删除");
         }
 
-        // todo 是否关联数据
+        // 判断是否关联属性分组
+        if (backCategoryAttributeGroupRelationDao.countByBackCategoryIdSet(recursionSubIdSet) > 0) {
+            throw new ScmBusinessException("scm.backCategory.service.delete.associationAttributeGroup", "关联属性分组不能删除");
+        }
+
+        // 判断是否关联属性
+        if (backCategoryAttributeRelationDao.countByBackCategoryIdSet(recursionSubIdSet) > 0) {
+            throw new ScmBusinessException("scm.backCategory.service.delete.associationAttribute", "关联属性不能删除");
+        }
 
         return backCategoryDao.deleteById(request.getId());
     }
@@ -177,12 +217,154 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
             throw new ScmBusinessException("scm.backCategory.service.updateParent.parentNotExists", "父节点不存在");
         }
 
+        if (backCategoryFrontRelationDao.countByBackCategoryIdSet(Set.of(inputDto.getParentId())) > 0) {
+            throw new ScmBusinessException("scm.backCategory.service.updateParent.parentHasFrontCategory",
+                    "目标父节点已关联前台分类，不能作为父节点");
+        }
+
         // 验证父Id是否在当前节点下面
-        Set<String> recursionIdSet = cacheScmBackCategory.recursionSubId(inputDto.getId());
-        if (recursionIdSet.contains(inputDto.getParentId())) {
+        Set<String> recursionSubIdSet = cacheScmBackCategory.recursionSubId(inputDto.getId());
+        if (recursionSubIdSet.contains(inputDto.getParentId())) {
             throw new ScmBusinessException("scm.backCategory.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
         }
+
+        // 分组在分类全路径中唯一
+        Set<String> moveGroupIdSet = new HashSet<>(
+                backCategoryAttributeGroupRelationDao.listGroupIdByBackCategoryIdSet(recursionSubIdSet));
+        if (CollectionUtil.isNotEmpty(moveGroupIdSet)) {
+            ScmBackCategoryTreeSimpleOutputDto tree = cacheScmBackCategory.treeSimple();
+            Set<String> parentChainIdSet = TreeUtil.getParentNodeList(tree, inputDto.getParentId()).stream()
+                    .map(ScmBackCategoryTreeSimpleOutputDto::getId)
+                    .collect(Collectors.toSet());
+            moveGroupIdSet.retainAll(
+                    backCategoryAttributeGroupRelationDao.listGroupIdByBackCategoryIdSet(parentChainIdSet));
+            if (CollectionUtil.isNotEmpty(moveGroupIdSet)) {
+                throw new ScmBusinessException("scm.backCategory.service.updateParent.parentHasAttributeGroup",
+                        "分组在分类全路径中不能重复");
+            }
+        }
         return backCategoryDao.updateParentId(inputDto.getId(), inputDto.getParentId());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAttributeGroup(ScmBackCategoryUpdateAttributeGroupInputDto inputDto) {
+        ScmBackCategoryEntity dbEntity = backCategoryDao.getById(inputDto.getId());
+        if (null == dbEntity) {
+            return 0;
+        }
+
+        if (SCM_BACK_CATEGORY_ROOT_PARENT_ID.equals(dbEntity.getId())) {
+            throw new ScmBusinessException("scm.backCategory.service.updateAttributeGroup.rootNode", "根节点不能修改");
+        }
+
+        // 按分组ID去重
+        Map<String, ScmBackCategoryAttributeGroupItemDto> itemMap = new LinkedHashMap<>();
+        for (ScmBackCategoryAttributeGroupItemDto item : inputDto.getAttributeGroupItemList()) {
+            if (null != itemMap.put(item.getGroupId(), item)) {
+                throw new ScmBusinessException("scm.backCategory.service.updateAttributeGroup.groupRepeat",
+                        "属性分组重复");
+            }
+        }
+
+        if (CollectionUtil.isNotEmpty(itemMap)) {
+            // 验证分组是否存在
+            List<ScmAttributeGroupEntity> groupEntityList = attributeGroupDao.listByIdSet(itemMap.keySet());
+            if (groupEntityList.size() != itemMap.size()) {
+                throw new ScmBusinessException("scm.backCategory.service.updateAttributeGroup.groupNotExists",
+                        "属性分组不存在");
+            }
+
+            // 分组在分类全路径中唯一
+            Set<String> relationBackCategoryIdSet =
+                    backCategoryAttributeGroupRelationDao.listByGroupIdSet(itemMap.keySet()).stream()
+                            .map(ScmBackCategoryAttributeGroupRelationEntity::getBackCategoryId)
+                            .collect(Collectors.toSet());
+            if (CollectionUtil.isNotEmpty(relationBackCategoryIdSet)) {
+                Set<String> forbidIdSet = new HashSet<>(cacheScmBackCategory.recursionSubId(inputDto.getId()));
+                forbidIdSet.addAll(TreeUtil.getParentNodeList(cacheScmBackCategory.treeSimple(), inputDto.getId())
+                        .stream()
+                        .map(ScmBackCategoryTreeSimpleOutputDto::getId)
+                        .collect(Collectors.toSet()));
+                forbidIdSet.remove(inputDto.getId());
+                forbidIdSet.retainAll(relationBackCategoryIdSet);
+                if (CollectionUtil.isNotEmpty(forbidIdSet)) {
+                    throw new ScmBusinessException("scm.backCategory.service.updateAttributeGroup.groupHasInPath",
+                            "分组在分类全路径中不能重复");
+                }
+            }
+        }
+
+        // 全量替换
+        backCategoryAttributeGroupRelationDao.deleteByBackCategoryId(inputDto.getId());
+        if (CollectionUtil.isNotEmpty(itemMap)) {
+            List<ScmBackCategoryAttributeGroupRelationEntity> entityList = new ArrayList<>(itemMap.size());
+            for (ScmBackCategoryAttributeGroupItemDto item : itemMap.values()) {
+                ScmBackCategoryAttributeGroupRelationEntity relationEntity =
+                        new ScmBackCategoryAttributeGroupRelationEntity();
+                relationEntity.setGroupId(item.getGroupId());
+                relationEntity.setBackCategoryId(inputDto.getId());
+                relationEntity.setRequiredFlag(item.getRequiredFlag());
+                relationEntity.setDisplayFlag(item.getDisplayFlag());
+                relationEntity.setSearchableFlag(item.getSearchableFlag());
+                relationEntity.setSort(item.getSort());
+                relationEntity.setFeatures(item.getFeatures());
+                entityList.add(relationEntity);
+            }
+            backCategoryAttributeGroupRelationDao.batchInsert(entityList);
+        }
+        return itemMap.size();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAttribute(ScmBackCategoryUpdateAttributeInputDto inputDto) {
+        ScmBackCategoryEntity dbEntity = backCategoryDao.getById(inputDto.getId());
+        if (null == dbEntity) {
+            return 0;
+        }
+
+        if (SCM_BACK_CATEGORY_ROOT_PARENT_ID.equals(dbEntity.getId())) {
+            throw new ScmBusinessException("scm.backCategory.service.updateAttribute.rootNode", "根节点不能修改");
+        }
+
+        // 按属性ID去重
+        Map<String, ScmBackCategoryAttributeItemDto> itemMap = new LinkedHashMap<>();
+        for (ScmBackCategoryAttributeItemDto item : inputDto.getAttributeItemList()) {
+            if (null != itemMap.put(item.getAttributeId(), item)) {
+                throw new ScmBusinessException("scm.backCategory.service.updateAttribute.attributeRepeat",
+                        "属性重复");
+            }
+        }
+
+        if (CollectionUtil.isNotEmpty(itemMap)) {
+            // 验证属性是否存在
+            List<ScmAttributeEntity> attributeEntityList = attributeDao.listByIdSet(itemMap.keySet());
+            if (attributeEntityList.size() != itemMap.size()) {
+                throw new ScmBusinessException("scm.backCategory.service.updateAttribute.attributeNotExists",
+                        "属性不存在");
+            }
+        }
+
+        // 全量替换
+        backCategoryAttributeRelationDao.deleteByBackCategoryId(inputDto.getId());
+        if (CollectionUtil.isNotEmpty(itemMap)) {
+            List<ScmBackCategoryAttributeRelationEntity> entityList = new ArrayList<>(itemMap.size());
+            for (ScmBackCategoryAttributeItemDto item : itemMap.values()) {
+                ScmBackCategoryAttributeRelationEntity relationEntity =
+                        new ScmBackCategoryAttributeRelationEntity();
+                relationEntity.setAttributeId(item.getAttributeId());
+                relationEntity.setBackCategoryId(inputDto.getId());
+                relationEntity.setRequiredFlag(item.getRequiredFlag());
+                relationEntity.setDisplayFlag(item.getDisplayFlag());
+                relationEntity.setSearchableFlag(item.getSearchableFlag());
+                relationEntity.setSort(item.getSort());
+                relationEntity.setFeatures(item.getFeatures());
+                entityList.add(relationEntity);
+            }
+            backCategoryAttributeRelationDao.batchInsert(entityList);
+        }
+        return itemMap.size();
     }
 
     @Override
@@ -192,6 +374,12 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
             return null;
         }
         return JSONUtil.toBean(JSONUtil.toJsonStr(entity), ScmBackCategoryDetailOutputDto.class);
+    }
+
+    @Override
+    public List<ScmBackCategoryListOutputDto> listAll() {
+        List<ScmBackCategoryEntity> entityList = backCategoryDao.listAll();
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), ScmBackCategoryListOutputDto.class);
     }
 
     @Override
@@ -248,12 +436,6 @@ public class ScmBackCategoryServiceImpl implements IScmBackCategoryService {
         } finally {
             lock.unlock();
         }
-    }
-
-    @Override
-    public List<ScmBackCategoryListOutputDto> listAll() {
-        List<ScmBackCategoryEntity> entityList = backCategoryDao.listAll();
-        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), ScmBackCategoryListOutputDto.class);
     }
 
 }

@@ -39,6 +39,12 @@ public class HrmJobPostServer implements IHrmJobPostClient {
     }
 
     @Override
+    @PostMapping("map_by_idSet")
+    public Map<String, HrmJobPostDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
+        return jobPostService.mapByIdSet(request);
+    }
+
+    @Override
     @PostMapping("page_simple")
     public PageResponse<HrmJobPostListSimpleOutputDto> pageSimple(@RequestBody @Validated HrmJobPostListSimpleInputDto inputDto) {
         Page<HrmJobPostListSimpleOutputDto> pageResult = jobPostService.pageSimple(inputDto);
@@ -47,12 +53,6 @@ public class HrmJobPostServer implements IHrmJobPostClient {
                 pageResult.getSize(),
                 pageResult.getTotal(),
                 pageResult.getRecords());
-    }
-
-    @Override
-    @PostMapping("map_by_idSet")
-    public Map<String, HrmJobPostDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
-        return jobPostService.mapByIdSet(request);
     }
 
 }

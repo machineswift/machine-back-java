@@ -5,6 +5,7 @@ import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateCategoryInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateStatusInputDto;
 import com.machine.client.data.brand.dto.output.DataBrandDetailOutputDto;
@@ -45,14 +46,17 @@ public interface IDataBrandClient {
     @PostMapping("update_parent")
     int updateParent(@RequestBody @Validated DataBrandUpdateParentIdInputDto inputDto);
 
+    @PostMapping("update_category")
+    void updateCategory(@RequestBody @Validated DataBrandUpdateCategoryInputDto inputDto);
+
     @PostMapping("exists")
     boolean exists(@RequestBody @Validated IdRequest request);
 
-    @PostMapping("list_ancestor")
-    List<DataBrandDetailOutputDto> listAncestorById(@RequestBody @Validated IdRequest request);
-
     @PostMapping("detail")
     DataBrandDetailOutputDto detail(@RequestBody @Validated IdRequest request);
+
+    @PostMapping("list_ancestor")
+    List<DataBrandDetailOutputDto> listAncestorById(@RequestBody @Validated IdRequest request);
 
     @PostMapping("list_has_children_idSet")
     Set<String> listHasChildrenIdSet(@RequestBody @Validated IdSetRequest request);

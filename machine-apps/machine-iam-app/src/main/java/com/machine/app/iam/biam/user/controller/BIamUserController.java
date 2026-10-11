@@ -143,11 +143,6 @@ public class BIamUserController {
     @Operation(summary = "分页查询用户(应用于组件弹窗)")
     @PostMapping("page_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:ACCESS_CONTROL:USER:PAGE_SIMPLE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.IAM_APP,
-            module = ModuleEnum.BIAM,
-            moduleEntity = ModuleEntityEnum.BIAM_USER,
-            operateType = ActionTypeEnum.QUERY,
-            operateName = "分页查询用户(组件弹窗)")
     public PageResponse<BIamUserSimpleListResponseVo> pageSimple(
             @RequestBody @Validated BIamUserQueryPageRequestVo request) {
         return userBusiness.pageSimple(request);

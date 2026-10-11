@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @Schema
 @NoArgsConstructor
@@ -16,6 +18,9 @@ public class DataBrandQueryChildrenRequestVo extends PageRequest {
     @NotBlank(message = "父品牌ID不能为空")
     @Schema(description = "父品牌ID")
     private String parentId;
+
+    @Schema(description = "品牌分类集合")
+    private Set<String> categoryIdSet;
 }
 
 

@@ -25,11 +25,11 @@ public interface IHrmJobPostClient {
     @PostMapping("list_by_roleId")
     List<HrmJobPostListSimpleOutputDto> listByRoleId(@RequestBody @Validated IdRequest request);
 
-    @PostMapping("page_simple")
-    PageResponse<HrmJobPostListSimpleOutputDto> pageSimple(@RequestBody @Validated HrmJobPostListSimpleInputDto inputDto);
-
     @PostMapping("map_by_idSet")
     Map<String, HrmJobPostDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
+
+    @PostMapping("page_simple")
+    PageResponse<HrmJobPostListSimpleOutputDto> pageSimple(@RequestBody @Validated HrmJobPostListSimpleInputDto inputDto);
 
 }
 

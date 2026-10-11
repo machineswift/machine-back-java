@@ -51,7 +51,13 @@ public interface IDataShopDao {
 
     int countNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
 
-    List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
+    String getIdByCode(String code);
+
+    DataShopEntity getById(String id);
+
+    DataShopEntity getByCode(String code);
+
+    DataShopEntity getByName(String name);
 
     DataShopBusinessLicenseDto shopBusinessLicense(String id,
                                                    StorageTypeEnum persistenceStatus);
@@ -65,13 +71,7 @@ public interface IDataShopDao {
     DataShopFrontPhotoDto shopFrontPhoto(String id,
                                          StorageTypeEnum persistenceStatus);
 
-    String getIdByCode(String code);
-
-    DataShopEntity getById(String id);
-
-    DataShopEntity getByCode(String code);
-
-    DataShopEntity getByName(String name);
+    List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
 
     List<String> listAreaCodeByShopIdSet(Set<String> shopIdSet);
 
@@ -89,10 +89,10 @@ public interface IDataShopDao {
 
     List<DataShopListSimpleOutputDto> listAll(DataShopQueryListAllInputDto inputDto);
 
+    List<DataShopEntity> listForExport(DataShopExportInputDto inputDto);
+
     Page<DataShopEntity> selectPage(DataShopQueryPageInputDto inputDto);
 
     Page<DataShopEntity> pageCollectShop(DataSuperShopListCollectShopInputDto inputDto);
-
-    List<DataShopEntity> listForExport(DataShopExportInputDto inputDto);
 
 }

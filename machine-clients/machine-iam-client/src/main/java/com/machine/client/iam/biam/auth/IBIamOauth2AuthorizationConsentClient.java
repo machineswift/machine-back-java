@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface IBIamOauth2AuthorizationConsentClient {
 
 
-    @PostMapping("update")
-    void update(@RequestBody BIamOauth2AuthorizationConsentInputDto dto);
-
     @PostMapping("save")
     void save(@RequestBody BIamOauth2AuthorizationConsentInputDto dto);
 
     @PostMapping("remove")
     void remove(@RequestBody BIamOauth2AuthorizationConsentInputDto dto);
+
+    @PostMapping("update")
+    void update(@RequestBody BIamOauth2AuthorizationConsentInputDto dto);
 
     @PostMapping("findById")
     BIamOauth2AuthorizationConsentOutputDto findById(@RequestBody BIamOauth2AuthorizationConsentInputDto dto);

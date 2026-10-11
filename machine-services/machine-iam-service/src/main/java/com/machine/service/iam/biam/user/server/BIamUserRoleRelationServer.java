@@ -25,6 +25,12 @@ public class BIamUserRoleRelationServer implements IBIamUserRoleRelationClient {
     private IBIamUserRoleRelationService userRoleRelationService;
 
     @Override
+    @PostMapping("countUser_by_roleIdSet")
+    public Map<String, Integer> countUserByRoleIdSet(@RequestBody @Validated IdSetRequest request) {
+        return userRoleRelationService.countUserByRoleIdSet(request);
+    }
+
+    @Override
     @PostMapping("list_by_userId")
     public List<BIamUserRoleRelationListOutputDto> listByUserId(@RequestBody @Validated IdRequest request) {
         return userRoleRelationService.listByUserId(request);
@@ -46,11 +52,5 @@ public class BIamUserRoleRelationServer implements IBIamUserRoleRelationClient {
     @PostMapping("list_by_userIdSet")
     public List<BIamUserRoleRelationListOutputDto> listByUserIdSet(@RequestBody @Validated IdSetRequest request) {
         return userRoleRelationService.listByUserIdSet(request);
-    }
-
-    @Override
-    @PostMapping("countUser_by_roleIdSet")
-    public Map<String, Integer> countUserByRoleIdSet(@RequestBody @Validated IdSetRequest request) {
-        return userRoleRelationService.countUserByRoleIdSet(request);
     }
 }

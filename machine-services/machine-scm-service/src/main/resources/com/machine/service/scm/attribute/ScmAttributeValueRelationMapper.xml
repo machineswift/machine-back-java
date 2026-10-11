@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.scm.attribute.dao.mapper.ScmAttributeValueRelationMapper">
+
+    <delete id="deleteByParentValueId">
+        delete from t_scm_attribute_value_relation where parent_value_id = #{parentValueId}
+    </delete>
+
+    <delete id="deleteByParentValueIdSet">
+        delete from t_scm_attribute_value_relation where parent_value_id in
+        <foreach item="item" collection="parentValueIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByChildAttributeId">
+        delete from t_scm_attribute_value_relation where child_attribute_id = #{childAttributeId}
+    </delete>
+
+    <select id="countByParentValueId" resultType="java.lang.Integer">
+        select count(0) from t_scm_attribute_value_relation where parent_value_id = #{parentValueId}
+    </select>
+
+    <select id="countByParentValueAndChildAttribute" resultType="java.lang.Integer">
+        select count(0) from t_scm_attribute_value_relation where parent_value_id = #{parentValueId} and child_attribute_id = #{childAttributeId}
+    </select>
+
+    <select id="listChildAttributeIdByParentValueId" resultType="java.lang.String">
+        select child_attribute_id from t_scm_attribute_value_relation where parent_value_id = #{parentValueId} order by sort desc
+    </select>
+
+    <select id="listByParentValueIdSet" resultType="com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeValueRelationEntity">
+        select * from t_scm_attribute_value_relation where parent_value_id in
+        <foreach item="item" collection="parentValueIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by sort desc
+    </select>
+
+</mapper>

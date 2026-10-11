@@ -99,8 +99,6 @@ COMMENT ON COLUMN t_data_tag_option.update_by IS '修改人';
 COMMENT ON COLUMN t_data_tag_option.update_time IS '更新时间';
 
 
-
-
 DROP TABLE IF EXISTS t_data_label_category;
 CREATE TABLE t_data_label_category
 (
@@ -130,6 +128,7 @@ COMMENT ON COLUMN t_data_label_category.create_by IS '创建人';
 COMMENT ON COLUMN t_data_label_category.create_time IS '创建时间';
 COMMENT ON COLUMN t_data_label_category.update_by IS '修改人';
 COMMENT ON COLUMN t_data_label_category.update_time IS '更新时间';
+
 
 DROP TABLE IF EXISTS t_data_label;
 CREATE TABLE t_data_label

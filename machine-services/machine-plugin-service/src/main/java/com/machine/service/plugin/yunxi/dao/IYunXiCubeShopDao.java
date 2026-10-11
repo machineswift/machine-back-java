@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface IYunXiCubeShopDao {
 
-    List<YunXiCubeShopEntity> listByOffset(Long offset,
-                                           int limit);
-
     YunXiCubeShopEntity getById(Long id);
 
     YunXiCubeShopEntity getByCode(String code);
 
     List<YunXiCubeShopEntity> selectByIds(Collection<Long> ids);
+
+    List<YunXiCubeShopEntity> listByOffset(Long offset,
+                                           int limit);
 
 }

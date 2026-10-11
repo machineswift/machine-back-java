@@ -29,6 +29,11 @@ public class EmployeeDaoImpl implements IEmployeeDao {
     }
 
     @Override
+    public Integer countByDepartmentIds(Set<String> departmentIdSet) {
+        return employeeMapper.countByDepartmentIds(departmentIdSet);
+    }
+
+    @Override
     public EmployeeEntity getById(String id) {
         return employeeMapper.selectById(id);
     }
@@ -38,11 +43,6 @@ public class EmployeeDaoImpl implements IEmployeeDao {
         Wrapper<EmployeeEntity> wrapper = new LambdaQueryWrapper<EmployeeEntity>()
                 .eq(EmployeeEntity::getUserId, userId);
         return employeeMapper.selectOne(wrapper);
-    }
-
-    @Override
-    public Integer countByDepartmentIds(Set<String> departmentIdSet) {
-        return employeeMapper.countByDepartmentIds(departmentIdSet);
     }
 
     @Override

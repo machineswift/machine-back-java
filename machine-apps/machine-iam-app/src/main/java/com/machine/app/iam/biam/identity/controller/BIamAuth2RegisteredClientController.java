@@ -67,6 +67,21 @@ public class BIamAuth2RegisteredClientController {
         return new IdResponse<>(auth2RegisteredClientBusiness.create(request));
     }
 
+    @Operation(summary = "删除客户端")
+    @PostMapping("delete")
+    @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:DELETE')")
+    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
+            module = ModuleEnum.BIAM,
+            moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
+            operateType = ActionTypeEnum.DELETE,
+            operateName = "删除认证客户端",
+            moduleEntityId = "#request.id",
+            content = "'删除认证客户端：' + #request.id")
+    public void delete(@RequestBody @Validated IdRequest request) {
+        log.info("认证中心删除客户端，request={}", JSONUtil.toJsonStr(request));
+        auth2RegisteredClientBusiness.delete(request);
+    }
+
     @Operation(summary = "修改客户端")
     @PostMapping("update")
     @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:UPDATE')")
@@ -97,21 +112,6 @@ public class BIamAuth2RegisteredClientController {
     public void updateStatus(@RequestBody @Validated BIamAuth2RegisteredClientUpdateStatusRequestVo request) {
         log.info("认证中心修改客户端状态，request={}", JSONUtil.toJsonStr(request));
         auth2RegisteredClientBusiness.updateStatus(request);
-    }
-
-    @Operation(summary = "删除客户端")
-    @PostMapping("delete")
-    @PreAuthorize("hasAnyRole('ROOT') && hasAuthority('MANAGE_APP:SYSTEM:IDENTITY_CENTER:AUTH2_REGISTERED_CLIENT:DELETE')")
-    @WebOperationLog(operateSource = OperateSourceEnum.IAM_APP,
-            module = ModuleEnum.BIAM,
-            moduleEntity = ModuleEntityEnum.BIAM_AUTH2_CLIENT,
-            operateType = ActionTypeEnum.DELETE,
-            operateName = "删除认证客户端",
-            moduleEntityId = "#request.id",
-            content = "'删除认证客户端：' + #request.id")
-    public void delete(@RequestBody @Validated IdRequest request) {
-        log.info("认证中心删除客户端，request={}", JSONUtil.toJsonStr(request));
-        auth2RegisteredClientBusiness.delete(request);
     }
 
     @Operation(summary = "客户端详情")

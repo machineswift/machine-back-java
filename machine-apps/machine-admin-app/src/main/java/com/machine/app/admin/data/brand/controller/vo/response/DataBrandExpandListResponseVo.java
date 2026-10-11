@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @Schema
 @NoArgsConstructor
@@ -15,6 +17,15 @@ public class DataBrandExpandListResponseVo  extends TreeNode<DataBrandExpandList
 
     @Schema(description = "是否有子节点")
     private Boolean hasChildren;
+
+    @Schema(description = "拼音全拼")
+    private String namePinyinFull;
+
+    @Schema(description = "拼音首字母")
+    private String namePinyinInitial;
+
+    @Schema(description = "英文名称")
+    private String nameEn;
 
     @Schema(description = "编码")
     private String code;
@@ -27,6 +38,9 @@ public class DataBrandExpandListResponseVo  extends TreeNode<DataBrandExpandList
 
     @Schema(description = "描述")
     private String description;
+
+    @Schema(description = "所属分类ID集合")
+    private Set<String> categoryIdSet;
 
     @Schema(description = "创建人ID")
     private String createBy;

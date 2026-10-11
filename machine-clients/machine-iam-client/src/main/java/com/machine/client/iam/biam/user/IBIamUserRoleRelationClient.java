@@ -17,6 +17,9 @@ import java.util.Map;
         configuration = OpenFeignMinTimeConfig.class)
 public interface IBIamUserRoleRelationClient {
 
+    @PostMapping("countUser_by_roleIdSet")
+    Map<String, Integer> countUserByRoleIdSet(@RequestBody @Validated IdSetRequest request);
+
     @PostMapping("list_by_userId")
     List<BIamUserRoleRelationListOutputDto> listByUserId(@RequestBody @Validated IdRequest request);
 
@@ -28,9 +31,6 @@ public interface IBIamUserRoleRelationClient {
 
     @PostMapping("list_by_userIdSet")
     List<BIamUserRoleRelationListOutputDto> listByUserIdSet(@RequestBody @Validated IdSetRequest request);
-
-    @PostMapping("countUser_by_roleIdSet")
-    Map<String, Integer> countUserByRoleIdSet(@RequestBody @Validated IdSetRequest request);
 }
 
 

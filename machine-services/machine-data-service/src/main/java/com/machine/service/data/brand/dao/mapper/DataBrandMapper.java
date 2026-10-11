@@ -15,9 +15,9 @@ import java.util.Set;
 @Mapper
 public interface DataBrandMapper extends BaseMapper<DataBrandEntity> {
 
-    Set<String> selectHasChildrenIdSet(@Param("idSet") Set<String> idSet);
-
     List<DataBrandEntity> selectAncestorList(@Param("id") String id);
+
+    Set<String> selectHasChildrenIdSet(@Param("idSet") Set<String> idSet);
 
     Page<DataBrandEntity> selectPage(@Param("inputDto") DataBrandQueryPageInputDto inputDto,
                                      IPage<DataBrandEntity> page);

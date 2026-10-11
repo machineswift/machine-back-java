@@ -34,6 +34,24 @@ public class DataBrandEntity extends BaseEntity {
     private String name;
 
     /**
+     * 拼音全拼
+     */
+    @TableField("name_pinyin_full")
+    private String namePinyinFull;
+
+    /**
+     * 拼音首字母
+     */
+    @TableField("name_pinyin_initial")
+    private String namePinyinInitial;
+
+    /**
+     * 英文名称
+     */
+    @TableField("name_en")
+    private String nameEn;
+
+    /**
      * 状态
      * {@link StatusEnum}
      */

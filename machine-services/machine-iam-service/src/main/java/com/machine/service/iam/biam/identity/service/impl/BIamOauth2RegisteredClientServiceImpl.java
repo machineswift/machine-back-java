@@ -213,11 +213,6 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
     }
 
     @Override
-    public List<String> allEnableClientId() {
-        return oauth2RegisteredClientDao.allClientId(StatusEnum.ENABLE);
-    }
-
-    @Override
     public BIamOAuth2RegisteredClientDto findByClientId(String clientId) {
         BIamOauth2RegisteredClientEntity entity = oauth2RegisteredClientDao.findByClientId(clientId);
         if (entity == null) {
@@ -251,8 +246,11 @@ public class BIamOauth2RegisteredClientServiceImpl implements IBIamOauth2Registe
         return outputDto;
     }
 
-    @Override
-    public Page<BIamOAuth2RegisteredClientListOutputDto> selectPage(BIamOAuth2RegisteredClientPageQueryInputDto inputDto) {
+    @Override    public List<String> allEnableClientId() {
+        return oauth2RegisteredClientDao.allClientId(StatusEnum.ENABLE);
+    }
+
+    @Override    public Page<BIamOAuth2RegisteredClientListOutputDto> selectPage(BIamOAuth2RegisteredClientPageQueryInputDto inputDto) {
         Page<BIamOauth2RegisteredClientEntity> page = oauth2RegisteredClientDao.selectPage(inputDto);
         Page<BIamOAuth2RegisteredClientListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamOAuth2RegisteredClientListOutputDto.class));

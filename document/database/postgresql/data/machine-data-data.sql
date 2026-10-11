@@ -23,6 +23,10 @@ FROM t_data_material_category;
 INSERT INTO t_data_material_category (id, parent_id, code, name, sort, create_by, create_time, update_by, update_time)
 VALUES ('material_category', 'root', 'MC202505010001', '素材根分类', 0, 'system', 1729736640000, 'system', 1729736640000);
 
+INSERT INTO t_data_brand_category (id, parent_id, code, name, sort, create_by, create_time, update_by, update_time)
+VALUES ('brand_category', 'root', 'BC202610100001', '品牌根分类', 0, 'system', 1729736640000, 'system', 1729736640000)
+ON CONFLICT (id) DO NOTHING;
+
 
 DELETE FROM t_data_tag_category;
 INSERT INTO t_data_tag_category (id, parent_id, name, code, type, sort, description,

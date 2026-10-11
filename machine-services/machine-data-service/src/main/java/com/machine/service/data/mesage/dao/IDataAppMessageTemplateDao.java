@@ -9,13 +9,13 @@ import com.machine.service.data.mesage.dao.mapper.entity.DataAppMessageTemplateE
 
 public interface IDataAppMessageTemplateDao {
 
-    Page<DataAppMessageTemplateEntity> page(AppMessageTemplateQueryPageInputDto inputDto);
-
-    DataAppMessageTemplateEntity detailByType(AppMessageTemplateDetailByTypeInputDto inputDto);
-
     void update(DataAppMessageTemplateEntity dataAppMessageTemplateEntity);
 
     void updateMessageTemplateStatus(AppMessageTemplateUpdateStatusInputDto inputDto);
 
     void updateMessageTemplateChannel(AppMessageTemplateUpdateChannelInput inputDto);
+
+    DataAppMessageTemplateEntity detailByType(AppMessageTemplateDetailByTypeInputDto inputDto);
+
+    Page<DataAppMessageTemplateEntity> page(AppMessageTemplateQueryPageInputDto inputDto);
 }

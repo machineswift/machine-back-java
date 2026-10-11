@@ -5,11 +5,11 @@ import com.machine.service.iam.biam.auth.dao.mapper.entity.BIamOauth2Authorizati
 
 public interface IBIamOauth2AuthorizationConsentDao {
 
-    void update(BIamOauth2AuthorizationConsentEntity dto);
-
     void save(BIamOauth2AuthorizationConsentEntity dto);
 
     void remove(BIamOauth2AuthorizationConsentEntity dto);
+
+    void update(BIamOauth2AuthorizationConsentEntity dto);
 
     BIamOauth2AuthorizationConsentEntity findById(BIamOauth2AuthorizationConsentInputDto dto);
 }

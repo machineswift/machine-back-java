@@ -15,6 +15,15 @@
         <if test="inputDto.name != null and inputDto.name !='' ">
             AND LOWER(b.name) like LOWER(CONCAT('%', #{inputDto.name}, '%'))
         </if>
+        <if test="inputDto.namePinyinFull != null and inputDto.namePinyinFull !='' ">
+            AND LOWER(b.name_pinyin_full) like LOWER(CONCAT('%', #{inputDto.namePinyinFull}, '%'))
+        </if>
+        <if test="inputDto.namePinyinInitial != null and inputDto.namePinyinInitial !='' ">
+            AND LOWER(b.name_pinyin_initial) like LOWER(CONCAT('%', #{inputDto.namePinyinInitial}, '%'))
+        </if>
+        <if test="inputDto.nameEn != null and inputDto.nameEn !='' ">
+            AND LOWER(b.name_en) like LOWER(CONCAT('%', #{inputDto.nameEn}, '%'))
+        </if>
         <if test="inputDto.createUserIdSet != null and inputDto.createUserIdSet.size > 0  ">
             AND b.create_by IN
             <foreach item="item" collection="inputDto.createUserIdSet" open="(" separator="," close=")">
@@ -33,12 +42,6 @@
         <if test="inputDto.createEndTime != null ">
             AND b.create_time <![CDATA[ <= ]]>  #{inputDto.createEndTime}
         </if>
-        <if test="inputDto.updateStartTime != null ">
-            AND b.update_time >= #{inputDto.updateStartTime}
-        </if>
-        <if test="inputDto.updateEndTime != null ">
-            AND b.update_time <![CDATA[ <= ]]>  #{inputDto.updateEndTime}
-        </if>
     </sql>
 
     <sql id="selectSimplePageConditions">
@@ -47,6 +50,9 @@
         </if>
         <if test="inputDto.keyword != null and inputDto.keyword !='' ">
             AND (LOWER(b.name) like LOWER(CONCAT('%', #{inputDto.keyword}, '%'))
+            OR LOWER(b.name_pinyin_full) like LOWER(CONCAT('%', #{inputDto.keyword}, '%'))
+            OR LOWER(b.name_pinyin_initial) like LOWER(CONCAT('%', #{inputDto.keyword}, '%'))
+            OR LOWER(b.name_en) like LOWER(CONCAT('%', #{inputDto.keyword}, '%'))
             OR LOWER(b.code) like LOWER(CONCAT('%', #{inputDto.keyword}, '%')))
         </if>
         <if test="inputDto.status != null ">
@@ -81,21 +87,73 @@
     </select>
 
     <select id="selectPage" resultType="com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity">
-        select b.*
-        from t_data_brand b
+        SELECT t.* FROM (
+        SELECT b.*
+        FROM t_data_brand b
+        <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+            INNER JOIN t_data_brand_category_relation bcr ON bcr.brand_id = b.id
+        </if>
         <where>
+            <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+                AND bcr.category_id IN
+                <foreach item="item" collection="inputDto.categoryIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <include refid="selectPageCommonConditions"/>
         </where>
-        ORDER BY b.create_time DESC
+        GROUP BY b.id
+
+        <!-- 当需要包含未分配品牌时 -->
+        <if test="inputDto.containVirtualNode != null and inputDto.containVirtualNode">
+            UNION
+
+            <!-- 查询未分配分类的品牌 -->
+            SELECT b.*
+            FROM t_data_brand b
+            WHERE NOT EXISTS (
+            SELECT 1 FROM t_data_brand_category_relation bcr
+            WHERE bcr.brand_id = b.id
+            )
+            <include refid="selectPageCommonConditions"/>
+        </if>
+        ) t
+        ORDER BY t.name_pinyin_initial
     </select>
 
     <select id="selectChildrenPage" resultType="com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity">
-        select b.*
-        from t_data_brand b
+        SELECT t.* FROM (
+        SELECT b.*
+        FROM t_data_brand b
+        <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+            INNER JOIN t_data_brand_category_relation bcr ON bcr.brand_id = b.id
+        </if>
         <where>
+            <if test="inputDto.categoryIdSet != null and inputDto.categoryIdSet.size > 0">
+                AND bcr.category_id IN
+                <foreach item="item" collection="inputDto.categoryIdSet" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <include refid="selectPageCommonConditions"/>
         </where>
-        ORDER BY b.sort DESC, b.create_time ASC
+        GROUP BY b.id
+
+        <!-- 当需要包含未分配品牌时 -->
+        <if test="inputDto.containVirtualNode != null and inputDto.containVirtualNode">
+            UNION
+
+            <!-- 查询未分配分类的品牌 -->
+            SELECT b.*
+            FROM t_data_brand b
+            WHERE NOT EXISTS (
+            SELECT 1 FROM t_data_brand_category_relation bcr
+            WHERE bcr.brand_id = b.id
+            )
+            <include refid="selectPageCommonConditions"/>
+        </if>
+        ) t
+        ORDER BY t.sort DESC, t.name_pinyin_initial
     </select>
 
     <select id="selectSimplePage" resultType="com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity">
@@ -104,7 +162,7 @@
         <where>
             <include refid="selectSimplePageConditions"/>
         </where>
-        ORDER BY b.create_time DESC
+        ORDER BY b.name_pinyin_initial
     </select>
 
 </mapper>

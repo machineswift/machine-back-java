@@ -68,11 +68,6 @@ public class BIamOauth2RegisteredClientDaoImpl implements IBIamOauth2RegisteredC
     }
 
     @Override
-    public List<String> allClientId(StatusEnum status) {
-        return authTokenMapper.allClientId(status);
-    }
-
-    @Override
     public BIamOauth2RegisteredClientEntity findById(String id) {
         return authTokenMapper.selectById(id);
     }
@@ -89,6 +84,11 @@ public class BIamOauth2RegisteredClientDaoImpl implements IBIamOauth2RegisteredC
         Wrapper<BIamOauth2RegisteredClientEntity> wrapper = new LambdaQueryWrapper<BIamOauth2RegisteredClientEntity>()
                 .eq(BIamOauth2RegisteredClientEntity::getClientName, clientName);
         return authTokenMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public List<String> allClientId(StatusEnum status) {
+        return authTokenMapper.allClientId(status);
     }
 
     @Override

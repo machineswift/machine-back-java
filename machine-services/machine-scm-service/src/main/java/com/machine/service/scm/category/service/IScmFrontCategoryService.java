@@ -1,6 +1,7 @@
 package com.machine.service.scm.category.service;
 
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryCreateInputDto;
+import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateBackCategoryInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateParentInputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDto;
@@ -21,9 +22,11 @@ public interface IScmFrontCategoryService {
 
     int updateParent(ScmFrontCategoryUpdateParentInputDto inputDto);
 
+    int updateBackCategory(ScmFrontCategoryUpdateBackCategoryInputDto inputDto);
+
     ScmFrontCategoryDetailOutputDto getById(IdRequest request);
 
-    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
-
     List<ScmFrontCategoryListOutputDto> listAll();
+
+    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
 }

@@ -109,6 +109,21 @@ public class DataBrandController {
         brandBusiness.updateParent(request);
     }
 
+    @Operation(summary = "修改分类")
+    @PostMapping("update_category")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:UPDATE_CATEGORY')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.DATA,
+            moduleEntity = ModuleEntityEnum.DATA_BRAND,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改品牌分类",
+            moduleEntityId = "#request.id",
+            content = "'修改品牌分类：' + #request.id")
+    public void updateCategory(@RequestBody @Validated DataBrandUpdateCategoryRequestVo request) {
+        log.info("修改品牌分类，request={}", JSONUtil.toJsonStr(request));
+        brandBusiness.updateCategory(request);
+    }
+
     @Operation(summary = "品牌详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:BRAND:DETAIL')")

@@ -92,11 +92,6 @@ public class DataSupplierCompanyController {
 
     @Operation(summary = "分页查询(应用于组件弹窗)")
     @PostMapping("page_simple")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
-            module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_SUPPLIER,
-            operateType = ActionTypeEnum.QUERY,
-            operateName = "分页查询供应商公司(组件弹窗)")
     public PageResponse<DataSupplierCompanySimpleListResponseVo> pageSimple(
             @RequestBody @Validated DataSupplierCompanyQueryPageSimpleRequestVo request) {
         return supplierCompanyBusiness.pageSimple(request);

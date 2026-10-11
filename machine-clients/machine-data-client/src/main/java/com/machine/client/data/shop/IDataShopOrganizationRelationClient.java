@@ -29,12 +29,6 @@ public interface IDataShopOrganizationRelationClient {
     Boolean isAssociationShopByOrganizationId(@RequestBody @Validated IdRequest request);
 
     /**
-     * 获取门店和组织的Map<ShopId,OrganizationId>
-     */
-    @PostMapping("map_by_shopIdSet")
-    Map<String, String> mapByShopIdSet(@RequestBody @Validated DataShopMapByShopIdSetInputDto inputDto);
-
-    /**
      * 查询组织关联的门店Id
      */
     @PostMapping("list_shopId_by_organizationIdSet")
@@ -62,6 +56,12 @@ public interface IDataShopOrganizationRelationClient {
     @PostMapping("list_by_condition")
     List<DataShopOrganizationRelationListOutputDto> listByCondition(
             @RequestBody @Validated BIamOrganizationShopRelationQueryListInputDto inputDto);
+
+    /**
+     * 获取门店和组织的Map<ShopId,OrganizationId>
+     */
+    @PostMapping("map_by_shopIdSet")
+    Map<String, String> mapByShopIdSet(@RequestBody @Validated DataShopMapByShopIdSetInputDto inputDto);
 
 }
 

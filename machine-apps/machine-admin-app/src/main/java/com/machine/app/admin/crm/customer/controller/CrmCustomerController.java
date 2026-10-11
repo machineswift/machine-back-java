@@ -99,11 +99,6 @@ public class CrmCustomerController {
     @Operation(summary = "分页查询客户(应用于组件弹窗)")
     @PostMapping("page_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:CRM:CUSTOMER:CUSTOMER:PAGE_SIMPLE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
-            module = ModuleEnum.CRM,
-            moduleEntity = ModuleEntityEnum.CRM_CUSTOMER,
-            operateType = ActionTypeEnum.QUERY,
-            operateName = "分页查询客户(组件弹窗)")
     public PageResponse<CrmCustomerListResponseVo> pageSimple(@RequestBody @Validated CrmCustomerQueryPageRequestVo request) {
         return crmCustomerBusiness.pageSimple(request);
     }

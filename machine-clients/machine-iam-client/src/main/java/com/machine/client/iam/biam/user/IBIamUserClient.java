@@ -80,11 +80,11 @@ public interface IBIamUserClient {
     @PostMapping("list_not_bind_Organization")
     List<String> listNotBindOrganization(@RequestBody @Validated BIamDataUserNotBindOrganizationInputDto inputDto);
 
-    @PostMapping("map_by_idSet")
-    Map<String, BIamUserDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
-
     @PostMapping("list_by_offset")
     List<BIamUserListOutputDto> listByOffset(@RequestBody @Validated BIamUserQueryListOffsetInputDto inputDto);
+
+    @PostMapping("map_by_idSet")
+    Map<String, BIamUserDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
     @PostMapping("select_page")
     PageResponse<BIamUserListOutputDto> selectPage(@RequestBody @Validated BIamUserQueryPageInputDto inputDto);

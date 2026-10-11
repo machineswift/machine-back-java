@@ -21,6 +21,11 @@ public class DataMqMessageExternalDaoImpl implements IDataMqMessageExternalDao {
     }
 
     @Override
+    public void deleteByReliableMessageId(String id) {
+        dataMqMessageExternalMapper.deleteByReliableMessageId(id);
+    }
+
+    @Override
     public void updateTableNameByReliableMessageId(String reliableMessageId) {
         dataMqMessageExternalMapper.updateTableNameByReliableMessageId(reliableMessageId);
     }
@@ -29,11 +34,6 @@ public class DataMqMessageExternalDaoImpl implements IDataMqMessageExternalDao {
     public void updateFailReasonByReliableMessageId(String reliableMessageId,
                                                     String failReason) {
         dataMqMessageExternalMapper.updateFailReasonByReliableMessageId(reliableMessageId, failReason);
-    }
-
-    @Override
-    public void deleteByReliableMessageId(String id) {
-        dataMqMessageExternalMapper.deleteByReliableMessageId(id);
     }
 
     @Override

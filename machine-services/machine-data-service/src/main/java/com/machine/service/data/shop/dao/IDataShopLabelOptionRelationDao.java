@@ -9,10 +9,10 @@ import java.util.Set;
 
 public interface IDataShopLabelOptionRelationDao {
 
-    int deleteByShopId(String shopId);
-
     void batchInsert(String shopId,
                      Set<String> labelOptionIdSet);
+
+    int deleteByShopId(String shopId);
 
     int batchUpdateLabel(String labelOptionIdId,
                          Set<String> shopIdSet);

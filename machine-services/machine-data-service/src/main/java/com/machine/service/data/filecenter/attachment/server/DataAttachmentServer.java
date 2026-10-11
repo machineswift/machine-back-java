@@ -42,17 +42,17 @@ public class DataAttachmentServer implements IDataAttachmentClient {
     }
 
     @Override
+    @PostMapping("get_by_attachmentId")
+    public DataAttachmentWithCurrentFileInfoOutputDto getCurrentByAttachmentId(@RequestBody @Validated IdRequest request) {
+        return attachmentService.getCurrentByAttachmentId(request);
+    }
+
+    @Override
     @PostMapping("map_by_idSet")
     public Map<String, DataAttachmentDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
         List<DataAttachmentDetailOutputDto> outputDtoList = attachmentService.listByIdSet(request);
         return outputDtoList.stream()
                 .collect(Collectors.toMap(DataAttachmentDetailOutputDto::getId, p -> p));
-    }
-
-    @Override
-    @PostMapping("get_by_attachmentId")
-    public DataAttachmentWithCurrentFileInfoOutputDto getCurrentByAttachmentId(@RequestBody @Validated IdRequest request) {
-        return attachmentService.getCurrentByAttachmentId(request);
     }
 
     @Override

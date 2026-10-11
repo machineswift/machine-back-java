@@ -9,10 +9,10 @@ import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IBIamUserAccessLogBusiness {
 
+    int delete(BIamUserAccessLogDeleteRequestVo request);
+
     BIamUserAccessLogDetailResponseVo detail(IdRequest request);
 
     PageResponse<BIamUserAccessLogExpandListResponseVo> pageExpand(BIamUserAccessLogQueryPageRequestVo request);
-
-    int delete(BIamUserAccessLogDeleteRequestVo request);
 
 }

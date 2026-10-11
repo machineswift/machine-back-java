@@ -5,6 +5,8 @@ import com.machine.client.scm.category.IScmBackCategoryClient;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryCreateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateParentInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeGroupInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeInputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryDetailOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
@@ -52,6 +54,20 @@ public class ScmBackCategoryServer implements IScmBackCategoryClient {
     public int updateParent(@RequestBody @Validated ScmBackCategoryUpdateParentInputDto inputDto) {
         log.info("修改后台分类父ID，inputDto={}", JSONUtil.toJsonStr(inputDto));
         return backCategoryService.updateParent(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_attribute_group")
+    public int updateAttributeGroup(@RequestBody @Validated ScmBackCategoryUpdateAttributeGroupInputDto inputDto) {
+        log.info("修改后台分类关联属性分组，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return backCategoryService.updateAttributeGroup(inputDto);
+    }
+
+    @Override
+    @PostMapping("update_attribute")
+    public int updateAttribute(@RequestBody @Validated ScmBackCategoryUpdateAttributeInputDto inputDto) {
+        log.info("修改后台分类关联属性，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return backCategoryService.updateAttribute(inputDto);
     }
 
     @Override

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.machine</groupId>
         <artifactId>machine-generals</artifactId>
-        <version>2026.09.01-RELEASE</version>
+        <version>2026.10.01-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -79,6 +79,11 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
         </dependency>
 
         <dependency>

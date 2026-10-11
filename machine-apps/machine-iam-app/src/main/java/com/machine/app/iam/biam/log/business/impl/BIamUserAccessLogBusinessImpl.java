@@ -37,6 +37,12 @@ public class BIamUserAccessLogBusinessImpl implements IBIamUserAccessLogBusiness
     private IBIamUserAccessLogClient userAccessLogClient;
 
     @Override
+    public int delete(BIamUserAccessLogDeleteRequestVo request) {
+        BIamUserAccessLogDeleteInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserAccessLogDeleteInputDto.class);
+        return userAccessLogClient.deleteByCreateTimeBefore(inputDto);
+    }
+
+    @Override
     public BIamUserAccessLogDetailResponseVo detail(IdRequest request) {
         BIamUserAccessLogDetailOutputDto outputDto = userAccessLogClient.detail(request);
         if (outputDto == null) {
@@ -87,9 +93,4 @@ public class BIamUserAccessLogBusinessImpl implements IBIamUserAccessLogBusiness
         return pageResponse;
     }
 
-    @Override
-    public int delete(BIamUserAccessLogDeleteRequestVo request) {
-        BIamUserAccessLogDeleteInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamUserAccessLogDeleteInputDto.class);
-        return userAccessLogClient.deleteByCreateTimeBefore(inputDto);
-    }
 }

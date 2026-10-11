@@ -4,14 +4,17 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.scm.category.business.IScmFrontCategoryBusiness;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryCreateRequestVo;
+import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateBackCategoryRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateParentRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.response.ScmFrontCategoryDetailResponseVo;
+import com.machine.app.admin.scm.category.controller.vo.response.ScmFrontCategoryTreeExpandResponseVo;
 import com.machine.client.iam.biam.user.IBIamUserClient;
 import com.machine.client.iam.biam.user.dto.output.BIamUserDetailOutputDto;
-import com.machine.client.scm.category.IScmFrontBackCategoryRelationClient;
+import com.machine.client.scm.category.IScmBackCategoryFrontRelationClient;
 import com.machine.client.scm.category.IScmFrontCategoryClient;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryCreateInputDto;
+import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateBackCategoryInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateParentInputDto;
 import com.machine.client.scm.category.dto.output.*;
@@ -40,7 +43,7 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
     private IScmFrontCategoryClient frontCategoryClient;
 
     @Autowired
-    private IScmFrontBackCategoryRelationClient frontBackCategoryRelationClient;
+    private IScmBackCategoryFrontRelationClient backCategoryFrontRelationClient;
 
 
     @Override
@@ -48,6 +51,12 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
         log.info("创建前台分类，request={}", JSONUtil.toJsonStr(request));
         ScmFrontCategoryCreateInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), ScmFrontCategoryCreateInputDto.class);
         return frontCategoryClient.create(inputDto);
+    }
+
+    @Override
+    public void deleteById(IdRequest request) {
+        log.info("删除前台分类，id={}", request.getId());
+        frontCategoryClient.deleteById(request);
     }
 
     @Override
@@ -65,9 +74,11 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
     }
 
     @Override
-    public void deleteById(IdRequest request) {
-        log.info("删除前台分类，id={}", request.getId());
-        frontCategoryClient.deleteById(request);
+    public void updateBackCategory(ScmFrontCategoryUpdateBackCategoryRequestVo request) {
+        log.info("修改前台分类关联后台分类，request={}", JSONUtil.toJsonStr(request));
+        ScmFrontCategoryUpdateBackCategoryInputDto inputDto =
+                JSONUtil.toBean(JSONUtil.toJsonStr(request), ScmFrontCategoryUpdateBackCategoryInputDto.class);
+        frontCategoryClient.updateBackCategory(inputDto);
     }
 
     @Override
@@ -78,10 +89,10 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
         ScmFrontCategoryDetailResponseVo responseVo = JSONUtil.toBean(JSONUtil.toJsonStr(outputDto), ScmFrontCategoryDetailResponseVo.class);
 
         { // 关联的后台分类数据
-            List<ScmFrontBackCategoryRelationListOutputDto> relationListOutputDtoList = frontBackCategoryRelationClient.listByFrontCategoryId(request);
+            List<ScmBackCategoryFrontRelationListOutputDto> relationListOutputDtoList = backCategoryFrontRelationClient.listByFrontCategoryId(request);
             if (CollectionUtil.isNotEmpty(relationListOutputDtoList)) {
                 responseVo.setBackCategoryIdSet(relationListOutputDtoList.stream()
-                        .map(ScmFrontBackCategoryRelationListOutputDto::getBackCategoryId).collect(Collectors.toSet()));
+                        .map(ScmBackCategoryFrontRelationListOutputDto::getBackCategoryId).collect(Collectors.toSet()));
             }
         }
 
@@ -104,30 +115,30 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
     }
 
     @Override
-    public ScmFrontCategoryTreeExpandOutputDto treeExpand() {
+    public ScmFrontCategoryTreeExpandResponseVo treeExpand() {
         //查询全量扁平数据
         List<ScmFrontCategoryListOutputDto> listOutputDtoList = frontCategoryClient.listAll();
 
         //转换为中间对象并构建树
-        List<ScmFrontCategoryTreeExpandOutputDto> expandTreeBoList = JSONUtil.toList(
-                JSONUtil.toJsonStr(listOutputDtoList), ScmFrontCategoryTreeExpandOutputDto.class);
+        List<ScmFrontCategoryTreeExpandResponseVo> expandTreeBoList = JSONUtil.toList(
+                JSONUtil.toJsonStr(listOutputDtoList), ScmFrontCategoryTreeExpandResponseVo.class);
 
-        ScmFrontCategoryTreeExpandOutputDto treeExpandOutputDto = TreeUtil.buildTree(expandTreeBoList).getFirst();
+        ScmFrontCategoryTreeExpandResponseVo treeExpandOutputDto = TreeUtil.buildTree(expandTreeBoList).getFirst();
 
         //收集所有节点
-        List<ScmFrontCategoryTreeExpandOutputDto> allNodes = TreeUtil.collectAllNodes(treeExpandOutputDto);
+        List<ScmFrontCategoryTreeExpandResponseVo> allNodes = TreeUtil.collectAllNodes(treeExpandOutputDto);
 
         {//填充创建人/修改人姓名
             Set<String> userIdSet = allNodes.stream()
-                    .map(ScmFrontCategoryTreeExpandOutputDto::getCreateBy)
+                    .map(ScmFrontCategoryTreeExpandResponseVo::getCreateBy)
                     .collect(Collectors.toSet());
             userIdSet.addAll(allNodes.stream()
-                    .map(ScmFrontCategoryTreeExpandOutputDto::getUpdateBy)
+                    .map(ScmFrontCategoryTreeExpandResponseVo::getUpdateBy)
                     .collect(Collectors.toSet()));
 
             Map<String, BIamUserDetailOutputDto> userSimpleDetailMap = userClient.mapByIdSet(new IdSetRequest(userIdSet));
 
-            for (ScmFrontCategoryTreeExpandOutputDto node : allNodes) {
+            for (ScmFrontCategoryTreeExpandResponseVo node : allNodes) {
                 BIamUserDetailOutputDto createUser = userSimpleDetailMap.get(node.getCreateBy());
                 if (null != createUser) {
                     node.setCreateName(createUser.getName());
@@ -153,14 +164,14 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
     /**
      * 计算前台节点数量（后序遍历并统计子节点数量）
      */
-    private void calculateFrontCount(ScmFrontCategoryTreeExpandOutputDto node) {
+    private void calculateFrontCount(ScmFrontCategoryTreeExpandResponseVo node) {
         if (CollectionUtil.isEmpty(node.getChildren())) {
             node.setFrontCategoryNumber(0);
             return;
         }
 
         int count = 0;
-        for (ScmFrontCategoryTreeExpandOutputDto child : node.getChildren()) {
+        for (ScmFrontCategoryTreeExpandResponseVo child : node.getChildren()) {
             calculateFrontCount(child);
             //子节点的 organizationNumber 已经是其子节点的数量，+1 算上子节点自身
             count += child.getFrontCategoryNumber() + 1;
@@ -171,15 +182,15 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
     /**
      * 计算后台节点数量
      */
-    private void calculateBackCount(ScmFrontCategoryTreeExpandOutputDto allTree) {
-        List<ScmFrontBackCategoryRelationListOutputDto> relationList = frontBackCategoryRelationClient.listAll();
+    private void calculateBackCount(ScmFrontCategoryTreeExpandResponseVo allTree) {
+        List<ScmBackCategoryFrontRelationListOutputDto> relationList = backCategoryFrontRelationClient.listAll();
 
         if (CollectionUtil.isEmpty(relationList)) {
             return;
         }
 
         Map<String, Set<String>> frontBackIdMap = new HashMap<>();
-        for (ScmFrontBackCategoryRelationListOutputDto relation : relationList) {
+        for (ScmBackCategoryFrontRelationListOutputDto relation : relationList) {
             String frontCategoryId = relation.getFrontCategoryId();
             String backCategoryId = relation.getBackCategoryId();
 
@@ -189,7 +200,7 @@ public class ScmFrontCategoryBusinessImpl implements IScmFrontCategoryBusiness {
 
         for (String frontCategoryId : frontBackIdMap.keySet()) {
             Set<String> backCategoryIdSet = frontBackIdMap.get(frontCategoryId);
-            ScmFrontCategoryTreeExpandOutputDto targetNode = TreeUtil.findNode(allTree, frontCategoryId);
+            ScmFrontCategoryTreeExpandResponseVo targetNode = TreeUtil.findNode(allTree, frontCategoryId);
             targetNode.setBackCategoryNumber(backCategoryIdSet.size());
         }
     }

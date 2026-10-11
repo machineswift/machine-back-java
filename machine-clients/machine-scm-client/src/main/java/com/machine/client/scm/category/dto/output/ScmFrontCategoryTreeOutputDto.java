@@ -11,4 +11,5 @@ public class ScmFrontCategoryTreeOutputDto extends TreeNode<ScmFrontCategoryTree
 
     @Schema(description = "编码")
     private String code;
+
 }

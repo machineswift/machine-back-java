@@ -20,12 +20,6 @@ public class BIamOauth2AuthorizationConsentServer implements IBIamOauth2Authoriz
     private IBIamOauth2AuthorizationConsentService authorizationConsentService;
 
     @Override
-    @PostMapping("update")
-    public void update(@RequestBody BIamOauth2AuthorizationConsentInputDto dto) {
-        authorizationConsentService.update(dto);
-    }
-
-    @Override
     @PostMapping("save")
     public void save(@RequestBody BIamOauth2AuthorizationConsentInputDto dto) {
         authorizationConsentService.save(dto);
@@ -35,6 +29,12 @@ public class BIamOauth2AuthorizationConsentServer implements IBIamOauth2Authoriz
     @PostMapping("remove")
     public void remove(@RequestBody BIamOauth2AuthorizationConsentInputDto dto) {
         authorizationConsentService.remove(dto);
+    }
+
+    @Override
+    @PostMapping("update")
+    public void update(@RequestBody BIamOauth2AuthorizationConsentInputDto dto) {
+        authorizationConsentService.update(dto);
     }
 
     @Override

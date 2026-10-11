@@ -1,6 +1,7 @@
 package com.machine.client.scm.category;
 
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryCreateInputDto;
+import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateBackCategoryInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateParentInputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDto;
@@ -23,21 +24,24 @@ public interface IScmFrontCategoryClient {
     @PostMapping("create")
     String create(@RequestBody @Valid ScmFrontCategoryCreateInputDto inputDto);
 
+    @PostMapping("delete")
+    int deleteById(@RequestBody @Valid IdRequest request);
+
     @PostMapping("update")
     int update(@RequestBody @Valid ScmFrontCategoryUpdateInputDto inputDto);
 
     @PostMapping("update_parent")
     int updateParent(@RequestBody @Valid ScmFrontCategoryUpdateParentInputDto inputDto);
 
-    @PostMapping("delete")
-    int deleteById(@RequestBody @Valid IdRequest request);
+    @PostMapping("update_back_category")
+    int updateBackCategory(@RequestBody @Valid ScmFrontCategoryUpdateBackCategoryInputDto inputDto);
 
     @PostMapping("detail")
     ScmFrontCategoryDetailOutputDto getById(@RequestBody @Valid IdRequest request);
 
-    @GetMapping("tree_all_simple")
-    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
-
     @GetMapping("list_all")
     List<ScmFrontCategoryListOutputDto> listAll();
+
+    @GetMapping("tree_all_simple")
+    Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple();
 }

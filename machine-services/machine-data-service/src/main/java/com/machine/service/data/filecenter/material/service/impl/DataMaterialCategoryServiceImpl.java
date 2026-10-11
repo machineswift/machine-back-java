@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -86,7 +85,7 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             throw new DataBusinessException("data.materialCategory.service.create.nameAlreadyExists", "名称已经存在");
         }
 
-        // 验证父级分类是否棒定了素材
+        // 验证父级分类是否绑定了素材
         Long count = materialCategoryRelationDao.selectCountByCategoryId(parentId);
         if (count.intValue() > 0) {
             throw new DataBusinessException("data.materialCategory.service.create.parentHasBindMaterial",
@@ -116,24 +115,19 @@ public class DataMaterialCategoryServiceImpl implements IDataMaterialCategorySer
             throw new DataBusinessException("data.materialCategory.service.delete.rootMaterialCategory", "根分类不能删除");
         }
 
-        // 递归获取所有的子节点
-        Set<String> idSet = new HashSet<>();
-        idSet.add(entity.getId());
-        idSet.addAll(materialCategoryCache.recursionListSubId(entity.getId()));
+        if (materialCategoryDao.existsByParentId(entity.getId())) {
+            throw new DataBusinessException("data.materialCategory.service.delete.hasChildrenNode",
+                    "有子节点不能删除");
+        }
 
         // 是否关联的素材信息
-        Long count = materialCategoryRelationDao.selectCountByCategoryIdSet(idSet);
+        Long count = materialCategoryRelationDao.selectCountByCategoryId(entity.getId());
         if (count.intValue() > 0) {
             throw new DataBusinessException("data.materialCategory.service.delete.associationMaterial",
                     "此分类存在素材不能被删除，请先移除或删除所有素材再试");
         }
 
-        int result = 0;
-        for (String id : idSet) {
-            result = result + materialCategoryDao.delete(id);
-        }
-
-        return result;
+        return materialCategoryDao.delete(entity.getId());
     }
 
     @Override

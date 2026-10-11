@@ -12,11 +12,11 @@ public interface IEmployeeDao {
 
     int update(EmployeeEntity entity);
 
+    Integer countByDepartmentIds(Set<String> departmentIdSet);
+
     EmployeeEntity getById(String id);
 
     EmployeeEntity getByUserId(String userId);
-
-    Integer countByDepartmentIds(Set<String> departmentIdSet);
 
     List<EmployeeEntity> selectByIdSet(Set<String> idSet);
 

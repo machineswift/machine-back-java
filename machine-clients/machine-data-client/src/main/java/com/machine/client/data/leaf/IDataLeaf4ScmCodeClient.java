@@ -32,6 +32,18 @@ public interface IDataLeaf4ScmCodeClient {
     @GetMapping("franchisee_code")
     String franchiseeCode();
 
+    /**
+     * 属性编码
+     */
+    @GetMapping("attribute_code")
+    String attributeCode();
+
+    /**
+     * 属性分组编码
+     */
+    @GetMapping("attribute_group_code")
+    String attributeGroupCode();
+
 }
 
 

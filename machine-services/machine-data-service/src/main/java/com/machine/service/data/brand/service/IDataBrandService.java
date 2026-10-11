@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.brand.dto.input.DataBrandCreateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateCategoryInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
@@ -31,13 +32,15 @@ public interface IDataBrandService  {
 
     int updateParent(DataBrandUpdateParentIdInputDto inputDto);
 
+    void updateCategory(DataBrandUpdateCategoryInputDto inputDto);
+
     boolean exists(IdRequest request);
 
     DataBrandDetailOutputDto detail(IdRequest request);
 
-    Set<String> listHasChildrenIdSet(IdSetRequest request);
-
     List<DataBrandDetailOutputDto> listAncestorById(IdRequest request);
+
+    Set<String> listHasChildrenIdSet(IdSetRequest request);
 
     Map<String, DataBrandDetailOutputDto> mapByIdSet(IdSetRequest request);
 

@@ -82,6 +82,11 @@ public class RedisLockPrefixConstant {
         public static final String LOCK_DATA_MATERIAL_CATEGORY_TREE = "lock:data:materialCategory:tree";
 
         /**
+         * 品牌分类
+         */
+        public static final String LOCK_DATA_BRAND_CATEGORY_TREE = "lock:data:brandCategory:tree";
+
+        /**
          * 智能标签分类
          */
         public static final String LOCK_DATA_TAG_CATEGORY_TREE = "lock:data:tagCategory:tree:";

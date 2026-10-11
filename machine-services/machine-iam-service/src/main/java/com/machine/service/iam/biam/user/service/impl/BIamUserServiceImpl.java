@@ -433,20 +433,20 @@ public class BIamUserServiceImpl implements IBIamUserService {
     }
 
     @Override
-    public Map<String, BIamUserDetailOutputDto> mapByUserIdSet(IdSetRequest request) {
-        List<BIamUserEntity> iamUserEntityList = userDao.selectByIdSet(request.getIdSet());
-        return iamUserEntityList.stream()
-                .collect(Collectors.toMap(BIamUserEntity::getId, user ->
-                        JSONUtil.toBean(JSONUtil.toJsonStr(user), BIamUserDetailOutputDto.class)));
-    }
-
-    @Override
     public List<BIamUserListOutputDto> listByOffset(BIamUserQueryListOffsetInputDto inputDto) {
         List<BIamUserEntity> entityList = userDao.listByOffset(inputDto);
         if (CollectionUtil.isEmpty(entityList)) {
             return List.of();
         }
         return JSONUtil.toList(JSONUtil.toJsonStr(entityList), BIamUserListOutputDto.class);
+    }
+
+    @Override
+    public Map<String, BIamUserDetailOutputDto> mapByUserIdSet(IdSetRequest request) {
+        List<BIamUserEntity> iamUserEntityList = userDao.selectByIdSet(request.getIdSet());
+        return iamUserEntityList.stream()
+                .collect(Collectors.toMap(BIamUserEntity::getId, user ->
+                        JSONUtil.toBean(JSONUtil.toJsonStr(user), BIamUserDetailOutputDto.class)));
     }
 
     @Override

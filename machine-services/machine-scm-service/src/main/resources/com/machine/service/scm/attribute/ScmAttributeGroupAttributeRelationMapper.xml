@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.machine.service.scm.attribute.dao.mapper.ScmAttributeGroupAttributeRelationMapper">
+
+    <delete id="deleteByGroupId">
+        delete from t_scm_attribute_group_attribute_relation where group_id = #{groupId}
+    </delete>
+
+    <delete id="deleteByAttributeId">
+        delete from t_scm_attribute_group_attribute_relation where attribute_id = #{attributeId}
+    </delete>
+
+    <select id="countByGroupAndAttribute" resultType="java.lang.Integer">
+        select count(0) from t_scm_attribute_group_attribute_relation where group_id = #{groupId} and attribute_id = #{attributeId}
+    </select>
+
+    <select id="listAttributeIdByGroupId" resultType="java.lang.String">
+        select attribute_id from t_scm_attribute_group_attribute_relation where group_id = #{groupId} order by sort desc
+    </select>
+
+    <select id="listByGroupIdSet" resultType="com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeGroupAttributeRelationEntity">
+        select * from t_scm_attribute_group_attribute_relation where group_id in
+        <foreach item="item" collection="groupIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by sort desc
+    </select>
+
+    <select id="listByAttributeIdSet" resultType="com.machine.service.scm.attribute.dao.mapper.entity.ScmAttributeGroupAttributeRelationEntity">
+        select * from t_scm_attribute_group_attribute_relation where attribute_id in
+        <foreach item="item" collection="attributeIdSet" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by sort desc
+    </select>
+
+</mapper>

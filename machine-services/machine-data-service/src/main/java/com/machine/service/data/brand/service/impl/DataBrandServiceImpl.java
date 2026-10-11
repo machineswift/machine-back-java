@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.machine.client.data.brand.dto.input.DataBrandCreateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateCategoryInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
@@ -18,10 +19,14 @@ import com.machine.sdk.base.envm.StatusEnum;
 import com.machine.sdk.base.exception.data.DataBusinessException;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.request.IdSetRequest;
+import com.machine.sdk.base.tool.PinyinUtil;
+import com.machine.service.data.brand.dao.IDataBrandCategoryRelationDao;
 import com.machine.service.data.brand.dao.IDataBrandDao;
+import com.machine.service.data.brand.dao.mapper.entity.DataBrandCategoryRelationEntity;
 import com.machine.service.data.brand.dao.mapper.entity.DataBrandEntity;
 import com.machine.service.data.brand.service.IDataBrandService;
 import com.machine.service.data.filecenter.attachment.dao.IDataAttachmentDao;
+import com.machine.starter.redis.cache.data.RedisDataBrandCategoryCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.machine.sdk.base.constant.CommonDataConstant.Brand.DATA_BRAND_ROOT_PARENT_ID;
+import static com.machine.sdk.base.constant.CommonDataConstant.BrandCategory.DATA_BRAND_CATEGORY_VIRTUAL_NODE;
 
 @Slf4j
 @Service
@@ -47,6 +53,12 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
     @Autowired
     private IDataLeaf4DataCodeClient leaf4DataCodeClient;
+
+    @Autowired
+    private IDataBrandCategoryRelationDao brandCategoryRelationDao;
+
+    @Autowired
+    private RedisDataBrandCategoryCache brandCategoryCache;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -66,6 +78,13 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
         DataBrandEntity insertEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataBrandEntity.class);
         insertEntity.setParentId(parentId);
+        //拼音：可手动指定，未指定则按名称自动生成
+        if (StrUtil.isBlank(insertEntity.getNamePinyinFull())) {
+            insertEntity.setNamePinyinFull(PinyinUtil.full(insertEntity.getName()));
+        }
+        if (StrUtil.isBlank(insertEntity.getNamePinyinInitial())) {
+            insertEntity.setNamePinyinInitial(PinyinUtil.initial(insertEntity.getName()));
+        }
         //新建默认禁用，启用时校验LOGO
         insertEntity.setStatus(StatusEnum.DISABLE);
         if (null == insertEntity.getSort()) {
@@ -94,6 +113,9 @@ public class DataBrandServiceImpl implements IDataBrandService {
             throw new DataBusinessException("data.brand.service.delete.hasChildrenNode", "有子品牌不能删除");
         }
 
+        //清理品牌与分类的关系
+        brandCategoryRelationDao.deleteByBrandId(request.getId());
+
         return brandDao.delete(request.getId());
     }
 
@@ -113,57 +135,14 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
         DataBrandEntity updateEntity = JSONUtil.toBean(JSONUtil.toJsonStr(inputDto), DataBrandEntity.class);
         updateEntity.setId(entity.getId());
+        //拼音：可手动指定，未指定则按名称自动生成
+        if (StrUtil.isBlank(updateEntity.getNamePinyinFull())) {
+            updateEntity.setNamePinyinFull(PinyinUtil.full(updateEntity.getName()));
+        }
+        if (StrUtil.isBlank(updateEntity.getNamePinyinInitial())) {
+            updateEntity.setNamePinyinInitial(PinyinUtil.initial(updateEntity.getName()));
+        }
         return brandDao.update(updateEntity);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int updateParent(DataBrandUpdateParentIdInputDto inputDto) {
-        DataBrandEntity entity = brandDao.getById(inputDto.getId());
-        if (null == entity) {
-            return 0;
-        }
-
-        String parentId = StrUtil.isBlank(inputDto.getParentId()) ? DATA_BRAND_ROOT_PARENT_ID : inputDto.getParentId();
-        if (parentId.equals(entity.getParentId())) {
-            //相同直接返回
-            return 0;
-        }
-
-        //验证父品牌是否存在
-        DataBrandEntity parentEntity = null;
-        if (!DATA_BRAND_ROOT_PARENT_ID.equals(parentId)) {
-            parentEntity = brandDao.getById(parentId);
-            if (null == parentEntity) {
-                throw new DataBusinessException("data.brand.service.updateParent.parentNotExists", "父品牌不存在");
-            }
-        }
-
-        //验证父品牌不能是自己或自己的子品牌
-        validateParentId(entity.getId(), parentId);
-
-        //启用状态的品牌不能挂到禁用的父品牌下
-        if (StatusEnum.ENABLE.equals(entity.getStatus())
-                && null != parentEntity
-                && StatusEnum.ENABLE != parentEntity.getStatus()) {
-            throw new DataBusinessException("data.brand.service.updateParent.parentDisabled", "父品牌已禁用，请先启用父品牌");
-        }
-
-        return brandDao.updateParent(entity.getId(), parentId);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int updateLogoAttachmentId(DataBrandUpdateLogoAttachmentIdInputDto inputDto) {
-        if (null == brandDao.getById(inputDto.getId())) {
-            throw new DataBusinessException("data.brand.service.updateLogoAttachmentId.brandNotExists", "品牌不存在");
-        }
-
-        if (null == attachmentDao.getById(inputDto.getLogoAttachmentId())) {
-            throw new DataBusinessException("data.brand.service.updateLogoAttachmentId.attachmentNotExists", "附件不存在");
-        }
-
-        return brandDao.updateLogoAttachmentId(inputDto.getId(), inputDto.getLogoAttachmentId());
     }
 
     @Override
@@ -201,6 +180,68 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
         return brandDao.updateStatus(inputDto.getId(), inputDto.getStatus());
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateLogoAttachmentId(DataBrandUpdateLogoAttachmentIdInputDto inputDto) {
+        if (null == brandDao.getById(inputDto.getId())) {
+            throw new DataBusinessException("data.brand.service.updateLogoAttachmentId.brandNotExists", "品牌不存在");
+        }
+
+        if (null == attachmentDao.getById(inputDto.getLogoAttachmentId())) {
+            throw new DataBusinessException("data.brand.service.updateLogoAttachmentId.attachmentNotExists", "附件不存在");
+        }
+
+        return brandDao.updateLogoAttachmentId(inputDto.getId(), inputDto.getLogoAttachmentId());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateParent(DataBrandUpdateParentIdInputDto inputDto) {
+        DataBrandEntity entity = brandDao.getById(inputDto.getId());
+        if (null == entity) {
+            return 0;
+        }
+
+        String parentId = StrUtil.isBlank(inputDto.getParentId()) ? DATA_BRAND_ROOT_PARENT_ID : inputDto.getParentId();
+        if (parentId.equals(entity.getParentId())) {
+            //相同直接返回
+            return 0;
+        }
+
+        //验证父品牌是否存在
+        DataBrandEntity parentEntity = null;
+        if (!DATA_BRAND_ROOT_PARENT_ID.equals(parentId)) {
+            parentEntity = brandDao.getById(parentId);
+            if (null == parentEntity) {
+                throw new DataBusinessException("data.brand.service.updateParent.parentNotExists", "父品牌不存在");
+            }
+        }
+
+        //验证父品牌不能是自己或自己的子品牌
+        validateParentId(entity.getId(), parentId);
+
+        //启用状态的品牌不能挂到禁用的父品牌下
+        if (StatusEnum.ENABLE.equals(entity.getStatus())
+                && null != parentEntity
+                && StatusEnum.ENABLE != parentEntity.getStatus()) {
+            throw new DataBusinessException("data.brand.service.updateParent.parentDisabled", "父品牌已禁用，请先启用父品牌");
+        }
+
+        return brandDao.updateParent(entity.getId(), parentId);
+    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateCategory(DataBrandUpdateCategoryInputDto inputDto) {
+        String brandId = inputDto.getId();
+        DataBrandEntity entity = brandDao.getById(brandId);
+        if (null == entity) {
+            throw new DataBusinessException("data.brand.service.updateCategory.brandNotExists", "品牌不存在");
+        }
+        brandCategoryRelationDao.deleteByBrandId(brandId);
+        insertBrandCategoryRelation(brandId, inputDto.getCategoryIdSet());
+    }
+
     @Override
     public boolean exists(IdRequest request) {
         return brandDao.exists(request.getId());
@@ -216,11 +257,6 @@ public class DataBrandServiceImpl implements IDataBrandService {
     }
 
     @Override
-    public Set<String> listHasChildrenIdSet(IdSetRequest request) {
-        return brandDao.selectHasChildrenIdSet(request.getIdSet());
-    }
-
-    @Override
     public List<DataBrandDetailOutputDto> listAncestorById(IdRequest request) {
         List<DataBrandEntity> entityList = brandDao.selectAncestorList(request.getId());
         if (CollectionUtil.isEmpty(entityList)) {
@@ -228,6 +264,11 @@ public class DataBrandServiceImpl implements IDataBrandService {
         }
 
         return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataBrandDetailOutputDto.class);
+    }
+
+    @Override
+    public Set<String> listHasChildrenIdSet(IdSetRequest request) {
+        return brandDao.selectHasChildrenIdSet(request.getIdSet());
     }
 
     @Override
@@ -240,6 +281,7 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
     @Override
     public Page<DataBrandListOutputDto> page(DataBrandQueryPageInputDto inputDto) {
+        expandCategoryIdSet(inputDto);
         Page<DataBrandEntity> page = brandDao.selectPage(inputDto);
         Page<DataBrandListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), DataBrandListOutputDto.class));
@@ -248,10 +290,49 @@ public class DataBrandServiceImpl implements IDataBrandService {
 
     @Override
     public Page<DataBrandListOutputDto> childrenPage(DataBrandQueryPageInputDto inputDto) {
+        expandCategoryIdSet(inputDto);
         Page<DataBrandEntity> page = brandDao.selectChildrenPage(inputDto);
         Page<DataBrandListOutputDto> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), DataBrandListOutputDto.class));
         return pageResult;
+    }
+
+    /**
+     * 品牌分类查询条件：把选中的分类展开为“自身 + 所有下级分类”，便于按父分类一次性过滤
+     * 选中【未分配】虚拟节点时，额外标记需要查询没有分类的品牌
+     */
+    private void expandCategoryIdSet(DataBrandQueryPageInputDto inputDto) {
+        Set<String> categoryIdSet = inputDto.getCategoryIdSet();
+        if (CollectionUtil.isEmpty(categoryIdSet)) {
+            return;
+        }
+
+        if (categoryIdSet.contains(DATA_BRAND_CATEGORY_VIRTUAL_NODE)) {
+            inputDto.setContainVirtualNode(true);
+        }
+        inputDto.setCategoryIdSet(brandCategoryCache.recursionListSubId(categoryIdSet));
+    }
+
+    /**
+     * 重建品牌与分类的关系
+     */
+    private void insertBrandCategoryRelation(String brandId,
+                                             Set<String> categoryIdSet) {
+        if (CollectionUtil.isEmpty(categoryIdSet)) {
+            return;
+        }
+
+        //【未分配】为虚拟节点，不能作为真实分类保存
+        if (categoryIdSet.contains(DATA_BRAND_CATEGORY_VIRTUAL_NODE)) {
+            throw new DataBusinessException("data.brand.service.updateCategory.virtualNode", "不能选择【未分配】");
+        }
+
+        for (String categoryId : categoryIdSet) {
+            DataBrandCategoryRelationEntity relationEntity = new DataBrandCategoryRelationEntity();
+            relationEntity.setBrandId(brandId);
+            relationEntity.setCategoryId(categoryId);
+            brandCategoryRelationDao.insert(relationEntity);
+        }
     }
 
     @Override

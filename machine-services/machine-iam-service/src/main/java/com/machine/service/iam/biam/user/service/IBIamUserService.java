@@ -51,9 +51,9 @@ public interface IBIamUserService {
 
     List<String> listNotBindOrganization(BIamDataUserNotBindOrganizationInputDto inputDto);
 
-    Map<String, BIamUserDetailOutputDto> mapByUserIdSet(IdSetRequest request);
-
     List<BIamUserListOutputDto> listByOffset(BIamUserQueryListOffsetInputDto inputDto);
+
+    Map<String, BIamUserDetailOutputDto> mapByUserIdSet(IdSetRequest request);
 
     Page<BIamUserListOutputDto> selectPage(BIamUserQueryPageInputDto inputDto);
 

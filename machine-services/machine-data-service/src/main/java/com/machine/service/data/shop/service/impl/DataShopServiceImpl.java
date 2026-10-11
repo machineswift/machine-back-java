@@ -224,21 +224,6 @@ public class DataShopServiceImpl implements IDataShopService {
     }
 
     @Override
-    public int countNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
-        return shopDao.countNotBindOrganization(inputDto);
-    }
-
-    @Override
-    public String getIdByCode(DataShopCodeInoutDto inoutDto) {
-        return shopDao.getIdByCode(inoutDto.getCode());
-    }
-
-    @Override
-    public List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
-        return shopDao.listNotBindOrganization(inputDto);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateShopBusinessLicense(DataShopUpdateShopBusinessLicenseInputDto inputDto) {
         DataShopEntity dbEntity = shopDao.getById(inputDto.getId());
@@ -279,6 +264,25 @@ public class DataShopServiceImpl implements IDataShopService {
             return 0;
         }
         return shopDao.updateShopFrontPhoto(dbEntity.getId(), inputDto.getPersistenceStatus(), inputDto.getShopFrontPhoto());
+    }
+
+    @Override
+    public int countNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
+        return shopDao.countNotBindOrganization(inputDto);
+    }
+
+    @Override
+    public String getIdByCode(DataShopCodeInoutDto inoutDto) {
+        return shopDao.getIdByCode(inoutDto.getCode());
+    }
+
+    @Override
+    public DataShopDetailOutputDto getById(IdRequest request) {
+        DataShopEntity entity = shopDao.getById(request.getId());
+        if (entity == null) {
+            return null;
+        }
+        return JSONUtil.toBean(JSONUtil.toJsonStr(entity), DataShopDetailOutputDto.class);
     }
 
     @Override
@@ -392,12 +396,8 @@ public class DataShopServiceImpl implements IDataShopService {
     }
 
     @Override
-    public DataShopDetailOutputDto getById(IdRequest request) {
-        DataShopEntity entity = shopDao.getById(request.getId());
-        if (entity == null) {
-            return null;
-        }
-        return JSONUtil.toBean(JSONUtil.toJsonStr(entity), DataShopDetailOutputDto.class);
+    public List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
+        return shopDao.listNotBindOrganization(inputDto);
     }
 
     @Override
@@ -434,6 +434,20 @@ public class DataShopServiceImpl implements IDataShopService {
     }
 
     @Override
+    public List<DataShopListOutputDto> listByOffset(DataShopQueryListOffsetInputDto inputDto) {
+        List<DataShopEntity> userEntityList = shopDao.listByOffset(inputDto);
+        if (CollectionUtil.isEmpty(userEntityList)) {
+            return List.of();
+        }
+        return JSONUtil.toList(JSONUtil.toJsonStr(userEntityList), DataShopListOutputDto.class);
+    }
+
+    @Override
+    public List<DataShopListSimpleOutputDto> listAll(DataShopQueryListAllInputDto inputDto) {
+        return shopDao.listAll(inputDto);
+    }
+
+    @Override
     public Map<String, String> idByCodeSet(OpenApiShopCodeSetInputDto inputDto) {
         List<IdCodeResponse> responseList = shopDao.selectSimpleByCodeSet(inputDto.getCodeSet());
         if (CollectionUtil.isEmpty(responseList)) {
@@ -450,20 +464,6 @@ public class DataShopServiceImpl implements IDataShopService {
         return userEntityList.stream()
                 .collect(Collectors.toMap(DataShopEntity::getId, user ->
                         JSONUtil.toBean(JSONUtil.toJsonStr(user), DataShopDetailOutputDto.class)));
-    }
-
-    @Override
-    public List<DataShopListOutputDto> listByOffset(DataShopQueryListOffsetInputDto inputDto) {
-        List<DataShopEntity> userEntityList = shopDao.listByOffset(inputDto);
-        if (CollectionUtil.isEmpty(userEntityList)) {
-            return List.of();
-        }
-        return JSONUtil.toList(JSONUtil.toJsonStr(userEntityList), DataShopListOutputDto.class);
-    }
-
-    @Override
-    public List<DataShopListSimpleOutputDto> listAll(DataShopQueryListAllInputDto inputDto) {
-        return shopDao.listAll(inputDto);
     }
 
     @Override

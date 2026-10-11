@@ -18,12 +18,6 @@ public class YunXiCubeShopDaoImpl implements IYunXiCubeShopDao {
     private IYunXiCubeShopMapper cubeShopMapper;
 
     @Override
-    public List<YunXiCubeShopEntity> listByOffset(Long offset,
-                                                  int limit) {
-        return cubeShopMapper.listByOffset(offset, limit);
-    }
-
-    @Override
     public YunXiCubeShopEntity getById(Long id) {
         return cubeShopMapper.selectById(id);
     }
@@ -41,5 +35,11 @@ public class YunXiCubeShopDaoImpl implements IYunXiCubeShopDao {
         Wrapper<YunXiCubeShopEntity> wrapper = new LambdaQueryWrapper<YunXiCubeShopEntity>()
                 .in(YunXiCubeShopEntity::getId, ids);
         return cubeShopMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<YunXiCubeShopEntity> listByOffset(Long offset,
+                                                  int limit) {
+        return cubeShopMapper.listByOffset(offset, limit);
     }
 }

@@ -13,10 +13,6 @@ import com.machine.service.data.mesage.dao.mapper.entity.DataAppMessageEntity;
 import java.util.List;
 
 public interface IDataAppMessageDao {
-    Page<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto);
-
-    Page<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto);
-
     void insert(DataAppMessageEntity dataAppMessageEntity);
 
     void disposeMessage(String messageId);
@@ -26,4 +22,8 @@ public interface IDataAppMessageDao {
     List<AppMessageGroupCountOutputDto> groupCount(AppMessageGroupCountInputDto inputDto);
 
     Integer getUnreadCount(AppMessageUnreadCountInputDto inputDto);
+
+    Page<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto);
+
+    Page<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto);
 }

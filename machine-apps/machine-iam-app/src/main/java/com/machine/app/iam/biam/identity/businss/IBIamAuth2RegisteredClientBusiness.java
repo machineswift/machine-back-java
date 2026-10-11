@@ -15,11 +15,11 @@ public interface IBIamAuth2RegisteredClientBusiness {
 
     String create(BIamAuth2RegisteredClientCreateRequestVo request);
 
+    void delete(IdRequest request);
+
     void update(BIamAuth2RegisteredClientUpdateRequestVo request);
 
     void updateStatus(BIamAuth2RegisteredClientUpdateStatusRequestVo request);
-
-    void delete(IdRequest request);
 
     BIamAuth2RegisteredClientDetailResponseVo detail(IdRequest request);
 

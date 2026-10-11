@@ -47,11 +47,11 @@ public interface IBIamRoleClient {
     @PostMapping("list_sub")
     List<BIamRoleListOutputDto> listSub(@RequestBody @Validated BIamRoleListSubInputDto inputDto);
 
-    @PostMapping("select_page")
-    PageResponse<BIamRoleListOutputDto> selectPage(@RequestBody @Validated BIamRoleQueryPageInputDto inputDto);
-
     @PostMapping("map_by_idSet")
     Map<String, BIamRoleDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
+
+    @PostMapping("select_page")
+    PageResponse<BIamRoleListOutputDto> selectPage(@RequestBody @Validated BIamRoleQueryPageInputDto inputDto);
 
 }
 

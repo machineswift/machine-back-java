@@ -51,11 +51,7 @@ public class DataMaterialServiceImpl implements IDataMaterialService {
         entity.setProcessStatus(DataMaterialProcessStatusEnum.NOT_STARTED);
         entity.setBusinessStatus(DataMaterialBusinessStatusEnum.DRAFT);
         entity.setAuditStatus(DataMaterialAuditStatusEnum.NOT_SUBMITTED);
-        String materialId = dataMaterialDao.insert(entity);
-
-        //素材与分类的关系
-        insertMaterialCategoryRelation(materialId, inputDto.getCategoryIdSet());
-        return materialId;
+        return dataMaterialDao.insert(entity);
     }
 
     @Override
@@ -69,10 +65,6 @@ public class DataMaterialServiceImpl implements IDataMaterialService {
         updateEntity.setId(inputDto.getId());
         updateEntity.setTitle(inputDto.getTitle());
         dataMaterialDao.update(updateEntity);
-
-        //素材与分类的关系
-        materialCategoryRelationDao.deleteByMaterialId(inputDto.getId());
-        insertMaterialCategoryRelation(inputDto.getId(), inputDto.getCategoryIdSet());
     }
 
     @Override

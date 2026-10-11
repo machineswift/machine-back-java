@@ -23,18 +23,6 @@ public class DataAppMessageServer implements IDataAppMessageClient {
     private IDataAppMessageService appMessageService;
 
     @Override
-    @PostMapping("manage_page")
-    public PageResponse<AppMessageListOutputDto> managePage(@RequestBody @Validated AppMessagePageInputDto inputDto) {
-        return appMessageService.managePage(inputDto);
-    }
-
-    @Override
-    @PostMapping("super_page")
-    public PageResponse<AppMessageListSuperOutputDto> superPage(@RequestBody @Validated AppMessagePageSuperInputDto inputDto) {
-        return appMessageService.superPage(inputDto);
-    }
-
-    @Override
     @PostMapping("save")
     public Boolean saveMessageRecord(@RequestBody @Validated AppMessageSaveInputDto inputDto) {
         return appMessageService.saveMessageRecord(inputDto);
@@ -68,5 +56,17 @@ public class DataAppMessageServer implements IDataAppMessageClient {
     @PostMapping("get_unread_count")
     public Integer getUnreadCount(@RequestBody AppMessageUnreadCountInputDto inputDto) {
         return appMessageService.getUnreadCount(inputDto);
+    }
+
+    @Override
+    @PostMapping("manage_page")
+    public PageResponse<AppMessageListOutputDto> managePage(@RequestBody @Validated AppMessagePageInputDto inputDto) {
+        return appMessageService.managePage(inputDto);
+    }
+
+    @Override
+    @PostMapping("super_page")
+    public PageResponse<AppMessageListSuperOutputDto> superPage(@RequestBody @Validated AppMessagePageSuperInputDto inputDto) {
+        return appMessageService.superPage(inputDto);
     }
 }

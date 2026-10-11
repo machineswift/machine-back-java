@@ -94,6 +94,20 @@ public class BIamUserRoleRelationDaoImpl implements IBIamUserRoleRelationDao {
     }
 
     @Override
+    public Map<String, Integer> countUserByRoleIdSet(Set<String> roleIdSet) {
+        List<IdCountResponse> responseList = userRoleRelationMapper.countUserByRoleIdSet(roleIdSet);
+        if (CollectionUtil.isEmpty(responseList)) {
+            return Map.of();
+        }
+
+        return responseList.stream()
+                .collect(Collectors.toMap(
+                        response -> response.id,
+                        response -> response.count
+                ));
+    }
+
+    @Override
     public BIamUserRoleRelationEntity detail(String id) {
         return userRoleRelationMapper.selectById(id);
     }
@@ -143,20 +157,6 @@ public class BIamUserRoleRelationDaoImpl implements IBIamUserRoleRelationDao {
         Wrapper<BIamUserRoleRelationEntity> wrapper = new LambdaQueryWrapper<BIamUserRoleRelationEntity>()
                 .in(BIamUserRoleRelationEntity::getUserId, userIdSet);
         return userRoleRelationMapper.selectList(wrapper);
-    }
-
-    @Override
-    public Map<String, Integer> countUserByRoleIdSet(Set<String> roleIdSet) {
-        List<IdCountResponse> responseList = userRoleRelationMapper.countUserByRoleIdSet(roleIdSet);
-        if (CollectionUtil.isEmpty(responseList)) {
-            return Map.of();
-        }
-
-        return responseList.stream()
-                .collect(Collectors.toMap(
-                        response -> response.id,
-                        response -> response.count
-                ));
     }
 
     private void clearFunctionPermissionByUserId(String userId) {

@@ -15,9 +15,9 @@ public interface IDataAttachmentService {
 
     DataAttachmentDetailOutputDto getById(IdRequest request);
 
-    List<DataAttachmentDetailOutputDto> listByIdSet(IdSetRequest request);
-
     DataAttachmentWithCurrentFileInfoOutputDto getCurrentByAttachmentId(IdRequest request);
+
+    List<DataAttachmentDetailOutputDto> listByIdSet(IdSetRequest request);
 
     Map<String, DataAttachmentWithCurrentFileInfoOutputDto> mapCurrentByAttachmentIdSet(IdSetRequest request);
 

@@ -22,11 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 操作日志 DATA 模块-素材 业务快照加载器注册。
- * <p>
- * 覆盖修改（update）与关系数据变更（update_category，携带 素材+分类ID->名称）。
- */
 @Slf4j
 @Configuration
 public class DataMaterialOperateLogLoad extends AbstractModuleOperateLogLoad {

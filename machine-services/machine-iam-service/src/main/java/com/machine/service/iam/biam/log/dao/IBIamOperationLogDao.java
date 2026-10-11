@@ -12,12 +12,12 @@ public interface IBIamOperationLogDao {
     String insert(BIamOperationLogEntity insertEntity);
 
     /**
-     * 分页查询
-     */
-    Page<BIamOperationLogEntity> page(BIamOperationLogQueryPageInputDto inputDto);
-
-    /**
      * 根据ID查询
      */
     BIamOperationLogEntity getById(String id);
+
+    /**
+     * 分页查询
+     */
+    Page<BIamOperationLogEntity> page(BIamOperationLogQueryPageInputDto inputDto);
 }

@@ -307,8 +307,27 @@ public class DataShopDaoImpl implements IDataShopDao {
     }
 
     @Override
-    public List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
-        return shopMapper.listNotBindOrganization(inputDto);
+    public String getIdByCode(String code) {
+        return shopMapper.getIdByCode(code);
+    }
+
+    @Override
+    public DataShopEntity getById(String id) {
+        return shopMapper.selectById(id);
+    }
+
+    @Override
+    public DataShopEntity getByCode(String code) {
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
+                .eq(DataShopEntity::getCode, code);
+        return shopMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public DataShopEntity getByName(String name) {
+        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
+                .eq(DataShopEntity::getName, name);
+        return shopMapper.selectOne(wrapper);
     }
 
     @Override
@@ -395,27 +414,8 @@ public class DataShopDaoImpl implements IDataShopDao {
     }
 
     @Override
-    public String getIdByCode(String code) {
-        return shopMapper.getIdByCode(code);
-    }
-
-    @Override
-    public DataShopEntity getById(String id) {
-        return shopMapper.selectById(id);
-    }
-
-    @Override
-    public DataShopEntity getByCode(String code) {
-        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
-                .eq(DataShopEntity::getCode, code);
-        return shopMapper.selectOne(wrapper);
-    }
-
-    @Override
-    public DataShopEntity getByName(String name) {
-        Wrapper<DataShopEntity> wrapper = new LambdaQueryWrapper<DataShopEntity>()
-                .eq(DataShopEntity::getName, name);
-        return shopMapper.selectOne(wrapper);
+    public List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto) {
+        return shopMapper.listNotBindOrganization(inputDto);
     }
 
     @Override
@@ -466,6 +466,11 @@ public class DataShopDaoImpl implements IDataShopDao {
     }
 
     @Override
+    public List<DataShopEntity> listForExport(DataShopExportInputDto inputDto) {
+        return shopMapper.listForExport(inputDto);
+    }
+
+    @Override
     public Page<DataShopEntity> selectPage(DataShopQueryPageInputDto inputDto) {
         IPage<DataShopEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
         return shopMapper.selectPage(inputDto, page);
@@ -475,11 +480,6 @@ public class DataShopDaoImpl implements IDataShopDao {
     public Page<DataShopEntity> pageCollectShop(DataSuperShopListCollectShopInputDto inputDto) {
         IPage<DataShopEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
         return shopMapper.pageCollectShop(inputDto, page);
-    }
-
-    @Override
-    public List<DataShopEntity> listForExport(DataShopExportInputDto inputDto) {
-        return shopMapper.listForExport(inputDto);
     }
 
 }

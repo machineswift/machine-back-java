@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @Schema
 @NoArgsConstructor
@@ -25,6 +27,15 @@ public class DataBrandDetailResponseVo {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "拼音全拼")
+    private String namePinyinFull;
+
+    @Schema(description = "拼音首字母")
+    private String namePinyinInitial;
+
+    @Schema(description = "英文名称")
+    private String nameEn;
+
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
 
@@ -36,6 +47,9 @@ public class DataBrandDetailResponseVo {
 
     @Schema(description = "描述")
     private String description;
+
+    @Schema(description = "所属分类ID集合")
+    private Set<String> categoryIdSet;
 
     @Schema(description = "创建人ID")
     private String createBy;

@@ -18,15 +18,6 @@ public class DataUserCollectShopDaoImpl implements IDataUserCollectShopDao {
     private DataUserCollectShopMapper userCollectShopMapper;
 
     @Override
-    public int deleteByShopIdSet(String userId,
-                                 Set<String> unCollectShopIdSet) {
-        Wrapper<DataUserCollectShopEntity> deleteWrapper = new LambdaQueryWrapper<DataUserCollectShopEntity>()
-                .eq(DataUserCollectShopEntity::getUserId, userId)
-                .in(DataUserCollectShopEntity::getShopId, unCollectShopIdSet);
-        return userCollectShopMapper.delete(deleteWrapper);
-    }
-
-    @Override
     public void insertByShopIdSet(String userId,
                                   Set<String> unCollectShopIdSet) {
         for (String shopId : unCollectShopIdSet) {
@@ -35,6 +26,15 @@ public class DataUserCollectShopDaoImpl implements IDataUserCollectShopDao {
             entity.setShopId(shopId);
             userCollectShopMapper.insert(entity);
         }
+    }
+
+    @Override
+    public int deleteByShopIdSet(String userId,
+                                 Set<String> unCollectShopIdSet) {
+        Wrapper<DataUserCollectShopEntity> deleteWrapper = new LambdaQueryWrapper<DataUserCollectShopEntity>()
+                .eq(DataUserCollectShopEntity::getUserId, userId)
+                .in(DataUserCollectShopEntity::getShopId, unCollectShopIdSet);
+        return userCollectShopMapper.delete(deleteWrapper);
     }
 
     @Override

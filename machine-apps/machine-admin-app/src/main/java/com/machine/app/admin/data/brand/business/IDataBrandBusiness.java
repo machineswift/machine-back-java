@@ -19,7 +19,9 @@ public interface IDataBrandBusiness {
     void updateStatus(DataBrandUpdateStatusRequestVo request);
 
     void updateParent(DataBrandUpdateParentIdRequestVo request);
-    
+
+    void updateCategory(DataBrandUpdateCategoryRequestVo request);
+
     DataBrandDetailResponseVo detail(IdRequest request);
 
     PageResponse<DataBrandSimpleListResponseVo> childrenSimple(DataBrandQueryChildrenRequestVo request);

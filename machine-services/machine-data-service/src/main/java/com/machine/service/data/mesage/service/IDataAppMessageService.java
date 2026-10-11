@@ -11,10 +11,6 @@ import java.util.List;
 
 public interface IDataAppMessageService {
 
-    PageResponse<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto);
-
-    PageResponse<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto);
-
     Boolean saveMessageRecord(AppMessageSaveInputDto inputDto);
 
     Boolean sendMessage(AppMessageSendInputDto inputDto);
@@ -26,4 +22,8 @@ public interface IDataAppMessageService {
     List<AppMessageGroupCountOutputDto> groupCount(AppMessageGroupCountInputDto inputDto);
 
     Integer getUnreadCount(AppMessageUnreadCountInputDto inputDto);
+
+    PageResponse<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto);
+
+    PageResponse<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto);
 }

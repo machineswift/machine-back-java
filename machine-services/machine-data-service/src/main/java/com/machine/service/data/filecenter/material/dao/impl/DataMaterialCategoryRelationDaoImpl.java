@@ -20,6 +20,21 @@ public class DataMaterialCategoryRelationDaoImpl implements IDataMaterialCategor
     private DataMaterialCategoryRelationMapper materialCategoryRelationMapper;
 
     @Override
+    public void insert(DataMaterialCategoryRelationEntity entity) {
+        materialCategoryRelationMapper.insert(entity);
+    }
+
+    @Override
+    public void deleteByMaterialId(String materialId) {
+        if (StrUtil.isBlank(materialId)) {
+            return;
+        }
+        Wrapper<DataMaterialCategoryRelationEntity> wrapper = new LambdaQueryWrapper<DataMaterialCategoryRelationEntity>()
+                .eq(DataMaterialCategoryRelationEntity::getMaterialId, materialId);
+        materialCategoryRelationMapper.delete(wrapper);
+    }
+
+    @Override
     public Long selectCountByCategoryId(String categoryId) {
         if (StrUtil.isBlank(categoryId)) {
             return 0L;
@@ -37,21 +52,6 @@ public class DataMaterialCategoryRelationDaoImpl implements IDataMaterialCategor
         Wrapper<DataMaterialCategoryRelationEntity> wrapper = new LambdaQueryWrapper<DataMaterialCategoryRelationEntity>()
                 .in(DataMaterialCategoryRelationEntity::getCategoryId, categoryIdSet);
         return materialCategoryRelationMapper.selectCount(wrapper);
-    }
-
-    @Override
-    public void insert(DataMaterialCategoryRelationEntity entity) {
-        materialCategoryRelationMapper.insert(entity);
-    }
-
-    @Override
-    public void deleteByMaterialId(String materialId) {
-        if (StrUtil.isBlank(materialId)) {
-            return;
-        }
-        Wrapper<DataMaterialCategoryRelationEntity> wrapper = new LambdaQueryWrapper<DataMaterialCategoryRelationEntity>()
-                .eq(DataMaterialCategoryRelationEntity::getMaterialId, materialId);
-        materialCategoryRelationMapper.delete(wrapper);
     }
 
     @Override

@@ -23,11 +23,11 @@ public interface IDataAttachmentClient {
     @PostMapping("get_by_id")
     DataAttachmentDetailOutputDto getById(@RequestBody @Validated IdRequest request);
 
-    @PostMapping("map_by_idSet")
-    Map<String, DataAttachmentDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
-
     @PostMapping("get_by_attachmentId")
     DataAttachmentWithCurrentFileInfoOutputDto getCurrentByAttachmentId(@RequestBody @Validated IdRequest request);
+
+    @PostMapping("map_by_idSet")
+    Map<String, DataAttachmentDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request);
 
     @PostMapping("map_by_attachmentIdSet")
     Map<String, DataAttachmentWithCurrentFileInfoOutputDto> mapCurrentByAttachmentIdSet(@RequestBody @Validated IdSetRequest request);

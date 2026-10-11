@@ -21,13 +21,13 @@ public interface IBIamOauth2RegisteredClientDao {
     int updateClientSecret(String id,
                            String clientSecret);
 
-    List<String> allClientId(StatusEnum status);
-
     BIamOauth2RegisteredClientEntity findById(String id);
 
     BIamOauth2RegisteredClientEntity findByClientId(String clientId);
 
     BIamOauth2RegisteredClientEntity findByClientName(String clientName);
+
+    List<String> allClientId(StatusEnum status);
 
     Page<BIamOauth2RegisteredClientEntity> selectPage(BIamOAuth2RegisteredClientPageQueryInputDto query);
 

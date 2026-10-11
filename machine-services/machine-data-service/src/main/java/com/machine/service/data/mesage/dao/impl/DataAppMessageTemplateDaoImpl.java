@@ -26,19 +26,6 @@ public class DataAppMessageTemplateDaoImpl implements IDataAppMessageTemplateDao
     private DataAppMessageTemplateMapper dataAppMessageTemplateMapper;
 
     @Override
-    public Page<DataAppMessageTemplateEntity> page(AppMessageTemplateQueryPageInputDto inputDto) {
-        IPage<DataAppMessageTemplateEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
-        return dataAppMessageTemplateMapper.page(inputDto, page);
- }
-
-    @Override
-    public DataAppMessageTemplateEntity detailByType(AppMessageTemplateDetailByTypeInputDto inputDto) {
-        Wrapper<DataAppMessageTemplateEntity> wrapper = new LambdaQueryWrapper<DataAppMessageTemplateEntity>()
-                .eq(DataAppMessageTemplateEntity::getTemplateType, inputDto.getTemplateType().getCode());
-        return dataAppMessageTemplateMapper.selectOne(wrapper);
-    }
-
-    @Override
     public void update(DataAppMessageTemplateEntity dataAppMessageTemplateEntity) {
         dataAppMessageTemplateMapper.updateById(dataAppMessageTemplateEntity);
     }
@@ -61,4 +48,17 @@ public class DataAppMessageTemplateDaoImpl implements IDataAppMessageTemplateDao
         updateWrapper.set(DataAppMessageTemplateEntity::getChannel, channelStr);
         dataAppMessageTemplateMapper.update(null, updateWrapper);
     }
+
+    @Override
+    public DataAppMessageTemplateEntity detailByType(AppMessageTemplateDetailByTypeInputDto inputDto) {
+        Wrapper<DataAppMessageTemplateEntity> wrapper = new LambdaQueryWrapper<DataAppMessageTemplateEntity>()
+                .eq(DataAppMessageTemplateEntity::getTemplateType, inputDto.getTemplateType().getCode());
+        return dataAppMessageTemplateMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public Page<DataAppMessageTemplateEntity> page(AppMessageTemplateQueryPageInputDto inputDto) {
+        IPage<DataAppMessageTemplateEntity> page = new Page<>(inputDto.getCurrent(), inputDto.getSize());
+        return dataAppMessageTemplateMapper.page(inputDto, page);
+ }
 }

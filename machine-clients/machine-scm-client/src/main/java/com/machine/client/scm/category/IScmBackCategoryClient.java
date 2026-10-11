@@ -3,6 +3,8 @@ package com.machine.client.scm.category;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryCreateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateParentInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeGroupInputDto;
+import com.machine.client.scm.category.dto.input.ScmBackCategoryUpdateAttributeInputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryDetailOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
@@ -31,6 +33,12 @@ public interface IScmBackCategoryClient {
 
     @PostMapping("update_parent")
     int updateParent(@RequestBody @Valid ScmBackCategoryUpdateParentInputDto inputDto);
+
+    @PostMapping("update_attribute_group")
+    int updateAttributeGroup(@RequestBody @Valid ScmBackCategoryUpdateAttributeGroupInputDto inputDto);
+
+    @PostMapping("update_attribute")
+    int updateAttribute(@RequestBody @Valid ScmBackCategoryUpdateAttributeInputDto inputDto);
 
     @PostMapping("detail")
     ScmBackCategoryDetailOutputDto getById(@RequestBody @Valid IdRequest request);

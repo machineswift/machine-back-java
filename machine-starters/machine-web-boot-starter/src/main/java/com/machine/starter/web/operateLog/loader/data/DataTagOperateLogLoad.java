@@ -15,11 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 操作日志 DATA 模块-智能标签 业务快照加载器注册。
- * <p>
- * 覆盖修改（update）与关系数据变更（update_category，携带 标签+分类名称）。
- */
 @Slf4j
 @Configuration
 public class DataTagOperateLogLoad extends AbstractModuleOperateLogLoad {

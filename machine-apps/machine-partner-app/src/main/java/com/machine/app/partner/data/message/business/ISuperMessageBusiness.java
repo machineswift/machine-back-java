@@ -13,13 +13,13 @@ import com.machine.sdk.base.model.response.PageResponse;
 import java.util.List;
 
 public interface ISuperMessageBusiness {
-    PageResponse<SuperAppMessageListResponseVo> page(SuperMessagePageRequestVo request);
-
     Boolean read(SuperReadMessageRequestVo request);
+
+    Integer getUnreadCount(SuperMessageUnreadCountRequestVo request);
 
     List<SuperAppMessageGroupCountResponseVo> groupCount(SuperAppMessageGroupCountRequestVo request);
 
-    Integer getUnreadCount(SuperMessageUnreadCountRequestVo request);
+    PageResponse<SuperAppMessageListResponseVo> page(SuperMessagePageRequestVo request);
 
     PageResponse<SuperAppMessageListResponseVo> customCategoryPage(DataMessageChannelEnum channelEnum, BaseEnum baseEnum, Long current, Long size);
 

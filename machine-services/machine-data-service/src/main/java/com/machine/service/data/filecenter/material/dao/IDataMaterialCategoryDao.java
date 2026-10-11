@@ -14,6 +14,8 @@ public interface IDataMaterialCategoryDao {
 
     DataMaterialCategoryEntity getById(String id);
 
+    boolean existsByParentId(String parentId);
+
     DataMaterialCategoryEntity getByParentIdAndName(String parentId,
                                                    String name);
 

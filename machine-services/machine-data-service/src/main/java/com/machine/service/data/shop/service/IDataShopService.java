@@ -39,8 +39,6 @@ public interface IDataShopService {
 
     DataShopDetailOutputDto getById(IdRequest request);
 
-    List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
-
     DataShopBusinessLicenseOutputDto getShopBusinessLicense(IdRequest request);
 
     DataFoodBusinessLicenseOutputDto getFoodBusinessLicense(IdRequest request);
@@ -48,6 +46,8 @@ public interface IDataShopService {
     DataOpenApiDisinfectingContractOutputDto getDisinfectingContract(IdRequest request);
 
     DataOpenApiShopFrontPhotoOutputDto getShopFrontPhoto(IdRequest request);
+
+    List<String> listNotBindOrganization(DataShopNotBindOrganizationInputDto inputDto);
 
     List<String> listAreaCodeByShopIdSet(IdSetRequest request);
 
@@ -59,13 +59,13 @@ public interface IDataShopService {
 
     List<DataShopDetailOutputDto> listByShopCodeSet(IdSetRequest request);
 
-    Map<String, String> idByCodeSet(OpenApiShopCodeSetInputDto inputDto);
-
-    Map<String, DataShopDetailOutputDto> mapByIdSet(IdSetRequest request);
-
     List<DataShopListOutputDto> listByOffset(DataShopQueryListOffsetInputDto inputDto);
 
     List<DataShopListSimpleOutputDto> listAll(DataShopQueryListAllInputDto inputDto);
+
+    Map<String, String> idByCodeSet(OpenApiShopCodeSetInputDto inputDto);
+
+    Map<String, DataShopDetailOutputDto> mapByIdSet(IdSetRequest request);
 
     Page<DataShopListOutputDto> selectPage(DataShopQueryPageInputDto inputDto);
 

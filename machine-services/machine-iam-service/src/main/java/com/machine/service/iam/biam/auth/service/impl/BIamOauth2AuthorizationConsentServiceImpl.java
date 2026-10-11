@@ -20,13 +20,6 @@ public class BIamOauth2AuthorizationConsentServiceImpl implements IBIamOauth2Aut
     private IBIamOauth2AuthorizationConsentDao authorizationConsentDao;
 
     @Override
-    public void update(BIamOauth2AuthorizationConsentInputDto dto) {
-        BIamOauth2AuthorizationConsentEntity entity = new BIamOauth2AuthorizationConsentEntity();
-        BeanUtil.copyProperties(dto, entity);
-        authorizationConsentDao.update(entity);
-    }
-
-    @Override
     public void save(BIamOauth2AuthorizationConsentInputDto dto) {
         BIamOauth2AuthorizationConsentEntity entity = new BIamOauth2AuthorizationConsentEntity();
         BeanUtil.copyProperties(dto, entity);
@@ -40,6 +33,13 @@ public class BIamOauth2AuthorizationConsentServiceImpl implements IBIamOauth2Aut
         BeanUtil.copyProperties(dto, entity);
         authorizationConsentDao.remove(entity);
 
+    }
+
+    @Override
+    public void update(BIamOauth2AuthorizationConsentInputDto dto) {
+        BIamOauth2AuthorizationConsentEntity entity = new BIamOauth2AuthorizationConsentEntity();
+        BeanUtil.copyProperties(dto, entity);
+        authorizationConsentDao.update(entity);
     }
 
     @Override

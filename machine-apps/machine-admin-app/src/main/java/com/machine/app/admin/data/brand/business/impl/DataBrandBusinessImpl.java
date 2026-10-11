@@ -8,14 +8,17 @@ import com.machine.app.admin.data.brand.controller.vo.request.*;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandDetailResponseVo;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandExpandListResponseVo;
 import com.machine.app.admin.data.brand.controller.vo.response.DataBrandSimpleListResponseVo;
+import com.machine.client.data.brand.IDataBrandCategoryRelationClient;
 import com.machine.client.data.brand.IDataBrandClient;
 import com.machine.client.data.brand.dto.input.DataBrandCreateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateCategoryInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateStatusInputDto;
+import com.machine.client.data.brand.dto.output.DataBrandCategoryRelationOutputDto;
 import com.machine.client.data.brand.dto.output.DataBrandDetailOutputDto;
 import com.machine.client.data.brand.dto.output.DataBrandListOutputDto;
 import com.machine.client.data.filecenter.attachment.IDataAttachmentClient;
@@ -57,6 +60,9 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
 
     @Autowired
     private IDataBrandClient brandClient;
+
+    @Autowired
+    private IDataBrandCategoryRelationClient brandCategoryRelationClient;
 
     @Autowired
     private IDataFileTempClient dataFileTempClient;
@@ -190,6 +196,12 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
     }
 
     @Override
+    public void updateCategory(DataBrandUpdateCategoryRequestVo request) {
+        DataBrandUpdateCategoryInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataBrandUpdateCategoryInputDto.class);
+        brandClient.updateCategory(inputDto);
+    }
+
+    @Override
     public DataBrandDetailResponseVo detail(IdRequest request) {
         DataBrandDetailOutputDto outputDto = brandClient.detail(request);
         if (null == outputDto) {
@@ -200,6 +212,9 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
 
         //填充品牌全称（父品牌-子品牌）
         responseVo.setFullName(getFullName(outputDto));
+
+        //填充所属分类
+        fillDetailCategories(responseVo);
 
         { //填充修改人创建人信息
             Set<String> userIdSet = new HashSet<>();
@@ -230,6 +245,9 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         }
 
         DataBrandQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataBrandQueryPageInputDto.class);
+        if (inputDto.getContainVirtualNode() == null) {
+            inputDto.setContainVirtualNode(false);
+        }
         return buildChildrenExpand(brandClient.childrenPage(inputDto));
     }
 
@@ -242,13 +260,12 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
     @Override
     public PageResponse<DataBrandExpandListResponseVo> pageExpand(DataBrandQueryPageRequestVo request) {
         DataBrandQueryPageInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), DataBrandQueryPageInputDto.class);
+        if (inputDto.getContainVirtualNode() == null) {
+            inputDto.setContainVirtualNode(false);
+        }
         return buildPageExpandTree(brandClient.page(inputDto));
     }
 
-    /**
-     * page_simple（组件弹窗快速选择）：按 父品牌 / 关键字（name 或 code 模糊） / 状态 分页，扁平返回
-     * 不补齐父链、不组树，也不与管理菜单的 page_expand（buildPageExpandTree）共用任何组装逻辑
-     */
     private PageResponse<DataBrandSimpleListResponseVo> buildSimplePage(PageResponse<DataBrandListOutputDto> pageOutput) {
         if (CollectionUtil.isEmpty(pageOutput.getRecords())) {
             return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal());
@@ -260,9 +277,6 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal(), voList);
     }
 
-    /**
-     * page_expand：分页命中的品牌补齐父链后组装成树（相同节点合并）
-     */
     private PageResponse<DataBrandExpandListResponseVo> buildPageExpandTree(PageResponse<DataBrandListOutputDto> pageOutput) {
         if (CollectionUtil.isEmpty(pageOutput.getRecords())) {
             return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal());
@@ -271,6 +285,7 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         List<DataBrandListOutputDto> nodeList = listWithParentChain(pageOutput.getRecords());
         List<DataBrandExpandListResponseVo> voList = JSONUtil.toList(JSONUtil.toJsonStr(nodeList), DataBrandExpandListResponseVo.class);
         fillExpandUserNames(voList);
+        fillExpandCategories(voList);
         fillExpandHasChildren(voList);
 
         //最外层按创建时间倒序
@@ -280,9 +295,6 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal(), treeList);
     }
 
-    /**
-     * children_simple：子品牌分页（sort 大的在前），不组装树
-     */
     private PageResponse<DataBrandSimpleListResponseVo> buildChildrenSimple(PageResponse<DataBrandListOutputDto> pageOutput) {
         if (CollectionUtil.isEmpty(pageOutput.getRecords())) {
             return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal());
@@ -294,9 +306,6 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal(), voList);
     }
 
-    /**
-     * children_expand：子品牌分页（sort 大的在前），不组装树
-     */
     private PageResponse<DataBrandExpandListResponseVo> buildChildrenExpand(PageResponse<DataBrandListOutputDto> pageOutput) {
         if (CollectionUtil.isEmpty(pageOutput.getRecords())) {
             return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal());
@@ -304,14 +313,12 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
 
         List<DataBrandExpandListResponseVo> voList = JSONUtil.toList(JSONUtil.toJsonStr(pageOutput.getRecords()), DataBrandExpandListResponseVo.class);
         fillExpandUserNames(voList);
+        fillExpandCategories(voList);
         fillExpandHasChildren(voList);
 
         return new PageResponse<>(pageOutput.getCurrent(), pageOutput.getSize(), pageOutput.getTotal(), voList);
     }
 
-    /**
-     * 分页命中的品牌补齐父链：逐层向上查询到根节点，相同节点只保留一份
-     */
     private List<DataBrandListOutputDto> listWithParentChain(List<DataBrandListOutputDto> matchedList) {
         Map<String, DataBrandListOutputDto> nodeMap = new LinkedHashMap<>();
         for (DataBrandListOutputDto matched : matchedList) {
@@ -338,9 +345,6 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         return new ArrayList<>(nodeMap.values());
     }
 
-    /**
-     * 收集还未加载的父品牌ID（根节点除外）
-     */
     private Set<String> listUnknownParentIdSet(Map<String, DataBrandListOutputDto> nodeMap) {
         return nodeMap.values().stream()
                 .map(DataBrandListOutputDto::getParentId)
@@ -423,6 +427,39 @@ public class DataBrandBusinessImpl implements IDataBrandBusiness {
         for (DataBrandExpandListResponseVo vo : records) {
             vo.setHasChildren(CollectionUtil.isNotEmpty(hasChildrenIdSet) && hasChildrenIdSet.contains(vo.getId()));
         }
+    }
+
+    /**
+     * 填充详情页的所属分类 ID 集合
+     */
+    private void fillDetailCategories(DataBrandDetailResponseVo responseVo) {
+        List<DataBrandCategoryRelationOutputDto> relationList =
+                brandCategoryRelationClient.listByBrandId(new IdRequest(responseVo.getId()));
+        responseVo.setCategoryIdSet(toCategoryIdSet(relationList));
+    }
+
+    /**
+     * 填充展开列表的所属分类 ID 集合
+     */
+    private void fillExpandCategories(List<DataBrandExpandListResponseVo> records) {
+        Set<String> brandIdSet = records.stream().map(DataBrandExpandListResponseVo::getId).collect(Collectors.toSet());
+        List<DataBrandCategoryRelationOutputDto> relationList =
+                brandCategoryRelationClient.listByBrandIdSet(new IdSetRequest(brandIdSet));
+        Map<String, Set<String>> brandIdToCategoryIds = relationList.stream()
+                .collect(Collectors.groupingBy(DataBrandCategoryRelationOutputDto::getBrandId,
+                        Collectors.mapping(DataBrandCategoryRelationOutputDto::getCategoryId, Collectors.toCollection(LinkedHashSet::new))));
+        for (DataBrandExpandListResponseVo vo : records) {
+            vo.setCategoryIdSet(brandIdToCategoryIds.getOrDefault(vo.getId(), Set.of()));
+        }
+    }
+
+    private Set<String> toCategoryIdSet(List<DataBrandCategoryRelationOutputDto> relationList) {
+        if (CollectionUtil.isEmpty(relationList)) {
+            return Set.of();
+        }
+        return relationList.stream()
+                .map(DataBrandCategoryRelationOutputDto::getCategoryId)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**

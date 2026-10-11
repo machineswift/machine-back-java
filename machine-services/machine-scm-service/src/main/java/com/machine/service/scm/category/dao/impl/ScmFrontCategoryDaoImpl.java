@@ -35,6 +35,14 @@ public class ScmFrontCategoryDaoImpl implements IScmFrontCategoryDao {
     }
 
     @Override
+    public int deleteById(String id) {
+        customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_KEY);
+        customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_DATA);
+
+        return frontCategoryMapper.deleteById(id);
+    }
+
+    @Override
     public int update(ScmFrontCategoryEntity entity) {
         customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_KEY);
         customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_DATA);
@@ -52,14 +60,6 @@ public class ScmFrontCategoryDaoImpl implements IScmFrontCategoryDao {
         entity.setId(id);
         entity.setParentId(parentId);
         return frontCategoryMapper.updateById(entity);
-    }
-
-    @Override
-    public int deleteById(String id) {
-        customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_KEY);
-        customerRedisCommands.del(SCM_FRONT_CATEGORY_TREE_DATA);
-
-        return frontCategoryMapper.deleteById(id);
     }
 
     @Override

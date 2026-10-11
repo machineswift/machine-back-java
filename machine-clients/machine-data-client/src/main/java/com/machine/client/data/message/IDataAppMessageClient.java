@@ -17,12 +17,6 @@ import java.util.List;
         configuration = OpenFeignMinTimeConfig.class)
 public interface IDataAppMessageClient {
 
-    @PostMapping("manage_page")
-    PageResponse<AppMessageListOutputDto> managePage(@RequestBody AppMessagePageInputDto request);
-
-    @PostMapping("super_page")
-    PageResponse<AppMessageListSuperOutputDto> superPage(@RequestBody @Validated AppMessagePageSuperInputDto inputDto);
-
     @PostMapping("save")
     Boolean saveMessageRecord(@RequestBody @Validated AppMessageSaveInputDto request);
 
@@ -40,6 +34,12 @@ public interface IDataAppMessageClient {
 
     @PostMapping("get_unread_count")
     Integer getUnreadCount(@RequestBody AppMessageUnreadCountInputDto inputDto);
+
+    @PostMapping("manage_page")
+    PageResponse<AppMessageListOutputDto> managePage(@RequestBody AppMessagePageInputDto request);
+
+    @PostMapping("super_page")
+    PageResponse<AppMessageListSuperOutputDto> superPage(@RequestBody @Validated AppMessagePageSuperInputDto inputDto);
 }
 
 

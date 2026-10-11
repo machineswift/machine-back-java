@@ -14,12 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
         configuration = OpenFeignMinTimeConfig.class)
 public interface IDataAppMessageTemplateClient {
 
-    @PostMapping("detail_by_type")
-    AppMessageTemplateDetailOutputDto detailByType(@RequestBody @Validated AppMessageTemplateDetailByTypeInputDto inputDto);
-
-    @PostMapping("page")
-    PageResponse<AppMessageTemplateListOutPutDto> page(@RequestBody @Validated AppMessageTemplateQueryPageInputDto inputDto);
-
     @PostMapping("update_message_template")
     void updateMessageTemplate(@RequestBody @Validated AppMessageTemplateUpdateInputDto inputDto);
 
@@ -28,6 +22,12 @@ public interface IDataAppMessageTemplateClient {
 
     @PostMapping("update_message_template_channel")
     void updateMessageTemplateChannel(@RequestBody @Validated AppMessageTemplateUpdateChannelInput inputDto);
+
+    @PostMapping("detail_by_type")
+    AppMessageTemplateDetailOutputDto detailByType(@RequestBody @Validated AppMessageTemplateDetailByTypeInputDto inputDto);
+
+    @PostMapping("page")
+    PageResponse<AppMessageTemplateListOutPutDto> page(@RequestBody @Validated AppMessageTemplateQueryPageInputDto inputDto);
 }
 
 

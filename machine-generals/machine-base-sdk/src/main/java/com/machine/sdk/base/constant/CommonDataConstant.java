@@ -53,4 +53,28 @@ public class CommonDataConstant {
 
     }
 
+    public static class BrandCategory {
+
+        /**
+         * 根分类ID
+         */
+        public static final String DATA_BRAND_CATEGORY_ROOT_ID = "brand_category";
+
+        /**
+         * 根节点父Id
+         */
+        public static final String DATA_BRAND_CATEGORY_ROOT_PARENT_ID = "root";
+
+        /**
+         * 虚拟品牌分类Id【未分配】
+         */
+        public static final String DATA_BRAND_CATEGORY_VIRTUAL_NODE = "data_brand_category_virtual_node";
+
+        /**
+         * 虚拟品牌分类名称【未分配】
+         */
+        public static final String DATA_BRAND_CATEGORY_VIRTUAL_NODE_NAME = "未分配";
+
+    }
+
 }

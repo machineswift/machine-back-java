@@ -98,21 +98,6 @@ public class DataAttachmentServiceImpl implements IDataAttachmentService {
     }
 
     @Override
-    public List<DataAttachmentDetailOutputDto> listByIdSet(IdSetRequest request) {
-        Set<String> idSet = request.getIdSet();
-        if (CollectionUtil.isEmpty(idSet)) {
-            return List.of();
-        }
-
-        List<DataAttachmentEntity> entityList = attachmentDao.selectByIdSet(idSet);
-        if (CollectionUtil.isEmpty(entityList)) {
-            return List.of();
-        }
-
-        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataAttachmentDetailOutputDto.class);
-    }
-
-    @Override
     public DataAttachmentWithCurrentFileInfoOutputDto getCurrentByAttachmentId(IdRequest request) {
         DataAttachmentEntity attachmentEntity = attachmentDao.getById(request.getId());
         if (attachmentEntity == null) {
@@ -130,6 +115,21 @@ public class DataAttachmentServiceImpl implements IDataAttachmentService {
         }
 
         return outputDto;
+    }
+
+    @Override
+    public List<DataAttachmentDetailOutputDto> listByIdSet(IdSetRequest request) {
+        Set<String> idSet = request.getIdSet();
+        if (CollectionUtil.isEmpty(idSet)) {
+            return List.of();
+        }
+
+        List<DataAttachmentEntity> entityList = attachmentDao.selectByIdSet(idSet);
+        if (CollectionUtil.isEmpty(entityList)) {
+            return List.of();
+        }
+
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), DataAttachmentDetailOutputDto.class);
     }
 
     @Override

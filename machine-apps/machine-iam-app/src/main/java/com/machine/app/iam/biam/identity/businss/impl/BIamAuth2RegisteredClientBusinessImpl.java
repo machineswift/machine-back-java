@@ -76,6 +76,14 @@ public class BIamAuth2RegisteredClientBusinessImpl implements IBIamAuth2Register
     }
 
     @Override
+    public void delete(IdRequest request) {
+        if (!ROOT_USER_ID.equals(AppContextHolder.getContext().getUserId())) {
+            throw new BIamBusinessException("biam.identity.business.oauth2RegisteredClient.delete.notRootUser", "只有超级管理员才能执行删除操作");
+        }
+        oauth2RegisteredClientClient.delete(request);
+    }
+
+    @Override
     public void update(BIamAuth2RegisteredClientUpdateRequestVo request) {
         BIamOAuth2RegisteredClientUpdateInputDto inputDto = new BIamOAuth2RegisteredClientUpdateInputDto();
         inputDto.setId(request.getId());
@@ -94,14 +102,6 @@ public class BIamAuth2RegisteredClientBusinessImpl implements IBIamAuth2Register
     public void updateStatus(BIamAuth2RegisteredClientUpdateStatusRequestVo request) {
         BIamOAuth2RegisteredClientUpdateStatusInputDto inputDto = JSONUtil.toBean(JSONUtil.toJsonStr(request), BIamOAuth2RegisteredClientUpdateStatusInputDto.class);
         oauth2RegisteredClientClient.updateStatus(inputDto);
-    }
-
-    @Override
-    public void delete(IdRequest request) {
-        if (!ROOT_USER_ID.equals(AppContextHolder.getContext().getUserId())) {
-            throw new BIamBusinessException("biam.identity.business.oauth2RegisteredClient.delete.notRootUser", "只有超级管理员才能执行删除操作");
-        }
-        oauth2RegisteredClientClient.delete(request);
     }
 
     @Override

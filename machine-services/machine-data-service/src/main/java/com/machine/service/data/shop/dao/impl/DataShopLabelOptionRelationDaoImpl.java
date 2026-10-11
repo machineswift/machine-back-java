@@ -26,17 +26,6 @@ public class DataShopLabelOptionRelationDaoImpl implements IDataShopLabelOptionR
     private DataShopLabelOptionRelationMapper shopLabelOptionRelationMapper;
 
     @Override
-    public int deleteByShopId(String shopId) {
-        Wrapper<DataShopLabelOptionRelationEntity> deleteWrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
-                .eq(DataShopLabelOptionRelationEntity::getShopId, shopId);
-
-        //事件
-        customerStreamBridge.sendWebHookEvent(EventTypeEnum.DATA_SHOP_UPDATE_UPDATE_SHOP_LABEL, new IdDto(shopId));
-
-        return shopLabelOptionRelationMapper.delete(deleteWrapper);
-    }
-
-    @Override
     public void batchInsert(String shopId,
                             Set<String> labelOptionIdSet) {
         for (String labelOptionId : labelOptionIdSet) {
@@ -48,6 +37,17 @@ public class DataShopLabelOptionRelationDaoImpl implements IDataShopLabelOptionR
 
         //事件
         customerStreamBridge.sendWebHookEvent(EventTypeEnum.DATA_SHOP_UPDATE_UPDATE_SHOP_LABEL, new IdDto(shopId));
+    }
+
+    @Override
+    public int deleteByShopId(String shopId) {
+        Wrapper<DataShopLabelOptionRelationEntity> deleteWrapper = new LambdaQueryWrapper<DataShopLabelOptionRelationEntity>()
+                .eq(DataShopLabelOptionRelationEntity::getShopId, shopId);
+
+        //事件
+        customerStreamBridge.sendWebHookEvent(EventTypeEnum.DATA_SHOP_UPDATE_UPDATE_SHOP_LABEL, new IdDto(shopId));
+
+        return shopLabelOptionRelationMapper.delete(deleteWrapper);
     }
 
     @Override

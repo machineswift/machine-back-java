@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 public class DataMaterialUpdateRequestVo {
@@ -22,8 +20,5 @@ public class DataMaterialUpdateRequestVo {
 
     @Schema(description = "临时文件")
     private DataFileTempCreateDto fileTemp;
-
-    @Schema(description = "所属分类ID集合，可多选")
-    private Set<String> categoryIdSet;
 
 }

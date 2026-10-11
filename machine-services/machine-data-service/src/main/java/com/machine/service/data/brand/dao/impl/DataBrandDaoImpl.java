@@ -67,22 +67,10 @@ public class DataBrandDaoImpl implements IDataBrandDao {
     }
 
     @Override
-    public DataBrandEntity getById(String id) {
-        return brandMapper.selectById(id);
-    }
-
-    @Override
     public boolean exists(String id) {
         Wrapper<DataBrandEntity> wrapper = new LambdaQueryWrapper<DataBrandEntity>()
                 .eq(DataBrandEntity::getId, id);
         return brandMapper.exists(wrapper);
-    }
-
-    @Override
-    public DataBrandEntity getByName(String name) {
-        Wrapper<DataBrandEntity> wrapper = new LambdaQueryWrapper<DataBrandEntity>()
-                .eq(DataBrandEntity::getName, name);
-        return brandMapper.selectOne(wrapper);
     }
 
     @Override
@@ -101,12 +89,15 @@ public class DataBrandDaoImpl implements IDataBrandDao {
     }
 
     @Override
-    public Set<String> selectHasChildrenIdSet(Set<String> idSet) {
-        if (CollectionUtil.isEmpty(idSet)) {
-            return Set.of();
-        }
+    public DataBrandEntity getById(String id) {
+        return brandMapper.selectById(id);
+    }
 
-        return brandMapper.selectHasChildrenIdSet(idSet);
+    @Override
+    public DataBrandEntity getByName(String name) {
+        Wrapper<DataBrandEntity> wrapper = new LambdaQueryWrapper<DataBrandEntity>()
+                .eq(DataBrandEntity::getName, name);
+        return brandMapper.selectOne(wrapper);
     }
 
     @Override
@@ -117,6 +108,15 @@ public class DataBrandDaoImpl implements IDataBrandDao {
     @Override
     public List<DataBrandEntity> selectByIdSet(Set<String> idSet) {
         return brandMapper.selectByIds(idSet);
+    }
+
+    @Override
+    public Set<String> selectHasChildrenIdSet(Set<String> idSet) {
+        if (CollectionUtil.isEmpty(idSet)) {
+            return Set.of();
+        }
+
+        return brandMapper.selectHasChildrenIdSet(idSet);
     }
 
     @Override

@@ -43,6 +43,19 @@ public class RedisPrefix4DataConstant {
         public static final String DATA_MATERIAL_CATEGORY_TREE_DATA = "data:materialCategory:tree:data:";
     }
 
+    public static class BrandCategory {
+
+        /**
+         * 品牌分类 key
+         */
+        public static final String DATA_BRAND_CATEGORY_TREE_KEY = "data:brandCategory:tree:key";
+
+        /**
+         * 品牌分类 数据
+         */
+        public static final String DATA_BRAND_CATEGORY_TREE_DATA = "data:brandCategory:tree:data:";
+    }
+
 
     public static class TagCategory {
 

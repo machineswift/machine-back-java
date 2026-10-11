@@ -6,6 +6,7 @@ import com.machine.client.data.brand.IDataBrandClient;
 import com.machine.client.data.brand.dto.input.DataBrandCreateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQueryPageInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandQuerySimplePageInputDto;
+import com.machine.client.data.brand.dto.input.DataBrandUpdateCategoryInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateLogoAttachmentIdInputDto;
 import com.machine.client.data.brand.dto.input.DataBrandUpdateParentIdInputDto;
@@ -76,21 +77,28 @@ public class DataBrandServer implements IDataBrandClient {
     }
 
     @Override
+    @PostMapping("update_category")
+    public void updateCategory(@RequestBody @Validated DataBrandUpdateCategoryInputDto inputDto) {
+        log.info("修改品牌分类， inputDto={}", JSONUtil.toJsonStr(inputDto));
+        brandService.updateCategory(inputDto);
+    }
+
+    @Override
     @PostMapping("exists")
     public boolean exists(@RequestBody @Validated IdRequest request) {
         return brandService.exists(request);
     }
 
     @Override
-    @PostMapping("list_ancestor")
-    public List<DataBrandDetailOutputDto> listAncestorById(@RequestBody @Validated IdRequest request) {
-        return brandService.listAncestorById(request);
-    }
-
-    @Override
     @PostMapping("detail")
     public DataBrandDetailOutputDto detail(@RequestBody @Validated IdRequest request) {
         return brandService.detail(request);
+    }
+
+    @Override
+    @PostMapping("list_ancestor")
+    public List<DataBrandDetailOutputDto> listAncestorById(@RequestBody @Validated IdRequest request) {
+        return brandService.listAncestorById(request);
     }
 
     @Override

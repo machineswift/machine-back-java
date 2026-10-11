@@ -8,13 +8,13 @@ import com.machine.sdk.base.model.response.PageResponse;
 
 public interface IDataAppMessageTemplateService {
 
-    PageResponse<AppMessageTemplateListOutPutDto> page(AppMessageTemplateQueryPageInputDto request);
-
-    AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto request);
-
     void updateMessageTemplate(AppMessageTemplateUpdateInputDto inputDto);
 
     void updateMessageTemplateStatus(AppMessageTemplateUpdateStatusInputDto inputDto);
 
     void updateMessageTemplateChannel(AppMessageTemplateUpdateChannelInput inputDto);
+
+    AppMessageTemplateDetailOutputDto detailByType(AppMessageTemplateDetailByTypeInputDto request);
+
+    PageResponse<AppMessageTemplateListOutPutDto> page(AppMessageTemplateQueryPageInputDto request);
 }

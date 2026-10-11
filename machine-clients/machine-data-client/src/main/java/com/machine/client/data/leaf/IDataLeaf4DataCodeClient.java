@@ -21,6 +21,12 @@ public interface IDataLeaf4DataCodeClient {
     String materialCategoryCode();
 
     /**
+     * 品牌分类编码
+     */
+    @GetMapping("brand_category_code")
+    String brandCategoryCode();
+
+    /**
      * 智能标签分类编码
      */
     @GetMapping("tag_category_code")
@@ -51,6 +57,5 @@ public interface IDataLeaf4DataCodeClient {
     String tagCode();
 
 }
-
 
 

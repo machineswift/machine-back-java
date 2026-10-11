@@ -3,10 +3,12 @@ package com.machine.app.admin.scm.category.controller;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.scm.category.business.IScmBackCategoryBusiness;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryCreateRequestVo;
+import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateAttributeGroupRequestVo;
+import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateAttributeRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateParentRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmBackCategoryUpdateRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.response.ScmBackCategoryDetailResponseVo;
-import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeExprandOutputDto;
+import com.machine.app.admin.scm.category.controller.vo.response.ScmBackCategoryTreeExpandResponseVo;
 import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
@@ -97,6 +99,36 @@ public class ScmBackCategoryController {
         backCategoryBusiness.updateParent(request);
     }
 
+    @Operation(summary = "修改后台分类关联属性分组")
+    @PostMapping("update_attribute_group")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:BACK:UPDATE_ATTRIBUTE_GROUP')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_BACK_CATEGORY,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改后台分类关联属性分组",
+            moduleEntityId = "#request.id",
+            content = "'修改后台分类关联属性分组：' + #request.id")
+    public void updateAttributeGroup(@RequestBody @Validated ScmBackCategoryUpdateAttributeGroupRequestVo request) {
+        log.info("修改后台分类关联属性分组，request={}", JSONUtil.toJsonStr(request));
+        backCategoryBusiness.updateAttributeGroup(request);
+    }
+
+    @Operation(summary = "修改后台分类关联属性")
+    @PostMapping("update_attribute")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:BACK:UPDATE_ATTRIBUTE')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_BACK_CATEGORY,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改后台分类关联属性",
+            moduleEntityId = "#request.id",
+            content = "'修改后台分类关联属性：' + #request.id")
+    public void updateAttribute(@RequestBody @Validated ScmBackCategoryUpdateAttributeRequestVo request) {
+        log.info("修改后台分类关联属性，request={}", JSONUtil.toJsonStr(request));
+        backCategoryBusiness.updateAttribute(request);
+    }
+
     @Operation(summary = "查询后台分类详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:BACK:DETAIL')")
@@ -124,7 +156,7 @@ public class ScmBackCategoryController {
             moduleEntity = ModuleEntityEnum.SCM_BACK_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询后台分类树(组织管理菜单)")
-    public ScmBackCategoryTreeExprandOutputDto treeExpand() {
+    public ScmBackCategoryTreeExpandResponseVo treeExpand() {
         return backCategoryBusiness.treeExpand();
     }
 

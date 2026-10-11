@@ -11,9 +11,9 @@ public interface IDepartmentExpansionDao {
 
     void batchInsert(List<DepartmentExpansionEntity> entityList);
 
-    DepartmentExpansionEntity getByDepartmentId(String departmentId);
-
     String updateByDepartmentId(DepartmentExpansionEntity updateEntity);
+
+    DepartmentExpansionEntity getByDepartmentId(String departmentId);
 
     List<DepartmentExpansionEntity> listDepartmentExpansionByDepartmentIdSet( Set<String> idSet);
 }

@@ -22,8 +22,8 @@ public interface IJobPostService {
 
     List<HrmJobPostListSimpleOutputDto> listByRoleId(IdRequest request);
 
-    Page<HrmJobPostListSimpleOutputDto> pageSimple(HrmJobPostListSimpleInputDto inputDto);
-
     Map<String, HrmJobPostDetailOutputDto> mapByIdSet(IdSetRequest request);
+
+    Page<HrmJobPostListSimpleOutputDto> pageSimple(HrmJobPostListSimpleInputDto inputDto);
 
 }

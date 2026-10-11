@@ -2,6 +2,10 @@ server:
   port: 8080
   servlet:
     context-path: /${spring.application.name}
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 2048
 
 spring:
   application:

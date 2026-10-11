@@ -204,11 +204,6 @@ public class DataShopController {
     @Operation(summary = "分页查询门店(应用于组件弹窗)")
     @PostMapping("page_simple")
     @PreAuthorize("hasAuthority('MANAGE_APP:SYSTEM:BASIC_DATA:SHOP:PAGE_SIMPLE')")
-    @WebApiAccessLog(operateSource = OperateSourceEnum.ADMIN_APP,
-            module = ModuleEnum.DATA,
-            moduleEntity = ModuleEntityEnum.DATA_SHOP,
-            operateType = ActionTypeEnum.QUERY,
-            operateName = "分页查询门店(组件弹窗)")
     public PageResponse<DataShopSimpleListResponseVo> pageSimple(@RequestBody @Validated DataShopQueryPageRequestVo request) {
         return shopBusiness.pageSimple(request);
     }

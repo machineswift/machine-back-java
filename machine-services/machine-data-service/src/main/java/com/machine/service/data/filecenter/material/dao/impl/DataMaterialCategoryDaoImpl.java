@@ -61,6 +61,13 @@ public class DataMaterialCategoryDaoImpl implements IDataMaterialCategoryDao {
     }
 
     @Override
+    public boolean existsByParentId(String parentId) {
+        Wrapper<DataMaterialCategoryEntity> wrapper = new LambdaQueryWrapper<DataMaterialCategoryEntity>()
+                .eq(DataMaterialCategoryEntity::getParentId, parentId);
+        return materialCategoryMapper.exists(wrapper);
+    }
+
+    @Override
     public DataMaterialCategoryEntity getByParentIdAndName(String parentId, String name) {
         Wrapper<DataMaterialCategoryEntity> wrapper = new LambdaQueryWrapper<DataMaterialCategoryEntity>()
                 .eq(DataMaterialCategoryEntity::getParentId, parentId)

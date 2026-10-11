@@ -3,6 +3,7 @@ package com.machine.service.scm.category.server;
 import cn.hutool.json.JSONUtil;
 import com.machine.client.scm.category.IScmFrontCategoryClient;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryCreateInputDto;
+import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateBackCategoryInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateParentInputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDto;
@@ -55,20 +56,27 @@ public class ScmFrontCategoryServer implements IScmFrontCategoryClient {
     }
 
     @Override
+    @PostMapping("update_back_category")
+    public int updateBackCategory(@RequestBody @Validated ScmFrontCategoryUpdateBackCategoryInputDto inputDto) {
+        log.info("修改前台分类关联后台分类，inputDto={}", JSONUtil.toJsonStr(inputDto));
+        return frontCategoryService.updateBackCategory(inputDto);
+    }
+
+    @Override
     @PostMapping("detail")
     public ScmFrontCategoryDetailOutputDto getById(@RequestBody @Validated IdRequest request) {
         return frontCategoryService.getById(request);
     }
 
     @Override
-    @GetMapping("tree_all_simple")
-    public Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple() {
-        return frontCategoryService.treeAllSimple();
-    }
-
-    @Override
     @GetMapping("list_all")
     public List<ScmFrontCategoryListOutputDto> listAll() {
         return frontCategoryService.listAll();
+    }
+
+    @Override
+    @GetMapping("tree_all_simple")
+    public Tuples.Tuple2<String, ScmFrontCategoryTreeOutputDto> treeAllSimple() {
+        return frontCategoryService.treeAllSimple();
     }
 }

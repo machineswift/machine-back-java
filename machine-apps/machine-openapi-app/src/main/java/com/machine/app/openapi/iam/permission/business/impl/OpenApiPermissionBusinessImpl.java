@@ -23,16 +23,6 @@ public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness
     private RedisBIamPermissionCache permissionCache;
 
     @Override
-    public List<BIamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request) {
-        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
-        List<BIamPermissionTreeOutputDto> children = treeOutputDto.getChildren();
-        for (BIamPermissionTreeOutputDto child : children) {
-            child.setChildren(null);
-        }
-        return children;
-    }
-
-    @Override
     public BIamPermissionTreeOutputDto detail(OpenApiPermissionIdRequestVo request) {
         BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
         BIamPermissionTreeOutputDto targetNode = TreeUtil.findNode(treeOutputDto, request.getId());
@@ -41,6 +31,16 @@ public class OpenApiPermissionBusinessImpl implements IOpenApiPermissionBusiness
         }
         targetNode.setChildren(null);
         return targetNode;
+    }
+
+    @Override
+    public List<BIamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request) {
+        BIamPermissionTreeOutputDto treeOutputDto = permissionCache.treeAll();
+        List<BIamPermissionTreeOutputDto> children = treeOutputDto.getChildren();
+        for (BIamPermissionTreeOutputDto child : children) {
+            child.setChildren(null);
+        }
+        return children;
     }
 
     @Override

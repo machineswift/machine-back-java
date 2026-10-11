@@ -3,10 +3,11 @@ package com.machine.app.admin.scm.category.controller;
 import cn.hutool.json.JSONUtil;
 import com.machine.app.admin.scm.category.business.IScmFrontCategoryBusiness;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryCreateRequestVo;
+import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateBackCategoryRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateParentRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.request.ScmFrontCategoryUpdateRequestVo;
 import com.machine.app.admin.scm.category.controller.vo.response.ScmFrontCategoryDetailResponseVo;
-import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeExpandOutputDto;
+import com.machine.app.admin.scm.category.controller.vo.response.ScmFrontCategoryTreeExpandResponseVo;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
 import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.model.response.IdResponse;
@@ -97,6 +98,21 @@ public class ScmFrontCategoryController {
         frontCategoryBusiness.updateParent(request);
     }
 
+    @Operation(summary = "修改前台分类关联后台分类")
+    @PostMapping("update_back_category")
+    @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:UPDATE_BACK_CATEGORY')")
+    @WebOperationLog(operateSource = OperateSourceEnum.ADMIN_APP,
+            module = ModuleEnum.SCM,
+            moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
+            operateType = ActionTypeEnum.UPDATE,
+            operateName = "修改前台分类关联后台分类",
+            moduleEntityId = "#request.id",
+            content = "'修改前台分类关联后台分类：' + #request.id")
+    public void updateBackCategory(@RequestBody @Validated ScmFrontCategoryUpdateBackCategoryRequestVo request) {
+        log.info("修改前台分类关联后台分类，request={}", JSONUtil.toJsonStr(request));
+        frontCategoryBusiness.updateBackCategory(request);
+    }
+
     @Operation(summary = "查询前台分类详情")
     @PostMapping("detail")
     @PreAuthorize("hasAuthority('MANAGE_APP:SCM:CATEGORY:FRONT:DETAIL')")
@@ -124,7 +140,7 @@ public class ScmFrontCategoryController {
             moduleEntity = ModuleEntityEnum.SCM_FRONT_CATEGORY,
             operateType = ActionTypeEnum.QUERY,
             operateName = "查询前台分类树(组织管理菜单)")
-    public ScmFrontCategoryTreeExpandOutputDto treeExpand() {
+    public ScmFrontCategoryTreeExpandResponseVo treeExpand() {
         return frontCategoryBusiness.treeExpand();
     }
 

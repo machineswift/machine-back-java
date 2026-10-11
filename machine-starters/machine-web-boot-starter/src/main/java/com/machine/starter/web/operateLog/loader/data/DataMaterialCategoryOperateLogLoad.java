@@ -12,11 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 操作日志 DATA 模块-素材分类 业务快照加载器注册。
- * <p>
- * 覆盖修改（update）与父节点关系变更（update_parent，携带 分类+父节点名称）。
- */
 @Slf4j
 @Configuration
 public class DataMaterialCategoryOperateLogLoad extends AbstractModuleOperateLogLoad {

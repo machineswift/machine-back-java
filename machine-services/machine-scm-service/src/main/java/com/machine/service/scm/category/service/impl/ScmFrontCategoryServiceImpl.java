@@ -6,8 +6,10 @@ import cn.hutool.json.JSONUtil;
 import com.machine.client.data.leaf.IDataLeaf4RedisClient;
 import com.machine.client.data.leaf.IDataLeaf4ScmCodeClient;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryCreateInputDto;
+import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateBackCategoryInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateInputDto;
 import com.machine.client.scm.category.dto.input.ScmFrontCategoryUpdateParentInputDto;
+import com.machine.client.scm.category.dto.output.ScmBackCategoryTreeSimpleOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryDetailOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryListOutputDto;
 import com.machine.client.scm.category.dto.output.ScmFrontCategoryTreeOutputDto;
@@ -16,11 +18,12 @@ import com.machine.sdk.base.model.request.IdRequest;
 import com.machine.sdk.base.tool.TreeUtil;
 import com.machine.sdk.base.tool.Tuples;
 import com.machine.service.scm.category.dao.IScmBackCategoryDao;
-import com.machine.service.scm.category.dao.IScmFrontBackCategoryRelationDao;
+import com.machine.service.scm.category.dao.IScmBackCategoryFrontRelationDao;
 import com.machine.service.scm.category.dao.IScmFrontCategoryDao;
-import com.machine.service.scm.category.dao.mapper.entity.ScmFrontBackCategoryRelationEntity;
+import com.machine.service.scm.category.dao.mapper.entity.ScmBackCategoryFrontRelationEntity;
 import com.machine.service.scm.category.dao.mapper.entity.ScmFrontCategoryEntity;
 import com.machine.service.scm.category.service.IScmFrontCategoryService;
+import com.machine.starter.redis.cache.scm.RedisScmBackCategoryCache;
 import com.machine.starter.redis.cache.scm.RedisScmFrontCategoryCache;
 import com.machine.starter.redis.command.CustomerRedisCommands;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.machine.sdk.base.constant.CommonConstant.EMPTY_LIST_STR;
 import static com.machine.sdk.base.constant.CommonConstant.EMPTY_OBJECT;
 import static com.machine.sdk.base.constant.CommonScmConstant.BackCategory.SCM_BACK_CATEGORY_ROOT_PARENT_ID;
 import static com.machine.starter.redis.constant.RedisLockPrefixConstant.Scm.LOCK_SCM_FRONT_CATEGORY_TREE;
@@ -61,13 +63,16 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
     private RedisScmFrontCategoryCache cacheScmFrontCategory;
 
     @Autowired
+    private RedisScmBackCategoryCache cacheScmBackCategory;
+
+    @Autowired
     private IScmBackCategoryDao backCategoryDao;
 
     @Autowired
     private IScmFrontCategoryDao frontCategoryDao;
 
     @Autowired
-    private IScmFrontBackCategoryRelationDao frontBackCategoryRelationDao;
+    private IScmBackCategoryFrontRelationDao backCategoryFrontRelationDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -82,12 +87,11 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.create.nameAlreadyExists", "名称已经存在");
         }
 
-        Set<String> backCategoryIdSet = inputDto.getBackCategoryIdSet();
-        if (CollectionUtil.isNotEmpty(backCategoryIdSet)) {
-            long backCategoryCount = backCategoryDao.countByIdSet(backCategoryIdSet);
-            if (backCategoryCount < backCategoryIdSet.size()) {
-                throw new ScmBusinessException("scm.frontCategory.service.create.backCategoryNotExists", "后台分类不存在");
-            }
+        // 新增只建节点、不关联后台分类（关联统一在编辑里做）；
+        // 但父节点一旦新增子节点就不再是叶子节点，所以父节点已关联后台分类时不允许新增
+        if (existsBackCategoryRelation(inputDto.getParentId())) {
+            throw new ScmBusinessException("scm.frontCategory.service.create.parentHasBackCategory",
+                    "父节点已关联后台分类，不能再新增子分类");
         }
 
         ScmFrontCategoryEntity insertEntity = new ScmFrontCategoryEntity();
@@ -95,12 +99,7 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
         insertEntity.setName(inputDto.getName());
         insertEntity.setCode(leaf4ScmCodeClient.frontCategoryCode());
         insertEntity.setSort(inputDto.getSort());
-        String frontCategoryId = frontCategoryDao.insert(insertEntity);
-
-        // 前台分类和后台分类关系数据
-        batchInsertRelation(frontCategoryId, inputDto.getBackCategoryIdSet());
-
-        return frontCategoryId;
+        return frontCategoryDao.insert(insertEntity);
     }
 
     @Override
@@ -117,19 +116,15 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.delete.rootNode", "根节点不能删除");
         }
 
-        // 判断是否有子节点
         Set<String> recursionSubIdSet = cacheScmFrontCategory.recursionSubId(id);
-        if (cacheScmFrontCategory.recursionSubId(id).size() > 1) {
+        if (recursionSubIdSet.size() > 1) {
             throw new ScmBusinessException("scm.frontCategory.service.delete.hasChildrenNode", "有子节点不能删除");
         }
 
-        // 判断是否关联前端分类
-        long countByBackIdSet = frontBackCategoryRelationDao.countByBackCategoryIdSet(recursionSubIdSet);
-        if (countByBackIdSet > 0) {
+        long countByFrontIdSet = backCategoryFrontRelationDao.countByFrontCategoryIdSet(recursionSubIdSet);
+        if (countByFrontIdSet > 0) {
             throw new ScmBusinessException("scm.frontCategory.service.delete.associationBackCategory", "关联后台分类不能删除");
         }
-
-        // todo 是否关联数据
 
         return frontCategoryDao.deleteById(request.getId());
     }
@@ -153,19 +148,6 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
         if (null != entityByName && !entityByName.getId().equals(entity.getId())) {
             throw new ScmBusinessException("scm.frontCategory.service.update.nameAlreadyExists", "名称已经存在");
         }
-
-        Set<String> backCategoryIdSet = inputDto.getBackCategoryIdSet();
-        if (CollectionUtil.isNotEmpty(backCategoryIdSet)) {
-            long backCategoryCount = backCategoryDao.countByIdSet(backCategoryIdSet);
-            if (backCategoryCount < backCategoryIdSet.size()) {
-                throw new ScmBusinessException("scm.frontCategory.service.update.backCategoryNotExists", "后台分类不存在");
-            }
-        }
-
-        // 处理前后台分类关系数据
-        frontBackCategoryRelationDao.deleteByFrontCategoryId(inputDto.getId());
-        // 前台分类和后台分类关系数据
-        batchInsertRelation(frontCategoryId, inputDto.getBackCategoryIdSet());
 
         ScmFrontCategoryEntity updateEntity = new ScmFrontCategoryEntity();
         updateEntity.setId(inputDto.getId());
@@ -202,6 +184,11 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
             throw new ScmBusinessException("scm.frontCategory.service.updateParent.parentNotExists", "父节点不存在");
         }
 
+        if (existsBackCategoryRelation(inputDto.getParentId())) {
+            throw new ScmBusinessException("scm.frontCategory.service.updateParent.parentHasBackCategory",
+                    "目标父节点已关联后台分类，不能作为父节点");
+        }
+
         Set<String> recursionIdSet = cacheScmFrontCategory.recursionSubId(inputDto.getId());
         if (recursionIdSet.contains(inputDto.getParentId())) {
             throw new ScmBusinessException("scm.frontCategory.service.updateParent.parentHasInCurrent", "父节点在当前节点下面");
@@ -211,12 +198,49 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateBackCategory(ScmFrontCategoryUpdateBackCategoryInputDto inputDto) {
+        String frontCategoryId = inputDto.getId();
+        ScmFrontCategoryEntity entity = frontCategoryDao.getById(frontCategoryId);
+        if (null == entity) {
+            return 0;
+        }
+
+        if (!cacheScmFrontCategory.isLeaf(frontCategoryId)) {
+            throw new ScmBusinessException("scm.frontCategory.service.updateBackCategory.notLeafNode",
+                    "非叶子节点不能关联后台分类，请先删除子节点");
+        }
+
+        Set<String> backCategoryIdSet = inputDto.getBackCategoryIdSet();
+        if (CollectionUtil.isNotEmpty(backCategoryIdSet)) {
+            long backCategoryCount = backCategoryDao.countByIdSet(backCategoryIdSet);
+            if (backCategoryCount < backCategoryIdSet.size()) {
+                throw new ScmBusinessException("scm.frontCategory.service.updateBackCategory.backCategoryNotExists",
+                        "后台分类不存在");
+            }
+
+            checkBackCategoryLeaf(backCategoryIdSet, "scm.frontCategory.service.updateBackCategory.backCategoryNotLeaf");
+        }
+
+        // 全量替换
+        backCategoryFrontRelationDao.deleteByFrontCategoryId(frontCategoryId);
+        batchInsertRelation(frontCategoryId, backCategoryIdSet);
+        return CollectionUtil.isEmpty(backCategoryIdSet) ? 0 : backCategoryIdSet.size();
+    }
+
+    @Override
     public ScmFrontCategoryDetailOutputDto getById(IdRequest request) {
         ScmFrontCategoryEntity entity = frontCategoryDao.getById(request.getId());
         if (null == entity) {
             return null;
         }
         return JSONUtil.toBean(JSONUtil.toJsonStr(entity), ScmFrontCategoryDetailOutputDto.class);
+    }
+
+    @Override
+    public List<ScmFrontCategoryListOutputDto> listAll() {
+        List<ScmFrontCategoryEntity> entityList = frontCategoryDao.listAll();
+        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), ScmFrontCategoryListOutputDto.class);
     }
 
     @Override
@@ -277,24 +301,56 @@ public class ScmFrontCategoryServiceImpl implements IScmFrontCategoryService {
         }
     }
 
-    @Override
-    public List<ScmFrontCategoryListOutputDto> listAll() {
-        List<ScmFrontCategoryEntity> entityList = frontCategoryDao.listAll();
-        return JSONUtil.toList(JSONUtil.toJsonStr(entityList), ScmFrontCategoryListOutputDto.class);
+    /**
+     * 判断前台分类是否已关联后台分类
+     */
+    private boolean existsBackCategoryRelation(String frontCategoryId) {
+        if (StrUtil.isBlank(frontCategoryId)) {
+            return false;
+        }
+        return backCategoryFrontRelationDao.countByFrontCategoryIdSet(Set.of(frontCategoryId)) > 0;
+    }
+
+    /**
+     * 校验待关联的后台分类是否均为叶子节点（前台分类只能关联后台分类的叶子节点）
+     */
+    private void checkBackCategoryLeaf(Set<String> backCategoryIdSet,
+                                       String errorCode) {
+        if (CollectionUtil.isEmpty(backCategoryIdSet)) {
+            return;
+        }
+
+        ScmBackCategoryTreeSimpleOutputDto treeOutputDto = cacheScmBackCategory.treeSimple();
+
+        List<String> notLeafNodeList = new ArrayList<>();
+        for (String backCategoryId : backCategoryIdSet) {
+            ScmBackCategoryTreeSimpleOutputDto node = TreeUtil.findNode(treeOutputDto, backCategoryId);
+            if (null == node) {
+                continue;
+            }
+            if (CollectionUtil.isNotEmpty(node.getChildren())) {
+                notLeafNodeList.add(node.getName() + "(" + node.getId() + ")");
+            }
+        }
+
+        if (CollectionUtil.isNotEmpty(notLeafNodeList)) {
+            throw new ScmBusinessException(errorCode,
+                    "只能关联后台分类的叶子节点，非叶子节点：" + String.join("、", notLeafNodeList));
+        }
     }
 
     private void batchInsertRelation(String frontCategoryId,
             Set<String> backCategoryIdSet) {
         if (CollectionUtil.isNotEmpty(backCategoryIdSet)) {
-            List<ScmFrontBackCategoryRelationEntity> relationEntityList = new ArrayList<>(backCategoryIdSet.size());
+            List<ScmBackCategoryFrontRelationEntity> relationEntityList = new ArrayList<>(backCategoryIdSet.size());
             for (String backCategoryId : backCategoryIdSet) {
-                ScmFrontBackCategoryRelationEntity relationEntity = new ScmFrontBackCategoryRelationEntity();
+                ScmBackCategoryFrontRelationEntity relationEntity = new ScmBackCategoryFrontRelationEntity();
                 relationEntity.setFrontCategoryId(frontCategoryId);
                 relationEntity.setBackCategoryId(backCategoryId);
                 relationEntity.setSort((long) backCategoryIdSet.size() - relationEntityList.size());
                 relationEntityList.add(relationEntity);
             }
-            frontBackCategoryRelationDao.batchInsert(relationEntityList);
+            backCategoryFrontRelationDao.batchInsert(relationEntityList);
         }
     }
 }

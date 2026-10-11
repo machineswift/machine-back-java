@@ -1,0 +1,33 @@
+package com.machine.client.scm.attribute.dto.input;
+
+import com.machine.sdk.base.envm.StatusEnum;
+import com.machine.sdk.base.envm.scm.category.ScmAttributeGroupTypeEnum;
+import com.machine.sdk.base.model.request.PageRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
+@Data
+@Schema
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class ScmAttributeGroupQueryPageInputDto extends PageRequest {
+
+    @Schema(description = "所属后台类目ID集合")
+    private Set<String> backCategoryIdSet;
+
+    @Schema(description = "编码（模糊）")
+    private String code;
+
+    @Schema(description = "名称（模糊）")
+    private String name;
+
+    @Schema(description = "组类型（ScmAttributeGroupTypeEnum）")
+    private ScmAttributeGroupTypeEnum groupType;
+
+    @Schema(description = "状态（StatusEnum）")
+    private StatusEnum status;
+}

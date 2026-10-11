@@ -114,42 +114,42 @@ COMMENT ON COLUMN t_scm_spu.create_time IS '创建时间';
 COMMENT ON COLUMN t_scm_spu.update_by IS '修改人';
 COMMENT ON COLUMN t_scm_spu.update_time IS '更新时间';
 
-DROP TABLE IF EXISTS t_scm_spu_property_value;
-CREATE TABLE t_scm_spu_property_value
+DROP TABLE IF EXISTS t_scm_spu_attribute_value;
+CREATE TABLE t_scm_spu_attribute_value
 (
     id                VARCHAR(32) NOT NULL,
     spu_id            VARCHAR(32) NOT NULL,
-    property_id       VARCHAR(32) NOT NULL,
-    property_value_id VARCHAR(32) NOT NULL,
+    attribute_id       VARCHAR(32) NOT NULL,
+    attribute_value_id VARCHAR(32) NOT NULL,
     sort              BIGINT NOT NULL DEFAULT 0,
     create_by         VARCHAR(32) NOT NULL,
     create_time       BIGINT NOT NULL,
     update_by         VARCHAR(32) NOT NULL,
     update_time       BIGINT NOT NULL,
-    CONSTRAINT pk_t_scm_spu_property_value PRIMARY KEY (id),
-    CONSTRAINT uk_t_scm_spu_property_value_01 UNIQUE (spu_id, property_id, property_value_id)
+    CONSTRAINT pk_t_scm_spu_attribute_value PRIMARY KEY (id),
+    CONSTRAINT uk_t_scm_spu_attribute_value_01 UNIQUE (spu_id, attribute_id, attribute_value_id)
 );
 
-ALTER TABLE t_scm_spu_property_value
-    ADD CONSTRAINT fk_t_scm_spu_property_value_01
+ALTER TABLE t_scm_spu_attribute_value
+    ADD CONSTRAINT fk_t_scm_spu_attribute_value_01
         FOREIGN KEY (spu_id) REFERENCES t_scm_spu(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_spu_property_value
-    ADD CONSTRAINT fk_t_scm_spu_property_value_02
-        FOREIGN KEY (property_id) REFERENCES t_scm_property(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_spu_property_value
-    ADD CONSTRAINT fk_t_scm_spu_property_value_03
-        FOREIGN KEY (property_value_id) REFERENCES t_scm_property_value(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_spu_attribute_value
+    ADD CONSTRAINT fk_t_scm_spu_attribute_value_02
+        FOREIGN KEY (attribute_id) REFERENCES t_scm_attribute(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_spu_attribute_value
+    ADD CONSTRAINT fk_t_scm_spu_attribute_value_03
+        FOREIGN KEY (attribute_value_id) REFERENCES t_scm_attribute_value(id) ON DELETE CASCADE;
 
-COMMENT ON TABLE t_scm_spu_property_value IS 'spu属性值表';
-COMMENT ON COLUMN t_scm_spu_property_value.id IS 'ID';
-COMMENT ON COLUMN t_scm_spu_property_value.spu_id IS 'SPU ID';
-COMMENT ON COLUMN t_scm_spu_property_value.property_id IS '属性ID';
-COMMENT ON COLUMN t_scm_spu_property_value.property_value_id IS '属性值ID';
-COMMENT ON COLUMN t_scm_spu_property_value.sort IS '排序，sort值大的排序靠前';
-COMMENT ON COLUMN t_scm_spu_property_value.create_by IS '创建人';
-COMMENT ON COLUMN t_scm_spu_property_value.create_time IS '创建时间';
-COMMENT ON COLUMN t_scm_spu_property_value.update_by IS '修改人';
-COMMENT ON COLUMN t_scm_spu_property_value.update_time IS '更新时间';
+COMMENT ON TABLE t_scm_spu_attribute_value IS 'spu属性值表';
+COMMENT ON COLUMN t_scm_spu_attribute_value.id IS 'ID';
+COMMENT ON COLUMN t_scm_spu_attribute_value.spu_id IS 'SPU ID';
+COMMENT ON COLUMN t_scm_spu_attribute_value.attribute_id IS '属性ID';
+COMMENT ON COLUMN t_scm_spu_attribute_value.attribute_value_id IS '属性值ID';
+COMMENT ON COLUMN t_scm_spu_attribute_value.sort IS '排序，sort值大的排序靠前';
+COMMENT ON COLUMN t_scm_spu_attribute_value.create_by IS '创建人';
+COMMENT ON COLUMN t_scm_spu_attribute_value.create_time IS '创建时间';
+COMMENT ON COLUMN t_scm_spu_attribute_value.update_by IS '修改人';
+COMMENT ON COLUMN t_scm_spu_attribute_value.update_time IS '更新时间';
 
 DROP TABLE IF EXISTS t_scm_spu_media;
 CREATE TABLE t_scm_spu_media
@@ -224,42 +224,42 @@ COMMENT ON COLUMN t_scm_product.create_time IS '创建时间';
 COMMENT ON COLUMN t_scm_product.update_by IS '修改人';
 COMMENT ON COLUMN t_scm_product.update_time IS '更新时间';
 
-DROP TABLE IF EXISTS t_scm_product_property_value;
-CREATE TABLE t_scm_product_property_value
+DROP TABLE IF EXISTS t_scm_product_attribute_value;
+CREATE TABLE t_scm_product_attribute_value
 (
     id                VARCHAR(32) NOT NULL,
     product_id        VARCHAR(32) NOT NULL,
-    property_id       VARCHAR(32) NOT NULL,
-    property_value_id VARCHAR(32) NOT NULL,
+    attribute_id       VARCHAR(32) NOT NULL,
+    attribute_value_id VARCHAR(32) NOT NULL,
     sort              BIGINT NOT NULL DEFAULT 0,
     create_by         VARCHAR(32) NOT NULL,
     create_time       BIGINT NOT NULL,
     update_by         VARCHAR(32) NOT NULL,
     update_time       BIGINT NOT NULL,
-    CONSTRAINT pk_t_scm_product_property_value PRIMARY KEY (id),
-    CONSTRAINT uk_t_scm_product_property_value_01 UNIQUE (product_id, property_id, property_value_id)
+    CONSTRAINT pk_t_scm_product_attribute_value PRIMARY KEY (id),
+    CONSTRAINT uk_t_scm_product_attribute_value_01 UNIQUE (product_id, attribute_id, attribute_value_id)
 );
 
-ALTER TABLE t_scm_product_property_value
-    ADD CONSTRAINT fk_t_scm_product_property_value_01
+ALTER TABLE t_scm_product_attribute_value
+    ADD CONSTRAINT fk_t_scm_product_attribute_value_01
         FOREIGN KEY (product_id) REFERENCES t_scm_product(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_product_property_value
-    ADD CONSTRAINT fk_t_scm_product_property_value_02
-        FOREIGN KEY (property_id) REFERENCES t_scm_property(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_product_property_value
-    ADD CONSTRAINT fk_t_scm_product_property_value_03
-        FOREIGN KEY (property_value_id) REFERENCES t_scm_property_value(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_product_attribute_value
+    ADD CONSTRAINT fk_t_scm_product_attribute_value_02
+        FOREIGN KEY (attribute_id) REFERENCES t_scm_attribute(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_product_attribute_value
+    ADD CONSTRAINT fk_t_scm_product_attribute_value_03
+        FOREIGN KEY (attribute_value_id) REFERENCES t_scm_attribute_value(id) ON DELETE CASCADE;
 
-COMMENT ON TABLE t_scm_product_property_value IS '商品属性值表';
-COMMENT ON COLUMN t_scm_product_property_value.id IS 'ID';
-COMMENT ON COLUMN t_scm_product_property_value.product_id IS '商品ID';
-COMMENT ON COLUMN t_scm_product_property_value.property_id IS '属性ID';
-COMMENT ON COLUMN t_scm_product_property_value.property_value_id IS '属性值ID';
-COMMENT ON COLUMN t_scm_product_property_value.sort IS '排序，sort值大的排序靠前';
-COMMENT ON COLUMN t_scm_product_property_value.create_by IS '创建人';
-COMMENT ON COLUMN t_scm_product_property_value.create_time IS '创建时间';
-COMMENT ON COLUMN t_scm_product_property_value.update_by IS '修改人';
-COMMENT ON COLUMN t_scm_product_property_value.update_time IS '更新时间';
+COMMENT ON TABLE t_scm_product_attribute_value IS '商品属性值表';
+COMMENT ON COLUMN t_scm_product_attribute_value.id IS 'ID';
+COMMENT ON COLUMN t_scm_product_attribute_value.product_id IS '商品ID';
+COMMENT ON COLUMN t_scm_product_attribute_value.attribute_id IS '属性ID';
+COMMENT ON COLUMN t_scm_product_attribute_value.attribute_value_id IS '属性值ID';
+COMMENT ON COLUMN t_scm_product_attribute_value.sort IS '排序，sort值大的排序靠前';
+COMMENT ON COLUMN t_scm_product_attribute_value.create_by IS '创建人';
+COMMENT ON COLUMN t_scm_product_attribute_value.create_time IS '创建时间';
+COMMENT ON COLUMN t_scm_product_attribute_value.update_by IS '修改人';
+COMMENT ON COLUMN t_scm_product_attribute_value.update_time IS '更新时间';
 
 DROP TABLE IF EXISTS t_scm_product_media;
 CREATE TABLE t_scm_product_media
@@ -335,42 +335,42 @@ COMMENT ON COLUMN t_scm_sku.create_time IS '创建时间';
 COMMENT ON COLUMN t_scm_sku.update_by IS '修改人';
 COMMENT ON COLUMN t_scm_sku.update_time IS '更新时间';
 
-DROP TABLE IF EXISTS t_scm_sku_property_value;
-CREATE TABLE t_scm_sku_property_value
+DROP TABLE IF EXISTS t_scm_sku_attribute_value;
+CREATE TABLE t_scm_sku_attribute_value
 (
     id                VARCHAR(32) NOT NULL,
     sku_id            VARCHAR(32) NOT NULL,
-    property_id       VARCHAR(32) NOT NULL,
-    property_value_id VARCHAR(32) NOT NULL,
+    attribute_id       VARCHAR(32) NOT NULL,
+    attribute_value_id VARCHAR(32) NOT NULL,
     sort              BIGINT NOT NULL DEFAULT 0,
     create_by         VARCHAR(32) NOT NULL,
     create_time       BIGINT NOT NULL,
     update_by         VARCHAR(32) NOT NULL,
     update_time       BIGINT NOT NULL,
-    CONSTRAINT pk_t_scm_sku_property_value PRIMARY KEY (id),
-    CONSTRAINT uk_t_scm_sku_property_value_01 UNIQUE (sku_id, property_id, property_value_id)
+    CONSTRAINT pk_t_scm_sku_attribute_value PRIMARY KEY (id),
+    CONSTRAINT uk_t_scm_sku_attribute_value_01 UNIQUE (sku_id, attribute_id, attribute_value_id)
 );
 
-ALTER TABLE t_scm_sku_property_value
-    ADD CONSTRAINT fk_t_scm_sku_property_value_01
+ALTER TABLE t_scm_sku_attribute_value
+    ADD CONSTRAINT fk_t_scm_sku_attribute_value_01
         FOREIGN KEY (sku_id) REFERENCES t_scm_sku(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_sku_property_value
-    ADD CONSTRAINT fk_t_scm_sku_property_value_02
-        FOREIGN KEY (property_id) REFERENCES t_scm_property(id) ON DELETE CASCADE;
-ALTER TABLE t_scm_sku_property_value
-    ADD CONSTRAINT fk_t_scm_sku_property_value_03
-        FOREIGN KEY (property_value_id) REFERENCES t_scm_property_value(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_sku_attribute_value
+    ADD CONSTRAINT fk_t_scm_sku_attribute_value_02
+        FOREIGN KEY (attribute_id) REFERENCES t_scm_attribute(id) ON DELETE CASCADE;
+ALTER TABLE t_scm_sku_attribute_value
+    ADD CONSTRAINT fk_t_scm_sku_attribute_value_03
+        FOREIGN KEY (attribute_value_id) REFERENCES t_scm_attribute_value(id) ON DELETE CASCADE;
 
-COMMENT ON TABLE t_scm_sku_property_value IS 'sku属性值表';
-COMMENT ON COLUMN t_scm_sku_property_value.id IS 'ID';
-COMMENT ON COLUMN t_scm_sku_property_value.sku_id IS 'SKU ID';
-COMMENT ON COLUMN t_scm_sku_property_value.property_id IS '属性ID';
-COMMENT ON COLUMN t_scm_sku_property_value.property_value_id IS '属性值ID';
-COMMENT ON COLUMN t_scm_sku_property_value.sort IS '排序，sort值大的排序靠前';
-COMMENT ON COLUMN t_scm_sku_property_value.create_by IS '创建人';
-COMMENT ON COLUMN t_scm_sku_property_value.create_time IS '创建时间';
-COMMENT ON COLUMN t_scm_sku_property_value.update_by IS '修改人';
-COMMENT ON COLUMN t_scm_sku_property_value.update_time IS '更新时间';
+COMMENT ON TABLE t_scm_sku_attribute_value IS 'sku属性值表';
+COMMENT ON COLUMN t_scm_sku_attribute_value.id IS 'ID';
+COMMENT ON COLUMN t_scm_sku_attribute_value.sku_id IS 'SKU ID';
+COMMENT ON COLUMN t_scm_sku_attribute_value.attribute_id IS '属性ID';
+COMMENT ON COLUMN t_scm_sku_attribute_value.attribute_value_id IS '属性值ID';
+COMMENT ON COLUMN t_scm_sku_attribute_value.sort IS '排序，sort值大的排序靠前';
+COMMENT ON COLUMN t_scm_sku_attribute_value.create_by IS '创建人';
+COMMENT ON COLUMN t_scm_sku_attribute_value.create_time IS '创建时间';
+COMMENT ON COLUMN t_scm_sku_attribute_value.update_by IS '修改人';
+COMMENT ON COLUMN t_scm_sku_attribute_value.update_time IS '更新时间';
 
 DROP TABLE IF EXISTS t_scm_sku_media;
 CREATE TABLE t_scm_sku_media

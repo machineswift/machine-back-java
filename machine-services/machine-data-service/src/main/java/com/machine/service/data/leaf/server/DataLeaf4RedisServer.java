@@ -68,6 +68,12 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
     }
 
     @Override
+    @GetMapping("data_brand_category_tree")
+    public String dataBrandCategoryTree() {
+        return generateTreeKey(REDIS_DATA_BRAND_CATEGORY, "品牌分类树");
+    }
+
+    @Override
     @GetMapping("data_organization_tree")
     public String dataOrganizationTree(@RequestParam("type") BIamOrganizationTypeEnum type) {
         return generateTreeKey(
@@ -149,6 +155,11 @@ public class DataLeaf4RedisServer implements IDataLeaf4RedisClient {
      * 素材分类
      */
     private static final String REDIS_DATA_MATERIAL_CATEGORY = "REDIS_DATA_MATERIAL_CATEGORY_";
+
+    /**
+     * 品牌分类
+     */
+    private static final String REDIS_DATA_BRAND_CATEGORY = "REDIS_DATA_BRAND_CATEGORY_";
 
     /**
      * 智能标签分类

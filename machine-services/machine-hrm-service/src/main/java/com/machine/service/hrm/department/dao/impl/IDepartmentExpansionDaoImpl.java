@@ -36,18 +36,18 @@ public class IDepartmentExpansionDaoImpl implements IDepartmentExpansionDao {
     }
 
     @Override
-    public DepartmentExpansionEntity getByDepartmentId(String departmentId) {
-        Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
-                .eq(DepartmentExpansionEntity::getDepartmentId, departmentId);
-        return departmentExpansionMapper.selectOne(wrapper);
-    }
-
-    @Override
     public String updateByDepartmentId(DepartmentExpansionEntity updateEntity) {
         Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
                 .eq(DepartmentExpansionEntity::getDepartmentId, updateEntity.getDepartmentId());
         int count = departmentExpansionMapper.update(updateEntity, wrapper);
         return count + "";
+    }
+
+    @Override
+    public DepartmentExpansionEntity getByDepartmentId(String departmentId) {
+        Wrapper<DepartmentExpansionEntity> wrapper = new LambdaQueryWrapper<DepartmentExpansionEntity>()
+                .eq(DepartmentExpansionEntity::getDepartmentId, departmentId);
+        return departmentExpansionMapper.selectOne(wrapper);
     }
 
     @Override

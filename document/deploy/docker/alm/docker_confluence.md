@@ -168,7 +168,7 @@ docker run -d \
 --cpus=2 \
 --memory=4g --memory-swap=8g \
 --restart unless-stopped \
-atlassian/jira-software:10.7.4
+atlassian/jira-software:11.3.12
 ```
 
 ### 破解jira

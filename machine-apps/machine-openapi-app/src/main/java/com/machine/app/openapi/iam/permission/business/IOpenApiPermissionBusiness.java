@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface IOpenApiPermissionBusiness {
 
-    List<BIamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request);
-
     BIamPermissionTreeOutputDto detail(OpenApiPermissionIdRequestVo request);
+
+    List<BIamPermissionTreeOutputDto> listApp(OpenApiPermissionQueryAppListRequestVo request);
 
     List<String> listParentByTarget(OpenApiPermissionIdRequestVo request);
 

@@ -21,11 +21,26 @@ public class DataBrandQueryPageInputDto extends PageRequest {
     @Schema(description = "名称")
     private String name;
 
+    @Schema(description = "拼音全拼")
+    private String namePinyinFull;
+
+    @Schema(description = "拼音首字母")
+    private String namePinyinInitial;
+
+    @Schema(description = "英文名称")
+    private String nameEn;
+
     @Schema(description = "编码")
     private String code;
 
     @Schema(description = "状态（StatusEnum）")
     private StatusEnum status;
+
+    @Schema(description = "品牌分类集合")
+    private Set<String> categoryIdSet;
+
+    @Schema(description = "是否包含【未分配】节点，默认：false")
+    private Boolean containVirtualNode = false;
 
     @Schema(description = "创建人ID集合")
     private Set<String> createUserIdSet;
@@ -38,12 +53,6 @@ public class DataBrandQueryPageInputDto extends PageRequest {
 
     @Schema(description = "创建结束时间")
     private Long createEndTime;
-
-    @Schema(description = "更新开始时间")
-    private Long updateStartTime;
-
-    @Schema(description = "更新结束时间")
-    private Long updateEndTime;
 }
 
 

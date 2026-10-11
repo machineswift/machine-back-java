@@ -18,12 +18,6 @@ import java.util.List;
 
 @Mapper
 public interface DataAppMessageMapper extends BaseMapper<DataAppMessageEntity> {
-    Page<AppMessageListOutputDto> managePage(@Param("inputDto") AppMessagePageInputDto inputDto,
-                                             IPage<AppMessageListOutputDto> page);
-
-    Page<AppMessageListSuperOutputDto> superPage(@Param("inputDto") AppMessagePageSuperInputDto inputDto,
-                                                 IPage<AppMessageListSuperOutputDto> page);
-
     void disposeMessage(@Param("batchCode") String batchCode, @Param("receiver") String receiver);
 
     void readMessage(@Param("batchCode") String batchCode, @Param("receiver") String receiver);
@@ -31,4 +25,10 @@ public interface DataAppMessageMapper extends BaseMapper<DataAppMessageEntity> {
     List<AppMessageGroupCountOutputDto> groupCount(@Param("inputDto")AppMessageGroupCountInputDto inputDto);
 
     Integer getUnreadCount(@Param("inputDto")AppMessageUnreadCountInputDto inputDto);
+
+    Page<AppMessageListOutputDto> managePage(@Param("inputDto") AppMessagePageInputDto inputDto,
+                                             IPage<AppMessageListOutputDto> page);
+
+    Page<AppMessageListSuperOutputDto> superPage(@Param("inputDto") AppMessagePageSuperInputDto inputDto,
+                                                 IPage<AppMessageListSuperOutputDto> page);
 }

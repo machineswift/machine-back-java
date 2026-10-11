@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @Schema
 @NoArgsConstructor
@@ -24,7 +22,4 @@ public class ScmFrontCategoryCreateInputDto {
     @NotNull(message = "排序不能为空")
     @Schema(description = "排序，sort值大的排序靠前", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long sort;
-
-    @Schema(description = "后台类目ID集合")
-    private Set<String> backCategoryIdSet;
 }

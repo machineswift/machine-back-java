@@ -55,44 +55,6 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
     private IBIamUserClient userClient;
 
     @Override
-    public PageResponse<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto) {
-        Page<AppMessageListOutputDto> outputDtoPage = appMessageDao.managePage(inputDto);
-        List<AppMessageListOutputDto> records = outputDtoPage.getRecords();
-        if (CollectionUtil.isEmpty(records)) {
-            return new PageResponse<>(outputDtoPage.getCurrent(), outputDtoPage.getSize(), outputDtoPage.getTotal());
-        }
-        for (AppMessageListOutputDto record : records) {
-            AppMessageContentDto bean = JSONUtil.toBean(JSONUtil.toJsonStr(record.getBusinessContent()), AppMessageContentDto.class);
-            record.setBusinessContentDto(bean);
-        }
-        return new PageResponse<>(
-                outputDtoPage.getCurrent(),
-                outputDtoPage.getSize(),
-                outputDtoPage.getTotal(),
-                records);
-    }
-
-    @Override
-    public PageResponse<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
-        String userId = AppContextHolder.getContext().getUserId();
-        inputDto.setReceiver(userId);
-        Page<AppMessageListSuperOutputDto> outputDtoPage = appMessageDao.superPage(inputDto);
-        List<AppMessageListSuperOutputDto> records = outputDtoPage.getRecords();
-        if (CollectionUtil.isEmpty(records)) {
-            return new PageResponse<>(outputDtoPage.getCurrent(), outputDtoPage.getSize(), outputDtoPage.getTotal());
-        }
-        for (AppMessageListSuperOutputDto record : records) {
-            AppMessageContentDto bean = JSONUtil.toBean(JSONUtil.toJsonStr(record.getBusinessContent()), AppMessageContentDto.class);
-            record.setBusinessContentDto(bean);
-        }
-        return new PageResponse<>(
-                outputDtoPage.getCurrent(),
-                outputDtoPage.getSize(),
-                outputDtoPage.getTotal(),
-                records);
-    }
-
-    @Override
     public Boolean saveMessageRecord(AppMessageSaveInputDto request) {
         if (StringUtils.isBlank(request.getBatchCode())) {
             request.setBatchCode(UUIDv7.generateWithoutDashes());
@@ -145,24 +107,6 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
         return true;
     }
 
-    private void sendFeiShuMessage(AppMessageSendInputDto request) {
-        FeiShuSendMessageInput feiShuSendMessageInput = new FeiShuSendMessageInput();
-        feiShuSendMessageInput.setMobiles(convertIdToMobiles(request.getReceiverSet()).toArray(String[]::new));
-        feiShuSendMessageInput.setTitle(request.getTitle());
-        feiShuSendMessageInput.setContent(request.getInformContent());
-        feishuMessageHttpClient.sendFeiShuMessage(feiShuSendMessageInput);
-    }
-
-    private List<String> convertIdToMobiles(Set<String> ids) {
-        IdSetRequest request = new IdSetRequest();
-        request.setIdSet(ids);
-        Map<String, BIamUserDetailOutputDto> map = userClient.mapByIdSet(request);
-        if (CollectionUtil.isEmpty(map)) {
-            return null;
-        }
-        return map.values().stream().map(BIamUserDetailOutputDto::getPhone).collect(Collectors.toList());
-    }
-
     @Override
     public Boolean readMessage(AppMessageReadInputDto request) {
         String messageId = request.getMessageId();
@@ -196,5 +140,61 @@ public class DataAppMessageServiceImpl implements IDataAppMessageService {
         String userId = AppContextHolder.getContext().getUserId();
         inputDto.setReceiver(userId);
         return appMessageDao.getUnreadCount(inputDto);
+    }
+
+    @Override
+    public PageResponse<AppMessageListOutputDto> managePage(AppMessagePageInputDto inputDto) {
+        Page<AppMessageListOutputDto> outputDtoPage = appMessageDao.managePage(inputDto);
+        List<AppMessageListOutputDto> records = outputDtoPage.getRecords();
+        if (CollectionUtil.isEmpty(records)) {
+            return new PageResponse<>(outputDtoPage.getCurrent(), outputDtoPage.getSize(), outputDtoPage.getTotal());
+        }
+        for (AppMessageListOutputDto record : records) {
+            AppMessageContentDto bean = JSONUtil.toBean(JSONUtil.toJsonStr(record.getBusinessContent()), AppMessageContentDto.class);
+            record.setBusinessContentDto(bean);
+        }
+        return new PageResponse<>(
+                outputDtoPage.getCurrent(),
+                outputDtoPage.getSize(),
+                outputDtoPage.getTotal(),
+                records);
+    }
+
+    @Override
+    public PageResponse<AppMessageListSuperOutputDto> superPage(AppMessagePageSuperInputDto inputDto) {
+        String userId = AppContextHolder.getContext().getUserId();
+        inputDto.setReceiver(userId);
+        Page<AppMessageListSuperOutputDto> outputDtoPage = appMessageDao.superPage(inputDto);
+        List<AppMessageListSuperOutputDto> records = outputDtoPage.getRecords();
+        if (CollectionUtil.isEmpty(records)) {
+            return new PageResponse<>(outputDtoPage.getCurrent(), outputDtoPage.getSize(), outputDtoPage.getTotal());
+        }
+        for (AppMessageListSuperOutputDto record : records) {
+            AppMessageContentDto bean = JSONUtil.toBean(JSONUtil.toJsonStr(record.getBusinessContent()), AppMessageContentDto.class);
+            record.setBusinessContentDto(bean);
+        }
+        return new PageResponse<>(
+                outputDtoPage.getCurrent(),
+                outputDtoPage.getSize(),
+                outputDtoPage.getTotal(),
+                records);
+    }
+
+    private void sendFeiShuMessage(AppMessageSendInputDto request) {
+        FeiShuSendMessageInput feiShuSendMessageInput = new FeiShuSendMessageInput();
+        feiShuSendMessageInput.setMobiles(convertIdToMobiles(request.getReceiverSet()).toArray(String[]::new));
+        feiShuSendMessageInput.setTitle(request.getTitle());
+        feiShuSendMessageInput.setContent(request.getInformContent());
+        feishuMessageHttpClient.sendFeiShuMessage(feiShuSendMessageInput);
+    }
+
+    private List<String> convertIdToMobiles(Set<String> ids) {
+        IdSetRequest request = new IdSetRequest();
+        request.setIdSet(ids);
+        Map<String, BIamUserDetailOutputDto> map = userClient.mapByIdSet(request);
+        if (CollectionUtil.isEmpty(map)) {
+            return null;
+        }
+        return map.values().stream().map(BIamUserDetailOutputDto::getPhone).collect(Collectors.toList());
     }
 }

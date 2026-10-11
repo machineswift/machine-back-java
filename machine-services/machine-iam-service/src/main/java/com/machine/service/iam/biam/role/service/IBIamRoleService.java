@@ -30,8 +30,8 @@ public interface IBIamRoleService {
 
     List<BIamRoleListOutputDto> listSub(BIamRoleListSubInputDto inputDto);
 
-    Page<BIamRoleListOutputDto> selectPage(BIamRoleQueryPageInputDto inputDto);
-
     Map<String, BIamRoleDetailOutputDto> mapByIdSet(IdSetRequest request);
+
+    Page<BIamRoleListOutputDto> selectPage(BIamRoleQueryPageInputDto inputDto);
 
 }

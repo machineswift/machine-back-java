@@ -97,6 +97,81 @@ public class TreeUtil {
     }
 
     /**
+     * 获取指定节点集合下所有叶子节点ID的并集
+     */
+    public static <T extends TreeNode<T>> Set<String> getAllLeafNodeIds(T root,
+                                                                        Set<String> targetIdSet) {
+        if (root == null || targetIdSet == null || targetIdSet.isEmpty()) {
+            return new HashSet<>();
+        }
+
+        Set<String> leafNodeIds = new HashSet<>();
+        for (String targetId : targetIdSet) {
+            if (targetId == null) {
+                continue;
+            }
+
+            T target = findNode(root, targetId);
+            if (target != null) {
+                leafNodeIds.addAll(getAllLeafNodeIds(target));
+            }
+        }
+
+        return leafNodeIds;
+    }
+
+    /**
+     * 获取指定节点下的所有叶子节点ID
+     */
+    public static <T extends TreeNode<T>> Set<String> getAllLeafNodeIds(T root,
+                                                                        String targetId) {
+        if (root == null || targetId == null) {
+            return new HashSet<>();
+        }
+
+        T target = findNode(root, targetId);
+        if (target == null) {
+            return new HashSet<>();
+        }
+
+        return getAllLeafNodeIds(target);
+    }
+
+    /**
+     * 获取指定节点下的所有叶子节点ID
+     * 如果该节点自身就是叶子节点，则返回其自身的ID
+     */
+    public static <T extends TreeNode<T>> Set<String> getAllLeafNodeIds(T target) {
+        if (target == null) {
+            return new HashSet<>();
+        }
+
+        Set<String> leafNodeIds = new HashSet<>();
+
+        Deque<T> stack = new ArrayDeque<>();
+        stack.push(target);
+
+        while (!stack.isEmpty()) {
+            T node = stack.pop();
+            List<T> children = node.getChildren();
+
+            if (children == null || children.isEmpty()) {
+                leafNodeIds.add(node.getId());
+                continue;
+            }
+
+            for (int i = children.size() - 1; i >= 0; i--) {
+                T child = children.get(i);
+                if (child != null) {
+                    stack.push(child);
+                }
+            }
+        }
+
+        return leafNodeIds;
+    }
+
+    /**
      * 查找指定ID的节点
      */
     public static <T extends TreeNode<T>> T findNode(T root, String id) {
@@ -249,6 +324,74 @@ public class TreeUtil {
         }
 
         return result;
+    }
+
+    /**
+     * 获取指定节点到根节点的链路列表（返回顺序：根节点 → 逐级向下 → 指定节点）
+     */
+    public static <T extends TreeNode<T>> List<T> getParentNodeList(T root,
+                                                                    String targetId) {
+        if (root == null || targetId == null) {
+            return new ArrayList<>();
+        }
+        return getParentNodeListMap(root, Set.of(targetId)).getOrDefault(targetId, new ArrayList<>());
+    }
+
+    /**
+     * 批量获取多个节点到根节点的链路列表（返回顺序：根节点 → 逐级向下 → 指定节点）
+     */
+    public static <T extends TreeNode<T>> Map<String, List<T>> getParentNodeListMap(T root,
+                                                                                    Set<String> targetIdSet) {
+        Map<String, List<T>> nodeListMap = new HashMap<>();
+        if (root == null || targetIdSet == null || targetIdSet.isEmpty()) {
+            return nodeListMap;
+        }
+
+        Map<String, T> idToNode = buildIdToNodeMap(root);
+        for (String targetId : targetIdSet) {
+            T currentNode = targetId == null ? null : idToNode.get(targetId);
+            if (currentNode == null) {
+                continue;
+            }
+
+            LinkedList<T> nodeList = new LinkedList<>();
+            while (currentNode != null) {
+                nodeList.addFirst(currentNode);
+                String parentId = currentNode.getParentId();
+                currentNode = parentId == null ? null : idToNode.get(parentId);
+            }
+            nodeListMap.put(targetId, nodeList);
+        }
+        return nodeListMap;
+    }
+
+    /**
+     * 构建 ID → 节点 的映射（一次遍历，O(n)）
+     */
+    private static <T extends TreeNode<T>> Map<String, T> buildIdToNodeMap(T root) {
+        Map<String, T> idToNode = new HashMap<>();
+        if (root == null) {
+            return idToNode;
+        }
+
+        Deque<T> stack = new ArrayDeque<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            T node = stack.pop();
+            idToNode.put(node.getId(), node);
+            List<T> children = node.getChildren();
+            if (children == null) {
+                continue;
+            }
+            for (int i = children.size() - 1; i >= 0; i--) {
+                T child = children.get(i);
+                if (child != null) {
+                    stack.push(child);
+                }
+            }
+        }
+        return idToNode;
     }
 
     private static <T extends TreeNode<T>> void insertionSort(List<T> nodes, boolean asc) {

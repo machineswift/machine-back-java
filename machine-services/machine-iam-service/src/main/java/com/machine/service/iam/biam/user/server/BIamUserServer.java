@@ -145,15 +145,15 @@ public class BIamUserServer implements IBIamUserClient {
     }
 
     @Override
-    @PostMapping("map_by_idSet")
-    public Map<String, BIamUserDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
-        return userService.mapByUserIdSet(request);
-    }
-
-    @Override
     @PostMapping("list_by_offset")
     public List<BIamUserListOutputDto> listByOffset(@RequestBody @Validated BIamUserQueryListOffsetInputDto inputDto) {
         return userService.listByOffset(inputDto);
+    }
+
+    @Override
+    @PostMapping("map_by_idSet")
+    public Map<String, BIamUserDetailOutputDto> mapByIdSet(@RequestBody @Validated IdSetRequest request) {
+        return userService.mapByUserIdSet(request);
     }
 
     @Override

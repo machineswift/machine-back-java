@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
         configuration = OpenFeignMinTimeConfig.class)
 public interface IBIamUserConfigClient {
 
-    @PostMapping("get_by_key")
-    BIamUserConfigOutputDto getByKey(@RequestBody @Validated BIamUserConfigGetInputDto inputDto);
-
     @PostMapping("save")
     void save(@RequestBody @Validated BIamUserConfigSaveInputDto inputDto);
+
+    @PostMapping("get_by_key")
+    BIamUserConfigOutputDto getByKey(@RequestBody @Validated BIamUserConfigGetInputDto inputDto);
 
 }

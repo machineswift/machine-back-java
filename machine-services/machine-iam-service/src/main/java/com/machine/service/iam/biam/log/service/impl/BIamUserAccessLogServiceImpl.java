@@ -32,6 +32,11 @@ public class BIamUserAccessLogServiceImpl implements IBIamUserAccessLogService {
     }
 
     @Override
+    public int deleteByCreateTimeBefore(BIamUserAccessLogDeleteInputDto inputDto) {
+        return userAccessLogDao.deleteByCreateTimeBefore(inputDto.getBeforeCreateTime());
+    }
+
+    @Override
     public BIamUserAccessLogDetailOutputDto detail(IdRequest request) {
         BIamUserAccessLogEntity entity = userAccessLogDao.getById(request.getId());
         if (entity == null) {
@@ -49,10 +54,5 @@ public class BIamUserAccessLogServiceImpl implements IBIamUserAccessLogService {
         }
         pageResult.setRecords(JSONUtil.toList(JSONUtil.toJsonStr(page.getRecords()), BIamUserAccessLogListOutputDto.class));
         return pageResult;
-    }
-
-    @Override
-    public int deleteByCreateTimeBefore(BIamUserAccessLogDeleteInputDto inputDto) {
-        return userAccessLogDao.deleteByCreateTimeBefore(inputDto.getBeforeCreateTime());
     }
 }

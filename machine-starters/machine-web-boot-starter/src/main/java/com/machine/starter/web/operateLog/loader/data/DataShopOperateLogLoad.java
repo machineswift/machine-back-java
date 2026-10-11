@@ -22,11 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 操作日志 DATA 模块-门店 业务快照加载器注册。
- * <p>
- * 覆盖修改（update）与关系数据变更（update_label_option，携带 标签选项ID->名称）。
- */
 @Slf4j
 @Configuration
 public class DataShopOperateLogLoad extends AbstractModuleOperateLogLoad {
